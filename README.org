@@ -3,26 +3,28 @@ Tomosipo is a library to make tomographic reconstructions with astra
 more user friendly.
 
 The scope of this library is as follows:
-- only 3D geometries
+- 3D geometries (no 2D geometries)
+- Try to interface with other packages (ODL, astra, flexbox)
 
 Usability:
 - Axis parameters are *always* in the Z, Y, X order
 - Detector parameters are *always* in the v, u order (~v~ being 'up'
   and ~u~ being 'right')
 - Data and geometry visualization built in using =pyqtgraph=.
+- Unfortunately, *projection data is still in (Y, num_angles, X)
+  order*.
+
 * Installation
-Requirements
+Requirements:
 - Astra (the 1.9.x development version is *required*)
 - pyopengl (optional)
 - pyqtgraph (optional)
-- odl (optional)
 
 #+BEGIN_SRC sh
 conda create -y -n tomosipo python=3.6 tomosipo -c astra-toolbox/label/dev -c aahendriksen
 source activate tomosipo
 #+END_SRC
-* TODO Usage
-
+* Usage
 Simple examples:
 ** Create and manipulate geometries
 #+BEGIN_SRC python :results output
@@ -168,6 +170,11 @@ TODO: discuss segfaults when trying to access cleaned up objects.
 
 #+END_SRC
 * Known bugs and or possible issues
+- Parallel geometries have not yet been implemented.
+- Memmapping of projection and/or volume data has not yet been implemented.
+- There are no doctests yet.
+- There is no documentation website yet.
+
 * Contributions
 ** Building conda packages
 #+BEGIN_SRC sh

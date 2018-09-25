@@ -1,0 +1,176 @@
+import astra
+import numpy as np
+from .utils import up_tuple
+import tomosipo as ts
+from tomosipo.ProjectionGeometry import ProjectionGeometry
+from .ConeVectorGeometry import ConeVectorGeometry
+
+
+def cone(angles=1, size=np.sqrt(2), shape=1, detector_distance=0, source_distance=2):
+    """Create a cone beam geometry
+
+        :param angles: `np.array` or integral value
+            If integral value: the number of angles in the cone beam
+            geometry. This describes a full arc (2 pi radians) with
+            uniform placement and without the start and end point
+            overlapping.
+
+            If np.array: the values of the array are taken as
+            projection angle (units are radians).
+        :param size: (float, float) or float
+            The detector size. If a single float is provided, the
+            detector is square with equal width and height.
+
+            The order is (height, width), i.e. (v, u).
+
+        :param shape: (`int`, `int`) or `int`
+            The detector shape in pixels. If tuple, the order is
+            (height, width). Else the pixel has the same number of
+            pixels in the U and V direction.
+        :param detector_distance: float
+            The detector-origin distance.
+        :param source_distance: float
+            the source-origin distance.
+        :returns: a cone beam geometry
+        :rtype: ConeGeometry
+    """
+    return ConeGeometry(angles, size, shape, detector_distance, source_distance)
+
+
+class ConeGeometry(ProjectionGeometry):
+    """Documentation for ConeGeometry
+
+    Cone beam geometry
+    """
+
+    def __init__(
+        self, angles=1, size=np.sqrt(2), shape=1, detector_distance=0, source_distance=2
+    ):
+        """Create a cone beam geometry
+
+        :param angles: `np.array` or integral value
+            If integral value: the number of angles in the cone beam
+            geometry. This describes a full arc (2 pi radians) with
+            uniform placement and without the start and end point
+            overlapping.
+
+            If np.array: the values of the array are taken as
+            projection angle (units are radians).
+        :param size: (float, float) or float
+            The detector size. If a single float is provided, the
+            detector is square with equal width and height.
+
+            The order is (height, width), i.e. (v, u).
+
+        :param shape: (`int`, `int`) or `int`
+            The detector shape in pixels. If tuple, the order is
+            (height, width). Else the pixel has the same number of
+            pixels in the U and V direction.
+        :param detector_distance: float
+            The detector-origin distance.
+        :param source_distance: float
+            the source-origin distance.
+        :returns: a cone beam geometry
+        :rtype: ConeGeometry
+
+        """
+        super(ConeGeometry, self).__init__(shape=shape)
+        self.angles_original = angles
+        if np.isscalar(angles):
+            # TODO: Handle case that angles is not an integer
+            angles = np.linspace(0, 2 * np.pi, angles, False)
+
+        size = up_tuple(size, 2)
+
+        self.angles = angles
+        self.size = size
+        self.detector_distance = detector_distance
+        self.source_distance = source_distance
+
+        self._is_cone = True
+        self._is_parallel = False
+        self._is_vector = False
+
+    def __repr__(self):
+        # Use self.angles_original to make the representation fit on screen.
+        return (
+            f"ConeGeometry(\n"
+            f"    angles={self.angles_original},\n"
+            f"    size={self.size},\n"
+            f"    shape={self.shape},\n"
+            f"    detector_distance={self.detector_distance},\n"
+            f"    source_distance={self.source_distance}\n"
+            f")"
+        )
+
+    def __eq__(self, other):
+
+        diff_angles = np.array(self.angles) - np.array(other.angles)
+        diff_size = np.array(self.size) - np.array(other.size)
+        diff_detector = self.detector_distance - other.detector_distance
+        diff_source = self.source_distance - other.source_distance
+
+        return (
+            np.all(abs(diff_angles) < ts.epsilon)
+            and np.all(abs(diff_size) < ts.epsilon)
+            and np.all(self.shape == other.shape)
+            and abs(diff_detector) < ts.epsilon
+            and abs(diff_source) < ts.epsilon
+        )
+
+    def to_vector(self):
+        return ConeVectorGeometry.from_astra(astra.geom_2vec(self.to_astra()))
+
+    def to_astra(self):
+        detector_spacing = np.array(self.size) / np.array(self.shape)
+        return astra.create_proj_geom(
+            "cone",
+            detector_spacing[1],
+            detector_spacing[0],  # u, then v (reversed)
+            *self.shape,
+            self.angles,
+            self.source_distance,
+            self.detector_distance,
+        )
+
+    def from_astra(astra_pg):
+        pg_type = astra_pg["type"]
+        if pg_type == "cone":
+            det_spacing = (astra_pg["DetectorSpacingY"], astra_pg["DetectorSpacingX"])
+            # Shape in v, u order (height, width)
+            shape = (astra_pg["DetectorRowCount"], astra_pg["DetectorColCount"])
+            angles = astra_pg["ProjectionAngles"]
+            size = np.array(det_spacing) * np.array(shape)
+            return ConeGeometry(
+                angles=angles,
+                size=size,
+                shape=shape,
+                detector_distance=astra_pg["DistanceOriginDetector"],
+                source_distance=astra_pg["DistanceOriginSource"],
+            )
+        else:
+            raise ValueError(
+                "ConeGeometry.from_astra only supports 'cone' type astra geometries."
+            )
+
+    def get_size(self):
+        """Returns a vector with the size of each detector
+
+
+        :returns: np.array
+            Array with shape (1, 2) in v and u direction
+            (height x width)
+        :rtype: np.array
+
+        """
+        return np.reshape(self.size, (1, 2))
+
+    def get_num_angles(self):
+        """Return the number of angles in the projection geometry
+
+        :returns:
+            The number of angles in the projection geometry.
+        :rtype: integer
+
+        """
+        return len(self.angles)

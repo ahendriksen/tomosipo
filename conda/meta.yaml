@@ -1,0 +1,37 @@
+package:
+    name: tomosipo
+    version: "0.0.1"
+
+source:
+    path: ../
+
+build:
+    number: '0'
+
+requirements:
+    build:
+        - python {{ python }}
+        # - setuptools
+        # - astra-toolbox
+        # - pyqtgraph
+        # - pyopengl
+        # - numpy
+        # - pyqt
+
+    run:
+        - python
+        - astra-toolbox
+        - pyqtgraph
+        - pyopengl
+        - pyqt
+        - numpy
+
+about:
+    home: https://github.com/ahendriksen/tomosipo
+    # license: MIT
+    # license_file: LICENSE
+    summary: "A usable Python astra-based tomography library."
+
+extra:
+    maintainers:
+        - Allard Hendriksen

@@ -1,0 +1,176 @@
+* Tomosipo
+Tomosipo is a library to make tomographic reconstructions with astra
+more user friendly.
+
+The scope of this library is as follows:
+- only 3D geometries
+
+Usability:
+- Axis parameters are *always* in the Z, Y, X order
+- Detector parameters are *always* in the v, u order (~v~ being 'up'
+  and ~u~ being 'right')
+- Data and geometry visualization built in using =pyqtgraph=.
+* Installation
+Requirements
+- Astra (the 1.9.x development version is *required*)
+- pyopengl (optional)
+- pyqtgraph (optional)
+- odl (optional)
+
+#+BEGIN_SRC sh
+conda create -y -n tomosipo python=3.6 tomosipo -c astra-toolbox/label/dev
+source activate tomosipo
+#+END_SRC
+* TODO Usage
+
+Simple examples:
+** Create and manipulate geometries
+#+BEGIN_SRC python :results output
+  import astra
+  import numpy as np
+  import tomosipo as ts
+
+  # Create 'unit' cone geometry
+  pg = ts.cone(angles=100)
+  print(pg)
+
+  # Create volume geometry of a unit cube on the origin
+  vg = ts.volume()
+  print(vg)
+
+  # Display an animation of the acquisition geometry
+  ts.display_geometry(pg, vg)
+
+  # Get a volume geometry that fits in the cone beam:
+  v_inside = ts.volume_from_projection_geometry(pg, inside=True)
+  v_outside = ts.volume_from_projection_geometry(pg, inside=False)
+  print(v_inside)
+  print(v_outside)
+  # Animate the geometries:
+  ts.display_geometry(pg, v_inside)
+  ts.display_geometry(pg, v_outside)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+ConeGeometry(
+    angles=100,
+    size=(1.4142135623730951, 1.4142135623730951),
+    shape=(1, 1),
+    detector_distance=0,
+    source_distance=2
+)
+VolumeGeometry < extent: ((-0.5, 0.5), (-0.5, 0.5), (-0.5, 0.5)), shape: (1, 1, 1)>
+VolumeGeometry < extent: ((-0.47151685419122136, 0.47151685419122136), (-0.47141208716416366, 0.47141208716416366), (-0.47141208716416366, 0.47141208716416366)), shape: (1, 1, 1)>
+VolumeGeometry < extent: ((-0.7071067811865476, 0.7071067811865476), (-1.0938365340665575, 1.0938365340665575), (-1.0938365340665575, 1.0938365340665575)), shape: (1, 1, 1)>
+VolumeGeometry < extent: ((-0.7071067811865476, 0.7071067811865476), (-1.0938365340665575, 1.0938365340665575), (-1.0938365340665575, 1.0938365340665575)), shape: (1, 1, 1)>
+#+end_example
+** Do a simple reconstruction
+#+BEGIN_SRC python :result output
+  import numpy as np
+  import tomosipo as ts
+
+  # Get astra projection geometry:
+  pg = ts.cone(angles=100, shape=100)
+  vg = ts.volume(100)
+
+  # Create data objects
+  pd = ts.Data(pg)
+  vd = ts.Data(vg)
+
+  # Make a small cube in the volume:
+  vol = vd.get()
+  vol[20:50, 20:50, 20:50] = 1.0
+
+  # Forward project onto detector (pd)
+  r = ts.ReconstructionGeometry(pd, vd)
+  r.forward()
+
+  # Reset volume
+  vd.set(0)
+
+  # Reconstruct small cube using FDK:
+  ts.fdk(r)
+
+  # Display result:
+  ts.display_data(vd)
+#+END_SRC
+** Clean up memory
+Sometimes you want to work with large datasets and you want to clean
+them up. Perhaps tomosipo is for you!
+
+In the following example, we loop to create datasets that are easily 1
+GB in size. Using a ~with~ statement, we make sure these allocations
+are only temporary.
+
+#+BEGIN_SRC python
+  import numpy as np
+  import tomosipo as ts
+
+  # If you want to see intermediate results, set `interactive` to True.
+  interactive = False
+  # Get astra projection geometry:
+  pg = ts.cone(angles=100, shape=1000)
+  vg = ts.volume(1000)
+
+  for _ in range (100):
+      # Create data objects such that they are only available in the
+      # with statement:
+      with ts.Data(pg) as pd, ts.Data(vg) as vd:
+
+          # Make a small cube in the volume:
+          vol = vd.get()
+          vol[20:50, 20:50, 20:50] = 1.0
+
+          # Forward project onto detector (pd)
+          r = ts.ReconstructionGeometry(pd, vd)
+          r.forward()
+
+          # Reset volume
+          vd.set(0)
+
+          # Reconstruct small cube using FDK:
+          ts.fdk(r)
+
+          # Display result:
+          ts.display_data(vd)
+
+          # pd and vd are cleaned up when you exit the with
+          # statement. No need to be afraid of memory errors!
+#+END_SRC
+
+TODO: discuss segfaults when trying to access cleaned up objects.
+
+** Make an FDK reconstruction of a scanned object
+
+#+BEGIN_SRC python
+  import numpy as np
+  import flexbox as flex
+  import tomosipo as ts
+  import os.path
+  import glob
+  g = "~/datasets/oatmeal/zoom*"
+  paths= glob.iglob(os.path.realpath(os.path.expanduser(g)))
+  for p in paths:
+      # Get astra projection geometry:
+      astra_pg = flex.data.astra_proj_geom(flex.data.read_log(p))
+      pg = ts.ProjectionGeometry.from_astra(astra_pg)
+      vg = ts.fit_volume_in_projection(pg)
+      # Read data (skip darks and flats)
+      proj = flex.data.read_raw(path, 'scan_', **read_raw_options)
+      proj = flex.data.raw2astra(proj)
+      # Reconstruct
+      with pg.with_data(proj) as pd, vg.with_data() as vd:
+          r = ts.ReconstructionGeometry(pg, vg)
+          ts.fdk(r)       # r contains all necessary reconstruction info
+          vd.display()    # show reconstruction -- good utility!
+      # Data is automatically freed -- no MemoryErrors!
+
+#+END_SRC
+* Known bugs and or possible issues
+* Contributions
+** Building conda packages
+#+BEGIN_SRC sh
+conda install conda-build anaconda-client
+conda build conda/ -c astra-toolbox/label/dev
+#+END_SRC

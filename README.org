@@ -16,6 +16,7 @@ Usability:
 
 * Installation
 Requirements:
+- python >= 3.6
 - Astra (the 1.9.x development version is *required*)
 - pyopengl (optional)
 - pyqtgraph (optional)

@@ -124,3 +124,11 @@ class TestConeGeometry(unittest.TestCase):
         size = (1, 2)
         pg = ts.cone(size=size)
         self.assertTrue(abs(size - pg.get_size()).sum() < ts.epsilon)
+
+    def test_get_item(self):
+        pg = ts.cone(angles=10, shape=20)
+        self.assertEqual(pg[1].get_num_angles(), 1)
+        self.assertEqual(pg[:1].get_num_angles(), 1)
+        self.assertEqual(pg[:2].get_num_angles(), 2)
+        self.assertEqual(pg[:].get_num_angles(), 10)
+        self.assertEqual(pg[10].get_num_angles(), 0)

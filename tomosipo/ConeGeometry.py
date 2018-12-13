@@ -1,4 +1,5 @@
 import astra
+from numbers import Integral
 import numpy as np
 from .utils import up_tuple
 import tomosipo as ts
@@ -42,6 +43,36 @@ class ConeGeometry(ProjectionGeometry):
 
     Cone beam geometry
     """
+
+    def __getitem__(self, key):
+        """Return self[key]
+
+        :param key: An int, tuple of ints,
+        :returns:
+        :rtype:
+
+        """
+
+        one_key = isinstance(key, Integral) or isinstance(key, slice)
+        if isinstance(key, Integral):
+            key = slice(key, key + 1)
+        if one_key:
+            return ConeGeometry(angles=np.asarray(self.angles[key]),
+                                size=self.size,
+                                shape=self.shape,
+                                detector_distance=self.detector_distance,
+                                source_distance=self.source_distance
+            )
+        if isinstance(key, tuple):
+            raise IndexError(
+                f"Expected 1 index to ConeGeometry, got {len(key)}. "
+                f"Indexing on the detector plane is not supported, "
+                f"since it might move the detector center. "
+            )
+        raise TypeError(
+            f"Indexing a ConeGeometry with {type(key)} is not supported. "
+            f"Try int or slice instead."
+        )
 
     def __init__(
         self, angles=1, size=np.sqrt(2), shape=1, detector_distance=0, source_distance=2

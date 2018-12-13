@@ -77,8 +77,9 @@ class ConeGeometry(ProjectionGeometry):
         super(ConeGeometry, self).__init__(shape=shape)
         self.angles_original = angles
         if np.isscalar(angles):
-            # TODO: Handle case that angles is not an integer
             angles = np.linspace(0, 2 * np.pi, angles, False)
+        else:
+            angles = np.asarray(angles).astype(np.float64)
 
         size = up_tuple(size, 2)
 

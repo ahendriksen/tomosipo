@@ -27,6 +27,12 @@ class TestConeGeometry(unittest.TestCase):
 
         self.assertTrue(isinstance(pg, ts.ProjectionGeometry))
 
+        pg = ts.ConeGeometry(angles=np.linspace(0, 1, 100))
+        self.assertEqual(pg.get_num_angles(), 100)
+
+        with self.assertRaises(ValueError):
+            pg = ts.ConeGeometry(angles="asdf")
+
         representation = repr(pg)
         if interactive:
             print(ts.ConeGeometry())

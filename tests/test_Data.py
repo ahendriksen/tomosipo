@@ -24,17 +24,27 @@ class TestData(unittest.TestCase):
 
     def test_init(self):
         """Test data creation."""
-        pg = ts.cone()
-        vg = ts.VolumeGeometry()
-        ts.Data(pg, 0)
-        ts.Data(vg, 0)
+        pg = ts.cone(angles=10, shape=20)
+        vg = ts.VolumeGeometry().reshape(10)
+        pd = ts.Data(pg, 0)
 
-        # Should warn when data is silently converted:
+        proj_shape = pd.get().shape
+
+        # Should warn when data is silently converted to float32.
         with self.assertWarns(UserWarning):
-            ts.Data(pg, np.ones((pg.get_num_angles(), *pg.shape), dtype=np.float64))
+            ts.Data(pg, np.ones(proj_shape, dtype=np.float64))
+        with self.assertWarns(UserWarning):
             ts.Data(vg, np.ones(vg.shape, dtype=np.float64))
 
-        ts.Data(pg, np.ones((pg.get_num_angles(), *pg.shape), dtype=np.float32))
+        # Should warn when data is made contiguous.
+        with self.assertWarns(UserWarning):
+            p_data = np.ones((pg.shape[0] * 2, pg.get_num_angles(), pg.shape[1]), dtype=np.float32)
+            ts.Data(pg, p_data[::2, ...])
+        with self.assertWarns(UserWarning):
+            v_data = np.ones((vg.shape[0] * 2, *vg.shape[1:]), dtype=np.float32)
+            ts.Data(vg, v_data[::2, ...])
+
+        ts.Data(pg, np.ones(proj_shape, dtype=np.float32))
         ts.Data(vg, np.ones(vg.shape, dtype=np.float32))
 
     def test_with(self):

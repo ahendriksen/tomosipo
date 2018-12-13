@@ -58,9 +58,13 @@ class Data(object):
                     f"The parameter initial_value is of type {initial_value.dtype}; expected `np.float32`. "
                     f"The type has been Automatically converted."
                 )
-            initial_value = initial_value.astype(np.float32)
-            initial_value = np.ascontiguousarray(initial_value)
-            # TODO: Warn when data is not contiguous
+                initial_value = initial_value.astype(np.float32)
+            if not (initial_value.flags['C_CONTIGUOUS'] and initial_value.flags['ALIGNED']):
+                warnings.warn(
+                    f"The parameter initial_value should be C_CONTIGUOUS and ALIGNED."
+                    f"It has been automatically made contiguous and aligned."
+                )
+                initial_value = np.ascontiguousarray(initial_value)
             astra_type = astra_type_dict[self.data_type + "_link"]
             self.data = astra.data3d.link(astra_type, self.astra_geom, initial_value)
 

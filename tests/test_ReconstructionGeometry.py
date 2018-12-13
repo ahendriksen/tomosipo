@@ -55,7 +55,7 @@ class TestReconstructionGeometry(unittest.TestCase):
             r.backward()
 
     def test_fdk(self):
-        interactive = True
+        interactive = False
         p = ts.Data(ts.cone(angles=100).reshape(100))
         v = ts.Data(ts.volume_from_projection_geometry(p.geometry).reshape(100))
 

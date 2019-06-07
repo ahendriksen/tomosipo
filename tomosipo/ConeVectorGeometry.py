@@ -90,20 +90,20 @@ class ConeVectorGeometry(ProjectionGeometry):
 
         return (
             self.shape == other.shape
-            and np.all(abs(dpos_diff)) < ts.epsilon
-            and np.all(abs(spos_diff)) < ts.epsilon
-            and np.all(abs(us_diff)) < ts.epsilon
-            and np.all(abs(vs_diff)) < ts.epsilon
+            and np.all(abs(dpos_diff) < ts.epsilon)
+            and np.all(abs(spos_diff) < ts.epsilon)
+            and np.all(abs(us_diff) < ts.epsilon)
+            and np.all(abs(vs_diff) < ts.epsilon)
         )
 
     def to_astra(self):
         row_count, col_count = self.shape
         vectors = np.concatenate(
             [
-                self.source_positions,
-                self.detector_positions,
-                self.detector_us,
-                self.detector_vs,
+                self.source_positions[:, ::-1],
+                self.detector_positions[:, ::-1],
+                self.detector_us[:, ::-1],
+                self.detector_vs[:, ::-1],
             ],
             axis=1,
         )

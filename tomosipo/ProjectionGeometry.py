@@ -99,21 +99,24 @@ class ProjectionGeometry(object):
     def is_vector(self):
         return self._is_vector
 
-    def get_size(self):
-        """Returns a vector with the size of each detector
-
-        :returns: np.array with shape (num_angles, 3)
-        :rtype: np.array
-
-        """
-        raise NotImplementedError()
-
     def get_num_angles(self):
         """Return the number of angles in the projection geometry
 
         :returns:
             The number of angles in the projection geometry.
         :rtype: integer
+
+        """
+        raise NotImplementedError()
+
+    @property
+    def detector_sizes(self):
+        """Returns a vector with the size of each detector
+
+        :returns: np.array
+            Array with shape (num_angles, 2) in v and u direction
+            (height x width)
+        :rtype: np.array
 
         """
         raise NotImplementedError()

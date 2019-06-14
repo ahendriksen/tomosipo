@@ -193,16 +193,8 @@ class ConeVectorGeometry(ProjectionGeometry):
 
         return np.stack((det_i_v, det_i_u), axis=-1)
 
-    def get_size(self):
-        """Returns a vector with the size of each detector
-
-
-        :returns: np.array
-            Array with shape (num_angles, 2) in v and u direction
-            (height x width)
-        :rtype: np.array
-
-        """
+    @ProjectionGeometry.detector_sizes.getter
+    def detector_sizes(self):
         height = vc.norm(self.detector_vs * self.shape[0])
         width = vc.norm(self.detector_us * self.shape[1])
 

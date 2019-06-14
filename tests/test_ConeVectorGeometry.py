@@ -81,16 +81,16 @@ class TestConeVectorGeometry(unittest.TestCase):
             np.abs(pg.project_point((0, 0, 0.2)) - [0.0, 1.0]).sum(), 0
         )
 
-    def test_get_size(self):
+    def test_detector_sizes(self):
         size = (1, 1)
         pg = ts.cone(angles=5, size=size).to_vector()
-        self.assertTrue(abs(size - pg.get_size()).sum() < ts.epsilon)
+        self.assertTrue(abs(size - pg.detector_sizes).sum() < ts.epsilon)
         for _ in range(10):
             new_shape = np.random.uniform(1, 100, size=2).astype(np.int)
             # Change the number of detector pixels and test if the
             # change in size is proportional
             pg2 = pg.reshape(new_shape)
-            self.assertTrue(abs(size * new_shape - pg2.get_size()).sum() < ts.epsilon)
+            self.assertTrue(abs(size * new_shape - pg2.detector_sizes).sum() < ts.epsilon)
 
     def test_get_corners(self):
         # TODO: This test deserves better..

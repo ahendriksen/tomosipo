@@ -21,38 +21,20 @@ class TestReconstructionGeometry(unittest.TestCase):
         """Tear down test fixtures, if any."""
         pass
 
-    def test_init(self):
-        """Test ReconstructionGeometry init."""
-
-        pd = ts.Data(ts.cone())
-        vd = ts.Data(ts.VolumeGeometry())
-
-        r = ts.ReconstructionGeometry(pd, vd)
-
-        r = ts.ReconstructionGeometry(
-            pd, vd, detector_supersampling=2, voxel_supersampling=2
-        )
-
     def test_forward_backward(self):
         pd = ts.Data(ts.cone().reshape(10))
         vd = ts.Data(ts.VolumeGeometry().reshape(10))
 
         rs = [
-            ts.ReconstructionGeometry(pd, vd),
-            ts.ReconstructionGeometry(
-                pd, vd, detector_supersampling=2, voxel_supersampling=2
-            ),
-            ts.ReconstructionGeometry(
-                pd, vd, detector_supersampling=1, voxel_supersampling=2
-            ),
-            ts.ReconstructionGeometry(
-                pd, vd, detector_supersampling=2, voxel_supersampling=1
-            ),
+            ([pd, vd], {}),
+            ([pd, vd], dict(detector_supersampling=2, voxel_supersampling=2)),
+            ((pd, vd), dict(detector_supersampling=1, voxel_supersampling=2)),
+            ((pd, vd), dict(detector_supersampling=2, voxel_supersampling=1)),
         ]
 
-        for r in rs:
-            r.forward()
-            r.backward()
+        for data, kwargs in rs:
+            ts.forward(*data, **kwargs)
+            ts.backward(*data, **kwargs)
 
     def test_fdk(self):
         interactive = False
@@ -64,12 +46,10 @@ class TestReconstructionGeometry(unittest.TestCase):
         proj[:] = np.random.normal(size=proj.shape)
         proj[:] = abs(proj)
 
-        r = ts.ReconstructionGeometry(p, v)
-
         if interactive:
             ts.display_data(p)
 
-        ts.fdk(r)
+        ts.fdk(v, p)
 
         if interactive:
             ts.display_data(v)

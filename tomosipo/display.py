@@ -6,6 +6,10 @@ import warnings
 import pyqtgraph as pq
 from pyqtgraph.Qt import QtCore
 import pyqtgraph.opengl as gl
+from functools import singledispatch
+from .Data import Data
+from .ProjectionGeometry import ProjectionGeometry, is_projection_geometry
+from .VolumeGeometry import VolumeGeometry, is_volume_geometry
 
 
 def get_app():
@@ -16,35 +20,45 @@ def run_app(app):
     app.exec_()
 
 
-def display_data(data):
+@singledispatch
+def display(arg, *items):
+    raise ValueError(f"Display not implemented for type {type(arg)}")
+
+
+@display.register(Data)
+def display_data(d):
     """Display a projection or volume data set.
 
     Shows the slices or projection images depending on the argument.
 
-    Note: for projection datasets, the axes on the data are
-    swapped. This can induce more allocations. Make sure not to call
-    this procedure with very large projection datasets or if memory is
-    scarce.
+    For projection datasets, the "first" pixel (0, 0) is located
+    in the lower-left corner and the "last" pixel (N, N) is located in
+    the top-right corner.
 
-    :param data: `Data`
+    For volume datasets, the voxel (0, 0, 0) is located in the
+    lower-left corner of the first (left-most) slice and the voxel (N,
+    N, N) is located in the top-right corner of the last slice.
+
+    :param d: `Data`
         A tomosipo dataset of either a volume or projection set.
     :returns: None
     :rtype:
 
     """
 
-    if data.is_volume():
+    if d.is_volume():
         app = get_app()
-        pq.image(data.get())
+        pq.image(d.get(), scale=(1, -1))
         run_app(app)
-    elif data.is_projection():
+    elif d.is_projection():
         app = get_app()
-        pq.image(data.get().swapaxes(0, 1).swapaxes(1, 2))
+        pq.image(d.get(), scale=(1, -1), axes=dict(zip("ytx", range(3))))
         run_app(app)
 
 
-# TODO: Add pyopengl as dependency
-def display_geometry(pg, vg):
+@display.register(VolumeGeometry)
+@display.register(ProjectionGeometry)
+def display_geometry(*geometries):
     """Display a 3D animation of the acquisition geometry
 
     Note: requires the installation of pyopengl.
@@ -56,6 +70,23 @@ def display_geometry(pg, vg):
     :rtype: None
 
     """
+
+    pgs = [g for g in geometries if is_projection_geometry(g)]
+    vgs = [g for g in geometries if is_volume_geometry(g)]
+
+    if len(pgs) != 1:
+        raise ValueError(
+            f"Expected 1 projection geometry to be supplied to ts.display_geometry. Got: {len(pgs)}"
+        )
+
+    if len(vgs) != 1:
+        raise ValueError(
+            f"Expected 1 volume geometry to be supplied to ts.display_geometry. Got: {len(vgs)}"
+        )
+
+    pg, *_ = pgs
+    vg, *_ = vgs
+
     app = get_app()
     view = gl.GLViewWidget()
     view.show()

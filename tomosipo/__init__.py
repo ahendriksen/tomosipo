@@ -12,12 +12,12 @@ from .VolumeGeometry import (
     volume_from_projection_geometry,
     is_volume_geometry,
 )
-from .ProjectionGeometry import ProjectionGeometry, is_projection_geometry
-from .ConeGeometry import ConeGeometry, cone
+from . import ProjectionGeometry
+from .ConeGeometry import cone
 from .GeometryConversion import from_astra_geometry
-from .ConeVectorGeometry import ConeVectorGeometry
-from .ReconstructionGeometry import ReconstructionGeometry, fdk
-from .display import display_geometry, display_data
+from .ConeVectorGeometry import cone_vec
+from .ReconstructionGeometry import forward, backward, fdk
+from .display import display_geometry, display_data, display
 from .Data import Data
 import warnings
 

@@ -58,7 +58,7 @@ def project(*data,
             'project must be given a forward argument (True/False).'
         )
 
-    if len(pds) < 1 or len(vds) < 1:
+    if len(vol_data) < 1 or len(proj_data) < 1:
         raise ValueError(
             "Expected at least one projection dataset and one volume dataset"
         )
@@ -78,7 +78,8 @@ def project(*data,
         t
     )
 
-def forward(*data, *, voxel_supersampling=1, detector_supersampling=1, additive=False):
+
+def forward(*data, voxel_supersampling=1, detector_supersampling=1, additive=False):
     """Forward project
 
     Projects all volumes on all projection datasets.
@@ -109,7 +110,8 @@ def forward(*data, *, voxel_supersampling=1, detector_supersampling=1, additive=
         forward=True
     )
 
-def backward(*data, *, voxel_supersampling=1, detector_supersampling=1, additive=False):
+
+def backward(*data, voxel_supersampling=1, detector_supersampling=1, additive=False):
     """Backproject
 
     Backprojects all projection datasets on all volumes.
@@ -140,6 +142,7 @@ def backward(*data, *, voxel_supersampling=1, detector_supersampling=1, additive
         forward=False
     )
 
+
 def fdk(vol_data, proj_data, *, voxel_supersampling=1, detector_supersampling=1):
     """Do an FDK reconstruction of the given geometry.
 
@@ -163,7 +166,7 @@ def fdk(vol_data, proj_data, *, voxel_supersampling=1, detector_supersampling=1)
 
     """
 
-    projector = astra_projector(vol_data.geometry, proj_data,geometry,
+    projector = astra_projector(vol_data.geometry, proj_data.geometry,
                                 voxel_supersampling=voxel_supersampling,
                                 detector_supersampling=detector_supersampling)
 

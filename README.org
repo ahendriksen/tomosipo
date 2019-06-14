@@ -86,8 +86,7 @@ VolumeGeometry < extent: ((-0.7071067811865476, 0.7071067811865476), (-1.0938365
   vol[20:50, 20:50, 20:50] = 1.0
 
   # Forward project onto detector (pd)
-  r = ts.ReconstructionGeometry(pd, vd)
-  r.forward()
+  r = ts.forward(vd, pd)
 
   # Reset volume
   vd.set(0)
@@ -126,14 +125,13 @@ are only temporary.
           vol[20:50, 20:50, 20:50] = 1.0
 
           # Forward project onto detector (pd)
-          r = ts.ReconstructionGeometry(pd, vd)
-          r.forward()
+          ts.forward(vd, pd)
 
           # Reset volume
           vd.set(0)
 
           # Reconstruct small cube using FDK:
-          ts.fdk(r)
+          ts.fdk(vd, pd)
 
           # Display result:
           ts.display_data(vd)
@@ -164,8 +162,7 @@ TODO: discuss segfaults when trying to access cleaned up objects.
       proj = flex.data.raw2astra(proj)
       # Reconstruct
       with pg.with_data(proj) as pd, vg.with_data() as vd:
-          r = ts.ReconstructionGeometry(pg, vg)
-          ts.fdk(r)       # r contains all necessary reconstruction info
+          ts.fdk(vd, pd)
           vd.display()    # show reconstruction -- good utility!
       # Data is automatically freed -- no MemoryErrors!
 

@@ -7,7 +7,10 @@
 import unittest
 import numpy as np
 import tomosipo as ts
-
+from tomosipo.ProjectionGeometry import (
+    ProjectionGeometry,
+    is_projection_geometry,
+)
 
 class TestProjectionGeometry(unittest.TestCase):
     """Tests for ProjectionGeometry."""
@@ -21,14 +24,14 @@ class TestProjectionGeometry(unittest.TestCase):
         pass
 
     def test_is_projection_geometry(self):
-        self.assertTrue(ts.is_projection_geometry(ts.cone()))
-        self.assertFalse(ts.is_projection_geometry(ts.VolumeGeometry()))
-        self.assertFalse(ts.is_projection_geometry(None))
+        self.assertTrue(is_projection_geometry(ts.cone()))
+        self.assertFalse(is_projection_geometry(ts.VolumeGeometry()))
+        self.assertFalse(is_projection_geometry(None))
 
     def test_init(self):
         """Test init."""
-        pg = ts.ProjectionGeometry()
+        pg = ProjectionGeometry()
         with self.assertRaises(ValueError):
-            ts.ProjectionGeometry(0)
+            ProjectionGeometry(0)
 
         self.assertEqual(pg.shape, (1, 1))

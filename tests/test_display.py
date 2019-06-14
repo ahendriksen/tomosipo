@@ -30,11 +30,9 @@ class Testdisplay(unittest.TestCase):
         proj[:] = np.random.normal(size=proj.shape)
         proj[:] = abs(proj)
 
-        r = ts.ReconstructionGeometry(p, v)
-
         if interactive:
             ts.display_data(p)
-        r.backward()
+        ts.backward(v, p)
         if interactive:
             ts.display_data(v)
 

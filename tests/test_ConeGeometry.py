@@ -23,19 +23,19 @@ class TestConeGeometry(unittest.TestCase):
     def test_init(self):
         """Test init."""
         interactive = False
-        pg = ts.ConeGeometry()
+        pg = ts.cone()
 
-        self.assertTrue(isinstance(pg, ts.ProjectionGeometry))
+        self.assertTrue(isinstance(pg, ts.ProjectionGeometry.ProjectionGeometry))
 
-        pg = ts.ConeGeometry(angles=np.linspace(0, 1, 100))
+        pg = ts.cone(angles=np.linspace(0, 1, 100))
         self.assertEqual(pg.get_num_angles(), 100)
 
         with self.assertRaises(ValueError):
-            pg = ts.ConeGeometry(angles="asdf")
+            pg = ts.cone(angles="asdf")
 
         representation = repr(pg)
         if interactive:
-            print(ts.ConeGeometry())
+            print(ts.cone())
             print(representation)
 
     def test_equal(self):
@@ -44,13 +44,13 @@ class TestConeGeometry(unittest.TestCase):
         Make sure that a ConeGeometry is equal to itself.
         """
 
-        pg = ts.ConeGeometry()
+        pg = ts.cone()
         unequal = [
-            ts.ConeGeometry(angles=2),
-            ts.ConeGeometry(size=5),
-            ts.ConeGeometry(shape=3),
-            ts.ConeGeometry(detector_distance=50),
-            ts.ConeGeometry(source_distance=50),
+            ts.cone(angles=2),
+            ts.cone(size=5),
+            ts.cone(shape=3),
+            ts.cone(detector_distance=50),
+            ts.cone(source_distance=50),
         ]
 
         self.assertEqual(pg, pg)
@@ -59,7 +59,7 @@ class TestConeGeometry(unittest.TestCase):
             self.assertNotEqual(pg, u)
 
     def test_cone(self):
-        self.assertEqual(ts.ConeGeometry(), ts.cone())
+        self.assertEqual(ts.ConeGeometry.ConeGeometry(), ts.cone())
 
     def test_to_vector(self):
         num_tests = 100
@@ -82,7 +82,7 @@ class TestConeGeometry(unittest.TestCase):
             s_dst = np.random.uniform(10, 100)
             d_dst = np.random.uniform(0, 100)
 
-            pg1 = ts.ConeGeometry(angles, size, shape, d_dst, s_dst)
+            pg1 = ts.cone(angles, size, shape, d_dst, s_dst)
             pgv = pg1.to_vector()
             self.assertEqual(pg1.shape, pgv.shape)
 
@@ -114,7 +114,7 @@ class TestConeGeometry(unittest.TestCase):
             s_dst = np.random.uniform(10, 100)
             d_dst = np.random.uniform(0, 100)
 
-            pg1 = ts.ConeGeometry(angles, size, shape, d_dst, s_dst)
+            pg1 = ts.cone(angles, size, shape, d_dst, s_dst)
             astra_pg = pg1.to_astra()
             pg2 = ts.from_astra_geometry(astra_pg)
 

@@ -123,7 +123,7 @@ class Data(object):
         return ts.is_volume_geometry(self.geometry)
 
     def is_projection(self):
-        return ts.is_projection_geometry(self.geometry)
+        return ts.ProjectionGeometry.is_projection_geometry(self.geometry)
 
     def to_astra(self):
         """Returns astra data id associated with current object

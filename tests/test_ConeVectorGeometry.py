@@ -27,19 +27,19 @@ class TestConeVectorGeometry(unittest.TestCase):
         vectors = np.arange(30).reshape((10, 3))
 
         # This should not raise an exception
-        pg = ts.ConeVectorGeometry(1, vectors, vectors, vectors, vectors)
+        pg = ts.cone_vec(1, vectors, vectors, vectors, vectors)
 
         representation = repr(pg)
         if interactive:
             print(representation)
 
         with self.assertRaises(ValueError):
-            ts.ConeVectorGeometry(0, vectors, vectors, vectors, vectors)
+            ts.cone_vec(0, vectors, vectors, vectors, vectors)
         with self.assertRaises(ValueError):
             vecs = np.arange(20).reshape((10, 2))
-            ts.ConeVectorGeometry(1, vecs, vecs, vecs, vecs)
+            ts.cone_vec(1, vecs, vecs, vecs, vecs)
         with self.assertRaises(ValueError):
-            ts.ConeVectorGeometry(1, vectors, vectors, vectors, vecs)
+            ts.cone_vec(1, vectors, vectors, vectors, vecs)
 
     def test_to_from_astra(self):
         nrows = 30
@@ -48,7 +48,7 @@ class TestConeVectorGeometry(unittest.TestCase):
             shape = tuple(int(np.random.uniform(1, 100)) for _ in range(2))
             v1, v2, v3, v4 = (np.random.uniform(size=(nrows, 3)) for _ in range(4))
 
-            pg = ts.ConeVectorGeometry(shape, v1, v2, v3, v4)
+            pg = ts.cone_vec(shape, v1, v2, v3, v4)
             astra_pg = pg.to_astra()
             self.assertEqual(pg, ts.from_astra_geometry(astra_pg))
 
@@ -57,7 +57,6 @@ class TestConeVectorGeometry(unittest.TestCase):
 
         Test whether projection_point works with non-uniform detector spacing.
         """
-        angles = np.zeros(1)
         shape = (10, 40)
         size = (30, 80)
 

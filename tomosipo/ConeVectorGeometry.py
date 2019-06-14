@@ -6,6 +6,36 @@ import tomosipo.vector_calc as vc
 from tomosipo.ProjectionGeometry import ProjectionGeometry
 
 
+def cone_vec(
+        shape, source_positions, detector_positions, detector_vs, detector_us
+):
+    """Create a cone beam vector geometry
+
+    :param shape: (`int`, `int`) or `int`
+        The detector shape in pixels. If tuple, the order is
+        (height, width). Else the pixel has the same number of
+        pixels in the U and V direction.
+    :param source_positions: np.array
+        A numpy array of dimension (num_positions, 3) with the
+        source positions in (Z, Y, X) order.
+    :param detector_positions:
+        A numpy array of dimension (num_positions, 3) with the
+        detector center positions in (Z, Y, X) order.
+    :param detector_vs:
+        A numpy array of dimension (num_positions, 3) with the
+        vector pointing from the detector (0, 0) to (1, 0) pixel
+        (up).
+    :param detector_us:
+        A numpy array of dimension (num_positions, 3) with the
+        vector pointing from the detector (0, 0) to (0, 1) pixel
+        (sideways).
+    :returns:
+    :rtype:
+
+    """
+    return ConeVectorGeometry(shape, source_positions,
+                              detector_positions, detector_vs, detector_us)
+
 class ConeVectorGeometry(ProjectionGeometry):
     """Documentation for ConeVectorGeometry
 

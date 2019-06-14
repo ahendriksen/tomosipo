@@ -19,9 +19,34 @@ requirements = [
     'numpy',
 ]
 
-setup_requirements = []
+setup_requirements = [
+    'pytest-runner'
+]
 
-test_requirements = []
+test_requirements = [
+    'pytest'
+]
+
+dev_requirements = [
+    'autopep8',
+    'rope',
+    'jedi',
+    'flake8',
+    'importmagic',
+    'autopep8',
+    'black',
+    'yapf',
+    'snakeviz',
+    # Documentation
+    'sphinx',
+    'sphinx_rtd_theme',
+    'recommonmark',
+    # Other
+    'watchdog',
+    'coverage',
+    'pytest',
+    'pytest-runner'
+]
 
 setup(
     author="Allard Hendriksen",
@@ -45,6 +70,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
+    extras_require={'dev': dev_requirements},
     url='https://github.com/ahendriksen/tomosipo',
     version='0.0.1',
     zip_safe=False,

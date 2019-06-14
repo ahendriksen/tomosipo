@@ -120,10 +120,11 @@ class TestConeGeometry(unittest.TestCase):
 
             self.assertTrue(pg1 == pg2, msg=f"{pg1}\n\n{pg2}")
 
-    def test_get_size(self):
+    def test_detector_sizes(self):
         size = (1, 2)
-        pg = ts.cone(size=size)
-        self.assertTrue(abs(size - pg.get_size()).sum() < ts.epsilon)
+        pg = ts.cone(angles=3, size=size)
+        size = np.array(size)[None, ...]
+        self.assertTrue(abs(pg.detector_sizes - size).sum() < ts.epsilon)
 
     def test_get_item(self):
         pg = ts.cone(angles=10, shape=20)

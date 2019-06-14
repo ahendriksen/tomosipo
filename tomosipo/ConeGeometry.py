@@ -185,17 +185,9 @@ class ConeGeometry(ProjectionGeometry):
                 "ConeGeometry.from_astra only supports 'cone' type astra geometries."
             )
 
-    def get_size(self):
-        """Returns a vector with the size of each detector
-
-
-        :returns: np.array
-            Array with shape (1, 2) in v and u direction
-            (height x width)
-        :rtype: np.array
-
-        """
-        return np.reshape(self.size, (1, 2))
+    @ProjectionGeometry.detector_sizes.getter
+    def detector_sizes(self):
+        return np.repeat([self.size], self.get_num_angles(), axis=0)
 
     def get_num_angles(self):
         """Return the number of angles in the projection geometry

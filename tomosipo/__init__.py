@@ -16,7 +16,7 @@ from . import ProjectionGeometry
 from .ConeGeometry import cone
 from .GeometryConversion import from_astra_geometry
 from .ConeVectorGeometry import cone_vec
-from .operator import forward, backward, fdk, operator
+from .Operator import forward, backward, fdk, operator
 from .display import display_geometry, display_data, display
 from .Data import data
 from . import phantom

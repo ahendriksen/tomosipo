@@ -7,17 +7,31 @@ import warnings
 def data(geometry, initial_value=None):
     """Create a managed Astra Data3d object
 
+
     :param geometry: `VolumeGeometry` or `ProjectionGeometry`
         A geometry associated with this dataset.
-    :param initial_value: `float` or `np.array` (optional)
+    :param initial_value: `float` or `np.array` or `ts.Data.Data` (optional)
         An initial value for the data. The default is zero. If a
         numpy array is provided, the array is linked to the astra
         toolbox, i.e. they share the same underlying memory.
+
+        If a `Data' object is passed, it is checked to have
     :returns:
         An initialized dataset.
     :rtype: Data
 
     """
+    # If an instance of Data is passed as initial_value, return it
+    # instead of creating a new Data instance.
+    if isinstance(initial_value, Data):
+        if geometry == initial_value.geometry:
+            return initial_value
+        else:
+            raise ValueError(
+                f"Got initial_value={initial_value}, "
+                f"but its geometry does not match {geometry}."
+            )
+
     return Data(geometry, initial_value)
 
 
@@ -67,7 +81,9 @@ class Data(object):
             self.astra_id = astra.data3d.create(astra_type, self.astra_geom, 0.0)
         elif np.isscalar(initial_value):
             astra_type = astra_type_dict[self.data_type]
-            self.astra_id = astra.data3d.create(astra_type, self.astra_geom, initial_value)
+            self.astra_id = astra.data3d.create(
+                astra_type, self.astra_geom, initial_value
+            )
         else:
             # Make contiguous:
             if initial_value.dtype != np.float32:
@@ -85,7 +101,9 @@ class Data(object):
                 )
                 initial_value = np.ascontiguousarray(initial_value)
             astra_type = astra_type_dict[self.data_type + "_link"]
-            self.astra_id = astra.data3d.link(astra_type, self.astra_geom, initial_value)
+            self.astra_id = astra.data3d.link(
+                astra_type, self.astra_geom, initial_value
+            )
 
     def clone(self):
         """Clone Data object

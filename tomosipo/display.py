@@ -45,11 +45,11 @@ def display_data(d):
 
     if d.is_volume():
         app = get_app()
-        pq.image(d.get(), scale=(1, -1))
+        pq.image(d.data, scale=(1, -1))
         run_app(app)
     elif d.is_projection():
         app = get_app()
-        pq.image(d.get(), scale=(1, -1), axes=dict(zip("ytx", range(3))))
+        pq.image(d.data, scale=(1, -1), axes=dict(zip("ytx", range(3))))
         run_app(app)
 
 

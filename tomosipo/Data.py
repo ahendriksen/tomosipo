@@ -64,10 +64,10 @@ class Data(object):
 
         if initial_value is None:
             astra_type = astra_type_dict[self.data_type]
-            self.data = astra.data3d.create(astra_type, self.astra_geom, 0.0)
+            self.astra_id = astra.data3d.create(astra_type, self.astra_geom, 0.0)
         elif np.isscalar(initial_value):
             astra_type = astra_type_dict[self.data_type]
-            self.data = astra.data3d.create(astra_type, self.astra_geom, initial_value)
+            self.astra_id = astra.data3d.create(astra_type, self.astra_geom, initial_value)
         else:
             # Make contiguous:
             if initial_value.dtype != np.float32:
@@ -85,7 +85,7 @@ class Data(object):
                 )
                 initial_value = np.ascontiguousarray(initial_value)
             astra_type = astra_type_dict[self.data_type + "_link"]
-            self.data = astra.data3d.link(astra_type, self.astra_geom, initial_value)
+            self.astra_id = astra.data3d.link(astra_type, self.astra_geom, initial_value)
 
     def clone(self):
         """Clone Data object
@@ -97,17 +97,18 @@ class Data(object):
         :rtype: Data
 
         """
-        data_copy = np.copy(self.get())
+        data_copy = np.copy(self.data)
         return Data(self.geometry, data_copy)
 
     def __enter__(self):
         return self
 
     def __exit__(self, type, value, traceback):
-        astra.data3d.delete(self.data)
+        astra.data3d.delete(self.astra_id)
 
-    def get(self):
-        """Returns a shared numpy array with the data.
+    @property
+    def data(self):
+        """Returns a shared numpy array with the underlying data.
 
         Changes to the return value will be reflected in the astra
         data.
@@ -123,20 +124,15 @@ class Data(object):
         :rtype: np.array
 
         """
-        return astra.data3d.get_shared(self.data)
+        return astra.data3d.get_shared(self.astra_id)
 
-    def set(self, value):
-        """Set the volume data to value
-
-        Changes the underlying storage.
-
-        :param value: `float` or `np.array`
-            The value to set the data to.
-        :returns: None
-        :rtype:
-
-        """
-        astra.data3d.store(self.data, value)
+    @data.setter
+    def data(self, val):
+        raise ValueError(
+            "You cannot change which numpy array backs a dataset.\n"
+            "To change the underlying data instead, use: \n"
+            " >>> vd.data[:] = new_data\n"
+        )
 
     def is_volume(self):
         return ts.is_volume_geometry(self.geometry)
@@ -151,4 +147,4 @@ class Data(object):
         :rtype:
 
         """
-        return self.data
+        return self.astra_id

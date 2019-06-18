@@ -82,17 +82,16 @@ VolumeGeometry < extent: ((-0.7071067811865476, 0.7071067811865476), (-1.0938365
   vd = ts.data(vg)
 
   # Make a small cube in the volume:
-  vol = vd.get()
-  vol[20:50, 20:50, 20:50] = 1.0
+  vd.data[20:50, 20:50, 20:50] = 1.0
 
   # Forward project onto detector (pd)
   r = ts.forward(vd, pd)
 
   # Reset volume
-  vd.set(0)
+  vd.data[:] = 0.0
 
   # Reconstruct small cube using FDK:
-  ts.fdk(r)
+  ts.fdk(vd, pd)
 
   # Display result:
   ts.display_data(vd)
@@ -121,14 +120,13 @@ are only temporary.
       with ts.data(pg) as pd, ts.data(vg) as vd:
 
           # Make a small cube in the volume:
-          vol = vd.get()
-          vol[20:50, 20:50, 20:50] = 1.0
+          vd.data[20:50, 20:50, 20:50] = 1.0
 
           # Forward project onto detector (pd)
           ts.forward(vd, pd)
 
           # Reset volume
-          vd.set(0)
+          vd.data[:] = 0.0
 
           # Reconstruct small cube using FDK:
           ts.fdk(vd, pd)

@@ -57,11 +57,12 @@ class ConeGeometry(ProjectionGeometry):
         if isinstance(key, Integral):
             key = slice(key, key + 1)
         if one_key:
-            return ConeGeometry(angles=np.asarray(self.angles[key]),
-                                size=self.size,
-                                shape=self.shape,
-                                detector_distance=self.detector_distance,
-                                source_distance=self.source_distance
+            return ConeGeometry(
+                angles=np.asarray(self.angles[key]),
+                size=self.size,
+                shape=self.shape,
+                detector_distance=self.detector_distance,
+                source_distance=self.source_distance,
             )
         if isinstance(key, tuple):
             raise IndexError(
@@ -136,6 +137,8 @@ class ConeGeometry(ProjectionGeometry):
         )
 
     def __eq__(self, other):
+        if not isinstance(other, ConeGeometry):
+            return False
 
         diff_angles = np.array(self.angles) - np.array(other.angles)
         diff_size = np.array(self.size) - np.array(other.size)

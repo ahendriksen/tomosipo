@@ -41,6 +41,30 @@ class TestConeVectorGeometry(unittest.TestCase):
         with self.assertRaises(ValueError):
             ts.cone_vec(1, vectors, vectors, vectors, vecs)
 
+    def test_equal(self):
+        """Test __eq__
+
+        Make sure that a ConeVectorGeometry is equal to itself.
+        """
+
+        pos = np.array([(0, 0, 0)])
+        pg = ts.cone_vec(10, pos, pos, pos, pos)
+        unequal = [
+            ts.cone_vec(9, pos, pos, pos, pos),
+            ts.cone_vec(10, pos + 1, pos, pos, pos),
+            ts.cone_vec(10, pos, pos + 1, pos, pos),
+            ts.cone_vec(10, pos, pos, pos + 1, pos),
+            ts.cone_vec(10, pos, pos, pos, pos + 1),
+            ts.cone(angles=2),
+            ts.cone(),
+            ts.volume(),
+        ]
+
+        self.assertEqual(pg, pg)
+
+        for u in unequal:
+            self.assertNotEqual(pg, u)
+
     def test_to_from_astra(self):
         nrows = 30
         num_tests = 100
@@ -89,7 +113,9 @@ class TestConeVectorGeometry(unittest.TestCase):
             # Change the number of detector pixels and test if the
             # change in size is proportional
             pg2 = pg.reshape(new_shape)
-            self.assertTrue(abs(size * new_shape - pg2.detector_sizes).sum() < ts.epsilon)
+            self.assertTrue(
+                abs(size * new_shape - pg2.detector_sizes).sum() < ts.epsilon
+            )
 
     def test_get_corners(self):
         # TODO: This test deserves better..

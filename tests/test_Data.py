@@ -38,7 +38,9 @@ class TestData(unittest.TestCase):
 
         # Should warn when data is made contiguous.
         with self.assertWarns(UserWarning):
-            p_data = np.ones((pg.shape[0] * 2, pg.get_num_angles(), pg.shape[1]), dtype=np.float32)
+            p_data = np.ones(
+                (pg.shape[0] * 2, pg.get_num_angles(), pg.shape[1]), dtype=np.float32
+            )
             ts.data(pg, p_data[::2, ...])
         with self.assertWarns(UserWarning):
             v_data = np.ones((vg.shape[0] * 2, *vg.shape[1:]), dtype=np.float32)
@@ -82,3 +84,38 @@ class TestData(unittest.TestCase):
         self.assertFalse(ts.data(ts.cone()).is_volume())
         self.assertTrue(ts.data(ts.VolumeGeometry()).is_volume())
         self.assertFalse(ts.data(ts.VolumeGeometry()).is_projection())
+
+    def test_init_idempotency(self):
+        """Test that ts.data can be used idempotently
+
+        In numpy, you do `np.array(np.array([1, 1]))' to cast a list
+        to a numpy array. The second invocation of `np.array'
+        basically short-circuits and returns the argument.
+
+        Here, we test that we have the same behaviour for `ts.data'.
+        """
+        vg = ts.volume(shape=10)
+        vg_ = vg.copy()
+
+        vd = ts.data(vg)
+        vd_ = ts.data(vg_, vd)
+
+        self.assertEqual(id(vd), id(vd_))
+
+        with self.assertRaises(ValueError):
+            ts.data(ts.volume(), vd)
+
+        pg = ts.cone(angles=10, shape=20)
+        # TODO: Implement and use .copy()
+        pg_ = ts.cone(angles=10, shape=20)
+
+        pd = ts.data(pg)
+        pd_ = ts.data(pg_, pd)
+
+        self.assertEqual(id(pd), id(pd_))
+
+        with self.assertRaises(ValueError):
+            ts.data(vg, pd)
+
+        with self.assertRaises(ValueError):
+            ts.data(ts.cone(), pd)

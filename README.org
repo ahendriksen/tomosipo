@@ -132,7 +132,8 @@ are only temporary.
           ts.fdk(vd, pd)
 
           # Display result:
-          ts.display_data(vd)
+          if interactive:
+              ts.display_data(vd)
 
           # pd and vd are cleaned up when you exit the with
           # statement. No need to be afraid of memory errors!

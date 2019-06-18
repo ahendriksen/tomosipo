@@ -65,17 +65,16 @@ def project(
         voxel_supersampling=voxel_supersampling,
         detector_supersampling=detector_supersampling,
     )
-    MODE_SET = 0
-    MODE_ADD = 1
+    # TODO: link to astra commit that commits to these public constants.
+    MODE_SET = 1
+    MODE_ADD = 0
 
-    mode = MODE_ADD if additive else MODE_SET
-    t = "FP" if forward else "BP"
     astra.experimental.do_composite(
         projector,
         [d.to_astra() for d in vol_data],
         [d.to_astra() for d in proj_data],
-        mode,
-        t,
+        MODE_ADD if additive else MODE_SET,
+        "FP" if forward else "BP",
     )
 
 

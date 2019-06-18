@@ -78,8 +78,8 @@ VolumeGeometry < extent: ((-0.7071067811865476, 0.7071067811865476), (-1.0938365
   vg = ts.volume(100)
 
   # Create data objects
-  pd = ts.Data(pg)
-  vd = ts.Data(vg)
+  pd = ts.data(pg)
+  vd = ts.data(vg)
 
   # Make a small cube in the volume:
   vol = vd.get()
@@ -118,7 +118,7 @@ are only temporary.
   for _ in range (100):
       # Create data objects such that they are only available in the
       # with statement:
-      with ts.Data(pg) as pd, ts.Data(vg) as vd:
+      with ts.data(pg) as pd, ts.data(vg) as vd:
 
           # Make a small cube in the volume:
           vol = vd.get()

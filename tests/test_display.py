@@ -22,8 +22,8 @@ class Testdisplay(unittest.TestCase):
 
     def test_display_data(self):
         interactive = False
-        p = ts.Data(ts.cone(angles=100).reshape(100))
-        v = ts.Data(ts.volume_from_projection_geometry(p.geometry).reshape(100))
+        p = ts.data(ts.cone(angles=100).reshape(100))
+        v = ts.data(ts.volume_from_projection_geometry(p.geometry).reshape(100))
 
         # Fill the projection data with random noise:
         proj = p.get()

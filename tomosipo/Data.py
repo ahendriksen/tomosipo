@@ -4,6 +4,23 @@ import tomosipo as ts
 import warnings
 
 
+def data(geometry, initial_value=None):
+    """Create a managed Astra Data3d object
+
+    :param geometry: `VolumeGeometry` or `ProjectionGeometry`
+        A geometry associated with this dataset.
+    :param initial_value: `float` or `np.array` (optional)
+        An initial value for the data. The default is zero. If a
+        numpy array is provided, the array is linked to the astra
+        toolbox, i.e. they share the same underlying memory.
+    :returns:
+        An initialized dataset.
+    :rtype: Data
+
+    """
+    return Data(geometry, initial_value)
+
+
 class Data(object):
     """Data: a data manager for Astra
 
@@ -13,13 +30,13 @@ class Data(object):
         """Create a managed Astra Data3d object
 
         :param geometry: `VolumeGeometry` or `ProjectionGeometry`
-            A geometry associated with this datablock.
+            A geometry associated with this dataset.
         :param initial_value: `float` or `np.array` (optional)
             An initial value for the data. The default is zero. If a
             numpy array is provided, the array is linked to the astra
             toolbox, i.e. they share the same underlying memory.
         :returns:
-            An initialized datablock.
+            An initialized dataset.
         :rtype: Data
 
         """
@@ -59,7 +76,9 @@ class Data(object):
                     f"The type has been Automatically converted."
                 )
                 initial_value = initial_value.astype(np.float32)
-            if not (initial_value.flags['C_CONTIGUOUS'] and initial_value.flags['ALIGNED']):
+            if not (
+                initial_value.flags["C_CONTIGUOUS"] and initial_value.flags["ALIGNED"]
+            ):
                 warnings.warn(
                     f"The parameter initial_value should be C_CONTIGUOUS and ALIGNED."
                     f"It has been automatically made contiguous and aligned."

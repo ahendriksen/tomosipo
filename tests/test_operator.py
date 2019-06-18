@@ -8,6 +8,7 @@ import unittest
 import numpy as np
 import tomosipo as ts
 
+
 interactive = False
 
 
@@ -52,3 +53,35 @@ class TestOperator(unittest.TestCase):
 
         if interactive:
             ts.display_data(v)
+
+    def test_operator(self):
+        pg = ts.cone(angles=150, shape=100)
+        vg = ts.volume(shape=100)
+
+        A = ts.operator(vg, pg, additive=False)
+        x = ts.phantom.hollow_box(ts.data(vg))
+
+        y = A(x)
+        y_ = A(np.copy(x.data))  # Test with np.array input
+
+        self.assertAlmostEqual(0.0, np.sum(abs(y.data - y_.data)))
+
+        # Test with `Data` and `np.array` again:
+        x1 = A.transpose(y)
+        x2 = A.transpose(y.data)
+        self.assertAlmostEqual(0.0, np.sum(abs(x1.data - x2.data)))
+
+    def test_operator_additive(self):
+        pg = ts.cone(angles=150, shape=100)
+        vg = ts.volume(shape=100)
+
+        A = ts.operator(vg, pg, additive=False)
+        B = ts.operator(vg, pg, additive=True)
+
+        x = ts.phantom.hollow_box(ts.data(vg))
+        y = ts.data(pg)
+
+        B(x, out=y)
+        B(x, out=y)
+
+        self.assertAlmostEqual(0.0, np.mean(abs(2 * A(x).data - y.data)))

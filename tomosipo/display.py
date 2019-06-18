@@ -1,8 +1,5 @@
 import numpy as np
-import tomosipo as ts
 import itertools
-import astra
-import warnings
 import pyqtgraph as pq
 from pyqtgraph.Qt import QtCore
 import pyqtgraph.opengl as gl

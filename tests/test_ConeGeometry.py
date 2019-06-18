@@ -51,6 +51,7 @@ class TestConeGeometry(unittest.TestCase):
             ts.cone(shape=3),
             ts.cone(detector_distance=50),
             ts.cone(source_distance=50),
+            ts.volume(),
         ]
 
         self.assertEqual(pg, pg)

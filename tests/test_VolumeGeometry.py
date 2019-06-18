@@ -30,6 +30,19 @@ class TestVolumeGeometry(unittest.TestCase):
         """Test init."""
         vg = ts.VolumeGeometry()
 
+    def test_equal(self):
+        """Test __eq__
+
+        """
+
+        vg = ts.volume()
+        unequal = [ts.volume(shape=10), ts.volume(shape=(10, 9, 8)), ts.cone()]
+
+        self.assertEqual(vg, vg)
+
+        for u in unequal:
+            self.assertNotEqual(vg, u)
+
     def test_volume(self):
         self.assertEqual(ts.volume(), ts.VolumeGeometry())
         shapes = [2, (1, 4, 5), (10, 10, 10)]

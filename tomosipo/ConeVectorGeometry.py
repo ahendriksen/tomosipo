@@ -6,9 +6,7 @@ import tomosipo.vector_calc as vc
 from tomosipo.ProjectionGeometry import ProjectionGeometry
 
 
-def cone_vec(
-        shape, source_positions, detector_positions, detector_vs, detector_us
-):
+def cone_vec(shape, source_positions, detector_positions, detector_vs, detector_us):
     """Create a cone beam vector geometry
 
     :param shape: (`int`, `int`) or `int`
@@ -33,8 +31,10 @@ def cone_vec(
     :rtype:
 
     """
-    return ConeVectorGeometry(shape, source_positions,
-                              detector_positions, detector_vs, detector_us)
+    return ConeVectorGeometry(
+        shape, source_positions, detector_positions, detector_vs, detector_us
+    )
+
 
 class ConeVectorGeometry(ProjectionGeometry):
     """Documentation for ConeVectorGeometry
@@ -113,6 +113,9 @@ class ConeVectorGeometry(ProjectionGeometry):
         )
 
     def __eq__(self, other):
+        if not isinstance(other, ConeVectorGeometry):
+            return False
+
         dpos_diff = self.detector_positions - other.detector_positions
         spos_diff = self.source_positions - other.source_positions
         us_diff = self.detector_us - other.detector_us

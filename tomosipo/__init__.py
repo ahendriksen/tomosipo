@@ -19,6 +19,7 @@ from .ConeVectorGeometry import cone_vec
 from .ReconstructionGeometry import forward, backward, fdk
 from .display import display_geometry, display_data, display
 from .Data import Data
+from . import phantom
 import warnings
 
 # This is a fundamental constant used for equality checking in

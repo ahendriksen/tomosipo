@@ -22,8 +22,8 @@ class TestReconstructionGeometry(unittest.TestCase):
         pass
 
     def test_forward_backward(self):
-        pd = ts.Data(ts.cone().reshape(10))
-        vd = ts.Data(ts.VolumeGeometry().reshape(10))
+        pd = ts.data(ts.cone().reshape(10))
+        vd = ts.data(ts.VolumeGeometry().reshape(10))
 
         rs = [
             ([pd, vd], {}),
@@ -38,8 +38,8 @@ class TestReconstructionGeometry(unittest.TestCase):
 
     def test_fdk(self):
         interactive = False
-        p = ts.Data(ts.cone(angles=100).reshape(100))
-        v = ts.Data(ts.volume_from_projection_geometry(p.geometry).reshape(100))
+        p = ts.data(ts.cone(angles=100).reshape(100))
+        v = ts.data(ts.volume_from_projection_geometry(p.geometry).reshape(100))
 
         # Fill the projection data with random noise:
         proj = p.get()

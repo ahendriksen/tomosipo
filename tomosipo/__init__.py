@@ -18,7 +18,7 @@ from .GeometryConversion import from_astra_geometry
 from .ConeVectorGeometry import cone_vec
 from .ReconstructionGeometry import forward, backward, fdk
 from .display import display_geometry, display_data, display
-from .Data import Data
+from .Data import data
 from . import phantom
 import warnings
 

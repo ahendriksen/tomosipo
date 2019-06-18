@@ -28,7 +28,7 @@ class TestData(unittest.TestCase):
         vg = ts.VolumeGeometry().reshape(10)
         pd = ts.data(pg, 0)
 
-        proj_shape = pd.get().shape
+        proj_shape = pd.data.shape
 
         # Should warn when data is silently converted to float32.
         with self.assertWarns(UserWarning):
@@ -57,8 +57,8 @@ class TestData(unittest.TestCase):
         vg = ts.VolumeGeometry()
 
         with ts.data(pg, 0) as pd, ts.data(vg, 0) as vd:
-            proj = pd.get()
-            vol = vd.get()
+            proj = pd.data
+            vol = vd.data
 
         # No test to check that the code below segfaults, but it does :)
         # You can run the code..
@@ -66,16 +66,16 @@ class TestData(unittest.TestCase):
             proj[:] = 0
             vol[:] = 0
 
-    def test_get_set(self):
-        """Test data.set() and data.get()
+    def test_data(self):
+        """Test data.data property
         """
 
         pg = ts.cone().reshape(10)
-        data = ts.data(pg, 0)
+        d = ts.data(pg, 0)
 
-        self.assertTrue(np.all(abs(data.get()) < ts.epsilon))
-        data.set(1)
-        self.assertTrue(np.all(abs(data.get() - 1) < ts.epsilon))
+        self.assertTrue(np.all(abs(d.data) < ts.epsilon))
+        d.data[:] = 1.0
+        self.assertTrue(np.all(abs(d.data - 1) < ts.epsilon))
 
     def test_is_volume_projection(self):
         self.assertTrue(ts.data(ts.cone()).is_projection())

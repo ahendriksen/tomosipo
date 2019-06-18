@@ -10,8 +10,7 @@ def hollow_box(vd):
     :rtype: ts.Data
 
     """
-    vol = vd.get()
-    shape = np.array(vol.shape)
+    shape = np.array(vd.data.shape)
 
     s20 = shape * 20 // 100
     s40 = shape * 40 // 100
@@ -19,8 +18,8 @@ def hollow_box(vd):
     box_slices = tuple(slice(a, l - a) for (a, l) in zip(s20, shape))
     hollow_slices = tuple(slice(a, l - a) for (a, l) in zip(s40, shape))
 
-    vol[:] = 0.0
-    vol[box_slices] = 1.0
-    vol[hollow_slices] = 0.0
+    vd.data[:] = 0.0
+    vd.data[box_slices] = 1.0
+    vd.data[hollow_slices] = 0.0
 
     return vd

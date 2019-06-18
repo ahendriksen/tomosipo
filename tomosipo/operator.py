@@ -1,4 +1,5 @@
 import astra
+import tomosipo as ts
 
 
 def astra_projector(
@@ -175,3 +176,150 @@ def fdk(vol_data, proj_data, *, voxel_supersampling=1, detector_supersampling=1)
     astra.experimental.accumulate_FDK(
         projector, vol_data.to_astra(), proj_data.to_astra()
     )
+
+
+def operator(
+    volume_geometry,
+    projection_geometry,
+    voxel_supersampling=1,
+    detector_supersampling=1,
+    additive=False,
+):
+    """Create a new tomographic operator
+
+    :param volume_geometry: `VolumeGeometry`
+        The domain of the operator.
+    :param projection_geometry:  `ProjectionGeometry`
+        The range of the operator.
+    :param voxel_supersampling: `int` (optional)
+        Specifies the amount of voxel supersampling, i.e., how
+        many (one dimension) subvoxels are generated from a single
+        parent voxel. The default is 1.
+    :param detector_supersampling: `int` (optional)
+        Specifies the amount of detector supersampling, i.e., how
+        many rays are cast per detector. The default is 1.
+    :param additive: `bool` (optional)
+        Specifies whether the operator should overwrite its range
+        (forward) and domain (transpose). When `additive=True`,
+        the operator adds instead of overwrites. The default is
+        `additive=False`.
+    :returns:
+    :rtype:
+
+    """
+    return Operator(
+        volume_geometry,
+        projection_geometry,
+        voxel_supersampling=voxel_supersampling,
+        detector_supersampling=detector_supersampling,
+        additive=additive,
+    )
+
+
+class Operator(object):
+    """Documentation for Operator
+
+    """
+
+    def __init__(
+        self,
+        volume_geometry,
+        projection_geometry,
+        voxel_supersampling=1,
+        detector_supersampling=1,
+        additive=False,
+    ):
+        """Create a new tomographic operator
+
+        :param volume_geometry: `VolumeGeometry`
+            The domain of the operator.
+        :param projection_geometry:  `ProjectionGeometry`
+            The range of the operator.
+        :param voxel_supersampling: `int` (optional)
+            Specifies the amount of voxel supersampling, i.e., how
+            many (one dimension) subvoxels are generated from a single
+            parent voxel. The default is 1.
+        :param detector_supersampling: `int` (optional)
+            Specifies the amount of detector supersampling, i.e., how
+            many rays are cast per detector. The default is 1.
+        :param additive: `bool` (optional)
+            Specifies whether the operator should overwrite its range
+            (forward) and domain (transpose). When `additive=True`,
+            the operator adds instead of overwrites. The default is
+            `additive=False`.
+        :returns:
+        :rtype:
+
+        """
+        super(Operator, self).__init__()
+        self.volume_geometry = volume_geometry
+        self.projection_geometry = projection_geometry
+
+        self.opts = dict(
+            voxel_supersampling=voxel_supersampling,
+            detector_supersampling=detector_supersampling,
+            additive=additive,
+        )
+
+    def __call__(self, volume, out=None):
+        """Apply forward projection
+
+        *Note*: when `volume` is not an instance of `Data`, then this
+         function leaks memory. An intermediate `Data` element is
+         created for the volume that is not freed, and it cannot be
+         freed by the caller. Therefore, it is recommended to only use
+         numpy arrays as input, for small data or one-off scripts.
+
+        :param volume: `np.array` or `Data`
+            An input volume. If a numpy array, the shape must match
+            the operator geometry. If the input volume is an instance
+            of `Data`, its geometry must match the operator geometry.
+        :param out: `np.array` or `Data` (optional)
+            An optional output value. If a numpy array, the shape must
+            match the operator geometry. If the out parameter is an
+            instance of of `Data`, its geometry must match the
+            operator geometry.
+        :returns:
+            A projection dataset on which the volume has been forward
+            projected.
+        :rtype: `Data`
+
+        """
+        vd = ts.data(self.volume_geometry, volume)
+        pd = ts.data(self.projection_geometry, out)
+
+        forward(vd, pd, **self.opts)
+
+        return pd
+
+    def transpose(self, projection, out=None):
+        """Apply backprojection
+
+        *Note*: when `projection` is not an instance of `Data`, then
+         this function leaks memory. An intermediate `Data` element is
+         created for the projection that is not freed, and it cannot
+         be freed by the caller. Therefore, it is recommended to only
+         use numpy arrays as input, for small data or one-off scripts.
+
+        :param projection: `np.array` or `Data`
+            An input projection dataset. If a numpy array, the shape
+            must match the operator geometry. If the projection dataset is
+            an instance of `Data`, its geometry must match the
+            operator geometry.
+        :param out: `np.array` or `Data` (optional)
+            An optional output value. If a numpy array, the shape must
+            match the operator geometry. If the out parameter is an
+            instance of of `Data`, its geometry must match the
+            operator geometry.
+        :returns:
+            A volume dataset on which the projection dataset has been
+            backprojected.
+        :rtype: `Data`
+
+        """
+        vd = ts.data(self.volume_geometry, out)
+        pd = ts.data(self.projection_geometry, projection)
+
+        backward(vd, pd, **self.opts)
+
+        return vd

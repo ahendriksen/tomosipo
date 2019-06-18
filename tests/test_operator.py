@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""Tests for ReconstructionGeometry."""
+"""Tests for operator."""
 
 
 import unittest
@@ -11,7 +11,7 @@ import tomosipo as ts
 interactive = False
 
 
-class TestReconstructionGeometry(unittest.TestCase):
+class TestOperator(unittest.TestCase):
     """Tests for ReconstructionGeometry."""
 
     def setUp(self):

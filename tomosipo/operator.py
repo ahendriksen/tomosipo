@@ -1,28 +1,27 @@
 import astra
-import numpy as np
-import tomosipo as ts
-from .utils import up_tuple
 
 
-def astra_projector(volume_geometry, projection_geometry, *,
-                    voxel_supersampling=1,
-                    detector_supersampling=1):
-        return astra.create_projector(
-            "cuda3d",
-            projection_geometry.to_astra(),
-            volume_geometry.to_astra(),
-            options={
-                "VoxelSuperSampling": voxel_supersampling,
-                "DetectorSuperSampling": detector_supersampling,
-            },
-        )
+def astra_projector(
+    volume_geometry,
+    projection_geometry,
+    *,
+    voxel_supersampling=1,
+    detector_supersampling=1
+):
+    return astra.create_projector(
+        "cuda3d",
+        projection_geometry.to_astra(),
+        volume_geometry.to_astra(),
+        options={
+            "VoxelSuperSampling": voxel_supersampling,
+            "DetectorSuperSampling": detector_supersampling,
+        },
+    )
 
 
-def project(*data,
-            voxel_supersampling=1,
-            detector_supersampling=1,
-            forward=None,
-            additive=False):
+def project(
+    *data, voxel_supersampling=1, detector_supersampling=1, forward=None, additive=False
+):
     """Project forward or backward
 
     Projects all volumes on all projection datasets.
@@ -54,17 +53,18 @@ def project(*data,
     proj_data = [d for d in data if d.is_projection()]
 
     if forward is None:
-        raise ValueError(
-            'project must be given a forward argument (True/False).'
-        )
+        raise ValueError("project must be given a forward argument (True/False).")
 
     if len(vol_data) < 1 or len(proj_data) < 1:
         raise ValueError(
             "Expected at least one projection dataset and one volume dataset"
         )
-    projector = astra_projector(vol_data[0].geometry, proj_data[0].geometry,
-                                voxel_supersampling=voxel_supersampling,
-                                detector_supersampling=detector_supersampling)
+    projector = astra_projector(
+        vol_data[0].geometry,
+        proj_data[0].geometry,
+        voxel_supersampling=voxel_supersampling,
+        detector_supersampling=detector_supersampling,
+    )
     MODE_SET = 0
     MODE_ADD = 1
 
@@ -75,7 +75,7 @@ def project(*data,
         [d.to_astra() for d in vol_data],
         [d.to_astra() for d in proj_data],
         mode,
-        t
+        t,
     )
 
 
@@ -166,8 +166,13 @@ def fdk(vol_data, proj_data, *, voxel_supersampling=1, detector_supersampling=1)
 
     """
 
-    projector = astra_projector(vol_data.geometry, proj_data.geometry,
-                                voxel_supersampling=voxel_supersampling,
-                                detector_supersampling=detector_supersampling)
+    projector = astra_projector(
+        vol_data.geometry,
+        proj_data.geometry,
+        voxel_supersampling=voxel_supersampling,
+        detector_supersampling=detector_supersampling,
+    )
 
-    astra.experimental.accumulate_FDK(projector, vol_data.to_astra(), proj_data.to_astra())
+    astra.experimental.accumulate_FDK(
+        projector, vol_data.to_astra(), proj_data.to_astra()
+    )

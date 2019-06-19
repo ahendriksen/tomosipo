@@ -19,6 +19,7 @@ from .ConeVectorGeometry import cone_vec
 from .Operator import forward, backward, fdk, operator
 from .display import display_geometry, display_data, display
 from .Data import data
+from .OrientedBox import OrientedBox
 from . import phantom
 import warnings
 

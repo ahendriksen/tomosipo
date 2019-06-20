@@ -331,3 +331,9 @@ def ignore_divide_by_zero():
     old_settings = np.seterr(divide="ignore")
     yield
     np.seterr(**old_settings)
+
+
+def check_same_shapes(*args):
+    shapes = [x.shape for x in args]
+    if min(shapes) != max(shapes):
+        raise ValueError(f"Not all arguments are the same shape. Got: {shapes}")

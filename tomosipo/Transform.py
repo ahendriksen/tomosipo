@@ -1,6 +1,6 @@
 import tomosipo as ts
 import numpy as np
-from .utils import up_tuple, check_same_shapes
+from .utils import up_tuple
 import tomosipo.vector_calc as vc
 
 
@@ -202,7 +202,7 @@ def to_perspective(pos=None, w=None, v=None, u=None, box=None):
     v = vc.to_homogeneous_vec(v)
     u = vc.to_homogeneous_vec(u)
     pos, w, v, u = np.broadcast_arrays(pos, w, v, u)
-    check_same_shapes(pos, w, v, u)
+    vc.check_same_shapes(pos, w, v, u)
 
     assert pos.ndim == 2
     return Transform(np.stack((w, v, u, pos), axis=2))

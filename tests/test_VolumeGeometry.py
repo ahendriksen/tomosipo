@@ -8,7 +8,8 @@ import unittest
 import numpy as np
 import tomosipo as ts
 import astra
-
+from tomosipo.VolumeGeometry import random_volume
+from tomosipo.Transform import random_transform
 
 class TestVolumeGeometry(unittest.TestCase):
     """Tests for VolumeGeometry."""
@@ -22,13 +23,13 @@ class TestVolumeGeometry(unittest.TestCase):
         pass
 
     def test_is_volume_geometry(self):
-        self.assertTrue(ts.is_volume_geometry(ts.VolumeGeometry()))
+        self.assertTrue(ts.is_volume_geometry(ts.volume()))
         self.assertFalse(ts.is_volume_geometry(ts.cone()))
         self.assertFalse(ts.is_volume_geometry(None))
 
     def test_init(self):
         """Test init."""
-        vg = ts.VolumeGeometry()
+        vg = ts.volume()
 
     def test_equal(self):
         """Test __eq__
@@ -44,20 +45,20 @@ class TestVolumeGeometry(unittest.TestCase):
             self.assertNotEqual(vg, u)
 
     def test_volume(self):
-        self.assertEqual(ts.volume(), ts.VolumeGeometry())
+        self.assertEqual(ts.volume(), ts.volume())
         shapes = [2, (1, 4, 5), (10, 10, 10)]
         for s in shapes:
-            self.assertEqual(ts.volume(s), ts.VolumeGeometry().reshape(s))
+            self.assertEqual(ts.volume(s), ts.volume(s))
 
     def test_astra(self):
-        vg = ts.VolumeGeometry()
+        vg = ts.volume()
         vg = vg.scale((1, 2, 3)).translate((10, 20, 30))
         vg1 = ts.VolumeGeometry.from_astra(vg.to_astra())
 
         self.assertEqual(vg, vg1)
 
     def test_translate(self):
-        vg = ts.VolumeGeometry()
+        vg = ts.volume()
 
         self.assertEqual(vg, vg.translate((0, 0, 0)))
         self.assertEqual(vg, vg.translate(0))
@@ -68,7 +69,7 @@ class TestVolumeGeometry(unittest.TestCase):
             self.assertAlmostEqual(vg, vg.translate(t).untranslate(t))
 
     def test_scale(self):
-        vg = ts.VolumeGeometry()
+        vg = ts.volume()
 
         self.assertEqual(vg, vg.scale((1, 1, 1)))
         self.assertEqual(vg, vg.scale(1))
@@ -77,7 +78,7 @@ class TestVolumeGeometry(unittest.TestCase):
             self.assertAlmostEqual(vg, vg.scale(t).scale(1 / t), places=5)
 
     def test_multiply(self):
-        vg = ts.VolumeGeometry()
+        vg = ts.volume()
         self.assertEqual(vg, vg.multiply((1, 1, 1)))
         self.assertEqual(vg, vg.multiply(1))
         for _ in range(10):
@@ -85,7 +86,7 @@ class TestVolumeGeometry(unittest.TestCase):
             self.assertAlmostEqual(vg, vg.multiply(t).multiply(1 / t), places=5)
 
     def test_contains(self):
-        vg = ts.VolumeGeometry()
+        vg = ts.volume()
         self.assertFalse(vg in vg.translate(1))
         self.assertFalse(vg in vg.scale(0.5))
         self.assertTrue(vg in vg.scale(2))
@@ -94,7 +95,7 @@ class TestVolumeGeometry(unittest.TestCase):
 
     def test_intersection(self):
 
-        vg = ts.VolumeGeometry()
+        vg = ts.volume()
 
         for _ in range(100):
             t = np.random.normal(size=3)
@@ -115,7 +116,7 @@ class TestVolumeGeometry(unittest.TestCase):
             self.assertAlmostEqual(vg2, vg2.intersect(vg2))
 
     def test_reshape(self):
-        vg = ts.VolumeGeometry()
+        vg = ts.volume()
 
         vg1 = vg.reshape(100)
         vg2 = vg.reshape((100,) * 3)
@@ -125,9 +126,15 @@ class TestVolumeGeometry(unittest.TestCase):
     def test_to_box(self):
         vg = ts.volume(shape=(3, 5, 7))
         box = vg.to_box()
-
         self.assertAlmostEqual(box.size, vg.size())
-        # XXX: Really do not know what to test here..
+
+    def test_transform(self):
+        for _ in range(10):
+            vg = random_volume()
+            T1 = random_transform()
+            T2 = random_transform()
+            self.assertEqual(T1(T2)(vg), T1(T2(vg)))
+            self.assertEqual(ts.identity()(vg), T1.inv(T1(vg)))
 
     def test_volume_from_projection(self):
         """Test volume_from_projection_geometry

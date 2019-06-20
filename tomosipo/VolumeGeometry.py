@@ -31,6 +31,18 @@ def volume(shape=(1, 1, 1)):
     return vg.reshape(shape)
 
 
+def random_volume():
+    """Generates a random volume geometry
+
+    :returns: a random volume geometry
+    :rtype: `VolumeGeometry`
+
+    """
+    center, size = 1 + abs(np.random.normal(size=(2, 3)))
+    shape = np.random.uniform(2, 100, 3)
+    return volume(shape).translate(center).scale(size)
+
+
 class VolumeGeometry:
     def __init__(self):
         """Create a unit VolumeGeometry
@@ -72,30 +84,6 @@ class VolumeGeometry:
     def __round__(self, places):
         c = self.copy()
         c.extent = tuple((round(l, places), round(r, places)) for l, r in c.extent)
-        return c
-
-    def from_astra(avg):
-        WindowMinX = avg["option"]["WindowMinX"]
-        WindowMaxX = avg["option"]["WindowMaxX"]
-        WindowMinY = avg["option"]["WindowMinY"]
-        WindowMaxY = avg["option"]["WindowMaxY"]
-        WindowMinZ = avg["option"]["WindowMinZ"]
-        WindowMaxZ = avg["option"]["WindowMaxZ"]
-
-        voxZ = avg["GridSliceCount"]
-        voxY = avg["GridRowCount"]
-        voxX = avg["GridColCount"]
-
-        c = VolumeGeometry()
-        c.extent = tuple(
-            [
-                (WindowMinZ, WindowMaxZ),
-                (WindowMinY, WindowMaxY),
-                (WindowMinX, WindowMaxX),
-            ]
-        )
-
-        c.shape = (voxZ, voxY, voxX)
         return c
 
     def to_astra(self):
@@ -318,6 +306,39 @@ class VolumeGeometry:
         return ts.OrientedBox(
             self.size(), self.get_center(), (1, 0, 0), (0, 1, 0), (0, 0, 1)
         )
+
+    def transform(self, matrix):
+        warnings.warn(
+            "Converting VolumeGeometry to OrientedBox. "
+            "Use `T(vg.to_box())` to inhibit this warning. ",
+            stacklevel=2,
+        )
+        return self.to_box().transform(matrix)
+
+
+def from_astra(avg):
+    WindowMinX = avg["option"]["WindowMinX"]
+    WindowMaxX = avg["option"]["WindowMaxX"]
+    WindowMinY = avg["option"]["WindowMinY"]
+    WindowMaxY = avg["option"]["WindowMaxY"]
+    WindowMinZ = avg["option"]["WindowMinZ"]
+    WindowMaxZ = avg["option"]["WindowMaxZ"]
+
+    voxZ = avg["GridSliceCount"]
+    voxY = avg["GridRowCount"]
+    voxX = avg["GridColCount"]
+
+    c = VolumeGeometry()
+    c.extent = tuple(
+        [
+            (WindowMinZ, WindowMaxZ),
+            (WindowMinY, WindowMaxY),
+            (WindowMinX, WindowMaxX),
+        ]
+    )
+
+    c.shape = (voxZ, voxY, voxX)
+    return c
 
 
 def volume_from_projection_geometry(projection_geometry, inside=False):

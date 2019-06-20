@@ -7,7 +7,6 @@ __email__ = "allard.hendriksen@cwi.nl"
 __version__ = "0.0.1"
 
 from .VolumeGeometry import (
-    VolumeGeometry,
     volume,
     volume_from_projection_geometry,
     is_volume_geometry,

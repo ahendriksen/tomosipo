@@ -9,6 +9,22 @@ import itertools
 from . import vector_calc as vc
 
 
+def random_box():
+    """Create a random box
+
+    Useful for testing.
+    :returns: a box with random size, position and orientation.
+    :rtype: OrientedBox
+
+    """
+    size = np.random.uniform(0, 10, size=3)
+    pos = np.random.normal(size=3)
+
+    RT = ts.Transform.random_transform()
+    box = ts.OrientedBox(size, pos)
+    return RT(box)
+
+
 class OrientedBox(object):
     """Documentation for OrientedBox
 

@@ -8,6 +8,8 @@ import unittest
 import tomosipo as ts
 import tomosipo.vector_calc as vc
 import numpy as np
+from tomosipo.Transform import random_transform
+from tomosipo.OrientedBox import random_box
 
 interactive = False
 
@@ -133,6 +135,18 @@ class TestOrientedBox(unittest.TestCase):
             ts.display(ob1, ob2)
 
     def test_transform(self):
+        for _ in range(10):
+            box = random_box()
+            T1 = random_transform()
+            T2 = random_transform()
+
+            self.assertEqual(T1(T2)(box), T1(T2(box)))
+            self.assertEqual(ts.identity()(box), box)
+
+            self.assertEqual(T1.inv(T1(box)), box)
+            self.assertEqual(T1.inv(T1)(box), box)
+
+    def test_transform_example(self):
         h = 3
         s = np.linspace(0, 2 * np.pi, 100)
 

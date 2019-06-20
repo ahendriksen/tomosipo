@@ -230,3 +230,19 @@ def from_perspective(pos=None, w=None, v=None, u=None, box=None):
 
     """
     return to_perspective(pos, w, v, u, box).inv
+
+
+def random_transform():
+    """Generate a random transformation
+
+    :returns: A random rigid transformation
+    :rtype: `Transform`
+
+    """
+    t, pos, axis, s = np.random.normal(size=(4, 3))
+    angle = np.random.normal()
+    T = ts.translate(t)
+    R = ts.rotate(pos, axis, rad=angle)
+    S = ts.scale(s)
+
+    return R(S)(T)

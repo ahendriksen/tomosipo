@@ -6,6 +6,7 @@
 
 import unittest
 import tomosipo as ts
+from tomosipo.OrientedBox import random_box
 import numpy as np
 
 interactive = False
@@ -43,9 +44,10 @@ class TestTransform(unittest.TestCase):
         """Test something."""
         N = 10
 
+        # "Simple case": we check that the position of a rotated box
+        # changes correctly.
         rotate = ts.rotate((2, 3, 5), axis=(7, 11, -13), deg=15)
         original = rotate(ts.OrientedBox(size=(3, 4, 5), pos=(2, 3, 5)))
-        print(original.pos)
 
         t = np.array((3, 4, 5))
         T = ts.translate(t)
@@ -56,15 +58,16 @@ class TestTransform(unittest.TestCase):
             ),
         )
 
-        for num_steps in range(1, N):
-            t = np.random.normal(size=(num_steps, 3))
-            T = ts.translate(t)
-            self.assertEqual(
-                T(original),
-                ts.OrientedBox(
-                    (3, 4, 5), t + (2, 3, 5), original.w, original.v, original.u
-                ),
-            )
+        # General case: check that translation by t1 and t2 is the
+        # same as translation by t1 + t2.
+        for t1, t2 in np.random.normal(size=(N, 2, 3)):
+            box = random_box()
+            T1 = ts.translate(t1)
+            T2 = ts.translate(t2)
+            T = ts.translate(t1 + t2)
+
+            self.assertEqual(T1(T2)(box), T1(T2(box)))
+            self.assertEqual(T1(T2), T)
 
     def test_scale(self):
         unit = ts.OrientedBox(size=1, pos=0)
@@ -73,11 +76,19 @@ class TestTransform(unittest.TestCase):
             ts.scale((5, 3, 2))(unit), ts.OrientedBox(size=(5, 3, 2), pos=0)
         )
 
+        # Check that scaling by s1 and s2 is the same as scaling by s1 + s2.
         N = 10
-        for s in np.random.normal(size=(N, 3)):
-            self.assertEqual(ts.scale(s)(unit), ts.OrientedBox(s, 0))
+        for s1, s2 in np.random.normal(size=(N, 2, 3)):
+            box = random_box()
+            S1 = ts.scale(s1)
+            S2 = ts.scale(s2)
+            S = ts.scale(s1 * s2)
+
+            self.assertEqual(S1(S2)(box), S1(S2(box)))
+            self.assertEqual(S1(S2), S)
 
     def test_rotate(self):
+        # TODO: Test continuity as axis approaches (0, 0, 1)
         N = 50
         for p, axis in np.random.normal(size=(N, 2, 3)):
             angle = 2 * np.pi * np.random.normal()
@@ -100,6 +111,20 @@ class TestTransform(unittest.TestCase):
                 ts.rotate(p, axis, rad=angle, right_handed=True),
                 ts.rotate(p, 2 * axis, rad=angle, right_handed=True),
             )
+
+        # Check that rotating by theta1 and theta2 is the same as
+        # rotating by theta1 + theta2.
+        N = 10
+        for theta1, theta2 in np.random.normal(size=(N, 2)):
+            box = random_box()
+            axis = np.random.normal(size=3)
+            pos = np.random.normal(size=3)
+            R1 = ts.rotate(pos, axis, rad=theta1)
+            R2 = ts.rotate(pos, axis, rad=theta2)
+            R = ts.rotate(pos, axis, rad=theta1 + theta2)
+
+            self.assertEqual(R1(R2)(box), R1(R2(box)))
+            self.assertEqual(R1(R2), R)
 
         # Show a box rotating around the Z-axis:
         box = ts.OrientedBox((5, 2, 2), 0, (1, 0, 0), (0, 1, 0), (0, 0, 1))

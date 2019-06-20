@@ -24,8 +24,8 @@ class TestOperator(unittest.TestCase):
         pass
 
     def test_forward_backward(self):
-        pd = ts.data(ts.cone().reshape(10))
-        vd = ts.data(ts.VolumeGeometry().reshape(10))
+        pd = ts.data(ts.cone(shape=10))
+        vd = ts.data(ts.volume(10))
 
         rs = [
             ([pd, vd], {}),

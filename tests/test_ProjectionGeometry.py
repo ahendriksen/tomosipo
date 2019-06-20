@@ -23,7 +23,7 @@ class TestProjectionGeometry(unittest.TestCase):
 
     def test_is_projection_geometry(self):
         self.assertTrue(is_projection_geometry(ts.cone()))
-        self.assertFalse(is_projection_geometry(ts.VolumeGeometry()))
+        self.assertFalse(is_projection_geometry(ts.volume()))
         self.assertFalse(is_projection_geometry(None))
 
     def test_init(self):

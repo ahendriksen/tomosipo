@@ -6,8 +6,6 @@
 
 import unittest
 import numpy as np
-import astra
-import warnings
 import tomosipo as ts
 
 
@@ -25,7 +23,7 @@ class TestData(unittest.TestCase):
     def test_init(self):
         """Test data creation."""
         pg = ts.cone(angles=10, shape=20)
-        vg = ts.VolumeGeometry().reshape(10)
+        vg = ts.volume().reshape(10)
         pd = ts.data(pg, 0)
 
         proj_shape = pd.data.shape
@@ -56,7 +54,7 @@ class TestData(unittest.TestCase):
         """
         seg_fault = False
         pg = ts.cone()
-        vg = ts.VolumeGeometry()
+        vg = ts.volume()
 
         with ts.data(pg, 0) as pd, ts.data(vg, 0) as vd:
             proj = pd.data
@@ -82,8 +80,8 @@ class TestData(unittest.TestCase):
     def test_is_volume_projection(self):
         self.assertTrue(ts.data(ts.cone()).is_projection())
         self.assertFalse(ts.data(ts.cone()).is_volume())
-        self.assertTrue(ts.data(ts.VolumeGeometry()).is_volume())
-        self.assertFalse(ts.data(ts.VolumeGeometry()).is_projection())
+        self.assertTrue(ts.data(ts.volume()).is_volume())
+        self.assertFalse(ts.data(ts.volume()).is_projection())
 
     def test_init_idempotency(self):
         """Test that ts.data can be used idempotently

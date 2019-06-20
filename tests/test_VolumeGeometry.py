@@ -122,6 +122,13 @@ class TestVolumeGeometry(unittest.TestCase):
 
         self.assertEqual(vg1, vg2)
 
+    def test_to_box(self):
+        vg = ts.volume(shape=(3, 5, 7))
+        box = vg.to_box()
+
+        self.assertAlmostEqual(box.size, vg.size())
+        # XXX: Really do not know what to test here..
+
     def test_volume_from_projection(self):
         """Test volume_from_projection_geometry
 
@@ -141,70 +148,43 @@ class TestVolumeGeometry(unittest.TestCase):
         sized volume might fail the test.
 
         """
-
         num_angles = 119
-        interactive = False
         proj_angles = np.linspace(0, 2 * np.pi, num_angles, False)
 
-        pg = ts.cone()
+        # Test with various parameters. Set interactive to True, to
+        # see them in action.
+        params = [
+            [(0.5, 0.2), (8, 20), 200, 20],
+            [(1.0, 1.0), (8, 20), 17, 0],
+            [(1.0, 1.0), (8, 20), 8, 19],
+            [(1.0, 1.0), (20, 8), 10, 100],
+            [(1.0, 1.0), (8, 20), 100, 10],
+            [(1.0, 1.0), (8, 20), 8, 20],
+            [(1.0, 1.0), (20, 8), 10, 0],
+        ]
 
-        vg = ts.volume_from_projection_geometry(pg)
-
-        # TODO: test with astra!
-
-        # # Test with various parameters. Set interactive to True, to
-        # # see them in action.
-        # params = [
-        #     [(0.5, 0.2), (8, 20), 200, 20],
-        #     [(1.0, 1.0), (8, 20), 10, 0],
-        #     [(1.0, 1.0), (8, 20), 8, 19],
-        #     [(1.0, 1.0), (20, 8), 10, 100],
-        #     [(1.0, 1.0), (8, 20), 100, 10],
-        #     [(1.0, 1.0), (8, 20), 8, 20],
-        #     [(1.0, 1.0), (20, 8), 10, 0],
-        # ]
-
-        # for (d_spacing, num_pixels, src_dist, det_dist) in params:
-        #     pg = astra.create_proj_geom(
-        #         "cone", *d_spacing, *num_pixels, proj_angles, src_dist, det_dist
-        #     )
-        #     geometry = Geometry(Cube().to_astra(), pg)
-
-        #     for inside in [True, False]:
-        #         c = geometry.fit_cube(inside=inside)
-        #         voxels = np.array(c.size()) * 3 // 1
-        #         voxels = np.array(voxels, dtype=np.int64)
-        #         g = Geometry(c.to_astra(voxels), pg)
-
-        #         proj = g.get_shared_projection()
-        #         vol = g.get_shared_volume()
-
-        #         r = Composite3dReconstruction(g)
-
-        #         if inside:
-        #             proj[:] = 1.0
-        #             r.backward()
-        #             self.assertGreater(
-        #                 np.min(np.abs(vol)),
-        #                 0,
-        #                 msg=f"Backward failed: {(num_pixels, src_dist, det_dist)}",
-        #             )
-        #         else:
-        #             vol[:] = 1.0
-        #             r.forward()
-        #             self.assertGreater(
-        #                 np.min(np.abs(proj)),
-        #                 0,
-        #                 msg=f"Forward failed: {(num_pixels, src_dist, det_dist)}",
-        #             )
-
-        #         if interactive:
-        #             print(c)
-        #             app = pq.mkQApp()
-        #             if inside:
-        #                 pq.image(vol)
-        #             else:
-        #                 pq.image(proj.swapaxes(0, 1).swapaxes(1, 2))
-        #             app.exec_()
-
-        #             g.display()
+        for (d_spacing, num_pixels, src_dist, det_dist) in params:
+            pg = astra.create_proj_geom(
+                "cone", *d_spacing, *num_pixels, proj_angles, src_dist, det_dist
+            )
+            pg = ts.from_astra_geometry(pg)
+            vg = ts.volume_from_projection_geometry(pg, inside=True)
+            with ts.data(vg) as vd, ts.data(pg) as pd:
+                pd.data[:] = 1.0
+                ts.backward(vd, pd)
+                self.assertGreater(
+                    np.min(np.abs(vd.data)),
+                    0,
+                    msg=f"Backward failed: {(num_pixels, src_dist, det_dist)}",
+                )
+            vg = ts.volume_from_projection_geometry(pg, inside=False)
+            with ts.data(vg) as vd, ts.data(pg) as pd:
+                vd.data[:] = 1.0
+                ts.forward(vd, pd)
+                # ts.display(pd)
+                # ts.display(pg, vg)
+                self.assertGreater(
+                    np.min(np.abs(pd.data)),
+                    0,
+                    msg=f"Forward failed: {(num_pixels, src_dist, det_dist)}",
+                )

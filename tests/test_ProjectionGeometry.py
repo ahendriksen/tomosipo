@@ -7,10 +7,8 @@
 import unittest
 import numpy as np
 import tomosipo as ts
-from tomosipo.ProjectionGeometry import (
-    ProjectionGeometry,
-    is_projection_geometry,
-)
+from tomosipo.ProjectionGeometry import ProjectionGeometry, is_projection_geometry
+
 
 class TestProjectionGeometry(unittest.TestCase):
     """Tests for ProjectionGeometry."""

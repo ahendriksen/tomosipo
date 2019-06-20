@@ -230,3 +230,12 @@ class ConeGeometry(ProjectionGeometry):
 
         """
         return len(self.angles)
+
+    def to_box(self):
+        """Returns two boxes representating the source and detector respectively
+
+        :returns: (source_box, detector_box)
+        :rtype:  `(OrientedBox, OrientedBox)`
+
+        """
+        return self.to_vector().to_box()

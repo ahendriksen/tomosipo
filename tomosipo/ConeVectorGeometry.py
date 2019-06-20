@@ -1,5 +1,5 @@
+import warnings
 import numpy as np
-from .utils import up_tuple
 import tomosipo as ts
 import tomosipo.vector_calc as vc
 from tomosipo.ProjectionGeometry import ProjectionGeometry
@@ -294,3 +294,44 @@ class ConeVectorGeometry(ProjectionGeometry):
 
         """
         return len(self.detector_positions)
+
+    def to_box(self):
+        """Returns two boxes representating the source and detector respectively
+
+        :returns: (source_box, detector_box)
+        :rtype:  `(OrientedBox, OrientedBox)`
+
+        """
+        src_pos = self.source_positions
+        det_pos = self.detector_positions
+        w = self.detector_vs  # v points up, w points up
+        u = self.detector_us  # detector_u and u point in the same direction
+
+        # TODO: Fix vc.norm so we do not need [:, None]
+        # We do not want to introduce scaling, so we normalize w and u.
+        w = w / vc.norm(w)[:, None]
+        u = u / vc.norm(u)[:, None]
+        # This is the detector normal and has norm 1. In right-handed
+        # coordinates, it would point towards the source usually. Now
+        # it points "into" the detector.
+        v = vc.cross_product(u, w)
+
+        # TODO: Warn when detector size changes during rotation.
+        det_height, det_width = self.detector_sizes[0]
+
+        if np.any(abs(np.ptp(self.detector_sizes, axis=0)) > ts.epsilon):
+            warnings.warn(
+                "The detector size is not uniform. "
+                "Using first detector size for the box"
+            )
+
+        detector_box = ts.OrientedBox((det_height, 0, det_width), det_pos, w, v, u)
+
+        # The source of course does not really have a size, but we
+        # want to visualize it for now :)
+        source_size = (det_width / 10,) * 3
+        # We set the orientation of the source to be identical to
+        # that of the detector.
+        source_box = ts.OrientedBox(source_size, src_pos, w, v, u)
+
+        return source_box, detector_box

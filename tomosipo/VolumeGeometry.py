@@ -52,7 +52,11 @@ class VolumeGeometry:
         return f"VolumeGeometry < extent: {self.extent}, " f"shape: {self.shape}>"
 
     def __eq__(self, other):
-        return isinstance(other, VolumeGeometry) and self.extent == other.extent and self.shape == other.shape
+        return (
+            isinstance(other, VolumeGeometry)
+            and self.extent == other.extent
+            and self.shape == other.shape
+        )
 
     def __abs__(self):
         return np.prod(self.size())
@@ -303,6 +307,17 @@ class VolumeGeometry:
 
         """
         return list(itertools.product(*self.extent))
+
+    def to_box(self):
+        """Returns an oriented box representating the volume
+
+        :returns:
+        :rtype:
+
+        """
+        return ts.OrientedBox(
+            self.size(), self.get_center(), (1, 0, 0), (0, 1, 0), (0, 0, 1)
+        )
 
 
 def volume_from_projection_geometry(projection_geometry, inside=False):

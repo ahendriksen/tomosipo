@@ -8,6 +8,7 @@ import numpy as np
 import tomosipo as ts
 from tomosipo.Transform import random_transform
 from tomosipo.ConeGeometry import random_cone
+import tomosipo.vector_calc as vc
 
 
 def test_init():
@@ -141,3 +142,10 @@ def test_transform():
         with pytest.warns(Warning):
             assert T1(T2)(pg) == T1(T2(pg))
             assert ts.identity()(pg) == pg.to_vector()
+
+
+def test_to_box():
+    pg = ts.cone(10, shape=(5, 3), detector_distance=10, source_distance=11)
+    src_box, det_box = pg.to_box()
+
+    assert pytest.approx(0) == vc.norm(src_box.pos - det_box.pos) - (10 + 11)

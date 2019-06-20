@@ -5,11 +5,11 @@
 
 
 import unittest
-import astra
 import numpy as np
 import tomosipo as ts
 from tomosipo.Transform import random_transform
 from tomosipo.ConeVectorGeometry import random_cone_vec
+import tomosipo.vector_calc as vc
 
 
 class TestConeVectorGeometry(unittest.TestCase):
@@ -142,3 +142,14 @@ class TestConeVectorGeometry(unittest.TestCase):
 
             self.assertEqual(T1(T2)(pg), T1(T2(pg)))
             self.assertEqual(ts.identity()(pg), pg)
+
+    def test_to_box(self):
+        pg = ts.cone(
+            10, shape=(5, 3), detector_distance=10, source_distance=11
+        ).to_vector()
+        src_box, det_box = pg.to_box()
+
+        self.assertAlmostEqual(
+            abs(vc.norm(src_box.pos - det_box.pos) - (10 + 11)).sum(), 0
+        )
+        # XXX: Really do not know what to test here..

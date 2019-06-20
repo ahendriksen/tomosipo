@@ -1,5 +1,4 @@
 import numpy as np
-import astra
 from .utils import up_tuple
 import tomosipo as ts
 import tomosipo.vector_calc as vc
@@ -71,31 +70,15 @@ class ConeVectorGeometry(ProjectionGeometry):
         """
         super(ConeVectorGeometry, self).__init__(shape=shape)
 
-        self.source_positions = np.array(source_positions)
-        self.detector_positions = np.array(detector_positions)
-        self.detector_vs = np.array(detector_vs)
-        self.detector_us = np.array(detector_us)
+        src_pos, det_pos, det_v, det_u = (vc.to_vec(x) for x in (source_positions, detector_positions, detector_vs, detector_us))
+        src_pos, det_pos, det_v, det_u = np.broadcast_arrays(src_pos, det_pos, det_v, det_u)
 
-        shapes = [
-            self.source_positions.shape,
-            self.detector_positions.shape,
-            self.detector_vs.shape,
-            self.detector_us.shape,
-        ]
+        vc.check_same_shapes(src_pos, det_pos, det_v, det_u)
 
-        s0 = shapes[0]
-
-        if len(s0) != 2:
-            raise ValueError("Source_positions must be two-dimensional.")
-
-        if s0[1] != 3:
-            raise ValueError("Source_positions must have 3 columns.")
-
-        for s in shapes:
-            if s != s0:
-                raise ValueError(
-                    "Not all shapes of source, detector, u, v vectors are equal"
-                )
+        self.source_positions = src_pos
+        self.detector_positions = det_pos
+        self.detector_vs = det_v
+        self.detector_us = det_u
 
         self._is_cone = True
         self._is_parallel = False

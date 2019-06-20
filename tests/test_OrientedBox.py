@@ -6,6 +6,7 @@
 
 import unittest
 import tomosipo as ts
+import tomosipo.vector_calc as vc
 import numpy as np
 
 interactive = False
@@ -24,9 +25,19 @@ class TestOrientedBox(unittest.TestCase):
 
     def test_init(self):
         """Test something."""
+        z, y, x = (1, 0, 0), (0, 1, 0), (0, 0, 1)
 
-        ob = ts.OrientedBox(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0))
-        print(ob)
+        # Create unit cube:
+        ob = ts.OrientedBox(1, (0, 0, 0), z, y, x)
+
+        # Test that using a scalar position works as well.
+        self.assertEqual(ob, ts.OrientedBox(1, 0, z, y, x))
+        self.assertEqual(ob, ts.OrientedBox(1, 0, z, y))
+        self.assertEqual(ob, ts.OrientedBox(1, 0, [z], y))
+        self.assertEqual(ob, ts.OrientedBox(1, 0, z, y, x))
+        self.assertEqual(ob, ts.OrientedBox((1, 1, 1), 0, z, y, x))
+        self.assertEqual(ob, ts.OrientedBox((1, 1, 1), 0, z, y, x))
+        self.assertEqual(ob, ts.OrientedBox((1, 1, 1), [(0, 0, 0)], z, y, x))
 
         N = 11
         with self.assertRaises(ValueError):
@@ -118,4 +129,91 @@ class TestOrientedBox(unittest.TestCase):
         pos2 = np.stack([zero, h * np.sin(s), h * np.cos(s)], axis=1)
         ob2 = ts.OrientedBox(2, pos2, w, v, u)
 
-        ts.display(ob1, ob2)
+        if interactive:
+            ts.display(ob1, ob2)
+
+    def test_transform(self):
+        h = 3
+        s = np.linspace(0, 2 * np.pi, 100)
+
+        zero = np.zeros(s.shape)
+        one = np.ones(s.shape)
+
+        pos = np.stack([h * np.sin(s), zero, zero], axis=1)
+        z = np.stack([one, zero, zero], axis=1)
+        y = np.stack([zero, one, zero], axis=1)
+        x = np.stack([zero, zero, one], axis=1)
+
+        w = np.stack([one, zero, zero], axis=1)
+        v = np.stack([zero, np.sin(s), np.cos(s)], axis=1)
+        u = np.stack([zero, np.sin(s + np.pi / 2), np.cos(s + np.pi / 2)], axis=1)
+
+        ob1 = ts.OrientedBox(1, pos, w, v, u)
+        pos2 = np.stack([zero, h * np.sin(s), h * np.cos(s)], axis=1)
+        ob2 = ts.OrientedBox(2, pos2, z, y, x)
+
+        M1 = ts.from_perspective(box=ob1)
+        M2 = ts.from_perspective(box=ob2)
+
+        if interactive:
+            ts.display(ob1, ob2)
+            ts.display(ob1.transform(M1.matrix), ob2.transform(M1.matrix))
+            ts.display(ob1.transform(M2.matrix), ob2.transform(M2.matrix))
+
+    def test_proj_geom(self):
+        # TODO: This functionality must move somewhere into the
+        # codebase instead of being here in the testing ground..
+
+        def to_boxes(pg):
+            pg = pg.to_vector()
+
+            assert pg.is_cone()
+
+            src_pos = pg.source_positions
+            det_pos = pg.detector_positions
+            w = pg.detector_vs  # v points up, w points up
+            u = pg.detector_us  # detector_u and u point in the same direction
+
+            # We do not want to introduce scaling, so we normalize w and u.
+            w = w / vc.norm(w)[:, None]
+            u = u / vc.norm(u)[:, None]
+            # This is the detector normal and has norm 1. In a lot of
+            # cases, it points towards the source.
+            v = vc.cross_product(u, w)
+
+            # TODO: Warn when detector size changes during rotation.
+            det_height, det_width = pg.detector_sizes[0]
+
+            detector_box = ts.OrientedBox((det_height, 0, det_width), det_pos, w, v, u)
+
+            # The source of course does not really have a size, but we
+            # want to visualize it for now :)
+            source_size = (det_width / 10,) * 3
+            # We set the orientation of the source to be identical to
+            # that of the detector.
+            source_box = ts.OrientedBox(source_size, src_pos, w, v, u)
+
+            return source_box, detector_box
+
+        def vol_to_box(vg):
+            return ts.OrientedBox(
+                vg.size(), vg.get_center(), (1, 0, 0), (0, 1, 0), (0, 0, 1)
+            )
+
+        num_steps = 100
+        s = np.linspace(0, 2 * np.pi, num_steps)
+        pg = ts.cone(angles=num_steps, size=10, detector_distance=5, source_distance=5)
+        vg = ts.volume()
+
+        src_box, det_box = to_boxes(pg)
+        vol_box = vol_to_box(vg)
+
+        R = ts.rotate(det_box.pos, det_box.v, deg=10)
+
+        if interactive:
+            ts.display(src_box, vol_box, det_box)
+            ts.display(src_box, (vol_box), R(det_box))
+
+        M1 = ts.from_perspective(src_box.pos, src_box.w, src_box.v, src_box.u)
+
+        # ts.display(src_box.transform(M1), vol_box.transform(M1), det_box.transform(M1))

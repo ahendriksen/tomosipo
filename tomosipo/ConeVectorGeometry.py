@@ -35,6 +35,23 @@ def cone_vec(shape, source_positions, detector_positions, detector_vs, detector_
     )
 
 
+def random_cone_vec():
+    """Generates a random cone vector geometry
+
+    :returns: a random cone vector geometry
+    :rtype: `ConeVectorGeometry`
+
+    """
+    angles = np.random.normal(size=20)
+    size = np.random.uniform(10, 20, size=2)
+    shape = np.random.uniform(10, 20, size=2)
+    detector_distance = np.random.uniform(0, 10)
+    source_distance = np.random.uniform(0, 10)
+
+    pg = ts.cone(angles, size, shape, detector_distance, source_distance)
+    return pg.to_vector()
+
+
 class ConeVectorGeometry(ProjectionGeometry):
     """Documentation for ConeVectorGeometry
 
@@ -70,8 +87,13 @@ class ConeVectorGeometry(ProjectionGeometry):
         """
         super(ConeVectorGeometry, self).__init__(shape=shape)
 
-        src_pos, det_pos, det_v, det_u = (vc.to_vec(x) for x in (source_positions, detector_positions, detector_vs, detector_us))
-        src_pos, det_pos, det_v, det_u = np.broadcast_arrays(src_pos, det_pos, det_v, det_u)
+        src_pos, det_pos, det_v, det_u = (
+            vc.to_vec(x)
+            for x in (source_positions, detector_positions, detector_vs, detector_us)
+        )
+        src_pos, det_pos, det_v, det_u = np.broadcast_arrays(
+            src_pos, det_pos, det_v, det_u
+        )
 
         vc.check_same_shapes(src_pos, det_pos, det_v, det_u)
 
@@ -215,6 +237,19 @@ class ConeVectorGeometry(ProjectionGeometry):
         width = vc.norm(self.detector_us * self.shape[1])
 
         return np.stack([height, width], axis=1)
+
+    def transform(self, matrix):
+        src_pos = vc.to_homogeneous_point(self.source_positions)
+        det_pos = vc.to_homogeneous_point(self.detector_positions)
+        det_v = vc.to_homogeneous_vec(self.detector_vs)
+        det_u = vc.to_homogeneous_vec(self.detector_us)
+
+        src_pos = vc.to_vec(vc.matrix_transform(matrix, src_pos))
+        det_pos = vc.to_vec(vc.matrix_transform(matrix, det_pos))
+        det_v = vc.to_vec(vc.matrix_transform(matrix, det_v))
+        det_u = vc.to_vec(vc.matrix_transform(matrix, det_u))
+
+        return ConeVectorGeometry(self.shape, src_pos, det_pos, det_v, det_u)
 
     def get_corners(self):
         """Returns a vector with the corners of each detector

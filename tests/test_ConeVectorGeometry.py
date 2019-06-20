@@ -8,6 +8,8 @@ import unittest
 import astra
 import numpy as np
 import tomosipo as ts
+from tomosipo.Transform import random_transform
+from tomosipo.ConeVectorGeometry import random_cone_vec
 
 
 class TestConeVectorGeometry(unittest.TestCase):
@@ -130,3 +132,13 @@ class TestConeVectorGeometry(unittest.TestCase):
 
         source_diff = pg1.get_source_positions() * 2 - pg2.get_source_positions()
         self.assertTrue(np.all(abs(source_diff) < ts.epsilon))
+
+    def test_transform(self):
+
+        for _ in range(10):
+            pg = random_cone_vec()
+            T1 = random_transform()
+            T2 = random_transform()
+
+            self.assertEqual(T1(T2)(pg), T1(T2(pg)))
+            self.assertEqual(ts.identity()(pg), pg)

@@ -27,7 +27,7 @@ import warnings
 
 # This is a fundamental constant used for equality checking in
 # floating point code.
-epsilon = 1e-6
+epsilon = 1e-8
 
 try:
     from astra.experimental import accumulate_FDK

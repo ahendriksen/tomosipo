@@ -1,10 +1,11 @@
 import astra
+import warnings
 from numbers import Integral
 import numpy as np
 from .utils import up_tuple
 import tomosipo as ts
 from tomosipo.ProjectionGeometry import ProjectionGeometry
-from .ConeVectorGeometry import ConeVectorGeometry
+from tomosipo.ConeVectorGeometry import ConeVectorGeometry
 
 
 def cone(angles=1, size=np.sqrt(2), shape=1, detector_distance=0, source_distance=2):
@@ -36,6 +37,25 @@ def cone(angles=1, size=np.sqrt(2), shape=1, detector_distance=0, source_distanc
         :rtype: ConeGeometry
     """
     return ConeGeometry(angles, size, shape, detector_distance, source_distance)
+
+
+def random_cone():
+    """Returns a random cone beam geometry
+
+    *Note*: this geometry is not circular. It just samples random
+     points on a circular path.
+
+    :returns: a random cone geometry
+    :rtype: `ConeGeometry`
+
+    """
+    angles = np.random.normal(size=20)
+    size = np.random.uniform(10, 20, size=2)
+    shape = np.random.uniform(10, 20, size=2)
+    detector_distance = np.random.uniform(0, 10)
+    source_distance = np.random.uniform(0, 10)
+
+    return ts.cone(angles, size, shape, detector_distance, source_distance)
 
 
 class ConeGeometry(ProjectionGeometry):
@@ -187,6 +207,15 @@ class ConeGeometry(ProjectionGeometry):
             raise ValueError(
                 "ConeGeometry.from_astra only supports 'cone' type astra geometries."
             )
+
+    def transform(self, matrix):
+        warnings.warn(
+            "Converting cone geometry to vector geometry. "
+            "Use `T(pg.to_vec())` to inhibit this warning. ",
+            stacklevel=2,
+        )
+
+        return self.to_vector().transform(matrix)
 
     @ProjectionGeometry.detector_sizes.getter
     def detector_sizes(self):

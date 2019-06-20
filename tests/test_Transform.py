@@ -42,16 +42,29 @@ class TestTransform(unittest.TestCase):
     def test_translate(self):
         """Test something."""
         N = 10
-        origin = ts.OrientedBox(size=1, pos=0)
 
-        t = (3, 4, 5)
+        rotate = ts.rotate((2, 3, 5), axis=(7, 11, -13), deg=15)
+        original = rotate(ts.OrientedBox(size=(3, 4, 5), pos=(2, 3, 5)))
+        print(original.pos)
+
+        t = np.array((3, 4, 5))
         T = ts.translate(t)
-        self.assertEqual(T(origin), ts.OrientedBox(1, t))
+        self.assertEqual(
+            T(original),
+            ts.OrientedBox(
+                (3, 4, 5), t + (2, 3, 5), original.w, original.v, original.u
+            ),
+        )
 
-        for num_steps in range(N, 1):
+        for num_steps in range(1, N):
             t = np.random.normal(size=(num_steps, 3))
             T = ts.translate(t)
-            self.assertEqual(T(origin), ts.OrientedBox(1, t))
+            self.assertEqual(
+                T(original),
+                ts.OrientedBox(
+                    (3, 4, 5), t + (2, 3, 5), original.w, original.v, original.u
+                ),
+            )
 
     def test_scale(self):
         unit = ts.OrientedBox(size=1, pos=0)

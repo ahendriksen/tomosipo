@@ -6,6 +6,7 @@ from pyqtgraph.Qt import QtCore
 import pyqtgraph.opengl as gl
 from tomosipo.display import run_app, get_app
 import itertools
+from . import vector_calc as vc
 
 
 class OrientedBox(object):
@@ -13,50 +14,44 @@ class OrientedBox(object):
 
     """
 
-    def __init__(self, size, pos, w, v, u):
+    def __init__(self, size, pos, w=(1, 0, 0), v=(0, 1, 0), u=(0, 0, 1)):
         """Create a new oriented box
 
         An oriented box with multiple orientations and positions.
 
         The position describes the center of the box.
 
-        :param size: `(int, int, int)` or `int`
-            The size of the detector as measured in basis elements w,
+        :param size: `(scalar, scalar, scalar)` or `scalar`
+            The size of the box as measured in basis elements w,
             v, u.
-        :param pos:
+        :param pos: `scalar`, `np.array`
             A numpy array of dimension (num_orientations, 3)
             describing the position of the box in world-coordinates
-            `(Z, Y, X)`.
-        :param w: `np.array`
+            `(Z, Y, X)`. You may also pass a 3-tuple or a scalar.
+        :param w: `np.array` (optional)
             A numpy array of dimension (num_orientations, 3)
             describing the `w` basis element in `(Z, Y, X)`
-            coordinates.
-        :param v:
+            coordinates. Default is `(1, 0, 0)`.
+        :param v: `np.array` (optional)
             A numpy array of dimension (num_orientations, 3)
             describing the `v` basis element in `(Z, Y, X)`
-            coordinates.
-        :param u:
+            coordinates. Default is `(0, 1, 0)`.
+        :param u: `np.array` (optional)
             A numpy array of dimension (num_orientations, 3)
             describing the `u` basis element in `(Z, Y, X)`
-            coordinates.
+            coordinates. Default is `(0, 0, 1)`.
         :returns:
         :rtype:
 
         """
         super(OrientedBox, self).__init__()
 
-        def up_dim(x):
-            x = np.array(x)
-            if x.ndim == 1:
-                return x[None, :]
-            else:
-                return x
-
         self.size = up_tuple(size, 3)
-        self.pos = up_dim(pos)
-        self.w = up_dim(w)
-        self.v = up_dim(v)
-        self.u = up_dim(u)
+        if np.isscalar(pos):
+            pos = up_tuple(pos, 3)
+
+        pos, w, v, u = np.broadcast_arrays(*(vc.to_vec(x) for x in (pos, w, v, u)))
+        self.pos, self.w, self.v, self.u = pos, w, v, u
 
         shapes = [x.shape for x in [self.pos, self.w, self.v, self.u]]
 
@@ -80,15 +75,13 @@ class OrientedBox(object):
         if not isinstance(other, OrientedBox):
             return False
 
-        d_size = np.array(self.size) - np.array(other.size)
         d_pos = self.pos - other.pos
-        d_w = self.w - other.w
-        d_v = self.v - other.v
-        d_u = self.u - other.u
+        d_w = self.size[0] * self.w - other.size[0] * other.w
+        d_v = self.size[1] * self.v - other.size[1] * other.v
+        d_u = self.size[2] * self.u - other.size[2] * other.u
 
         return (
-            np.all(abs(d_size) < ts.epsilon)
-            and np.all(abs(d_pos) < ts.epsilon)
+            np.all(abs(d_pos) < ts.epsilon)
             and np.all(abs(d_w) < ts.epsilon)
             and np.all(abs(d_v) < ts.epsilon)
             and np.all(abs(d_u) < ts.epsilon)
@@ -122,6 +115,19 @@ class OrientedBox(object):
     @property
     def num_orientations(self):
         return len(self.pos)
+
+    def transform(self, matrix):
+        pos = vc.to_homogeneous_point(self.pos)
+        w = vc.to_homogeneous_vec(self.w)
+        v = vc.to_homogeneous_vec(self.v)
+        u = vc.to_homogeneous_vec(self.u)
+
+        new_pos = vc.to_vec(vc.matrix_transform(matrix, pos))
+        new_w = vc.to_vec(vc.matrix_transform(matrix, w))
+        new_v = vc.to_vec(vc.matrix_transform(matrix, v))
+        new_u = vc.to_vec(vc.matrix_transform(matrix, u))
+
+        return OrientedBox(self.size, new_pos, new_w, new_v, new_u)
 
 
 @ts.display.register(OrientedBox)

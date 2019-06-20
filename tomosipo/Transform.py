@@ -72,9 +72,9 @@ def translate(t):
 
     """
     t = vc.to_homogeneous_point(t)
-    w = vc.to_homogeneous_point((1, 0, 0))
-    v = vc.to_homogeneous_point((0, 1, 0))
-    u = vc.to_homogeneous_point((0, 0, 1))
+    w = vc.to_homogeneous_vec((1, 0, 0))
+    v = vc.to_homogeneous_vec((0, 1, 0))
+    u = vc.to_homogeneous_vec((0, 0, 1))
     t, w, v, u = np.broadcast_arrays(t, w, v, u)
     return Transform(np.stack((w, v, u, t), axis=2))
 

@@ -11,3 +11,9 @@ def up_tuple(x, n):
         return x
     # Make tuple
     return (x,) * n
+
+
+def check_same_shapes(*args):
+    shapes = [x.shape for x in args]
+    if min(shapes) != max(shapes):
+        raise ValueError(f"Not all arguments are the same shape. Got: {shapes}")

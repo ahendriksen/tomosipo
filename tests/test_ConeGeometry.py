@@ -23,6 +23,8 @@ def test_init():
 
     with pytest.raises(ValueError):
         pg = ts.cone(angles="asdf")
+    with pytest.raises(ValueError):
+        pg = ts.cone(angles=[])
 
     representation = repr(pg)
     if interactive:

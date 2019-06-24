@@ -113,8 +113,8 @@ def rotate(position, axis, *, rad=None, deg=None, right_handed=True):
     `right_handed=True` is set (the default), then the rotation is
     translated to a left-handed rotation matrix.
 
-    :param position: `np.array`
-        The position through which the axis moves
+    :param position: `np.array` or `scalar`
+        The position through which the axis moves.
     :param axis:
         The axis of rotation.
     :param rad: `float` or `np.array`
@@ -147,6 +147,8 @@ def rotate(position, axis, *, rad=None, deg=None, right_handed=True):
     # 3) Undo the perspective change
 
     # Create perspective transformation:
+    if np.isscalar(position):
+        position = up_tuple(position, 3)
     position = vc.to_homogeneous_point(position)
     axis = vc.to_homogeneous_vec(axis)
     a0, a1, a2 = vc.orthogonal_basis_from_axis(axis)

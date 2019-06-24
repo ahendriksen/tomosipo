@@ -133,6 +133,10 @@ class ConeGeometry(ProjectionGeometry):
         else:
             angles = np.asarray(angles).astype(np.float64)
 
+        if len(angles) == 0:
+            raise ValueError(
+                f"ConeGeometry expects non-empty array of angles; got {self.angles_original}"
+            )
         size = up_tuple(size, 2)
 
         self.angles = angles

@@ -57,6 +57,19 @@ def slice_interval(left, right, length, key):
     is counter-intuitive. Nonetheless, it is compatible with detector
     and volume binning.
 
+    Example. Suppose we have the interval [0, 4] divided into four
+    pixels. An illustration of the interval is shown below, with `|`
+    denoting the edges of the pixels. As you can see, with a step size
+    of two, the pixels become twice as large, and depending on the
+    start of the slice, the interval is shifted to the left or
+    right. With a step size of 3, the resulting interval is larger
+    than the original interval.
+
+       |x|x|x|x|   [0:4:1]
+      | x | x |    [0:4:2]
+        | x | x |  [1:4:2]
+     |  x  |  x  | [0:4:3]
+
     :param left: `scalar` or `np.array`
     :param right: `scalar` or `np.array`
     :param length: `int`

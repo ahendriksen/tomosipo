@@ -67,6 +67,42 @@ class TestConeVectorGeometry(unittest.TestCase):
         for u in unequal:
             self.assertNotEqual(pg, u)
 
+    def test_getitem(self):
+        pg = ts.cone(10, shape=100).to_vector()
+        self.assertEqual(pg, pg[:, :, :])
+
+        self.assertEqual(2 * pg[::2].get_num_angles(), pg.get_num_angles())
+        self.assertEqual(10 * pg[::10].get_num_angles(), pg.get_num_angles())
+
+        self.assertAlmostEqual(
+            0.0, np.sum(abs(pg[:, ::2].detector_vs - 2 * pg.detector_vs))
+        )
+        self.assertAlmostEqual(
+            0.0, np.sum(abs(pg[:, :, ::2].detector_us - 2 * pg.detector_us))
+        )
+
+        self.assertNotAlmostEqual(
+            0.0, np.sum(abs(pg[:, :, ::2].detector_positions - pg.detector_positions))
+        )
+        self.assertNotAlmostEqual(
+            0.0,
+            np.sum(
+                abs(
+                    pg[:, :, ::2].detector_positions - pg[:, :, 1::2].detector_positions
+                )
+            ),
+        )
+        self.assertAlmostEqual(
+            0.0, np.sum(abs(pg[:, :, ::2].detector_vs - pg[:, :, 1::2].detector_vs))
+        )
+        self.assertAlmostEqual(
+            0.0, np.sum(abs(pg[:, :, ::2].detector_us - pg[:, :, 1::2].detector_us))
+        )
+        self.assertAlmostEqual(
+            0.0,
+            np.sum(abs(pg[:, :, ::2].detector_sizes - pg[:, :, 1::2].detector_sizes)),
+        )
+
     def test_to_from_astra(self):
         nrows = 30
         num_tests = 100

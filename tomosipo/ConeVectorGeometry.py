@@ -2,6 +2,8 @@ import warnings
 import numpy as np
 import tomosipo as ts
 import tomosipo.vector_calc as vc
+from tomosipo.utils import up_slice, slice_interval
+from numbers import Integral
 from tomosipo.ProjectionGeometry import ProjectionGeometry
 
 
@@ -133,6 +135,54 @@ class ConeVectorGeometry(ProjectionGeometry):
             and np.all(abs(us_diff) < ts.epsilon)
             and np.all(abs(vs_diff) < ts.epsilon)
         )
+
+    @property
+    def lower_left_corner(self):
+        return (
+            self.detector_positions
+            - (self.detector_vs * self.shape[0]) / 2
+            - (self.detector_us * self.shape[1]) / 2
+        )
+
+    @property
+    def top_right_corner(self):
+        return (
+            self.detector_positions
+            + (self.detector_vs * self.shape[0]) / 2
+            + (self.detector_us * self.shape[1]) / 2
+        )
+
+    def __getitem__(self, key):
+        full_slice = slice(None, None, None)
+
+        if isinstance(key, Integral) or isinstance(key, slice):
+            key = (key, full_slice, full_slice)
+        while isinstance(key, tuple) and len(key) < 3:
+            key = (*key, full_slice)
+
+        if isinstance(key, tuple) and len(key) == 3:
+            v0, v1, lenV, stepV = slice_interval(
+                0, self.shape[0], self.shape[0], key[1]
+            )
+            u0, u1, lenU, stepU = slice_interval(
+                0, self.shape[1], self.shape[1], key[2]
+            )
+            # Calculate new lower-left corner, top-right corner, and center.
+            new_llc = (
+                self.lower_left_corner + v0 * self.detector_vs + u0 * self.detector_us
+            )
+            new_trc = (
+                self.lower_left_corner + v1 * self.detector_vs + u1 * self.detector_us
+            )
+            new_center = (new_llc + new_trc) / 2
+
+            new_shape = (lenV, lenU)
+            new_src_pos = self.source_positions[up_slice(key[0])]
+            new_det_pos = new_center[up_slice(key[0])]
+            new_det_vs = self.detector_vs[up_slice(key[0])] * stepV
+            new_det_us = self.detector_us[up_slice(key[0])] * stepU
+
+            return cone_vec(new_shape, new_src_pos, new_det_pos, new_det_vs, new_det_us)
 
     def to_astra(self):
         row_count, col_count = self.shape

@@ -1,5 +1,7 @@
 import astra
+from collections import Iterator, Iterable
 import numpy as np
+from numbers import Integral
 import warnings
 import itertools
 from .utils import up_tuple
@@ -10,7 +12,7 @@ def is_volume_geometry(g):
     return isinstance(g, VolumeGeometry)
 
 
-def volume(shape=(1, 1, 1)):
+def volume(shape=(1, 1, 1), extent=None):
     """Create a unit VolumeGeometry
 
         A VolumeGeometry is a unit cube centered on the origin. Each
@@ -21,6 +23,10 @@ def volume(shape=(1, 1, 1)):
 
     :param shape: `int` or (`int`, `int`, `int`)
         Shape of the voxel grid underlying the volume.
+    :param extent: `(int, int)` or `((int, int), (int, int), (int, int))`
+        The minimal and maximal value of the volume in the Z, Y, X
+        coordinate. If only one minimal and maximal value is provided,
+        then it is applied to all coordinates.
     :returns: a volume geometry of the unit cube with shape as given.
     :rtype: VolumeGeometry
 
@@ -28,7 +34,24 @@ def volume(shape=(1, 1, 1)):
     vg = VolumeGeometry()
     shape = up_tuple(shape, 3)
 
-    return vg.reshape(shape)
+    vg = vg.reshape(shape)
+    if extent is not None:
+        if isinstance(extent, Iterator) or isinstance(extent, Iterable):
+            if len(extent) == 2:
+                extent = up_tuple((extent,), 3)
+        try:
+            (x, X), (y, Y), (z, Z) = extent
+            for (a, A) in ((x, X), (y, Y), (z, Z)):
+                if A < a:
+                    raise ValueError(f"Extent (x, X) must satisfy x <= X; got: {(a,A)}")
+            vg.extent = tuple(
+                (float(a), float(A)) for (a, A) in ((x, X), (y, Y), (z, Z))
+            )
+
+        except TypeError:
+            raise TypeError(f"Extent should be a tuple of ints, got {extent}")
+
+    return vg
 
 
 def random_volume():
@@ -330,11 +353,7 @@ def from_astra(avg):
 
     c = VolumeGeometry()
     c.extent = tuple(
-        [
-            (WindowMinZ, WindowMaxZ),
-            (WindowMinY, WindowMaxY),
-            (WindowMinX, WindowMaxX),
-        ]
+        [(WindowMinZ, WindowMaxZ), (WindowMinY, WindowMaxY), (WindowMinX, WindowMaxX)]
     )
 
     c.shape = (voxZ, voxY, voxX)

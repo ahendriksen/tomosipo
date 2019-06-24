@@ -42,7 +42,7 @@ class OrientedBox(object):
             v, u.
         :param pos: `scalar`, `np.array`
             A numpy array of dimension (num_orientations, 3)
-            describing the position of the box in world-coordinates
+            describing the center of the box in world-coordinates
             `(Z, Y, X)`. You may also pass a 3-tuple or a scalar.
         :param w: `np.array` (optional)
             A numpy array of dimension (num_orientations, 3)
@@ -127,6 +127,31 @@ class OrientedBox(object):
         c = self.pos + c_w + c_v + c_u
 
         return c.swapaxes(0, 1)
+
+    @property
+    def abs_size(self):
+        """Returns the absolute size of the object
+
+        The `size` property is defined the local coordinate frame of
+        the object. Therefore we must multiply by the length of the
+        `w, u, v` vectors to obtain the absolute size of the object.
+
+        Because the vectors `w, u, v` may change over time, `abs_size`
+        is a vector with shape `(num_steps, 3)`.
+
+        :returns: a numpy array of shape `(num_steps, 3)` describing the size of the object.
+        :rtype:
+
+        """
+
+        # TODO: Test this property
+        # TODO: rename self.size to self.rel_size
+        # TODO: Make self.size a property that just implements a warning and points to real_size and rel_size
+        W = self.size[0] * vc.norm(self.w)
+        V = self.size[1] * vc.norm(self.v)
+        U = self.size[2] * vc.norm(self.u)
+
+        return np.array((W, V, U)).T
 
     @property
     def num_orientations(self):

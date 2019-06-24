@@ -12,29 +12,52 @@ def is_volume_geometry(g):
     return isinstance(g, VolumeGeometry)
 
 
-def volume(shape=(1, 1, 1), extent=None):
+def volume(shape=(1, 1, 1), extent=None, center=None, size=None):
     """Create a unit VolumeGeometry
 
-        A VolumeGeometry is a unit cube centered on the origin. Each
-        side has length 1.
+    A VolumeGeometry is a unit cube centered on the origin. Each
+    side has length 1.
 
-        VolumeGeometry is indexed(Z, Y, X) just like numpy. The
-        conversion to and from an astra_vol_geom depends on this.
+    VolumeGeometry is indexed(Z, Y, X) just like numpy. The
+    conversion to and from an astra_vol_geom depends on this.
+
+    You may provide a combination of arguments to create a new volume geometry:
+    - shape
+    - shape and extent
+    - shape and center and size
 
     :param shape: `int` or (`int`, `int`, `int`)
         Shape of the voxel grid underlying the volume.
-    :param extent: `(int, int)` or `((int, int), (int, int), (int, int))`
+    :param extent: `(scalar, scalar)` or `((scalar, scalar), (scalar, scalar), (scalar, scalar))`
         The minimal and maximal value of the volume in the Z, Y, X
         coordinate. If only one minimal and maximal value is provided,
         then it is applied to all coordinates.
+    :param center: `scalar` or `(scalar, scalar, scalar)`
+    :param size: `scalar` or `(scalar, scalar, scalar)`
     :returns: a volume geometry of the unit cube with shape as given.
     :rtype: VolumeGeometry
 
     """
     vg = VolumeGeometry()
     shape = up_tuple(shape, 3)
-
     vg = vg.reshape(shape)
+
+    if center is None and size is not None:
+        raise ValueError("Both center and size must be provided.")
+    if size is None and center is not None:
+        raise ValueError("Both center and size must be provided.")
+    if size is not None and center is not None and extent is not None:
+        raise ValueError(
+            "extent must not be provided when size and center already are."
+        )
+
+    if center is not None and size is not None:
+        center = np.array(up_tuple(center, 3))
+        size = np.array(up_tuple(size, 3))
+        l = center - size / 2
+        r = center + size / 2
+        extent = tuple(zip(l, r))
+
     if extent is not None:
         if isinstance(extent, Iterator) or isinstance(extent, Iterable):
             if len(extent) == 2:

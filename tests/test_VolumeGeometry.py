@@ -40,11 +40,19 @@ class TestVolumeGeometry(unittest.TestCase):
         extent = ((0, 1),) * 3
         self.assertEqual(ts.volume(extent=(0, 1)).extent, extent)
 
+        self.assertEqual(ts.volume(center=.5, size=1).extent, extent)
+
         # Check errors
         with self.assertRaises(ValueError):
             ts.volume(extent=(1, 0))
         with self.assertRaises(TypeError):
             ts.volume(extent=3)
+        with self.assertRaises(ValueError):
+            ts.volume(center=0, size=None)
+        with self.assertRaises(ValueError):
+            ts.volume(center=None, size=1)
+        with self.assertRaises(ValueError):
+            ts.volume(center=0, size=1, extent=(0, 1))
 
     def test_equal(self):
         """Test __eq__

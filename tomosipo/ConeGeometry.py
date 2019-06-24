@@ -2,7 +2,7 @@ import astra
 import warnings
 from numbers import Integral
 import numpy as np
-from .utils import up_tuple
+from .utils import up_tuple, up_slice
 import tomosipo as ts
 from tomosipo.ProjectionGeometry import ProjectionGeometry
 from tomosipo.ConeVectorGeometry import ConeVectorGeometry
@@ -74,12 +74,9 @@ class ConeGeometry(ProjectionGeometry):
         """
 
         one_key = isinstance(key, Integral) or isinstance(key, slice)
-        if isinstance(key, Integral):
-            if key == -1:
-                key = slice(key, None)
-            else:
-                key = slice(key, key + 1)
+
         if one_key:
+            key = up_slice(key)
             return ConeGeometry(
                 angles=np.asarray(self.angles[key]),
                 size=self.size,

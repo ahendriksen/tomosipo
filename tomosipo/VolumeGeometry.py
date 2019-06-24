@@ -4,7 +4,7 @@ import numpy as np
 from numbers import Integral
 import warnings
 import itertools
-from .utils import up_tuple, index_one_dim
+from .utils import up_tuple, slice_interval
 import tomosipo as ts
 
 
@@ -356,7 +356,7 @@ class VolumeGeometry:
 
         if isinstance(key, tuple) and len(key) == 3:
             indices = [
-                index_one_dim(l, r, s, k)
+                slice_interval(l, r, s, k)
                 for ((l, r), s, k) in zip(self.extent, self.shape, key)
             ]
 

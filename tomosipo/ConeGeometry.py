@@ -166,7 +166,8 @@ class ConeGeometry(ProjectionGeometry):
         diff_source = self.source_distance - other.source_distance
 
         return (
-            np.all(abs(diff_angles) < ts.epsilon)
+            len(self.angles) == len(other.angles)
+            and np.all(abs(diff_angles) < ts.epsilon)
             and np.all(abs(diff_size) < ts.epsilon)
             and np.all(self.shape == other.shape)
             and abs(diff_detector) < ts.epsilon

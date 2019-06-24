@@ -72,6 +72,28 @@ class TestVolumeGeometry(unittest.TestCase):
 
         self.assertEqual(vg, vg1)
 
+    def test_getitem(self):
+        vg = ts.volume(shape=(3,4,5), extent=((11,13), (17,19), (23,29)))
+
+        self.assertEqual(vg, vg[:, :, :])
+        self.assertEqual(vg, vg[:, :])
+        self.assertEqual(vg, vg[:])
+
+        self.assertEqual(vg[0, 0, 0], vg[:1, :1, :1])
+        self.assertEqual(vg[0], vg[0, :, :])
+        self.assertEqual(vg[-1], vg[2])
+
+        self.assertEqual(vg[::3,::4,::5].shape, (1, 1, 1))
+        # Check that voxel size is preserved:
+        self.assertAlmostEqual(0.0,
+                               np.sum(abs(vg[0, 1, 2].size() - (np.array(vg.size()) / vg.shape))))
+        self.assertAlmostEqual(vg.size()[1], vg[:,::2, :].size()[1])
+        self.assertAlmostEqual(vg.shape[1], 2 * vg[:, ::2, ].shape[1])
+
+        self.assertAlmostEqual(2 * vg.size()[1] / vg.shape[1],
+                               vg[:, ::2, :].size()[1] / vg[:, ::2, :].shape[1])
+
+
     def test_translate(self):
         vg = ts.volume()
 

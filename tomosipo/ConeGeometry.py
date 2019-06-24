@@ -75,7 +75,10 @@ class ConeGeometry(ProjectionGeometry):
 
         one_key = isinstance(key, Integral) or isinstance(key, slice)
         if isinstance(key, Integral):
-            key = slice(key, key + 1)
+            if key == -1:
+                key = slice(key, None)
+            else:
+                key = slice(key, key + 1)
         if one_key:
             return ConeGeometry(
                 angles=np.asarray(self.angles[key]),

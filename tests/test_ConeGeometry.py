@@ -132,7 +132,11 @@ def test_get_item():
     assert pg[:1].get_num_angles() == 1
     assert pg[:2].get_num_angles() == 2
     assert pg[:].get_num_angles() == 10
-    assert pg[10].get_num_angles() == 0
+    assert pg[-1] == pg[9]
+    assert pg[-2] == pg[8]
+
+    with pytest.raises(ValueError):
+        pg[10]
 
 
 def test_transform():

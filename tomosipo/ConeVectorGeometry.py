@@ -2,7 +2,7 @@ import warnings
 import numpy as np
 import tomosipo as ts
 import tomosipo.vector_calc as vc
-from tomosipo.utils import up_slice, slice_interval
+from tomosipo.utils import up_tuple, up_slice, slice_interval
 from numbers import Integral
 from tomosipo.ProjectionGeometry import ProjectionGeometry
 
@@ -231,6 +231,31 @@ class ConeVectorGeometry(ProjectionGeometry):
 
         """
         return self
+
+    def rescale_detector(self, scale):
+        """Rescale detector pixels
+
+        Rescales detector pixels without changing the size of the detector.
+
+        :param scale: `int` or `(int, int)`
+            Indicates how many times to enlarge a detector pixel. Per
+            convention, the first coordinate scales the pixels in the
+            `v` coordinate, and the second coordinate scales the
+            pixels in the `u` coordinate.
+        :returns: a rescaled cone vector geometry
+        :rtype: `ConeVectorGeometry`
+
+        """
+        scaleV, scaleU = up_tuple(scale, 2)
+        scaleV, scaleU = int(scaleV), int(scaleU)
+
+        shape = (self.shape[0] // scaleV, self.shape[1] // scaleU)
+        det_v = self.detector_vs / scaleV
+        det_u = self.detector_us / scaleU
+
+        return cone_vec(
+            shape, self.source_positions, self.detector_positions, det_v, det_u
+        )
 
     def project_point(self, point):
         """Projects point onto detectors

@@ -4,6 +4,7 @@
 """Tests for ConeGeometry."""
 
 import pytest
+from pytest import approx
 import numpy as np
 import tomosipo as ts
 from tomosipo.Transform import random_transform
@@ -137,6 +138,14 @@ def test_get_item():
 
     with pytest.raises(ValueError):
         pg[10]
+
+
+def test_rescale_detector():
+    pg = ts.cone(angles=10, shape=20)
+
+    assert approx(pg.detector_sizes) == pg.rescale_detector(2).detector_sizes
+    assert pg.rescale_detector((2, 2)) == pg.rescale_detector(2)
+    assert pg.rescale_detector(10).shape == (2, 2)
 
 
 def test_transform():

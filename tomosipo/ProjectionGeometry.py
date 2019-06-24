@@ -120,3 +120,19 @@ class ProjectionGeometry(object):
 
         """
         raise NotImplementedError()
+
+    def rescale_detector(self, scale):
+        """Rescale detector pixels
+
+        Rescales detector pixels without changing the size of the detector.
+
+        :param scale: `int` or `(int, int)`
+            Indicates how many times to enlarge a detector pixel. Per
+            convention, the first coordinate scales the pixels in the
+            `v` coordinate, and the second coordinate scales the
+            pixels in the `u` coordinate.
+        :returns: a rescaled cone geometry
+        :rtype: `ConeGeometry`
+
+        """
+        raise NotImplementedError()

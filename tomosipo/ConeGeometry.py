@@ -222,6 +222,33 @@ class ConeGeometry(ProjectionGeometry):
 
         return self.to_vector().transform(matrix)
 
+    def rescale_detector(self, scale):
+        """Rescale detector pixels
+
+        Rescales detector pixels without changing the size of the detector.
+
+        :param scale: `int` or `(int, int)`
+            Indicates how many times to enlarge a detector pixel. Per
+            convention, the first coordinate scales the pixels in the
+            `v` coordinate, and the second coordinate scales the
+            pixels in the `u` coordinate.
+        :returns: a rescaled cone geometry
+        :rtype: `ConeGeometry`
+
+        """
+        scaleV, scaleU = up_tuple(scale, 2)
+        scaleV, scaleU = int(scaleV), int(scaleU)
+
+        shape = (self.shape[0] // scaleV, self.shape[1] // scaleU)
+
+        return cone(
+            self.angles_original,
+            self.size,
+            shape,
+            self.detector_distance,
+            self.source_distance,
+        )
+
     @ProjectionGeometry.detector_sizes.getter
     def detector_sizes(self):
         return np.repeat([self.size], self.get_num_angles(), axis=0)

@@ -185,6 +185,15 @@ class TestVolumeGeometry(unittest.TestCase):
             self.assertEqual(T1(T2)(vg), T1(T2(vg)))
             self.assertEqual(ts.identity()(vg), T1.inv(T1(vg)))
 
+    def test_with_voxel_size(self):
+        vg = ts.volume(shape=10, size=10, center=0)
+        self.assertEqual(vg.with_voxel_size(1.0), vg)
+        self.assertEqual(vg.with_voxel_size(2.0), ts.volume(shape=5, size=10, center=0))
+
+        self.assertEqual(vg.with_voxel_size(1.0), vg.with_voxel_size((1.0, 1.0, 1.0)))
+        self.assertEqual(vg.with_voxel_size(2.0), vg.with_voxel_size((2.0, 2.0, 2.0)))
+        self.assertEqual(vg.with_voxel_size(3.0), vg.with_voxel_size((3.0, 3.0, 3.0)))
+
     def test_volume_from_projection(self):
         """Test volume_from_projection_geometry
 

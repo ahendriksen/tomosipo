@@ -11,6 +11,7 @@ import astra
 from tomosipo.VolumeGeometry import random_volume
 from tomosipo.Transform import random_transform
 
+
 class TestVolumeGeometry(unittest.TestCase):
     """Tests for VolumeGeometry."""
 
@@ -30,6 +31,20 @@ class TestVolumeGeometry(unittest.TestCase):
     def test_init(self):
         """Test init."""
         vg = ts.volume()
+        self.assertEqual(vg.shape, (1, 1, 1))
+        # Check shape
+        self.assertEqual(ts.volume(shape=(3, 4, 5)).shape, (3, 4, 5))
+        # Check extent
+        extent = ((0, 1), (3, 4), (5, 6))
+        self.assertEqual(ts.volume(extent=extent).extent, extent)
+        extent = ((0, 1),) * 3
+        self.assertEqual(ts.volume(extent=(0, 1)).extent, extent)
+
+        # Check errors
+        with self.assertRaises(ValueError):
+            ts.volume(extent=(1, 0))
+        with self.assertRaises(TypeError):
+            ts.volume(extent=3)
 
     def test_equal(self):
         """Test __eq__

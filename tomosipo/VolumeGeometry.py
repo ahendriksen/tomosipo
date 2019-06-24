@@ -149,6 +149,24 @@ class VolumeGeometry:
         e = self.extent
         return astra.create_vol_geom(v[1], v[2], v[0], *e[2], *e[1], *e[0])
 
+    def with_voxel_size(self, voxel_size):
+        """Returns a new volume with the specified voxel size
+
+        When the voxel_size does not cleanly divide the size of the
+        volume, a volume is returned that is
+        - centered on the origin;
+        - fits inside the original volume;
+
+        :param voxel_size:
+        :returns:
+        :rtype:
+
+        """
+        voxel_size = up_tuple(voxel_size, 3)
+        new_shape = (np.array(self.size()) / voxel_size).astype(np.int)
+
+        return volume(new_shape, center=self.get_center(), size=new_shape * voxel_size)
+
     def reshape(self, new_shape):
         """Reshape the VolumeGeometry
 

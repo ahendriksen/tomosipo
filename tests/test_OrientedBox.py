@@ -162,6 +162,18 @@ class TestOrientedBox(unittest.TestCase):
             self.assertEqual(T1.inv(T1(box)), box)
             self.assertEqual(T1.inv(T1)(box), box)
 
+    def test_display_auto_center(self):
+        boxes = [ts.scale(.01)(random_box()) for _ in range(16)]
+
+        if interactive:
+            ts.display(*boxes)
+
+    def test_display_colors(self):
+        boxes = [random_box() for _ in range(16)]
+
+        if interactive:
+            ts.display(*boxes)
+
     def test_transform_example(self):
         h = 3
         s = np.linspace(0, 2 * np.pi, 100)

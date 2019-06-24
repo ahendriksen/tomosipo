@@ -4,7 +4,7 @@ import numpy as np
 from numbers import Integral
 import warnings
 import itertools
-from .utils import up_tuple
+from .utils import up_tuple, index_one_dim
 import tomosipo as ts
 
 
@@ -337,6 +337,38 @@ class VolumeGeometry:
             stacklevel=2,
         )
         return self.to_box().transform(matrix)
+
+    def __getitem__(self, key):
+        """Return self[key]
+
+        :param key: An int, tuple of ints,
+        :returns:
+        :rtype:
+
+        """
+        full_slice = slice(None, None, None)
+        one_key = isinstance(key, Integral) or isinstance(key, slice)
+        if one_key:
+            key = (key, full_slice, full_slice)
+
+        while isinstance(key, tuple) and len(key) < 3:
+            key = (*key, full_slice)
+
+        if isinstance(key, tuple) and len(key) == 3:
+            indices = [
+                index_one_dim(l, r, s, k)
+                for ((l, r), s, k) in zip(self.extent, self.shape, key)
+            ]
+
+            new_shape = tuple(s for (_, _, s, _) in indices)
+            new_extent = tuple((l, r) for (l, r, _, _) in indices)
+
+            return volume(new_shape, new_extent)
+
+        raise TypeError(
+            f"Indexing a ConeGeometry with {type(key)} is not supported. "
+            f"Try int or slice instead."
+        )
 
 
 def from_astra(avg):

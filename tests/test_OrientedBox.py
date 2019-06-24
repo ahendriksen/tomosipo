@@ -60,7 +60,7 @@ class TestOrientedBox(unittest.TestCase):
             )
 
     def test_eq(self):
-        ob = ts.OrientedBox(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0))
+        ob = ts.OrientedBox(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1))
 
         unequal = [
             ts.cone(),
@@ -74,6 +74,22 @@ class TestOrientedBox(unittest.TestCase):
 
         for u in unequal:
             self.assertNotEqual(ob, u)
+
+    def test_abs_size(self):
+        basis = np.array(((1, 0, 0), (0, 1, 0), (0, 0, 1)))
+        ob = ts.OrientedBox(1, 0, *basis)
+
+        for s in np.random.uniform(ts.epsilon, 1, 10):
+            self.assertAlmostEqual(
+                0.0,
+                np.sum(abs(ob.abs_size - ts.OrientedBox(s, 0, *(basis / s)).abs_size)),
+            )
+            self.assertAlmostEqual(
+                0.0,
+                np.sum(
+                    abs(ob.abs_size - ts.OrientedBox(1 / s, 0, *(basis * s)).abs_size)
+                ),
+            )
 
     def test_corners(self):
         # Test shape of ob.corners

@@ -6,11 +6,7 @@ __author__ = """Allard Hendriksen"""
 __email__ = "allard.hendriksen@cwi.nl"
 __version__ = "0.0.1"
 
-from .VolumeGeometry import (
-    volume,
-    volume_from_projection_geometry,
-    is_volume_geometry,
-)
+from .VolumeGeometry import volume, volume_from_projection_geometry, is_volume_geometry
 from . import ProjectionGeometry
 from .ConeGeometry import cone
 from .GeometryConversion import from_astra_geometry

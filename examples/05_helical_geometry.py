@@ -107,14 +107,14 @@ with ts.data(vg) as vd_tmp, ts.data(rot10(helical_pg)) as pd_tmp:
     ts.forward(vd_tmp, pd_tmp)
     pd_tmp.data[pd_tmp.data < ts.epsilon] = np.Inf
     np.reciprocal(pd_tmp.data, out=pd_tmp.data)
-    R = np.copy(pd_tmp.data)    # <---- copy
+    R = np.copy(pd_tmp.data)  # <---- copy
 
     # Calculate C
     pd_tmp.data[:] = 1.0
     ts.backward(vd_tmp, pd_tmp)
     vd_tmp.data[vd_tmp.data < ts.epsilon] = np.Inf
     np.reciprocal(vd_tmp.data, out=vd_tmp.data)
-    C = np.copy(vd_tmp.data)    # <---- copy
+    C = np.copy(vd_tmp.data)  # <---- copy
 
 # After the with statement, all the data has been cleaned up. That is
 # why we had to copy R and C to new separate numpy arrays.

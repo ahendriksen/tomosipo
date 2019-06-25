@@ -39,20 +39,24 @@ class TestOperator(unittest.TestCase):
             ts.backward(*data, **kwargs)
 
     def test_fdk(self):
-        p = ts.data(ts.cone(angles=100).reshape(100))
-        v = ts.data(ts.volume_from_projection_geometry(p.geometry).reshape(100))
+        pg = ts.cone(angles=100, shape=100)
+        vg = ts.volume_from_projection_geometry(pg).reshape(100)
+        pd = ts.data(pg)
+        vd = ts.data(vg)
 
         # Fill the projection data with random noise:
-        p.data[:] = np.random.normal(size=p.data.shape)
-        p.data[:] = abs(p.data)
+        ts.phantom.hollow_box(vd)
+
+        ts.forward(vd, pd)
 
         if interactive:
-            ts.display_data(p)
+            ts.display(vg, pg)
+            ts.display(pd)
 
-        ts.fdk(v, p)
+        ts.fdk(vd, pd)
 
         if interactive:
-            ts.display_data(v)
+            ts.display(vd)
 
     def test_operator(self):
         pg = ts.cone(angles=150, shape=100)

@@ -147,8 +147,7 @@ class TestConeVectorGeometry(unittest.TestCase):
         self.assertTrue(abs(size - pg.det_sizes).sum() < ts.epsilon)
         for _ in range(10):
             new_shape = np.random.uniform(1, 100, size=2).astype(np.int)
-            # Change the number of detector pixels and test if the
-            # change in size is proportional
+            # Ensure that reshape does not increase the detector size.
             pg2 = pg.reshape(new_shape)
             self.assertEqual(pg2.det_shape, tuple(new_shape))
             self.assertAlmostEqual(0.0, np.sum(abs(pg2.det_sizes - pg.det_sizes)))

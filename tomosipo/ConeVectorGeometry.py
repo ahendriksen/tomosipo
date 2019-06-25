@@ -250,8 +250,8 @@ class ConeVectorGeometry(ProjectionGeometry):
         scaleV, scaleU = int(scaleV), int(scaleU)
 
         shape = (self.shape[0] // scaleV, self.shape[1] // scaleU)
-        det_v = self.detector_vs / scaleV
-        det_u = self.detector_us / scaleU
+        det_v = self.detector_vs * scaleV
+        det_u = self.detector_us * scaleU
 
         return cone_vec(
             shape, self.source_positions, self.detector_positions, det_v, det_u

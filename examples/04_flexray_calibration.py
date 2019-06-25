@@ -13,10 +13,7 @@ import numpy as np
 from contextlib import suppress
 import pyqtgraph as pq
 from pyqtgraph.Qt import QtGui
-from pyqtgraph.parametertree import (
-    Parameter,
-    ParameterTree,
-)
+from pyqtgraph.parametertree import Parameter, ParameterTree
 
 
 ###############################################################################
@@ -73,11 +70,6 @@ flat_mean = (flat - dark).mean(axis=1, dtype=np.float32)[:, None, :]
 # proj = (proj - dark) / flat[None, :, :]
 # proj = -np.log(proj).astype('float32')
 ne.evaluate("-log((proj - dark) / ((flat_mean - dark)))", out=proj)
-
-# Convert to sinogram data that is compatible with Astra:
-# proj = np.transpose(proj, [1, 0, 2])  # Angles in the middle, "up" in front, "right" at the back.
-# proj = np.flipud(proj)                # Flip image in the vertical direction
-# proj = np.ascontiguousarray(proj)     # Ensure contiguous layout in memory
 
 ###############################################################################
 #                              Parse FlexRay log                              #
@@ -175,7 +167,7 @@ def reconstruct(proj, param_dict):
 
     # Take region of interest on detector plane
     l, t, r, b = s["roi_ltrb"]
-    pg = pg[:, t: b + 1, l: r + 1]
+    pg = pg[:, t : b + 1, l : r + 1]
     # Apply hardware binning
     pg = pg.rescale_detector(s.binning_value)
     # Apply initial software binning (see loading data above)
@@ -188,9 +180,9 @@ def reconstruct(proj, param_dict):
     ###############################################################################
 
     num_slices = param_dict["Num slices"]
-    v_xy = ts.data(vg[vg.shape[0] // 2: vg.shape[0] // 2 + num_slices, :, :])
-    v_zx = ts.data(vg[:, vg.shape[0] // 2: vg.shape[0] // 2 + num_slices, :])
-    v_zy = ts.data(vg[:, :, vg.shape[0] // 2: vg.shape[0] // 2 + num_slices])
+    v_xy = ts.data(vg[vg.shape[0] // 2 : vg.shape[0] // 2 + num_slices, :, :])
+    v_zx = ts.data(vg[:, vg.shape[0] // 2 : vg.shape[0] // 2 + num_slices, :])
+    v_zy = ts.data(vg[:, :, vg.shape[0] // 2 : vg.shape[0] // 2 + num_slices])
 
     pd = ts.data(
         pg, proj[::additional_binning, ::additional_binning, ::additional_binning]
@@ -201,11 +193,7 @@ def reconstruct(proj, param_dict):
             if param_dict[opt]:
                 ts.fdk(v, pd)
 
-        return (
-            np.transpose(np.copy(v_xy.data), [0, 1, 2]),
-            np.transpose(np.copy(v_zx.data), [1, 2, 0]),
-            np.transpose(np.copy(v_zy.data), [2, 1, 0]),
-        )
+        return (np.copy(v_xy.data), np.copy(v_zx.data), np.copy(v_zy.data))
 
 
 ###############################################################################
@@ -248,8 +236,8 @@ params = [
             {"name": "Rotate clockwise", "type": "bool", "value": True},
             {"name": "Additional binning", "type": "int", "value": 4, "step": 1},
             {"name": "Show XY", "type": "bool", "value": True},
-            {"name": "Show ZY", "type": "bool", "value": False},
             {"name": "Show ZX", "type": "bool", "value": False},
+            {"name": "Show ZY", "type": "bool", "value": False},
             {"name": "Num slices", "type": "int", "value": 1},
         ],
     }
@@ -283,10 +271,10 @@ def change(param, changes):
     for k, v in d.items():
         print(f"{k:<10}: {v}")
 
-    v_xy, v_zy, v_zx = reconstruct(proj, d)
-    img_view_xy.setImage(v_xy)
-    img_view_zx.setImage(v_zx)
-    img_view_zy.setImage(v_zy)
+    v_xy, v_zx, v_zy = reconstruct(proj, d)
+    img_view_xy.setImage(v_xy, scale=(1, -1), axes=dict(zip("tyx", range(3))))
+    img_view_zx.setImage(v_zx, scale=(1, -1), axes=dict(zip("ytx", range(3))))
+    img_view_zy.setImage(v_zy, scale=(1, -1), axes=dict(zip("yxt", range(3))))
 
 
 parameter.sigTreeStateChanged.connect(change)
@@ -302,5 +290,9 @@ grid_layout.addWidget(img_view_zy, 1, 1, 1, 1)
 grid_layout.setColumnStretch(1, 5)
 grid_layout.setColumnStretch(2, 5)
 
+# Do initial reconstruction:
 change(None, None)
+
+# Show window
 win.show()
+app.exec_()

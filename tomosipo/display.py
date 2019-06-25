@@ -88,24 +88,24 @@ def display_geometry(*geometries):
     view = gl.GLViewWidget()
     view.show()
 
-    if not pg.is_cone():
+    if not pg.is_cone:
         raise NotImplementedError(
             "Displaying of parallel geometries is not yet supported."
         )
 
-    pg = pg.to_vector()
+    pg = pg.to_vec()
 
     # Get source positions in X, Y, Z order
-    source_pos = pg.get_source_positions()[:, ::-1]
+    source_pos = pg.src_pos[:, ::-1]
     # Get detector corners shaped (num_angles, 4 -- for each corner,
     # 3) and in XYZ order.
-    detector_corners = pg.get_corners()[:, :, ::-1].swapaxes(0, 1)
+    detector_corners = pg.corners[:, :, ::-1]
     # Calculate detector center from the corners:
     detector_origins = np.mean(detector_corners, axis=1)
     #######################################################################
     #                          Draw source curve                          #
     #######################################################################
-    if pg.is_cone():
+    if pg.is_cone:
         sourceItem = gl.GLLinePlotItem(pos=source_pos, width=1, mode="line_strip")
         view.addItem(sourceItem)
 
@@ -156,21 +156,21 @@ def display_geometry(*geometries):
 
     def draw_corner_rays(i):
         i = i % len(source_pos)
-        if pg.is_cone():
+        if pg.is_cone:
             source = np.copy(source_pos[i])
-        elif pg.is_parallel():
+        elif pg.is_parallel:
             # TODO: unimplemented
             pass
 
         corners = detector_corners[i]
-        if pg.is_cone():
+        if pg.is_cone:
             rayItems = [
                 gl.GLLinePlotItem(
                     pos=np.array([source, corner]), width=1, mode="line_strip"
                 )
                 for corner in corners
             ]
-        elif pg.is_parallel():
+        elif pg.is_parallel:
             # TODO: fix this to make parallel display work
             rayItems = [
                 gl.GLLinePlotItem(

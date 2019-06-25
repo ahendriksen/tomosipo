@@ -172,7 +172,7 @@ pg = pg[:, t : b + 1, l : r + 1]
 # When the flexray scanner has already binned the detector values, we
 # must increase the detector pixel size. This does not alter the
 # dimensions of the detector!
-pg = pg.rescale_detector(s.binning_value)
+pg = pg.rescale_det(s.binning_value)
 
 # The projection data has also been binned in the loading script
 # above, so we obtain a subgeometry with the same binning applied:

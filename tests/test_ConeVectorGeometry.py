@@ -68,11 +68,11 @@ class TestConeVectorGeometry(unittest.TestCase):
             self.assertNotEqual(pg, u)
 
     def test_getitem(self):
-        pg = ts.cone(10, shape=100).to_vector()
+        pg = ts.cone(10, shape=100).to_vec()
         self.assertEqual(pg, pg[:, :, :])
 
-        self.assertEqual(2 * pg[::2].get_num_angles(), pg.get_num_angles())
-        self.assertEqual(10 * pg[::10].get_num_angles(), pg.get_num_angles())
+        self.assertEqual(2 * pg[::2].num_angles, pg.num_angles)
+        self.assertEqual(10 * pg[::10].num_angles, pg.num_angles)
 
         self.assertAlmostEqual(
             0.0, np.sum(abs(pg[:, ::2].detector_vs - 2 * pg.detector_vs))
@@ -99,8 +99,7 @@ class TestConeVectorGeometry(unittest.TestCase):
             0.0, np.sum(abs(pg[:, :, ::2].detector_us - pg[:, :, 1::2].detector_us))
         )
         self.assertAlmostEqual(
-            0.0,
-            np.sum(abs(pg[:, :, ::2].detector_sizes - pg[:, :, 1::2].detector_sizes)),
+            0.0, np.sum(abs(pg[:, :, ::2].det_sizes - pg[:, :, 1::2].det_sizes))
         )
 
     def test_to_from_astra(self):
@@ -122,7 +121,7 @@ class TestConeVectorGeometry(unittest.TestCase):
         shape = (10, 40)
         size = (30, 80)
 
-        pg = ts.cone(1, size, shape, source_distance=10).to_vector()
+        pg = ts.cone(1, size, shape, source_distance=10).to_vec()
         self.assertAlmostEqual(np.abs(pg.project_point((0, 0, 0))).sum(), 0)
 
         self.assertAlmostEqual(
@@ -133,7 +132,7 @@ class TestConeVectorGeometry(unittest.TestCase):
         )
 
         shape = (100, 400)
-        pg = ts.cone(1, size, shape, source_distance=10).to_vector()
+        pg = ts.cone(1, size, shape, source_distance=10).to_vec()
         self.assertAlmostEqual(np.abs(pg.project_point((0, 0, 0))).sum(), 0)
         self.assertAlmostEqual(
             np.abs(pg.project_point((0.3, 0, 0)) - [1.0, 0.0]).sum(), 0
@@ -142,31 +141,30 @@ class TestConeVectorGeometry(unittest.TestCase):
             np.abs(pg.project_point((0, 0, 0.2)) - [0.0, 1.0]).sum(), 0
         )
 
-    def test_detector_sizes(self):
+    def test_det_sizes(self):
         size = (1, 1)
-        pg = ts.cone(angles=5, size=size).to_vector()
-        self.assertTrue(abs(size - pg.detector_sizes).sum() < ts.epsilon)
+        pg = ts.cone(angles=5, size=size).to_vec()
+        self.assertTrue(abs(size - pg.det_sizes).sum() < ts.epsilon)
         for _ in range(10):
             new_shape = np.random.uniform(1, 100, size=2).astype(np.int)
             # Change the number of detector pixels and test if the
             # change in size is proportional
             pg2 = pg.reshape(new_shape)
-            self.assertTrue(
-                abs(size * new_shape - pg2.detector_sizes).sum() < ts.epsilon
-            )
+            self.assertEqual(pg2.det_shape, tuple(new_shape))
+            self.assertAlmostEqual(0.0, np.sum(abs(pg2.det_sizes - pg.det_sizes)))
 
-    def test_get_corners(self):
+    def test_corners(self):
         # TODO: This test deserves better..
         size = (1, 1)
-        pg1 = ts.cone(angles=5, size=size).to_vector()
+        pg1 = ts.cone(angles=5, size=size).to_vec()
 
-        self.assertEqual(pg1.get_corners().shape, (4, 5, 3))
+        self.assertEqual(pg1.corners.shape, (5, 4, 3))
 
-    def test_get_source_positions(self):
-        pg1 = ts.cone(source_distance=1).to_vector()
-        pg2 = ts.cone(source_distance=2).to_vector()
+    def test_src_pos(self):
+        pg1 = ts.cone(source_distance=1).to_vec()
+        pg2 = ts.cone(source_distance=2).to_vec()
 
-        source_diff = pg1.get_source_positions() * 2 - pg2.get_source_positions()
+        source_diff = pg1.src_pos * 2 - pg2.src_pos
         self.assertTrue(np.all(abs(source_diff) < ts.epsilon))
 
     def test_transform(self):
@@ -182,7 +180,7 @@ class TestConeVectorGeometry(unittest.TestCase):
     def test_to_box(self):
         pg = ts.cone(
             10, shape=(5, 3), detector_distance=10, source_distance=11
-        ).to_vector()
+        ).to_vec()
         src_box, det_box = pg.to_box()
 
         self.assertAlmostEqual(
@@ -190,12 +188,12 @@ class TestConeVectorGeometry(unittest.TestCase):
         )
         # XXX: Really do not know what to test here..
 
-    def test_rescale_detector(self):
-        pg = ts.cone(angles=10, shape=20).to_vector()
+    def test_rescale_det(self):
+        pg = ts.cone(angles=10, shape=20).to_vec()
 
         self.assertAlmostEqual(
-            0.0, np.sum(abs(pg.detector_sizes - pg.rescale_detector(2).detector_sizes))
+            0.0, np.sum(abs(pg.det_sizes - pg.rescale_det(2).det_sizes))
         )
 
-        self.assertEqual(pg.rescale_detector((2, 2)), pg.rescale_detector(2))
-        self.assertEqual(pg.rescale_detector(10).shape, (2, 2))
+        self.assertEqual(pg.rescale_det((2, 2)), pg.rescale_det(2))
+        self.assertEqual(pg.rescale_det(10).det_shape, (2, 2))

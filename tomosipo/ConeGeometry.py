@@ -80,7 +80,7 @@ class ConeGeometry(ProjectionGeometry):
             return ConeGeometry(
                 angles=np.asarray(self.angles[key]),
                 size=self.size,
-                shape=self.shape,
+                shape=self.det_shape,
                 detector_distance=self.detector_distance,
                 source_distance=self.source_distance,
             )
@@ -154,7 +154,7 @@ class ConeGeometry(ProjectionGeometry):
             f"ConeGeometry(\n"
             f"    angles={self.angles_original},\n"
             f"    size={self.size},\n"
-            f"    shape={self.shape},\n"
+            f"    shape={self.det_shape},\n"
             f"    detector_distance={self.detector_distance},\n"
             f"    source_distance={self.source_distance}\n"
             f")"
@@ -173,21 +173,21 @@ class ConeGeometry(ProjectionGeometry):
             len(self.angles) == len(other.angles)
             and np.all(abs(diff_angles) < ts.epsilon)
             and np.all(abs(diff_size) < ts.epsilon)
-            and np.all(self.shape == other.shape)
+            and np.all(self.det_shape == other.det_shape)
             and abs(diff_detector) < ts.epsilon
             and abs(diff_source) < ts.epsilon
         )
 
-    def to_vector(self):
+    def to_vec(self):
         return ConeVectorGeometry.from_astra(astra.geom_2vec(self.to_astra()))
 
     def to_astra(self):
-        detector_spacing = np.array(self.size) / np.array(self.shape)
+        detector_spacing = np.array(self.size) / np.array(self.det_shape)
         return astra.create_proj_geom(
             "cone",
             detector_spacing[1],
             detector_spacing[0],  # u, then v (reversed)
-            *self.shape,
+            *self.det_shape,
             self.angles,
             self.source_distance,
             self.detector_distance,
@@ -213,6 +213,46 @@ class ConeGeometry(ProjectionGeometry):
                 "ConeGeometry.from_astra only supports 'cone' type astra geometries."
             )
 
+    ###########################################################################
+    #                                Properties                               #
+    ###########################################################################
+    @ProjectionGeometry.num_angles.getter
+    def num_angles(self):
+        return len(self.angles)
+
+    @ProjectionGeometry.src_pos.getter
+    def src_pos(self):
+        return self.to_vec().src_pos
+
+    @ProjectionGeometry.det_pos.getter
+    def det_pos(self):
+        return self.to_vec().det_pos
+
+    @ProjectionGeometry.det_v.getter
+    def det_v(self):
+        return self.to_vec().det_v
+
+    @ProjectionGeometry.det_u.getter
+    def det_u(self):
+        return self.to_vec().det_u
+
+    # TODO: det_normal
+
+    @ProjectionGeometry.ray_dir.getter
+    def ray_dir(self):
+        raise NotImplementedError()
+
+    @ProjectionGeometry.det_sizes.getter
+    def det_sizes(self):
+        return np.repeat([self.size], self.num_angles, axis=0)
+
+    @ProjectionGeometry.corners.getter
+    def corners(self):
+        return self.to_vec().corners
+
+    ###########################################################################
+    #                                 Methods                                 #
+    ###########################################################################
     def transform(self, matrix):
         warnings.warn(
             "Converting cone geometry to vector geometry. "
@@ -220,9 +260,9 @@ class ConeGeometry(ProjectionGeometry):
             stacklevel=2,
         )
 
-        return self.to_vector().transform(matrix)
+        return self.to_vec().transform(matrix)
 
-    def rescale_detector(self, scale):
+    def rescale_det(self, scale):
         """Rescale detector pixels
 
         Rescales detector pixels without changing the size of the detector.
@@ -239,7 +279,7 @@ class ConeGeometry(ProjectionGeometry):
         scaleV, scaleU = up_tuple(scale, 2)
         scaleV, scaleU = int(scaleV), int(scaleU)
 
-        shape = (self.shape[0] // scaleV, self.shape[1] // scaleU)
+        shape = (self.det_shape[0] // scaleV, self.det_shape[1] // scaleU)
 
         return cone(
             self.angles_original,
@@ -249,19 +289,28 @@ class ConeGeometry(ProjectionGeometry):
             self.source_distance,
         )
 
-    @ProjectionGeometry.detector_sizes.getter
-    def detector_sizes(self):
-        return np.repeat([self.size], self.get_num_angles(), axis=0)
+    def reshape(self, new_shape):
+        """Reshape detector pixels without changing detector size
 
-    def get_num_angles(self):
-        """Return the number of angles in the projection geometry
 
-        :returns:
-            The number of angles in the projection geometry.
-        :rtype: integer
+        :param new_shape: int or (int, int)
+            The new shape of the detector in pixels in `v` (height)
+            and `u` (width) direction.
+        :returns: `self`
+        :rtype: ProjectionGeometry
 
         """
-        return len(self.angles)
+        new_shape = up_tuple(new_shape, 2)
+        return cone(
+            self.angles_original,
+            self.size,
+            new_shape,
+            self.detector_distance,
+            self.source_distance,
+        )
+
+    def project_point(self, point):
+        return self.to_vec().project_point(point)
 
     def to_box(self):
         """Returns two boxes representating the source and detector respectively
@@ -270,4 +319,4 @@ class ConeGeometry(ProjectionGeometry):
         :rtype:  `(OrientedBox, OrientedBox)`
 
         """
-        return self.to_vector().to_box()
+        return self.to_vec().to_box()

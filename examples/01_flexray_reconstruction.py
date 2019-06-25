@@ -167,7 +167,7 @@ ts.display(pg, vg)
 # below. Moreover, all values are indices, so we must add 1 to the
 # right hand size of the slices.
 l, t, r, b = s["roi_ltrb"]
-pg = pg[:, t: b + 1, l: r + 1]
+pg = pg[:, t : b + 1, l : r + 1]
 
 # When the flexray scanner has already binned the detector values, we
 # must increase the detector pixel size. This does not alter the
@@ -183,7 +183,7 @@ pg = pg[:, ::binning, ::binning]
 #                                Reconstruction                               #
 ###############################################################################
 
-vg_slice = vg[vg.shape[0] // 2:vg.shape[0] // 2 + 10]
+vg_slice = vg[vg.shape[0] // 2 : vg.shape[0] // 2 + 10]
 vd = ts.data(vg_slice)
 pd = ts.data(pg, proj)
 

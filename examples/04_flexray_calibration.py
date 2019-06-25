@@ -169,7 +169,7 @@ def reconstruct(proj, param_dict):
     l, t, r, b = s["roi_ltrb"]
     pg = pg[:, t : b + 1, l : r + 1]
     # Apply hardware binning
-    pg = pg.rescale_detector(s.binning_value)
+    pg = pg.rescale_det(s.binning_value)
     # Apply initial software binning (see loading data above)
     pg = pg[:, ::initial_binning, ::initial_binning]
     # Apply additional software binning:

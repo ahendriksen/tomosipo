@@ -25,7 +25,7 @@ class ProjectionGeometry(object):
         if not np.all(np.array(shape) > 0):
             raise ValueError("Shape must be strictly positive.")
 
-        self.shape = shape
+        self._shape = shape
 
     def __repr__(self):
         raise NotImplementedError()
@@ -36,26 +36,170 @@ class ProjectionGeometry(object):
     def to_astra(self):
         raise NotImplementedError()
 
+    def to_vec(self):
+        """Return a vector geometry of the current geometry
+
+        :returns:
+        :rtype: ProjectionGeometry
+
+        """
+        raise NotImplementedError()
+
+    @property
+    def is_cone(self):
+        return self._is_cone
+
+    @property
+    def is_parallel(self):
+        return self._is_parallel
+
+    @property
+    def is_vec(self):
+        return self._is_vector
+
+    @property
+    def det_shape(self):
+        """The shape of the detector.
+
+        :returns: `(int, int)`
+            A tuple describing the height and width of the detector in
+            pixels.
+        :rtype: np.array
+
+        """
+        return self._shape
+
+    @property
+    def num_angles(self):
+        """The number of angles in the projection geometry
+
+        :returns:
+            The number of angles in the projection geometry.
+        :rtype: integer
+
+        """
+        raise NotImplementedError()
+
+    @property
+    def src_pos(self):
+        """The source positions of the geometry.
+
+        Not supported on parallel geometries.
+
+        :returns: `np.array`
+            A `(num_angles, 3)`-shaped numpy array containing the
+            (Z,Y,X)-coordinates of the source positions.
+        :rtype:
+
+        """
+
+        raise NotImplementedError()
+
+    @property
+    def det_pos(self):
+        """The detector positions of the geometry.
+
+        :returns: `np.array`
+            A `(num_angles, 3)`-shaped numpy array containing the
+            (Z,Y,X)-coordinates of the detector positions.
+        :rtype:
+
+        """
+        raise NotImplementedError()
+
+    @property
+    def det_v(self):
+        """The detector v-vectors of the geometry.
+
+        The 'v' vector is usually the "upward" pointing vector
+        describing the distance from the (0, 0) to (1, 0) pixel.
+
+        :returns: `np.array`
+            A `(num_angles, 3)`-shaped numpy array containing the
+            (Z,Y,X)-coordinates of the v vectors.
+        :rtype:
+
+        """
+        raise NotImplementedError()
+
+    @property
+    def det_u(self):
+        """The detector u-vectors of the geometry.
+
+        The 'u' vector is usually the "sideways" pointing vector
+        describing the distance from the (0, 0) to (0, 1) pixel.
+
+        :returns: `np.array`
+            A `(num_angles, 3)`-shaped numpy array containing the
+            (Z,Y,X)-coordinates of the u vectors.
+        :rtype:
+
+        """
+        raise NotImplementedError()
+
+    # TODO: det_normal
+
+    @property
+    def ray_dir(self):
+        """The ray direction of the geometry.
+
+        This property is not supported on cone geometries.
+
+        :returns: `np.array`
+            A `(num_angles, 3)`-shaped numpy array containing the
+            (Z,Y,X)-coordinates of the ray direction vectors.
+        :rtype:
+
+        """
+        raise NotImplementedError()
+
+    @property
+    def det_sizes(self):
+        """The size of each detector.
+
+        :returns: np.array
+            Array with shape (num_angles, 2) in v and u direction
+            (height x width)
+        :rtype: np.array
+
+        """
+        raise NotImplementedError()
+
+    @property
+    def corners(self):
+        """Returns a vector with the corners of each detector
+
+        :returns: np.array
+            Array with shape (num_angles, 4, 3), describing the 4
+            corners of each detector in (Z, Y, X)-coordinates.
+        :rtype: np.array
+        """
+        raise NotImplementedError()
+
+    def rescale_det(self, scale):
+        """Rescale detector pixels
+
+        Rescales detector pixels without changing the size of the detector.
+
+        :param scale: `int` or `(int, int)`
+            Indicates how many times to enlarge a detector pixel. Per
+            convention, the first coordinate scales the pixels in the
+            `v` coordinate, and the second coordinate scales the
+            pixels in the `u` coordinate.
+        :returns: a rescaled cone geometry
+        :rtype: `ConeGeometry`
+
+        """
+        raise NotImplementedError()
+
     def reshape(self, new_shape):
-        """Reshape detector pixels
+        """Reshape detector pixels without changing detector size
 
 
         :param new_shape: int or (int, int)
             The new shape of the detector in pixels in `v` (height)
             and `u` (width) direction.
         :returns: `self`
-        :rtype: ProjectionGeometry
-
-        """
-        new_shape = up_tuple(new_shape, 2)
-        self.shape = new_shape
-
-        return self
-
-    def to_vector(self):
-        """Return a vector geometry of the current geometry
-
-        :returns:
         :rtype: ProjectionGeometry
 
         """
@@ -90,49 +234,14 @@ class ProjectionGeometry(object):
 
         raise NotImplementedError()
 
-    def is_cone(self):
-        return self._is_cone
+    def transform(self, matrix):
+        """Applies a projective matrix transformation to geometry
 
-    def is_parallel(self):
-        return self._is_parallel
-
-    def is_vector(self):
-        return self._is_vector
-
-    def get_num_angles(self):
-        """Return the number of angles in the projection geometry
-
-        :returns:
-            The number of angles in the projection geometry.
-        :rtype: integer
+        :param matrix: `np.array`
+            A transformation matrix
+        :returns: A transformed geometry
+        :rtype: `ProjectionGeometry`
 
         """
-        raise NotImplementedError()
 
-    @property
-    def detector_sizes(self):
-        """Returns a vector with the size of each detector
-
-        :returns: np.array
-            Array with shape (num_angles, 2) in v and u direction
-            (height x width)
-        :rtype: np.array
-
-        """
-        raise NotImplementedError()
-
-    def rescale_detector(self, scale):
-        """Rescale detector pixels
-
-        Rescales detector pixels without changing the size of the detector.
-
-        :param scale: `int` or `(int, int)`
-            Indicates how many times to enlarge a detector pixel. Per
-            convention, the first coordinate scales the pixels in the
-            `v` coordinate, and the second coordinate scales the
-            pixels in the `u` coordinate.
-        :returns: a rescaled cone geometry
-        :rtype: `ConeGeometry`
-
-        """
         raise NotImplementedError()

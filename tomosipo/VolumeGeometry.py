@@ -462,9 +462,9 @@ def volume_from_projection_geometry(projection_geometry, inside=False):
     # should be provided, where a cylinder fits exactly inside the
     # VolumeGeometry and inside the photon beam.
 
-    pg = projection_geometry.to_vector()
+    pg = projection_geometry.to_vec()
 
-    if pg.is_parallel():
+    if pg.is_parallel:
         warnings.warn(
             "volume_from_projection_geometry has not been tested with parallel geometries."
         )
@@ -495,13 +495,13 @@ def volume_from_projection_geometry(projection_geometry, inside=False):
     # (mini)
 
     # Gather detector information
-    detector_width = pg.shape[1]
-    detector_height = pg.shape[0]
+    detector_width = pg.det_shape[1]
+    detector_height = pg.det_shape[0]
 
     # Create a (_, 3) shaped array of the corners
-    corners = pg.get_corners()
+    corners = pg.corners.swapaxes(0, 1)
     corners = np.concatenate(corners, axis=0)
-    source_pos = pg.get_source_positions()
+    source_pos = pg.src_pos
     all_pos = np.concatenate([corners, source_pos], axis=0)
 
     mini = np.min(all_pos, axis=0)

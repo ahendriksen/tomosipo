@@ -20,7 +20,7 @@ def test_init():
     assert isinstance(pg, ts.ProjectionGeometry.ProjectionGeometry)
 
     pg = ts.cone(angles=np.linspace(0, 1, 100))
-    assert pg.get_num_angles() == 100
+    assert pg.num_angles == 100
 
     with pytest.raises(ValueError):
         pg = ts.cone(angles="asdf")
@@ -59,7 +59,7 @@ def test_cone():
     assert ts.ConeGeometry.ConeGeometry() == ts.cone()
 
 
-def test_to_vector():
+def test_to_vec():
     num_tests = 100
     for _ in range(num_tests):
         num_angles = int(np.random.uniform(1, 100))
@@ -81,8 +81,8 @@ def test_to_vector():
         d_dst = np.random.uniform(0, 100)
 
         pg1 = ts.cone(angles, size, shape, d_dst, s_dst)
-        pgv = pg1.to_vector()
-        assert pg1.shape == pgv.shape
+        pgv = pg1.to_vec()
+        assert pg1.det_shape == pgv.det_shape
 
 
 def test_to_from_astra():
@@ -120,19 +120,19 @@ def test_to_from_astra():
         assert pg1 == pg2
 
 
-def test_detector_sizes():
+def test_det_sizes():
     size = (1, 2)
     pg = ts.cone(angles=3, size=size)
     size = np.array(size)[None, ...]
-    assert abs(pg.detector_sizes - size).sum() < ts.epsilon
+    assert abs(pg.det_sizes - size).sum() < ts.epsilon
 
 
 def test_get_item():
     pg = ts.cone(angles=10, shape=20)
-    assert pg[1].get_num_angles() == 1
-    assert pg[:1].get_num_angles() == 1
-    assert pg[:2].get_num_angles() == 2
-    assert pg[:].get_num_angles() == 10
+    assert pg[1].num_angles == 1
+    assert pg[:1].num_angles == 1
+    assert pg[:2].num_angles == 2
+    assert pg[:].num_angles == 10
     assert pg[-1] == pg[9]
     assert pg[-2] == pg[8]
 
@@ -140,12 +140,12 @@ def test_get_item():
         pg[10]
 
 
-def test_rescale_detector():
+def test_rescale_det():
     pg = ts.cone(angles=10, shape=20)
 
-    assert approx(pg.detector_sizes) == pg.rescale_detector(2).detector_sizes
-    assert pg.rescale_detector((2, 2)) == pg.rescale_detector(2)
-    assert pg.rescale_detector(10).shape == (2, 2)
+    assert approx(pg.det_sizes) == pg.rescale_det(2).det_sizes
+    assert pg.rescale_det((2, 2)) == pg.rescale_det(2)
+    assert pg.rescale_det(10).det_shape == (2, 2)
 
 
 def test_transform():
@@ -156,7 +156,7 @@ def test_transform():
 
         with pytest.warns(Warning):
             assert T1(T2)(pg) == T1(T2(pg))
-            assert ts.identity()(pg) == pg.to_vector()
+            assert ts.identity()(pg) == pg.to_vec()
 
 
 def test_to_box():

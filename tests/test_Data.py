@@ -37,7 +37,7 @@ class TestData(unittest.TestCase):
         # Should warn when data is made contiguous.
         with self.assertWarns(UserWarning):
             p_data = np.ones(
-                (pg.shape[0] * 2, pg.get_num_angles(), pg.shape[1]), dtype=np.float32
+                (pg.det_shape[0] * 2, pg.num_angles, pg.det_shape[1]), dtype=np.float32
             )
             ts.data(pg, p_data[::2, ...])
         with self.assertWarns(UserWarning):

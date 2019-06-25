@@ -191,11 +191,10 @@ class TestConeVectorGeometry(unittest.TestCase):
         # XXX: Really do not know what to test here..
 
     def test_rescale_detector(self):
-        pg = ts.cone(angles=10, shape=20)
+        pg = ts.cone(angles=10, shape=20).to_vector()
 
         self.assertAlmostEqual(
-            0.0,
-            np.sum(abs((pg.detector_sizes) - pg.rescale_detector(2).detector_sizes)),
+            0.0, np.sum(abs(pg.detector_sizes - pg.rescale_detector(2).detector_sizes))
         )
 
         self.assertEqual(pg.rescale_detector((2, 2)), pg.rescale_detector(2))

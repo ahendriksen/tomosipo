@@ -15,6 +15,7 @@ from .geometry.cone import cone
 from .geometry.conversion import from_astra_geometry
 from .geometry.cone_vec import cone_vec
 from .geometry.parallel_vec import parallel_vec
+from .geometry.parallel import parallel
 from .geometry.oriented_box import box
 from .geometry.transform import (
     identity,

@@ -129,9 +129,10 @@ class ConeGeometry(ProjectionGeometry):
         super(ConeGeometry, self).__init__(shape=shape)
         self.angles_original = angles
         if np.isscalar(angles):
+            # XXX: Should maybe include endpoints? -----v
             angles = np.linspace(0, 2 * np.pi, angles, False)
         else:
-            angles = np.asarray(angles).astype(np.float64)
+            angles = np.array(angles, copy=False, ndmin=1, dtype=np.float64)
 
         if len(angles) == 0:
             raise ValueError(

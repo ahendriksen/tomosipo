@@ -6,16 +6,16 @@ __author__ = """Allard Hendriksen"""
 __email__ = "allard.hendriksen@cwi.nl"
 __version__ = "0.0.1"
 
-from .VolumeGeometry import volume, volume_from_projection_geometry, is_volume_geometry
-from . import ProjectionGeometry
-from .ConeGeometry import cone
-from .GeometryConversion import from_astra_geometry
-from .ConeVectorGeometry import cone_vec
+from .display import display
 from .Operator import forward, backward, fdk, operator
-from .display import display_geometry, display_data, display
 from .Data import data
-from .OrientedBox import OrientedBox
-from .Transform import (
+from .geometry.volume import volume, volume_from_projection_geometry
+from . import geometry
+from .geometry.cone import cone
+from .geometry.conversion import from_astra_geometry
+from .geometry.cone_vec import cone_vec
+from .geometry.oriented_box import box
+from .geometry.transform import (
     identity,
     translate,
     scale,

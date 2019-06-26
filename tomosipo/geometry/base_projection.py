@@ -1,8 +1,8 @@
 import numpy as np
-from .utils import up_tuple
+from tomosipo.utils import up_tuple
 
 
-def is_projection_geometry(g):
+def is_projection(g):
     return isinstance(g, ProjectionGeometry)
 
 

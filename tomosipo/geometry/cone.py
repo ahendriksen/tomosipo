@@ -2,10 +2,10 @@ import astra
 import warnings
 from numbers import Integral
 import numpy as np
-from .utils import up_tuple, up_slice
 import tomosipo as ts
-from tomosipo.ProjectionGeometry import ProjectionGeometry
-from tomosipo.ConeVectorGeometry import ConeVectorGeometry
+from tomosipo.utils import up_tuple, up_slice
+from .base_projection import ProjectionGeometry
+from .cone_vec import ConeVectorGeometry
 
 
 def cone(angles=1, size=np.sqrt(2), shape=1, detector_distance=0, source_distance=2):

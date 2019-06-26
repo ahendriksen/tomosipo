@@ -5,7 +5,7 @@
 
 import pytest
 import tomosipo as ts
-from tomosipo.ProjectionGeometry import ProjectionGeometry, is_projection_geometry
+from tomosipo.geometry.base_projection import ProjectionGeometry, is_projection
 
 
 @pytest.fixture
@@ -20,10 +20,10 @@ def default_proj_geoms():
     ]
 
 
-def test_is_projection_geometry():
-    assert is_projection_geometry(ts.cone())
-    assert not is_projection_geometry(ts.volume())
-    assert not is_projection_geometry(None)
+def test_is_projection():
+    assert is_projection(ts.cone())
+    assert not is_projection(ts.volume())
+    assert not is_projection(None)
 
 
 def test_init():
@@ -37,7 +37,7 @@ def test_init():
 
 def test_interface(default_proj_geoms):
     for pg in default_proj_geoms:
-        assert is_projection_geometry(pg)
+        assert is_projection(pg)
         repr(pg)
         assert pg == pg
         pg_fix = ts.from_astra_geometry(pg.to_astra())

@@ -8,8 +8,8 @@ import unittest
 import numpy as np
 import tomosipo as ts
 import astra
-from tomosipo.VolumeGeometry import random_volume
-from tomosipo.Transform import random_transform
+from tomosipo.geometry import random_volume, random_transform
+from tomosipo.geometry.volume import from_astra
 
 
 class TestVolumeGeometry(unittest.TestCase):
@@ -23,10 +23,10 @@ class TestVolumeGeometry(unittest.TestCase):
         """Tear down test fixtures, if any."""
         pass
 
-    def test_is_volume_geometry(self):
-        self.assertTrue(ts.is_volume_geometry(ts.volume()))
-        self.assertFalse(ts.is_volume_geometry(ts.cone()))
-        self.assertFalse(ts.is_volume_geometry(None))
+    def test_is_volume(self):
+        self.assertTrue(ts.geometry.is_volume(ts.volume()))
+        self.assertFalse(ts.geometry.is_volume(ts.cone()))
+        self.assertFalse(ts.geometry.is_volume(None))
 
     def test_init(self):
         """Test init."""
@@ -76,7 +76,7 @@ class TestVolumeGeometry(unittest.TestCase):
     def test_astra(self):
         vg = ts.volume()
         vg = vg.scale((1, 2, 3)).translate((10, 20, 30))
-        vg1 = ts.VolumeGeometry.from_astra(vg.to_astra())
+        vg1 = from_astra(vg.to_astra())
 
         self.assertEqual(vg, vg1)
 

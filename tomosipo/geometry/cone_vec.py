@@ -4,7 +4,7 @@ import tomosipo as ts
 import tomosipo.vector_calc as vc
 from tomosipo.utils import up_tuple, up_slice, slice_interval
 from numbers import Integral
-from tomosipo.ProjectionGeometry import ProjectionGeometry
+from .base_projection import ProjectionGeometry
 
 
 def cone_vec(shape, source_positions, detector_positions, detector_vs, detector_us):
@@ -242,14 +242,14 @@ class ConeVectorGeometry(ProjectionGeometry):
                 "Using first detector size for the box"
             )
 
-        detector_box = ts.OrientedBox((det_height, 0, det_width), det_pos, w, v, u)
+        detector_box = ts.box((det_height, 0, det_width), det_pos, w, v, u)
 
         # The source of course does not really have a size, but we
         # want to visualize it for now :)
         source_size = (det_width / 10,) * 3
         # We set the orientation of the source to be identical to
         # that of the detector.
-        source_box = ts.OrientedBox(source_size, src_pos, w, v, u)
+        source_box = ts.box(source_size, src_pos, w, v, u)
 
         return source_box, detector_box
 

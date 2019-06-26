@@ -130,10 +130,10 @@ def reconstruct(proj, param_dict):
     angles = np.linspace(0, 2 * np.pi, num_angles, endpoint=True)
     if param_dict["Rotate clockwise"]:
         angles *= -1
-    src = ts.OrientedBox(size=1, pos=src_pos)
-    det = ts.OrientedBox((det_size[0], 0, det_size[1]), pos=det_pos)
+    src = ts.box(size=1, pos=src_pos)
+    det = ts.box((det_size[0], 0, det_size[1]), pos=det_pos)
     R = ts.rotate(obj_pos, (1, 0, 0), rad=angles)
-    vol = R(ts.OrientedBox(size=det_size[0] / 5, pos=obj_pos))
+    vol = R(ts.box(size=det_size[0] / 5, pos=obj_pos))
 
     axes = ["Z", "Y", "X"]
     src_coords = tuple(param_dict[" ".join(["Src", ax])] for ax in axes)

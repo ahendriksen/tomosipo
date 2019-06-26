@@ -7,8 +7,7 @@
 import unittest
 import numpy as np
 import tomosipo as ts
-from tomosipo.Transform import random_transform
-from tomosipo.ConeVectorGeometry import random_cone_vec
+from tomosipo.geometry import random_transform, random_cone_vec
 import tomosipo.vector_calc as vc
 
 

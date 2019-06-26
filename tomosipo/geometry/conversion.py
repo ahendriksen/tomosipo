@@ -1,6 +1,6 @@
-from .ProjectionGeometry import ProjectionGeometry
-from .ConeGeometry import ConeGeometry
-from .ConeVectorGeometry import ConeVectorGeometry
+from .base_projection import ProjectionGeometry
+from .cone import ConeGeometry
+from .cone_vec import ConeVectorGeometry
 
 # TODO: change the name of this module.
 

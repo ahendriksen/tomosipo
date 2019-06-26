@@ -2,6 +2,8 @@ from . import base_projection
 from . import det_vec
 from . import cone_vec
 from . import cone
+from . import parallel_vec
+from . import parallel
 from . import conversion
 from . import oriented_box
 from . import transform
@@ -15,6 +17,7 @@ from . import display
 from .cone import random_cone
 from .cone_vec import random_cone_vec
 from .parallel_vec import random_parallel_vec
+from .parallel import random_parallel
 from .oriented_box import random_box
 from .volume import random_volume
 from .transform import random_transform

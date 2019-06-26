@@ -17,11 +17,14 @@ def default_proj_geoms():
         ts.cone(angles=10, shape=(5, 3)).to_vec(),
         ts.cone(angles=11, shape=(10, 10)),
         ts.cone(angles=11, shape=(10, 10)).to_vec(),
+        ts.geometry.det_vec.random_det_vec(),
     ]
 
 
-def test_is_projection():
-    assert is_projection(ts.cone())
+def test_is_projection(default_proj_geoms):
+    for pg in default_proj_geoms:
+        assert is_projection(pg)
+
     assert not is_projection(ts.volume())
     assert not is_projection(None)
 
@@ -43,7 +46,6 @@ def test_interface(default_proj_geoms):
         pg_fix = ts.from_astra_geometry(pg.to_astra())
         assert pg_fix == ts.from_astra_geometry(pg_fix.to_astra())
         assert pg.to_vec() == pg.to_vec().to_vec()
-        assert pg.is_cone or pg.is_parallel
         pg.is_vec
         pg.num_angles
         if pg.is_cone:
@@ -63,4 +65,5 @@ def test_interface(default_proj_geoms):
             )
 
         assert pg.reshape(1).det_shape == (1, 1)
-        pg.project_point((0, 0, 0))
+        if pg.is_parallel or pg.is_cone:
+            pg.project_point((0, 0, 0))

@@ -1,3 +1,10 @@
+"""Vector geometry containing just the detector
+
+The class in this file can be encapsulated by ConeVectorGeometry and
+ParallelVectorGeometry.
+
+"""
+
 import warnings
 import numpy as np
 import tomosipo as ts
@@ -7,24 +14,21 @@ from numbers import Integral
 from .base_projection import ProjectionGeometry
 
 
-def cone_vec(shape, source_positions, detector_positions, detector_vs, detector_us):
-    """Create a cone beam vector geometry
+def det_vec(shape, det_pos, det_v, det_u):
+    """Create a detector vector geometry
 
     :param shape: (`int`, `int`) or `int`
         The detector shape in pixels. If tuple, the order is
         (height, width). Else the pixel has the same number of
         pixels in the U and V direction.
-    :param source_positions: np.array
-        A numpy array of dimension (num_positions, 3) with the
-        source positions in (Z, Y, X) order.
-    :param detector_positions:
+    :param det_pos:
         A numpy array of dimension (num_positions, 3) with the
         detector center positions in (Z, Y, X) order.
-    :param detector_vs:
+    :param det_v:
         A numpy array of dimension (num_positions, 3) with the
         vector pointing from the detector (0, 0) to (1, 0) pixel
         (up).
-    :param detector_us:
+    :param det_u:
         A numpy array of dimension (num_positions, 3) with the
         vector pointing from the detector (0, 0) to (0, 1) pixel
         (sideways).
@@ -32,54 +36,46 @@ def cone_vec(shape, source_positions, detector_positions, detector_vs, detector_
     :rtype:
 
     """
-    return ConeVectorGeometry(
-        shape, source_positions, detector_positions, detector_vs, detector_us
-    )
+    return DetectorVectorGeometry(shape, det_pos, det_v, det_u)
 
 
-def random_cone_vec():
+def random_det_vec():
     """Generates a random cone vector geometry
 
     :returns: a random cone vector geometry
     :rtype: `ConeVectorGeometry`
 
     """
-    angles = np.random.normal(size=20)
-    size = np.random.uniform(10, 20, size=2)
-    shape = np.random.uniform(10, 20, size=2)
-    detector_distance = np.random.uniform(0, 10)
-    source_distance = np.random.uniform(0, 10)
+    shape = np.random.uniform(10, 20, size=2).astype(np.int)
+    num_angles = int(np.random.uniform(1, 100))
+    det_pos = np.random.normal(size=(num_angles, 3))
+    det_v = np.random.normal(size=(num_angles, 3))
+    det_u = np.random.normal(size=(num_angles, 3))
 
-    pg = ts.cone(angles, size, shape, detector_distance, source_distance)
-    return pg.to_vec()
+    return det_vec(shape, det_pos, det_v, det_u)
 
 
-class ConeVectorGeometry(ProjectionGeometry):
-    """Documentation for ConeVectorGeometry
+class DetectorVectorGeometry(ProjectionGeometry):
+    """Documentation for DetectorVectorGeometry
 
-    A class for representing cone vector geometries.
+    A class for representing detector vector geometries.
     """
 
-    def __init__(
-        self, shape, source_positions, detector_positions, detector_vs, detector_us
-    ):
-        """Create a cone beam vector geometry
+    def __init__(self, shape, det_pos, det_v, det_u):
+        """Create a detector vector geometry
 
         :param shape: (`int`, `int`) or `int`
             The detector shape in pixels. If tuple, the order is
             (height, width). Else the pixel has the same number of
             pixels in the U and V direction.
-        :param source_positions: np.array
-            A numpy array of dimension (num_positions, 3) with the
-            source positions in (Z, Y, X) order.
-        :param detector_positions:
+        :param det_pos:
             A numpy array of dimension (num_positions, 3) with the
             detector center positions in (Z, Y, X) order.
-        :param detector_vs:
+        :param det_v:
             A numpy array of dimension (num_positions, 3) with the
             vector pointing from the detector (0, 0) to (1, 0) pixel
             (up).
-        :param detector_us:
+        :param det_u:
             A numpy array of dimension (num_positions, 3) with the
             vector pointing from the detector (0, 0) to (0, 1) pixel
             (sideways).
@@ -87,51 +83,42 @@ class ConeVectorGeometry(ProjectionGeometry):
         :rtype:
 
         """
-        super(ConeVectorGeometry, self).__init__(shape=shape)
+        super(DetectorVectorGeometry, self).__init__(shape=shape)
 
-        src_pos, det_pos, det_v, det_u = (
-            vc.to_vec(x)
-            for x in (source_positions, detector_positions, detector_vs, detector_us)
-        )
-        src_pos, det_pos, det_v, det_u = np.broadcast_arrays(
-            src_pos, det_pos, det_v, det_u
-        )
+        det_pos, det_v, det_u = (vc.to_vec(x) for x in (det_pos, det_v, det_u))
+        det_pos, det_v, det_u = np.broadcast_arrays(det_pos, det_v, det_u)
 
-        vc.check_same_shapes(src_pos, det_pos, det_v, det_u)
+        vc.check_same_shapes(det_pos, det_v, det_u)
 
-        self.source_positions = src_pos
         self.detector_positions = det_pos
         self.detector_vs = det_v
         self.detector_us = det_u
 
-        self._is_cone = True
+        self._is_cone = False
         self._is_parallel = False
         self._is_vector = True
 
     def __repr__(self):
         return (
-            f"(ConeVectorGeometry\n"
+            f"(DetectorVectorGeometry\n"
             f"    shape={self.det_shape},\n"
-            f"    source_positions={self.source_positions},\n"
-            f"    detector_positions={self.detector_positions},\n"
-            f"    detector_vs={self.detector_vs},\n"
-            f"    detector_us={self.detector_us}"
+            f"    det_pos={self.detector_positions},\n"
+            f"    det_u={self.detector_vs},\n"
+            f"    det_v={self.detector_us}"
             f")"
         )
 
     def __eq__(self, other):
-        if not isinstance(other, ConeVectorGeometry):
+        if not isinstance(other, DetectorVectorGeometry):
             return False
 
         dpos_diff = self.detector_positions - other.detector_positions
-        spos_diff = self.source_positions - other.source_positions
         us_diff = self.detector_us - other.detector_us
         vs_diff = self.detector_vs - other.detector_vs
 
         return (
             self.det_shape == other.det_shape
             and np.all(abs(dpos_diff) < ts.epsilon)
-            and np.all(abs(spos_diff) < ts.epsilon)
             and np.all(abs(us_diff) < ts.epsilon)
             and np.all(abs(vs_diff) < ts.epsilon)
         )
@@ -157,18 +144,19 @@ class ConeVectorGeometry(ProjectionGeometry):
             new_center = (new_llc + new_trc) / 2
 
             new_shape = (lenV, lenU)
-            new_src_pos = self.source_positions[up_slice(key[0])]
             new_det_pos = new_center[up_slice(key[0])]
             new_det_vs = self.detector_vs[up_slice(key[0])] * stepV
             new_det_us = self.detector_us[up_slice(key[0])] * stepU
 
-            return cone_vec(new_shape, new_src_pos, new_det_pos, new_det_vs, new_det_us)
+            return det_vec(new_shape, new_det_pos, new_det_vs, new_det_us)
 
     def to_astra(self):
         row_count, col_count = self.det_shape
+        # We do not have ray_dir or src_pos, so we just set the first
+        # three columns to zero.
         vectors = np.concatenate(
             [
-                self.source_positions[:, ::-1],
+                self.detector_positions[:, ::-1] * 0,
                 self.detector_positions[:, ::-1],
                 self.detector_us[:, ::-1],
                 self.detector_vs[:, ::-1],
@@ -177,31 +165,27 @@ class ConeVectorGeometry(ProjectionGeometry):
         )
 
         return {
-            "type": "cone_vec",
+            "type": "det_vec",  # Astra does not support this type
             "DetectorRowCount": row_count,
             "DetectorColCount": col_count,
             "Vectors": vectors,
         }
 
     def from_astra(astra_pg):
-        if astra_pg["type"] != "cone_vec":
+        if astra_pg["type"] != "det_vec":
             raise ValueError(
-                "ConeVectorGeometry.from_astra only supports 'cone' type astra geometries."
+                "DetectorVectorGeometry.from_astra only supports 'det_vec' type astra geometries."
             )
 
         vecs = astra_pg["Vectors"]
-        # ray direction (parallel) / source_position (cone)
-        sp = vecs[:, :3]
         # detector pos:
-        dp = vecs[:, 3:6]
+        det_pos = vecs[:, 3:6]
         # Detector u and v direction
-        us = vecs[:, 6:9]
-        vs = vecs[:, 9:12]
+        det_u = vecs[:, 6:9]
+        det_v = vecs[:, 9:12]
 
         shape = (astra_pg["DetectorRowCount"], astra_pg["DetectorColCount"])
-        return ConeVectorGeometry(
-            shape, sp[:, ::-1], dp[:, ::-1], vs[:, ::-1], us[:, ::-1]
-        )
+        return det_vec(shape, det_pos[:, ::-1], det_v[:, ::-1], det_u[:, ::-1])
 
     def to_vec(self):
         """Return a vector geometry of the current geometry
@@ -213,13 +197,12 @@ class ConeVectorGeometry(ProjectionGeometry):
         return self
 
     def to_box(self):
-        """Returns two boxes representating the source and detector respectively
+        """Returns a box representating the detector
 
-        :returns: (source_box, detector_box)
-        :rtype:  `(OrientedBox, OrientedBox)`
+        :returns: detector_box
+        :rtype:  `OrientedBox`
 
         """
-        src_pos = self.source_positions
         det_pos = self.detector_positions
         w = self.detector_vs  # v points up, w points up
         u = self.detector_us  # detector_u and u point in the same direction
@@ -242,16 +225,9 @@ class ConeVectorGeometry(ProjectionGeometry):
                 "Using first detector size for the box"
             )
 
-        detector_box = ts.box((det_height, 0, det_width), det_pos, w, v, u)
+        det_box = ts.box((det_height, 0, det_width), det_pos, w, v, u)
 
-        # The source of course does not really have a size, but we
-        # want to visualize it for now :)
-        source_size = (det_width / 10,) * 3
-        # We set the orientation of the source to be identical to
-        # that of the detector.
-        source_box = ts.box(source_size, src_pos, w, v, u)
-
-        return source_box, detector_box
+        return det_box
 
     ###########################################################################
     #                                Properties                               #
@@ -263,7 +239,7 @@ class ConeVectorGeometry(ProjectionGeometry):
 
     @ProjectionGeometry.src_pos.getter
     def src_pos(self):
-        return np.copy(self.source_positions)
+        raise NotImplementedError()
 
     @ProjectionGeometry.det_pos.getter
     def det_pos(self):
@@ -337,9 +313,7 @@ class ConeVectorGeometry(ProjectionGeometry):
         det_v = self.detector_vs * scaleV
         det_u = self.detector_us * scaleU
 
-        return cone_vec(
-            shape, self.source_positions, self.detector_positions, det_v, det_u
-        )
+        return det_vec(shape, self.detector_positions, det_v, det_u)
 
     def reshape(self, new_shape):
         """Reshape detector pixels without changing detector size
@@ -356,66 +330,18 @@ class ConeVectorGeometry(ProjectionGeometry):
         det_v = self.det_v / new_shape[0] * self.det_shape[0]
         det_u = self.det_u / new_shape[1] * self.det_shape[1]
 
-        return cone_vec(new_shape, self.src_pos, self.det_pos, det_v, det_u)
+        return det_vec(new_shape, self.det_pos, det_v, det_u)
 
     def project_point(self, point):
-        """Projects point onto detectors
-
-        This function projects onto the virtual detectors described by
-        the projection geometry.
-
-        For each source-detector pair, this function returns
-
-            (detector_intersection_y, detector_intersection_x)
-
-        where the distance is from the detector origin (center) and
-        the units are in detector pixels.
-
-        This function returns `np.nan` if the source-point ray is
-        parallel to the detector plane.
-
-        N.B:
-        This function projects onto the detector even if the ray is
-        moving away from the detector instead of towards it, or if the
-        detector is between the source and point instead of behind the
-        point.
-
-        :param point: A three-dimensional vector (preferably np.array)
-        :returns: np.array([[detector_intersection_y, detector_intersection_x],
-                            .....])
-        :rtype: np.array (num_angles * 2)
-
-        """
-        v_origin = np.array(point)
-
-        # TODO: Check v_origin shape (should be 3)
-
-        det_us = self.detector_us
-        det_vs = self.detector_vs
-
-        # (source_pos, det_o, det_y, det_x) = self._get_vectors()
-        det_normal = vc.cross_product(det_us, det_vs)
-
-        v_direction = v_origin - self.source_positions
-
-        intersection = vc.intersect(
-            v_origin, v_direction, self.detector_positions, det_normal
-        )
-
-        det_i_u = np.sum(intersection * det_us, axis=1) / vc.squared_norm(det_us)
-        det_i_v = np.sum(intersection * det_vs, axis=1) / vc.squared_norm(det_vs)
-
-        return np.stack((det_i_v, det_i_u), axis=-1)
+        raise NotImplementedError()
 
     def transform(self, matrix):
-        src_pos = vc.to_homogeneous_point(self.source_positions)
         det_pos = vc.to_homogeneous_point(self.detector_positions)
         det_v = vc.to_homogeneous_vec(self.detector_vs)
         det_u = vc.to_homogeneous_vec(self.detector_us)
 
-        src_pos = vc.to_vec(vc.matrix_transform(matrix, src_pos))
         det_pos = vc.to_vec(vc.matrix_transform(matrix, det_pos))
         det_v = vc.to_vec(vc.matrix_transform(matrix, det_v))
         det_u = vc.to_vec(vc.matrix_transform(matrix, det_u))
 
-        return ConeVectorGeometry(self.det_shape, src_pos, det_pos, det_v, det_u)
+        return det_vec(self.det_shape, det_pos, det_v, det_u)

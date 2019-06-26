@@ -1,4 +1,5 @@
 from . import base_projection
+from . import det_vec
 from . import cone_vec
 from . import cone
 from . import conversion

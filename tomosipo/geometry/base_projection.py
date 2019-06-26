@@ -20,12 +20,13 @@ class ProjectionGeometry(object):
         :rtype:
 
         """
-        shape = up_tuple(shape, 2)
-        # TODO: Handle case that shape is not an integer
-        if not np.all(np.array(shape) > 0):
+        height, width = up_tuple(shape, 2)
+        height, width = int(height), int(width)
+
+        if not np.all(np.array((height, width)) > 0):
             raise ValueError("Shape must be strictly positive.")
 
-        self._shape = shape
+        self._shape = (height, width)
 
     def __repr__(self):
         raise NotImplementedError()

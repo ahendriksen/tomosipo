@@ -328,7 +328,7 @@ def invert_transformation_matrix(M):
 ###############################################################################
 @contextmanager
 def ignore_divide_by_zero():
-    old_settings = np.seterr(divide="ignore")
+    old_settings = np.seterr(divide="ignore", invalid="ignore")
     yield
     np.seterr(**old_settings)
 

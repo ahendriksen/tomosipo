@@ -1,9 +1,7 @@
-import warnings
 import numpy as np
 import tomosipo as ts
 import tomosipo.vector_calc as vc
-from tomosipo.utils import up_tuple, up_slice, slice_interval
-from numbers import Integral
+from tomosipo.utils import up_tuple, up_slice
 from .base_projection import ProjectionGeometry
 from . import det_vec as dv
 
@@ -109,12 +107,12 @@ class ConeVectorGeometry(ProjectionGeometry):
 
     def __repr__(self):
         return (
-            f"(ConeVectorGeometry\n"
+            f"ConeVectorGeometry(\n"
             f"    shape={self.det_shape},\n"
             f"    source_positions={self._src_pos},\n"
             f"    detector_positions={self._det_vec.det_pos},\n"
             f"    detector_vs={self._det_vec.det_v},\n"
-            f"    detector_us={self._det_vec.det_u}"
+            f"    detector_us={self._det_vec.det_u},\n"
             f")"
         )
 
@@ -162,7 +160,7 @@ class ConeVectorGeometry(ProjectionGeometry):
     def from_astra(astra_pg):
         if astra_pg["type"] != "cone_vec":
             raise ValueError(
-                "ConeVectorGeometry.from_astra only supports 'cone' type astra geometries."
+                "ConeVectorGeometry.from_astra only supports 'cone_vec' type astra geometries."
             )
 
         vecs = astra_pg["Vectors"]
@@ -273,7 +271,7 @@ class ConeVectorGeometry(ProjectionGeometry):
 
         return cone_vec(
             det_vec.det_shape,
-            self._src_pos,
+            self.src_pos,
             det_vec.det_pos,
             det_vec.det_v,
             det_vec.det_u,

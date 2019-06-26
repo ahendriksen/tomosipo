@@ -1,7 +1,7 @@
 import numpy as np
 import itertools
 import tomosipo as ts
-from tomosipo.display import get_app
+from tomosipo.display import get_app, rainbow_colormap
 from pyqtgraph.Qt import QtCore
 import pyqtgraph.opengl as gl
 from .volume import VolumeGeometry, is_volume
@@ -41,17 +41,17 @@ def display_geometry(*geometries):
 
     app = get_app()
     view = gl.GLViewWidget()
-    view.show()
+    # view.setBackgroundColor('w')
 
-    if not pg.is_cone:
-        raise NotImplementedError(
-            "Displaying of parallel geometries is not yet supported."
-        )
+    view.show()
 
     pg = pg.to_vec()
 
     # Get source positions in X, Y, Z order
-    source_pos = pg.src_pos[:, ::-1]
+    if pg.is_cone:
+        source_pos = pg.src_pos[:, ::-1]
+    if pg.is_parallel:
+        ray_dir = pg.ray_dir[:, ::-1]  # XYZ order
     # Get detector corners shaped (num_angles, 4 -- for each corner,
     # 3) and in XYZ order.
     detector_corners = pg.corners[:, :, ::-1]
@@ -95,7 +95,7 @@ def display_geometry(*geometries):
     #######################################################################
     # Show detector position i
     def draw_detector(i):
-        i = i % len(source_pos)
+        i = i % len(detector_origins)
 
         corners = detector_corners[i]
         meshdata = np.array(list(itertools.product(corners, repeat=3)))
@@ -110,15 +110,11 @@ def display_geometry(*geometries):
     #######################################################################
 
     def draw_corner_rays(i):
-        i = i % len(source_pos)
-        if pg.is_cone:
-            source = np.copy(source_pos[i])
-        elif pg.is_parallel:
-            # TODO: unimplemented
-            pass
+        i = i % len(detector_origins)
 
         corners = detector_corners[i]
         if pg.is_cone:
+            source = np.copy(source_pos[i])
             rayItems = [
                 gl.GLLinePlotItem(
                     pos=np.array([source, corner]), width=1, mode="line_strip"
@@ -126,14 +122,15 @@ def display_geometry(*geometries):
                 for corner in corners
             ]
         elif pg.is_parallel:
-            # TODO: fix this to make parallel display work
+            ray = np.copy(ray_dir[i])
+            ray *= 10 * np.linalg.norm(pg.det_sizes[0])
             rayItems = [
                 gl.GLLinePlotItem(
-                    pos=np.array([corner - 1000 * ray_dir, corner + 1000 * ray_dir]),
+                    pos=np.array([corner - 10 * ray, corner + 10 * ray]),
                     width=1,
                     mode="line_strip",
                 )
-                for corner in detector_corners
+                for corner in corners
             ]
 
         return rayItems
@@ -160,6 +157,6 @@ def display_geometry(*geometries):
 
     timer = QtCore.QTimer()
     timer.timeout.connect(on_timer)
-    timer.start(5000 / len(source_pos))
-
+    timer.start(5000 / len(detector_origins))
+    on_timer()
     app.exec_()

@@ -6,10 +6,8 @@
 
 import unittest
 import tomosipo as ts
-import tomosipo.vector_calc as vc
 import numpy as np
-from tomosipo.Transform import random_transform
-from tomosipo.OrientedBox import random_box
+from tomosipo.geometry import random_transform, random_box
 
 interactive = False
 
@@ -30,44 +28,44 @@ class TestOrientedBox(unittest.TestCase):
         z, y, x = (1, 0, 0), (0, 1, 0), (0, 0, 1)
 
         # Create unit cube:
-        ob = ts.OrientedBox(1, (0, 0, 0), z, y, x)
+        ob = ts.box(1, (0, 0, 0), z, y, x)
 
         # Test that using a scalar position works as well.
-        self.assertEqual(ob, ts.OrientedBox(1, 0, z, y, x))
-        self.assertEqual(ob, ts.OrientedBox(1, 0, z, y))
-        self.assertEqual(ob, ts.OrientedBox(1, 0, [z], y))
-        self.assertEqual(ob, ts.OrientedBox(1, 0, z, y, x))
-        self.assertEqual(ob, ts.OrientedBox((1, 1, 1), 0, z, y, x))
-        self.assertEqual(ob, ts.OrientedBox((1, 1, 1), 0, z, y, x))
-        self.assertEqual(ob, ts.OrientedBox((1, 1, 1), [(0, 0, 0)], z, y, x))
+        self.assertEqual(ob, ts.box(1, 0, z, y, x))
+        self.assertEqual(ob, ts.box(1, 0, z, y))
+        self.assertEqual(ob, ts.box(1, 0, [z], y))
+        self.assertEqual(ob, ts.box(1, 0, z, y, x))
+        self.assertEqual(ob, ts.box((1, 1, 1), 0, z, y, x))
+        self.assertEqual(ob, ts.box((1, 1, 1), 0, z, y, x))
+        self.assertEqual(ob, ts.box((1, 1, 1), [(0, 0, 0)], z, y, x))
 
         N = 11
         with self.assertRaises(ValueError):
-            ts.OrientedBox(
+            ts.box(
                 1, [(0, 0, 0)] * 3, [(1, 0, 0)] * N, [(0, 1, 0)] * N, [(0, 1, 0)] * N
             )
         with self.assertRaises(ValueError):
-            ts.OrientedBox(
+            ts.box(
                 1, [(0, 0, 0)] * N, [(1, 0, 0)] * 3, [(0, 1, 0)] * N, [(0, 1, 0)] * N
             )
         with self.assertRaises(ValueError):
-            ts.OrientedBox(
+            ts.box(
                 1, [(0, 0, 0)] * N, [(1, 0, 0)] * N, [(0, 1, 0)] * 3, [(0, 1, 0)] * N
             )
         with self.assertRaises(ValueError):
-            ts.OrientedBox(
+            ts.box(
                 1, [(0, 0, 0)] * N, [(1, 0, 0)] * N, [(0, 1, 0)] * N, [(0, 1, 0)] * 3
             )
 
     def test_eq(self):
-        ob = ts.OrientedBox(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1))
+        ob = ts.box(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1))
 
         unequal = [
             ts.cone(),
-            ts.OrientedBox(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 99)),
-            ts.OrientedBox(1.1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0)),
-            ts.OrientedBox(1, (1, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0)),
-            ts.OrientedBox(1, (0, 0, 0), (0, 1, 0), (1, 0, 0), (0, 1, 0)),
+            ts.box(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 99)),
+            ts.box(1.1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0)),
+            ts.box(1, (1, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0)),
+            ts.box(1, (0, 0, 0), (0, 1, 0), (1, 0, 0), (0, 1, 0)),
         ]
 
         self.assertEqual(ob, ob)
@@ -77,43 +75,39 @@ class TestOrientedBox(unittest.TestCase):
 
     def test_abs_size(self):
         basis = np.array(((1, 0, 0), (0, 1, 0), (0, 0, 1)))
-        ob = ts.OrientedBox(1, 0, *basis)
+        ob = ts.box(1, 0, *basis)
 
         for s in np.random.uniform(ts.epsilon, 1, 10):
             self.assertAlmostEqual(
-                0.0,
-                np.sum(abs(ob.abs_size - ts.OrientedBox(s, 0, *(basis / s)).abs_size)),
+                0.0, np.sum(abs(ob.abs_size - ts.box(s, 0, *(basis / s)).abs_size))
             )
             self.assertAlmostEqual(
-                0.0,
-                np.sum(
-                    abs(ob.abs_size - ts.OrientedBox(1 / s, 0, *(basis * s)).abs_size)
-                ),
+                0.0, np.sum(abs(ob.abs_size - ts.box(1 / s, 0, *(basis * s)).abs_size))
             )
 
     def test_corners(self):
         # Test shape of ob.corners
         N = 11
-        ob = ts.OrientedBox(
+        ob = ts.box(
             1, [(0, 0, 0)] * N, [(1, 0, 0)] * N, [(0, 1, 0)] * N, [(0, 1, 0)] * N
         )
         self.assertEqual(ob.corners.shape, (N, 8, 3))
 
         # Test that corners of ob2 are twice as far from the origin as
         # ob's corners.
-        ob1 = ts.OrientedBox(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0))
-        ob2 = ts.OrientedBox(2, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0))
+        ob1 = ts.box(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0))
+        ob2 = ts.box(2, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0))
         self.assertAlmostEqual(0.0, np.sum(abs(ob.corners * 2.0 - ob2.corners)))
 
-        ob = ts.OrientedBox((1, 2, 3), (0, 0, 0), (2, 3, 5), (7, 11, 13), (17, 19, 23))
-        ob2 = ts.OrientedBox((2, 4, 6), (0, 0, 0), (2, 3, 5), (7, 11, 13), (17, 19, 23))
+        ob = ts.box((1, 2, 3), (0, 0, 0), (2, 3, 5), (7, 11, 13), (17, 19, 23))
+        ob2 = ts.box((2, 4, 6), (0, 0, 0), (2, 3, 5), (7, 11, 13), (17, 19, 23))
         # Test that corners of ob2 are twice as far from the origin as
         # ob's corners.
         self.assertAlmostEqual(0.0, np.sum(abs(ob.corners * 2.0 - ob2.corners)))
 
         # Test that ob2's corners are translated by (5, 7, 11) wrt those of ob1.
-        ob1 = ts.OrientedBox((1, 2, 3), (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0))
-        ob2 = ts.OrientedBox((1, 2, 3), (5, 7, 11), (1, 0, 0), (0, 1, 0), (0, 1, 0))
+        ob1 = ts.box((1, 2, 3), (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0))
+        ob2 = ts.box((1, 2, 3), (5, 7, 11), (1, 0, 0), (0, 1, 0), (0, 1, 0))
         self.assertAlmostEqual(
             0.0, np.sum(abs((ob2.corners - ob1.corners) - (5, 7, 11)))
         )
@@ -143,9 +137,9 @@ class TestOrientedBox(unittest.TestCase):
         v = np.stack([zero, np.sin(s), np.cos(s)], axis=1)
         u = np.stack([zero, np.sin(s + np.pi / 2), np.cos(s + np.pi / 2)], axis=1)
 
-        ob1 = ts.OrientedBox(1, pos, w, v, u)
+        ob1 = ts.box(1, pos, w, v, u)
         pos2 = np.stack([zero, h * np.sin(s), h * np.cos(s)], axis=1)
-        ob2 = ts.OrientedBox(2, pos2, w, v, u)
+        ob2 = ts.box(2, pos2, w, v, u)
 
         if interactive:
             ts.display(ob1, ob2)
@@ -190,9 +184,9 @@ class TestOrientedBox(unittest.TestCase):
         v = np.stack([zero, np.sin(s), np.cos(s)], axis=1)
         u = np.stack([zero, np.sin(s + np.pi / 2), np.cos(s + np.pi / 2)], axis=1)
 
-        ob1 = ts.OrientedBox(1, pos, w, v, u)
+        ob1 = ts.box(1, pos, w, v, u)
         pos2 = np.stack([zero, h * np.sin(s), h * np.cos(s)], axis=1)
-        ob2 = ts.OrientedBox(2, pos2, z, y, x)
+        ob2 = ts.box(2, pos2, z, y, x)
 
         M1 = ts.from_perspective(box=ob1)
         M2 = ts.from_perspective(box=ob2)

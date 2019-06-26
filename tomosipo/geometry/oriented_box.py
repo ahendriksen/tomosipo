@@ -1,12 +1,45 @@
 import numpy as np
-from .utils import up_tuple
+from tomosipo.utils import up_tuple
 import tomosipo as ts
 import pyqtgraph as pq
 from pyqtgraph.Qt import QtCore
 import pyqtgraph.opengl as gl
 from tomosipo.display import run_app, get_app, rainbow_colormap
 import itertools
-from . import vector_calc as vc
+from tomosipo import vector_calc as vc
+
+
+def box(size, pos, w=(1, 0, 0), v=(0, 1, 0), u=(0, 0, 1)):
+    """Create a new oriented box
+
+    An oriented box with multiple orientations and positions.
+
+    The position describes the center of the box.
+
+    :param size: `(scalar, scalar, scalar)` or `scalar`
+        The size of the box as measured in basis elements w,
+        v, u.
+    :param pos: `scalar`, `np.array`
+        A numpy array of dimension (num_orientations, 3)
+        describing the center of the box in world-coordinates
+        `(Z, Y, X)`. You may also pass a 3-tuple or a scalar.
+    :param w: `np.array` (optional)
+        A numpy array of dimension (num_orientations, 3)
+        describing the `w` basis element in `(Z, Y, X)`
+        coordinates. Default is `(1, 0, 0)`.
+    :param v: `np.array` (optional)
+        A numpy array of dimension (num_orientations, 3)
+        describing the `v` basis element in `(Z, Y, X)`
+        coordinates. Default is `(0, 1, 0)`.
+    :param u: `np.array` (optional)
+        A numpy array of dimension (num_orientations, 3)
+        describing the `u` basis element in `(Z, Y, X)`
+        coordinates. Default is `(0, 0, 1)`.
+    :returns:
+    :rtype:
+
+    """
+    return OrientedBox(size, pos, w, v, u)
 
 
 def random_box():
@@ -20,8 +53,8 @@ def random_box():
     size = np.random.uniform(0, 10, size=3)
     pos = np.random.normal(size=3)
 
-    RT = ts.Transform.random_transform()
-    box = ts.OrientedBox(size, pos)
+    RT = ts.geometry.random_transform()
+    box = ts.box(size, pos)
     return RT(box)
 
 

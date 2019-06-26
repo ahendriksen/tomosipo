@@ -7,8 +7,7 @@ import pytest
 from pytest import approx
 import numpy as np
 import tomosipo as ts
-from tomosipo.Transform import random_transform
-from tomosipo.ConeGeometry import random_cone
+from tomosipo.geometry import random_transform, random_cone
 import tomosipo.vector_calc as vc
 
 
@@ -17,7 +16,7 @@ def test_init():
     interactive = False
     pg = ts.cone()
 
-    assert isinstance(pg, ts.ProjectionGeometry.ProjectionGeometry)
+    assert isinstance(pg, ts.geometry.base_projection.ProjectionGeometry)
 
     pg = ts.cone(angles=np.linspace(0, 1, 100))
     assert pg.num_angles == 100
@@ -56,7 +55,7 @@ def test_equal():
 
 
 def test_cone():
-    assert ts.ConeGeometry.ConeGeometry() == ts.cone()
+    assert ts.geometry.cone.ConeGeometry() == ts.cone()
 
 
 def test_to_vec():

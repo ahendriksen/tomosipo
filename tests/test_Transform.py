@@ -6,7 +6,7 @@
 
 import unittest
 import tomosipo as ts
-from tomosipo.OrientedBox import random_box
+from tomosipo.geometry import random_box
 import numpy as np
 
 interactive = False
@@ -25,11 +25,11 @@ class TestTransform(unittest.TestCase):
 
     def test_identity(self):
         T = ts.identity()
-        box = ts.OrientedBox(1, (-1, -2, -3), (2, 3, 5), (7, 11, 13), (17, 19, 23))
+        box = ts.box(1, (-1, -2, -3), (2, 3, 5), (7, 11, 13), (17, 19, 23))
         self.assertEqual(T(box), box)
         for _ in range(5):
             params = np.random.normal(0, 1, size=(5, 3))
-            box = ts.OrientedBox(*params)
+            box = ts.box(*params)
             self.assertEqual(T(box), box)
 
     def test_eq(self):
@@ -47,15 +47,13 @@ class TestTransform(unittest.TestCase):
         # "Simple case": we check that the position of a rotated box
         # changes correctly.
         rotate = ts.rotate((2, 3, 5), axis=(7, 11, -13), deg=15)
-        original = rotate(ts.OrientedBox(size=(3, 4, 5), pos=(2, 3, 5)))
+        original = rotate(ts.box(size=(3, 4, 5), pos=(2, 3, 5)))
 
         t = np.array((3, 4, 5))
         T = ts.translate(t)
         self.assertEqual(
             T(original),
-            ts.OrientedBox(
-                (3, 4, 5), t + (2, 3, 5), original.w, original.v, original.u
-            ),
+            ts.box((3, 4, 5), t + (2, 3, 5), original.w, original.v, original.u),
         )
 
         # General case: check that translation by t1 and t2 is the
@@ -70,11 +68,9 @@ class TestTransform(unittest.TestCase):
             self.assertEqual(T1(T2), T)
 
     def test_scale(self):
-        unit = ts.OrientedBox(size=1, pos=0)
-        self.assertEqual(ts.scale(5)(unit), ts.OrientedBox(5, 0))
-        self.assertEqual(
-            ts.scale((5, 3, 2))(unit), ts.OrientedBox(size=(5, 3, 2), pos=0)
-        )
+        unit = ts.box(size=1, pos=0)
+        self.assertEqual(ts.scale(5)(unit), ts.box(5, 0))
+        self.assertEqual(ts.scale((5, 3, 2))(unit), ts.box(size=(5, 3, 2), pos=0))
 
         # Check that scaling by s1 and s2 is the same as scaling by s1 + s2.
         N = 10
@@ -127,10 +123,10 @@ class TestTransform(unittest.TestCase):
             self.assertEqual(R1(R2), R)
 
         # Show a box rotating around the Z-axis:
-        box = ts.OrientedBox((5, 2, 2), 0, (1, 0, 0), (0, 1, 0), (0, 0, 1))
+        box = ts.box((5, 2, 2), 0, (1, 0, 0), (0, 1, 0), (0, 0, 1))
         # top_box is located above (Z-axis) the box to show in
         # which direction the Z-axis points
-        top_box = ts.OrientedBox(.5, (3, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1))
+        top_box = ts.box(.5, (3, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1))
 
         s = np.linspace(0, 360, 361, endpoint=True)
         R = ts.rotate((0, 0, 0), (1, 0, 0), deg=s, right_handed=True)
@@ -144,7 +140,7 @@ class TestTransform(unittest.TestCase):
         """
 
         # Unit cube
-        unit = ts.OrientedBox(1, 0)
+        unit = ts.box(1, 0)
 
         N = 50
         for t, p, axis in np.random.normal(size=(N, 3, 3)):

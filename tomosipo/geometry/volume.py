@@ -4,11 +4,11 @@ import numpy as np
 from numbers import Integral
 import warnings
 import itertools
-from .utils import up_tuple, slice_interval
+from tomosipo.utils import up_tuple, slice_interval
 import tomosipo as ts
 
 
-def is_volume_geometry(g):
+def is_volume(g):
     return isinstance(g, VolumeGeometry)
 
 
@@ -367,9 +367,7 @@ class VolumeGeometry:
         :rtype:
 
         """
-        return ts.OrientedBox(
-            self.size(), self.get_center(), (1, 0, 0), (0, 1, 0), (0, 0, 1)
-        )
+        return ts.box(self.size(), self.get_center(), (1, 0, 0), (0, 1, 0), (0, 0, 1))
 
     def transform(self, matrix):
         warnings.warn(

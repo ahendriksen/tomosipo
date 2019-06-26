@@ -114,10 +114,10 @@ det_pos = s.ver_det, s.mag_det, s.tra_det
 
 # The object rotates clockwise:
 angles = -np.linspace(0, 2 * np.pi, num_angles, endpoint=True)
-src = ts.OrientedBox(size=det_size[0] / 10, pos=src_pos)
-det = ts.OrientedBox((det_size[0], 0, det_size[1]), pos=det_pos)
+src = ts.box(size=det_size[0] / 10, pos=src_pos)
+det = ts.box((det_size[0], 0, det_size[1]), pos=det_pos)
 R = ts.rotate(obj_pos, (1, 0, 0), rad=angles)
-vol = R(ts.OrientedBox(size=det_size[0] / 5, pos=obj_pos))
+vol = R(ts.box(size=det_size[0] / 5, pos=obj_pos))
 
 # We can visualize the geometry. NB: Do zoom out to see the whole
 # scene.

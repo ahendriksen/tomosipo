@@ -2,6 +2,7 @@ from .base_projection import ProjectionGeometry
 from .cone import ConeGeometry
 from .cone_vec import ConeVectorGeometry
 from .det_vec import DetectorVectorGeometry
+from .parallel_vec import ParallelVectorGeometry
 
 # TODO: change the name of this module.
 
@@ -19,9 +20,7 @@ def from_astra_geometry(astra_pg):
     elif pg_type == "det_vec":
         return DetectorVectorGeometry.from_astra(astra_pg)
     elif pg_type == "parallel3d_vec":
-        raise NotImplementedError(
-            "ProjectionGeometry.from_astra does not yet support parallel3d_vec geometries."
-        )
+        return ParallelVectorGeometry.from_astra(astra_pg)
     elif pg_type == "parallel3d":
         raise NotImplementedError(
             "ProjectionGeometry.from_astra does not yet support parallel3d geometries."

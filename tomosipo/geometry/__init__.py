@@ -14,6 +14,7 @@ from . import display
 # testing.
 from .cone import random_cone
 from .cone_vec import random_cone_vec
+from .parallel_vec import random_parallel_vec
 from .oriented_box import random_box
 from .volume import random_volume
 from .transform import random_transform

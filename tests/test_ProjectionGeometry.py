@@ -18,6 +18,7 @@ def default_proj_geoms():
         ts.cone(angles=11, shape=(10, 10)),
         ts.cone(angles=11, shape=(10, 10)).to_vec(),
         ts.geometry.det_vec.random_det_vec(),
+        ts.geometry.random_parallel_vec(),
     ]
 
 

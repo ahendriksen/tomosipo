@@ -73,29 +73,18 @@ class TestConeVectorGeometry(unittest.TestCase):
         self.assertEqual(2 * pg[::2].num_angles, pg.num_angles)
         self.assertEqual(10 * pg[::10].num_angles, pg.num_angles)
 
-        self.assertAlmostEqual(
-            0.0, np.sum(abs(pg[:, ::2].detector_vs - 2 * pg.detector_vs))
-        )
-        self.assertAlmostEqual(
-            0.0, np.sum(abs(pg[:, :, ::2].detector_us - 2 * pg.detector_us))
-        )
+        self.assertAlmostEqual(0.0, np.sum(abs(pg[:, ::2].det_v - 2 * pg.det_v)))
+        self.assertAlmostEqual(0.0, np.sum(abs(pg[:, :, ::2].det_u - 2 * pg.det_u)))
 
+        self.assertNotAlmostEqual(0.0, np.sum(abs(pg[:, :, ::2].det_pos - pg.det_pos)))
         self.assertNotAlmostEqual(
-            0.0, np.sum(abs(pg[:, :, ::2].detector_positions - pg.detector_positions))
-        )
-        self.assertNotAlmostEqual(
-            0.0,
-            np.sum(
-                abs(
-                    pg[:, :, ::2].detector_positions - pg[:, :, 1::2].detector_positions
-                )
-            ),
+            0.0, np.sum(abs(pg[:, :, ::2].det_pos - pg[:, :, 1::2].det_pos))
         )
         self.assertAlmostEqual(
-            0.0, np.sum(abs(pg[:, :, ::2].detector_vs - pg[:, :, 1::2].detector_vs))
+            0.0, np.sum(abs(pg[:, :, ::2].det_v - pg[:, :, 1::2].det_v))
         )
         self.assertAlmostEqual(
-            0.0, np.sum(abs(pg[:, :, ::2].detector_us - pg[:, :, 1::2].detector_us))
+            0.0, np.sum(abs(pg[:, :, ::2].det_u - pg[:, :, 1::2].det_u))
         )
         self.assertAlmostEqual(
             0.0, np.sum(abs(pg[:, :, ::2].det_sizes - pg[:, :, 1::2].det_sizes))

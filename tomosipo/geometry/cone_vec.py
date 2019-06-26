@@ -5,6 +5,7 @@ import tomosipo.vector_calc as vc
 from tomosipo.utils import up_tuple, up_slice, slice_interval
 from numbers import Integral
 from .base_projection import ProjectionGeometry
+from . import det_vec as dv
 
 
 def cone_vec(shape, source_positions, detector_positions, detector_vs, detector_us):
@@ -99,10 +100,8 @@ class ConeVectorGeometry(ProjectionGeometry):
 
         vc.check_same_shapes(src_pos, det_pos, det_v, det_u)
 
-        self.source_positions = src_pos
-        self.detector_positions = det_pos
-        self.detector_vs = det_v
-        self.detector_us = det_u
+        self._src_pos = src_pos
+        self._det_vec = dv.det_vec(shape, det_pos, det_v, det_u)
 
         self._is_cone = True
         self._is_parallel = False
@@ -112,10 +111,10 @@ class ConeVectorGeometry(ProjectionGeometry):
         return (
             f"(ConeVectorGeometry\n"
             f"    shape={self.det_shape},\n"
-            f"    source_positions={self.source_positions},\n"
-            f"    detector_positions={self.detector_positions},\n"
-            f"    detector_vs={self.detector_vs},\n"
-            f"    detector_us={self.detector_us}"
+            f"    source_positions={self._src_pos},\n"
+            f"    detector_positions={self._det_vec.det_pos},\n"
+            f"    detector_vs={self._det_vec.det_v},\n"
+            f"    detector_us={self._det_vec.det_u}"
             f")"
         )
 
@@ -123,55 +122,32 @@ class ConeVectorGeometry(ProjectionGeometry):
         if not isinstance(other, ConeVectorGeometry):
             return False
 
-        dpos_diff = self.detector_positions - other.detector_positions
-        spos_diff = self.source_positions - other.source_positions
-        us_diff = self.detector_us - other.detector_us
-        vs_diff = self.detector_vs - other.detector_vs
+        spos_diff = self._src_pos - other.src_pos
 
-        return (
-            self.det_shape == other.det_shape
-            and np.all(abs(dpos_diff) < ts.epsilon)
-            and np.all(abs(spos_diff) < ts.epsilon)
-            and np.all(abs(us_diff) < ts.epsilon)
-            and np.all(abs(vs_diff) < ts.epsilon)
-        )
+        return self._det_vec == other._det_vec and np.all(abs(spos_diff) < ts.epsilon)
 
     def __getitem__(self, key):
-        full_slice = slice(None, None, None)
+        det_vec = self._det_vec[key]
+        if isinstance(key, tuple):
+            key, *_ = key
 
-        if isinstance(key, Integral) or isinstance(key, slice):
-            key = (key, full_slice, full_slice)
-        while isinstance(key, tuple) and len(key) < 3:
-            key = (*key, full_slice)
-
-        if isinstance(key, tuple) and len(key) == 3:
-            v0, v1, lenV, stepV = slice_interval(
-                0, self.det_shape[0], self.det_shape[0], key[1]
-            )
-            u0, u1, lenU, stepU = slice_interval(
-                0, self.det_shape[1], self.det_shape[1], key[2]
-            )
-            # Calculate new lower-left corner, top-right corner, and center.
-            new_llc = self.lower_left_corner + v0 * self.det_v + u0 * self.det_u
-            new_trc = self.lower_left_corner + v1 * self.det_v + u1 * self.det_u
-            new_center = (new_llc + new_trc) / 2
-
-            new_shape = (lenV, lenU)
-            new_src_pos = self.source_positions[up_slice(key[0])]
-            new_det_pos = new_center[up_slice(key[0])]
-            new_det_vs = self.detector_vs[up_slice(key[0])] * stepV
-            new_det_us = self.detector_us[up_slice(key[0])] * stepU
-
-            return cone_vec(new_shape, new_src_pos, new_det_pos, new_det_vs, new_det_us)
+        new_src_pos = self._src_pos[up_slice(key)]
+        return cone_vec(
+            det_vec.det_shape,
+            new_src_pos,
+            det_vec.det_pos,
+            det_vec.det_v,
+            det_vec.det_u,
+        )
 
     def to_astra(self):
         row_count, col_count = self.det_shape
         vectors = np.concatenate(
             [
-                self.source_positions[:, ::-1],
-                self.detector_positions[:, ::-1],
-                self.detector_us[:, ::-1],
-                self.detector_vs[:, ::-1],
+                self._src_pos[:, ::-1],
+                self._det_vec.det_pos[:, ::-1],
+                self._det_vec.det_u[:, ::-1],
+                self._det_vec.det_v[:, ::-1],
             ],
             axis=1,
         )
@@ -219,39 +195,18 @@ class ConeVectorGeometry(ProjectionGeometry):
         :rtype:  `(OrientedBox, OrientedBox)`
 
         """
-        src_pos = self.source_positions
-        det_pos = self.detector_positions
-        w = self.detector_vs  # v points up, w points up
-        u = self.detector_us  # detector_u and u point in the same direction
 
-        # TODO: Fix vc.norm so we do not need [:, None]
-        # We do not want to introduce scaling, so we normalize w and u.
-        w = w / vc.norm(w)[:, None]
-        u = u / vc.norm(u)[:, None]
-        # This is the detector normal and has norm 1. In right-handed
-        # coordinates, it would point towards the source usually. Now
-        # it points "into" the detector.
-        v = vc.cross_product(u, w)
-
-        # TODO: Warn when detector size changes during rotation.
-        det_height, det_width = self.det_sizes[0]
-
-        if np.any(abs(np.ptp(self.det_sizes, axis=0)) > ts.epsilon):
-            warnings.warn(
-                "The detector size is not uniform. "
-                "Using first detector size for the box"
-            )
-
-        detector_box = ts.box((det_height, 0, det_width), det_pos, w, v, u)
+        det_box = self._det_vec.to_box()
 
         # The source of course does not really have a size, but we
-        # want to visualize it for now :)
-        source_size = (det_width / 10,) * 3
+        # want to be able to visualize it, so we take the height
+        # divided by 10.
+        source_size = (det_box.size[0] / 10,) * 3
         # We set the orientation of the source to be identical to
         # that of the detector.
-        source_box = ts.box(source_size, src_pos, w, v, u)
+        src_box = ts.box(source_size, self.src_pos, det_box.w, det_box.v, det_box.u)
 
-        return source_box, detector_box
+        return src_box, det_box
 
     ###########################################################################
     #                                Properties                               #
@@ -259,23 +214,23 @@ class ConeVectorGeometry(ProjectionGeometry):
 
     @ProjectionGeometry.num_angles.getter
     def num_angles(self):
-        return len(self.detector_positions)
+        return self._det_vec.num_angles
 
     @ProjectionGeometry.src_pos.getter
     def src_pos(self):
-        return np.copy(self.source_positions)
+        return np.copy(self._src_pos)
 
     @ProjectionGeometry.det_pos.getter
     def det_pos(self):
-        return np.copy(self.detector_positions)
+        return self._det_vec.det_pos
 
     @ProjectionGeometry.det_v.getter
     def det_v(self):
-        return np.copy(self.detector_vs)
+        return self._det_vec.det_v
 
     @ProjectionGeometry.det_u.getter
     def det_u(self):
-        return np.copy(self.detector_us)
+        return self._det_vec.det_u
 
     # TODO: det_normal
 
@@ -285,32 +240,15 @@ class ConeVectorGeometry(ProjectionGeometry):
 
     @ProjectionGeometry.det_sizes.getter
     def det_sizes(self):
-        height = vc.norm(self.detector_vs * self.det_shape[0])
-        width = vc.norm(self.detector_us * self.det_shape[1])
-        return np.stack([height, width], axis=1)
+        return self._det_vec.det_sizes
 
     @ProjectionGeometry.corners.getter
     def corners(self):
-        ds = self.detector_positions
-        u_offset = self.detector_us * self.det_shape[1] / 2
-        v_offset = self.detector_vs * self.det_shape[0] / 2
-
-        return np.array(
-            [
-                ds - u_offset - v_offset,
-                ds - u_offset + v_offset,
-                ds + u_offset - v_offset,
-                ds + u_offset + v_offset,
-            ]
-        ).transpose([1, 0, 2])
+        return self._det_vec.corners
 
     @property
     def lower_left_corner(self):
-        return (
-            self.detector_positions
-            - (self.detector_vs * self.det_shape[0]) / 2
-            - (self.detector_us * self.det_shape[1]) / 2
-        )
+        return self._det_vec.lower_left_corner
 
     ###########################################################################
     #                                 Methods                                 #
@@ -330,15 +268,15 @@ class ConeVectorGeometry(ProjectionGeometry):
         :rtype: `ConeVectorGeometry`
 
         """
-        scaleV, scaleU = up_tuple(scale, 2)
-        scaleV, scaleU = int(scaleV), int(scaleU)
 
-        shape = (self.det_shape[0] // scaleV, self.det_shape[1] // scaleU)
-        det_v = self.detector_vs * scaleV
-        det_u = self.detector_us * scaleU
+        det_vec = self._det_vec.rescale_det(scale)
 
         return cone_vec(
-            shape, self.source_positions, self.detector_positions, det_v, det_u
+            det_vec.det_shape,
+            self._src_pos,
+            det_vec.det_pos,
+            det_vec.det_v,
+            det_vec.det_u,
         )
 
     def reshape(self, new_shape):
@@ -352,11 +290,10 @@ class ConeVectorGeometry(ProjectionGeometry):
         :rtype: ProjectionGeometry
 
         """
-        new_shape = up_tuple(new_shape, 2)
-        det_v = self.det_v / new_shape[0] * self.det_shape[0]
-        det_u = self.det_u / new_shape[1] * self.det_shape[1]
-
-        return cone_vec(new_shape, self.src_pos, self.det_pos, det_v, det_u)
+        det_vec = self._det_vec.reshape(new_shape)
+        return cone_vec(
+            new_shape, self.src_pos, det_vec.det_pos, det_vec.det_v, det_vec.det_u
+        )
 
     def project_point(self, point):
         """Projects point onto detectors
@@ -386,36 +323,34 @@ class ConeVectorGeometry(ProjectionGeometry):
         :rtype: np.array (num_angles * 2)
 
         """
-        v_origin = np.array(point)
+        if np.isscalar(point):
+            point = up_tuple(point, 3)
+
+        v_origin = vc.to_vec(point)
 
         # TODO: Check v_origin shape (should be 3)
 
-        det_us = self.detector_us
-        det_vs = self.detector_vs
+        det_pos = self._det_vec.det_pos
+        det_v = self._det_vec.det_v
+        det_u = self._det_vec.det_u
 
         # (source_pos, det_o, det_y, det_x) = self._get_vectors()
-        det_normal = vc.cross_product(det_us, det_vs)
+        det_normal = vc.cross_product(det_u, det_v)
 
-        v_direction = v_origin - self.source_positions
+        v_direction = v_origin - self._src_pos
 
-        intersection = vc.intersect(
-            v_origin, v_direction, self.detector_positions, det_normal
-        )
+        intersection = vc.intersect(v_origin, v_direction, det_pos, det_normal)
 
-        det_i_u = np.sum(intersection * det_us, axis=1) / vc.squared_norm(det_us)
-        det_i_v = np.sum(intersection * det_vs, axis=1) / vc.squared_norm(det_vs)
+        det_i_u = np.sum(intersection * det_u, axis=1) / vc.squared_norm(det_u)
+        det_i_v = np.sum(intersection * det_v, axis=1) / vc.squared_norm(det_v)
 
         return np.stack((det_i_v, det_i_u), axis=-1)
 
     def transform(self, matrix):
-        src_pos = vc.to_homogeneous_point(self.source_positions)
-        det_pos = vc.to_homogeneous_point(self.detector_positions)
-        det_v = vc.to_homogeneous_vec(self.detector_vs)
-        det_u = vc.to_homogeneous_vec(self.detector_us)
-
+        src_pos = vc.to_homogeneous_point(self._src_pos)
         src_pos = vc.to_vec(vc.matrix_transform(matrix, src_pos))
-        det_pos = vc.to_vec(vc.matrix_transform(matrix, det_pos))
-        det_v = vc.to_vec(vc.matrix_transform(matrix, det_v))
-        det_u = vc.to_vec(vc.matrix_transform(matrix, det_u))
 
-        return ConeVectorGeometry(self.det_shape, src_pos, det_pos, det_v, det_u)
+        det_vec = self._det_vec.transform(matrix)
+        return ConeVectorGeometry(
+            self.det_shape, src_pos, det_vec.det_pos, det_vec.det_v, det_vec.det_u
+        )

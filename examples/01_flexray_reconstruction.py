@@ -147,11 +147,11 @@ ts.display(P(src_cor), P(vol_cor), P(det_cor))
 # determined above:
 pg = ts.cone_vec(
     shape=original_shape,
-    source_positions=P(src_cor).pos,
-    detector_positions=P(det_cor).pos,
+    src_pos=P(src_cor).pos,
+    det_pos=P(det_cor).pos,
     # w is the upward pointing vector of the detector box.
-    detector_vs=s.original_pixel_size * P(det_cor).w,
-    detector_us=s.original_pixel_size * P(det_cor).u,
+    det_v=s.original_pixel_size * P(det_cor).w,
+    det_u=s.original_pixel_size * P(det_cor).u,
 )
 # For most reasonable geometries, tomosipo can deduce the size and
 # position of a reasonable volume geometry for us.

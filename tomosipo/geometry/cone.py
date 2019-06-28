@@ -256,7 +256,9 @@ class ConeGeometry(ProjectionGeometry):
     def det_u(self):
         return self.to_vec().det_u
 
-    # TODO: det_normal
+    @ProjectionGeometry.det_normal.getter
+    def det_normal(self):
+        return self.to_vec().det_normal
 
     @ProjectionGeometry.ray_dir.getter
     def ray_dir(self):

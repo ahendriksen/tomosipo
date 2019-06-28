@@ -9,6 +9,7 @@ from pytest import approx
 import numpy as np
 import tomosipo as ts
 from tomosipo.geometry.base_projection import ProjectionGeometry, is_projection
+import tomosipo.vector_calc as vc
 
 
 @pytest.fixture
@@ -67,6 +68,8 @@ def test_interface(default_proj_geoms):
         assert pg.det_pos.shape == (pg.num_angles, 3)
         assert pg.det_v.shape == (pg.num_angles, 3)
         assert pg.det_u.shape == (pg.num_angles, 3)
+
+        assert vc.cross_product(pg.det_u, pg.det_v) == approx(pg.det_normal)
 
         if pg.is_vec and pg.num_angles == 1:
             assert pg.det_sizes[0] == approx(pg.det_size)

@@ -201,7 +201,21 @@ class ProjectionGeometry(object):
         """
         raise NotImplementedError()
 
-    # TODO: det_normal
+    @property
+    def det_normal(self):
+        """The detector normal vectors of the geometry.
+
+        In tomosipo, the normal vector usually points "into" the
+        detector and away from the source/object. It is orthogonal to
+        the `v` and `u` vectors.
+
+        :returns: `np.array`
+            A `(num_angles, 3)`-shaped numpy array containing the
+            (Z,Y,X)-coordinates of the normal vectors.
+        :rtype:
+
+        """
+        raise NotImplementedError()
 
     @property
     def ray_dir(self):

@@ -9,6 +9,16 @@ import tomosipo as ts
 
 
 def is_volume(g):
+    """Determine if a geometry is a volume geometry
+
+    A geometry object can be a volume geometry or a projection
+    geometry.
+
+    :param g: a geometry object
+    :returns: `True` if `g` is a volume geometry
+    :rtype: bool
+
+    """
     return isinstance(g, VolumeGeometry)
 
 

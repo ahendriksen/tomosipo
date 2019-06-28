@@ -9,10 +9,10 @@ from .parallel_vec import ParallelVectorGeometry
 
 
 def parallel(angles=1, size=np.sqrt(2), shape=1):
-    """Create a parallel beam geometry
+    """Create a parallel-beam geometry
 
         :param angles: `np.array` or integral value
-            If integral value: the number of angles in the cone beam
+            If integral value: the number of angles in the parallel-beam
             geometry. This describes a full arc (2 pi radians) with
             uniform placement and without the start and end point
             overlapping.
@@ -29,7 +29,7 @@ def parallel(angles=1, size=np.sqrt(2), shape=1):
             The detector shape in pixels. If tuple, the order is
             (height, width). Else the pixel has the same number of
             pixels in the U and V direction.
-        :returns: a parallel beam geometry
+        :returns: a parallel-beam geometry
         :rtype: ParallelGeometry
     """
     return ParallelGeometry(angles, size, shape)
@@ -43,15 +43,15 @@ def random_parallel():
 
 
 class ParallelGeometry(ProjectionGeometry):
-    """Documentation for ParallelGeometry
+    """A parametrized parallel-beam geometry
 
     """
 
     def __init__(self, angles=1, size=np.sqrt(2), shape=1):
-        """Create a parallel beam geometry
+        """Create a parallel-beam geometry
 
             :param angles: `np.array` or integral value
-                If integral value: the number of angles in the cone beam
+                If integral value: the number of angles in the parallel-beam
                 geometry. This describes a full arc (2 pi radians) with
                 uniform placement and without the start and end point
                 overlapping.
@@ -68,7 +68,7 @@ class ParallelGeometry(ProjectionGeometry):
                 The detector shape in pixels. If tuple, the order is
                 (height, width). Else the pixel has the same number of
                 pixels in the U and V direction.
-            :returns: a parallel beam geometry
+            :returns: a parallel-beam geometry
             :rtype: ParallelGeometry
         """
 
@@ -121,6 +121,20 @@ class ParallelGeometry(ProjectionGeometry):
         )
 
     def __getitem__(self, key):
+        """Slice geometry by angle
+
+        Example: Obtain geometry containing every second angle:
+
+        >>> ts.parallel()[0::2]
+
+        Indexing on the detector plane is not supported, since it
+        might move the detector center.
+
+        :param key:
+        :returns:
+        :rtype:
+
+        """
         if isinstance(key, tuple):
             raise IndexError(
                 f"Expected 1 index to ParallelGeometry, got {len(key)}. "
@@ -237,19 +251,6 @@ class ParallelGeometry(ProjectionGeometry):
     ###########################################################################
 
     def rescale_det(self, scale):
-        """Rescale detector pixels
-
-        Rescales detector pixels without changing the size of the detector.
-
-        :param scale: `int` or `(int, int)`
-            Indicates how many times to enlarge a detector pixel. Per
-            convention, the first coordinate scales the pixels in the
-            `v` coordinate, and the second coordinate scales the
-            pixels in the `u` coordinate.
-        :returns: a rescaled cone vector geometry
-        :rtype: `ParallelGeometry`
-
-        """
         scaleV, scaleU = up_tuple(scale, 2)
         scaleV, scaleU = int(scaleV), int(scaleU)
         shape = (self.det_shape[0] // scaleV, self.det_shape[1] // scaleU)
@@ -257,45 +258,9 @@ class ParallelGeometry(ProjectionGeometry):
         return parallel(angles=np.copy(self.angles), shape=shape, size=self._size)
 
     def reshape(self, new_shape):
-        """Change pixel configuration without changing detector size
-
-        :param new_shape: int or (int, int)
-            The new shape of the detector in pixels in `v` (height)
-            and `u` (width) direction.
-        :returns: `self`
-        :rtype: ProjectionGeometry
-
-        """
         return parallel(angles=np.copy(self._angles), shape=new_shape, size=self._size)
 
     def project_point(self, point):
-        """Projects point onto detectors
-
-        This function projects onto the virtual detectors described by
-        the projection geometry.
-
-        For each source-detector pair, this function returns
-
-            (detector_intersection_y, detector_intersection_x)
-
-        where the distance is from the detector origin (center) and
-        the units are in detector pixels.
-
-        This function returns `np.nan` if the source-point ray is
-        parallel to the detector plane.
-
-        N.B:
-        This function projects onto the detector even if the ray is
-        moving away from the detector instead of towards it, or if the
-        detector is between the source and point instead of behind the
-        point.
-
-        :param point: A three-dimensional vector (preferably np.array)
-        :returns: np.array([[detector_intersection_y, detector_intersection_x],
-                            .....])
-        :rtype: np.array (num_angles * 2)
-
-        """
         return self.to_vec().project_point(point)
 
     def transform(self, matrix):

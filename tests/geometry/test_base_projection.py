@@ -87,7 +87,10 @@ def test_interface(default_proj_geoms):
             assert len(pg.det_size) == 2
 
         assert pg.det_sizes.shape == (pg.num_angles, 2)
+        # Corners
         assert pg.corners.shape == (pg.num_angles, 4, 3)
+        assert pg.lower_left_corner == approx(pg.corners[:, 0, :])
+
         if pg.det_shape[0] % 2 == 0 and pg.det_shape[1] % 2 == 0:
             assert pg.rescale_det(2).det_shape == (
                 pg.det_shape[0] // 2,

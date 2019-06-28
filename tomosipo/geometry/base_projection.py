@@ -272,6 +272,19 @@ class ProjectionGeometry(object):
         """
         raise NotImplementedError()
 
+    @property
+    def lower_left_corner(self):
+        """Returns a vector with the positions of the lower-left corner the detector
+
+        :returns: np.array
+            Array with shape (num_angles, 3), describing the position
+            of the lower-left corner of each detector in (Z, Y,
+            X)-coordinates.
+        :rtype: np.array
+
+        """
+        raise NotImplementedError()
+
     ###########################################################################
     #                          Transormation methods                          #
     ###########################################################################

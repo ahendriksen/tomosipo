@@ -313,7 +313,7 @@ class DetectorVectorGeometry(ProjectionGeometry):
             ]
         ).transpose([1, 0, 2])
 
-    @property
+    @ProjectionGeometry.lower_left_corner.getter
     def lower_left_corner(self):
         return (
             self._det_pos

@@ -18,9 +18,8 @@ def test_cone():
     assert ts.geometry.cone.ConeGeometry() == ts.cone()
 
 
-def test_init():
+def test_init(interactive):
     """Test init."""
-    interactive = False
     pg = ts.cone()
 
     assert isinstance(pg, ts.geometry.base_projection.ProjectionGeometry)

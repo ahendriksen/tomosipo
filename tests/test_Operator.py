@@ -3,89 +3,80 @@
 
 """Tests for operator."""
 
-
-import unittest
+from pytest import approx
 import numpy as np
 import tomosipo as ts
 
 
-interactive = False
+def test_forward_backward():
+    pd = ts.data(ts.cone(shape=10))
+    vd = ts.data(ts.volume(10))
+
+    rs = [
+        ([pd, vd], {}),
+        ([pd, vd], dict(detector_supersampling=2, voxel_supersampling=2)),
+        ((pd, vd), dict(detector_supersampling=1, voxel_supersampling=2)),
+        ((pd, vd), dict(detector_supersampling=2, voxel_supersampling=1)),
+    ]
+
+    for data, kwargs in rs:
+        ts.forward(*data, **kwargs)
+        ts.backward(*data, **kwargs)
 
 
-class TestOperator(unittest.TestCase):
-    """Tests for ReconstructionGeometry."""
+def test_fdk(interactive):
+    pg = ts.cone(angles=100, shape=100)
+    vg = ts.volume_from_projection_geometry(pg).reshape(100)
+    pd = ts.data(pg)
+    vd = ts.data(vg)
 
-    def setUp(self):
-        """Set up test fixtures, if any."""
-        pass
+    # Fill the projection data with random noise:
+    ts.phantom.hollow_box(vd)
 
-    def tearDown(self):
-        """Tear down test fixtures, if any."""
-        pass
+    ts.forward(vd, pd)
 
-    def test_forward_backward(self):
-        pd = ts.data(ts.cone(shape=10))
-        vd = ts.data(ts.volume(10))
+    if interactive:
+        ts.display(vg, pg)
+        ts.display(pd)
 
-        rs = [
-            ([pd, vd], {}),
-            ([pd, vd], dict(detector_supersampling=2, voxel_supersampling=2)),
-            ((pd, vd), dict(detector_supersampling=1, voxel_supersampling=2)),
-            ((pd, vd), dict(detector_supersampling=2, voxel_supersampling=1)),
-        ]
+    ts.fdk(vd, pd)
 
-        for data, kwargs in rs:
-            ts.forward(*data, **kwargs)
-            ts.backward(*data, **kwargs)
+    if interactive:
+        ts.display(vd)
 
-    def test_fdk(self):
-        pg = ts.cone(angles=100, shape=100)
-        vg = ts.volume_from_projection_geometry(pg).reshape(100)
-        pd = ts.data(pg)
-        vd = ts.data(vg)
 
-        # Fill the projection data with random noise:
-        ts.phantom.hollow_box(vd)
+def test_operator():
+    pg = ts.cone(angles=150, shape=100)
+    vg = ts.volume(shape=100)
 
-        ts.forward(vd, pd)
+    A = ts.operator(vg, pg, additive=False)
+    x = ts.phantom.hollow_box(ts.data(vg))
 
-        if interactive:
-            ts.display(vg, pg)
-            ts.display(pd)
+    y = A(x)
+    y_ = A(np.copy(x.data))  # Test with np.array input
 
-        ts.fdk(vd, pd)
+    assert np.sum(abs(y.data - y_.data)) == approx(0.0)
 
-        if interactive:
-            ts.display(vd)
+    # Test with `Data` and `np.array` again:
+    x1 = A.transpose(y)
+    x2 = A.transpose(y.data)
 
-    def test_operator(self):
-        pg = ts.cone(angles=150, shape=100)
-        vg = ts.volume(shape=100)
+    assert np.sum(abs(x1.data - x2.data)) == approx(0.0)
 
-        A = ts.operator(vg, pg, additive=False)
-        x = ts.phantom.hollow_box(ts.data(vg))
 
-        y = A(x)
-        y_ = A(np.copy(x.data))  # Test with np.array input
+def test_operator_additive():
+    pg = ts.cone(angles=150, shape=100)
+    vg = ts.volume(shape=100)
 
-        self.assertAlmostEqual(0.0, np.sum(abs(y.data - y_.data)))
+    A = ts.operator(vg, pg, additive=False)
+    B = ts.operator(vg, pg, additive=True)
 
-        # Test with `Data` and `np.array` again:
-        x1 = A.transpose(y)
-        x2 = A.transpose(y.data)
-        self.assertAlmostEqual(0.0, np.sum(abs(x1.data - x2.data)))
+    x = ts.phantom.hollow_box(ts.data(vg))
+    y = ts.data(pg)
 
-    def test_operator_additive(self):
-        pg = ts.cone(angles=150, shape=100)
-        vg = ts.volume(shape=100)
+    B(x, out=y)
+    B(x, out=y)
 
-        A = ts.operator(vg, pg, additive=False)
-        B = ts.operator(vg, pg, additive=True)
-
-        x = ts.phantom.hollow_box(ts.data(vg))
-        y = ts.data(pg)
-
-        B(x, out=y)
-        B(x, out=y)
-
-        self.assertAlmostEqual(0.0, np.mean(abs(2 * A(x).data - y.data)))
+    # approx is not the fastest function, so we use mean to reduce the
+    # problem size.
+    assert np.mean(abs(2 * A(x).data)) == approx(np.mean(abs(y.data)))

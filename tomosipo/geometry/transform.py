@@ -57,10 +57,10 @@ def identity():
 def translate(t):
     """Return translation transform
 
-    The parameter `t` is interpreted as a homogeneous coordinates. You
-    may pass in both homogeneous or non-homogeneous coordinates. Also,
-    you may pass in multiple rows for multiple timesteps. The
-    following shapes are allowed:
+    The parameter `t` is interpreted as a series homogeneous
+    coordinates. You may pass in both homogeneous or non-homogeneous
+    coordinates. Also, you may pass in multiple rows for multiple
+    timesteps. The following shapes are allowed:
 
     - `(n_rows, 3)` [non-homogeneous] or `(n_rows, 4)` [homogeneous]
     - `(3,)` [non-homogeneous] or `(4,)` [homogeneous]
@@ -80,6 +80,26 @@ def translate(t):
 
 
 def scale(s):
+    """Return scaling transform
+
+    The scaling transform scales the coordinate frame of the object.
+
+    The parameter `s` is interpreted as a series of homogeneous
+    coordinates. You may pass in both homogeneous or non-homogeneous
+    coordinates. Also, you may pass in multiple rows for multiple
+    timesteps. The following shapes are allowed:
+
+    - scalar
+    - `(n_rows, 3)` [non-homogeneous] or `(n_rows, 4)` [homogeneous]
+    - `(3,)` [non-homogeneous] or `(4,)` [homogeneous]
+
+
+    :param s:
+        By how much to scale in each direction.
+    :returns:
+    :rtype:
+
+    """
     if np.isscalar(s):
         s = up_tuple(s, 3)
     s = vc.to_vec(s)

@@ -8,6 +8,7 @@ from pytest import approx
 import tomosipo as ts
 import numpy as np
 from tomosipo.geometry import random_transform, random_box
+from tomosipo.geometry import transform
 
 
 def test_init():
@@ -18,13 +19,13 @@ def test_init():
     ob = ts.box(1, (0, 0, 0), z, y, x)
 
     # Test that using a scalar position works as well.
-    assert ob == ts.box(1, 0, z, y, x)  # Equal
-    assert ob == ts.box(1, 0, z, y)  # Equal
-    assert ob == ts.box(1, 0, [z], y)  # Equal
-    assert ob == ts.box(1, 0, z, y, x)  # Equal
-    assert ob == ts.box((1, 1, 1), 0, z, y, x)  # Equal
-    assert ob == ts.box((1, 1, 1), 0, z, y, x)  # Equal
-    assert ob == ts.box((1, 1, 1), [(0, 0, 0)], z, y, x)  # Equal
+    assert ob == ts.box(1, 0, z, y, x)
+    assert ob == ts.box(1, 0, z, y)
+    assert ob == ts.box(1, 0, [z], y)
+    assert ob == ts.box(1, 0, z, y, x)
+    assert ob == ts.box((1, 1, 1), 0, z, y, x)
+    assert ob == ts.box((1, 1, 1), 0, z, y, x)
+    assert ob == ts.box((1, 1, 1), [(0, 0, 0)], z, y, x)
 
     N = 11
     with pytest.raises(ValueError):
@@ -150,11 +151,11 @@ def test_transform():
         T1 = random_transform()
         T2 = random_transform()
 
-        assert T1(T2)(box) == T1(T2(box))  # Equal
-        assert ts.identity()(box) == box  # Equal
+        assert T1(T2)(box) == T1(T2(box))
+        assert transform.identity()(box) == box
 
-        assert T1.inv(T1(box)) == box  # Equal
-        assert T1.inv(T1)(box) == box  # Equal
+        assert T1.inv(T1(box)) == box
+        assert T1.inv(T1)(box) == box
 
 
 def test_display_auto_center(interactive):

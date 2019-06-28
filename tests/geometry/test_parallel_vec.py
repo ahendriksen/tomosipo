@@ -5,6 +5,7 @@ import tomosipo as ts
 from tomosipo.geometry import random_transform, random_parallel_vec
 from tomosipo.utils import up_tuple
 import tomosipo.vector_calc as vc
+from tomosipo.geometry import transform
 
 
 @pytest.fixture
@@ -169,7 +170,7 @@ def test_transform(par_vecs):
         T2 = random_transform()
 
         assert T1(T2)(pg) == T1(T2(pg))
-        assert ts.identity()(pg) == pg
+        assert transform.identity()(pg) == pg
 
     for pg in par_vecs:
         T = ts.translate(np.random.normal(size=3))

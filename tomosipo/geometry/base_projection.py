@@ -218,6 +218,24 @@ class ProjectionGeometry(object):
         raise NotImplementedError()
 
     @property
+    def det_size(self):
+        """The size of the detector.
+
+        This property is dangerous for vector geometries, because for
+        vector geometries it is not guaranteed that the detector size
+        is constant through time. If the detector size is not
+        constant, this property raises a ValueError. Otherwise, it
+        returns the detector size.
+
+        :returns:
+            The absolute size of the detector in the `v` and the `u`
+            direction.
+        :rtype: (scalar, scalar)
+
+        """
+        raise NotImplementedError()
+
+    @property
     def det_sizes(self):
         """The size of each detector.
 

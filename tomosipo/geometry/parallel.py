@@ -194,23 +194,13 @@ class ParallelGeometry(ProjectionGeometry):
     #                                Properties                               #
     ###########################################################################
 
-    @property
-    def angles(self):
-        """The angles from which projections are acquired.
-
-        This property is specific to non-vector geometries.
-
-        :returns:
-            A numpy array of shape with length `num_angles` containing
-            the angles in radians.
-        :rtype: `np.array`
-
-        """
-        return np.copy(self._angles)
-
     @ProjectionGeometry.num_angles.getter
     def num_angles(self):
         return len(self._angles)
+
+    @ProjectionGeometry.angles.getter
+    def angles(self):
+        return np.copy(self._angles)
 
     @ProjectionGeometry.src_pos.getter
     def src_pos(self):

@@ -250,6 +250,10 @@ class DetectorVectorGeometry(ProjectionGeometry):
     def num_angles(self):
         return len(self._det_pos)
 
+    @ProjectionGeometry.angles.getter
+    def angles(self):
+        raise NotImplementedError()
+
     @ProjectionGeometry.src_pos.getter
     def src_pos(self):
         raise NotImplementedError()

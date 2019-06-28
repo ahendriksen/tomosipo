@@ -214,6 +214,10 @@ class ConeVectorGeometry(ProjectionGeometry):
     def num_angles(self):
         return self._det_vec.num_angles
 
+    @ProjectionGeometry.angles.getter
+    def angles(self):
+        raise NotImplementedError()
+
     @ProjectionGeometry.src_pos.getter
     def src_pos(self):
         return np.copy(self._src_pos)

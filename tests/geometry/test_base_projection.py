@@ -19,6 +19,7 @@ def default_proj_geoms():
         ts.cone(angles=11, shape=(10, 10)).to_vec(),
         ts.geometry.det_vec.random_det_vec(),
         ts.geometry.random_parallel_vec(),
+        ts.geometry.random_parallel(),
     ]
 
 
@@ -49,6 +50,12 @@ def test_interface(default_proj_geoms):
         assert pg.to_vec() == pg.to_vec().to_vec()
         pg.is_vec
         pg.num_angles
+        if pg.is_vec:
+            with pytest.raises(NotImplementedError):
+                pg.angles
+        else:
+            assert len(pg.angles) == pg.num_angles
+
         if pg.is_cone:
             assert pg.src_pos.shape == (pg.num_angles, 3)
         if pg.is_parallel:

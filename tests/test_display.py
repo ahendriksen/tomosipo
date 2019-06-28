@@ -1,9 +1,7 @@
 import tomosipo as ts
 
-interactive = False
 
-
-def test_display_data():
+def test_display_data(interactive):
     p = ts.data(ts.cone(angles=100, shape=100))
     v = ts.data(ts.volume_from_projection_geometry(p.geometry).reshape(100))
 

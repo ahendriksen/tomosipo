@@ -11,6 +11,13 @@ from tomosipo.geometry import random_transform, random_cone
 import tomosipo.vector_calc as vc
 
 
+###############################################################################
+#                             Creation and dunders                            #
+###############################################################################
+def test_cone():
+    assert ts.geometry.cone.ConeGeometry() == ts.cone()
+
+
 def test_init():
     """Test init."""
     interactive = False
@@ -43,8 +50,8 @@ def test_equal():
         ts.cone(angles=2),
         ts.cone(size=5),
         ts.cone(shape=3),
-        ts.cone(detector_distance=50),
-        ts.cone(source_distance=50),
+        ts.cone(src_obj_dist=50),
+        ts.cone(src_det_dist=50),
         ts.volume(),
     ]
 
@@ -54,10 +61,22 @@ def test_equal():
         assert pg != u
 
 
-def test_cone():
-    assert ts.geometry.cone.ConeGeometry() == ts.cone()
+def test_get_item():
+    pg = ts.cone(angles=10, shape=20)
+    assert pg[1].num_angles == 1
+    assert pg[:1].num_angles == 1
+    assert pg[:2].num_angles == 2
+    assert pg[:].num_angles == 10
+    assert pg[-1] == pg[9]
+    assert pg[-2] == pg[8]
+
+    with pytest.raises(ValueError):
+        pg[10]
 
 
+###############################################################################
+#                                     to_*                                    #
+###############################################################################
 def test_to_vec():
     num_tests = 100
     for _ in range(num_tests):
@@ -119,6 +138,11 @@ def test_to_from_astra():
         assert pg1 == pg2
 
 
+###############################################################################
+#                                  Properties                                 #
+###############################################################################
+
+
 def test_det_sizes():
     size = (1, 2)
     pg = ts.cone(angles=3, size=size)
@@ -126,19 +150,14 @@ def test_det_sizes():
     assert abs(pg.det_sizes - size).sum() < ts.epsilon
 
 
-def test_get_item():
-    pg = ts.cone(angles=10, shape=20)
-    assert pg[1].num_angles == 1
-    assert pg[:1].num_angles == 1
-    assert pg[:2].num_angles == 2
-    assert pg[:].num_angles == 10
-    assert pg[-1] == pg[9]
-    assert pg[-2] == pg[8]
-
-    with pytest.raises(ValueError):
-        pg[10]
+def test_src_obj_det_dist():
+    assert ts.cone(src_obj_dist=5.0).src_obj_dist == 5.0
+    assert ts.cone(src_det_dist=3.0).src_det_dist == 3.0
 
 
+###############################################################################
+#                                   Methods                                   #
+###############################################################################
 def test_rescale_det():
     pg = ts.cone(angles=10, shape=20)
 
@@ -159,7 +178,7 @@ def test_transform():
 
 
 def test_to_box():
-    pg = ts.cone(10, shape=(5, 3), detector_distance=10, source_distance=11)
+    pg = ts.cone(10, shape=(5, 3), src_obj_dist=11, src_det_dist=21)
     src_box, det_box = pg.to_box()
 
     assert pytest.approx(0) == vc.norm(src_box.pos - det_box.pos) - (10 + 11)

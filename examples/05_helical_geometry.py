@@ -31,8 +31,8 @@ pg = ts.cone(
     angles,
     detector_size,
     detector_shape,
-    detector_distance=source_detector_distance / 2,
-    source_distance=source_detector_distance / 2,
+    src_obj_dist=source_detector_distance / 2,
+    src_det_dist=source_detector_distance,
 )
 vg = ts.volume(128)
 

@@ -3,7 +3,7 @@
 
 """Tests for ConeVectorGeometry."""
 
-
+from pytest import approx
 import unittest
 import numpy as np
 import tomosipo as ts
@@ -183,3 +183,15 @@ class TestConeVectorGeometry(unittest.TestCase):
 
         self.assertEqual(pg.rescale_det((2, 2)), pg.rescale_det(2))
         self.assertEqual(pg.rescale_det(10).det_shape, (2, 2))
+
+    def test_project_point(par_vecs):
+        for _ in range(5):
+            pg = ts.geometry.random_cone_vec()
+            # The detector position should always be projected on (0, 0)
+            assert pg.project_point(pg.det_pos) == approx(np.zeros((pg.num_angles, 2)))
+            # A translation of the projection geometry along the ray_dir
+            # should not affect project_point.
+            p = vc.to_vec((3, 5, 7))
+            T = ts.translate(np.random.normal() * (pg.src_pos - p))
+            assert pg.project_point(p).shape == T(pg).project_point(p).shape
+            assert pg.project_point(p) == approx(T(pg).project_point(p))

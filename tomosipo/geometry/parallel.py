@@ -96,7 +96,7 @@ class ParallelGeometry(ProjectionGeometry):
 
         self._is_cone = False
         self._is_parallel = True
-        self._is_vector = True
+        self._is_vector = False
 
     def __repr__(self):
         return (

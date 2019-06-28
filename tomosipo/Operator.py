@@ -66,7 +66,8 @@ def project(
         voxel_supersampling=voxel_supersampling,
         detector_supersampling=detector_supersampling,
     )
-    # TODO: link to astra commit that commits to these public constants.
+    # These constants have become the default. See:
+    # https://github.com/astra-toolbox/astra-toolbox/commit/4d673b3cdb6d27d430087758a8081e4a10267595
     MODE_SET = 1
     MODE_ADD = 0
 

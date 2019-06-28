@@ -254,7 +254,7 @@ class ConeVectorGeometry(ProjectionGeometry):
     def corners(self):
         return self._det_vec.corners
 
-    @property
+    @ProjectionGeometry.lower_left_corner.getter
     def lower_left_corner(self):
         return self._det_vec.lower_left_corner
 

@@ -276,6 +276,10 @@ class ConeGeometry(ProjectionGeometry):
     def corners(self):
         return self.to_vec().corners
 
+    @ProjectionGeometry.lower_left_corner.getter
+    def lower_left_corner(self):
+        return self.to_vec().lower_left_corner
+
     ###########################################################################
     #                                 Methods                                 #
     ###########################################################################

@@ -233,16 +233,16 @@ class ConeGeometry(ProjectionGeometry):
         return self._src_det_dist
 
     @property
-    def angles(self):
-        return np.copy(self._angles)
-
-    @property
     def det_size(self):
         return self._size
 
     @ProjectionGeometry.num_angles.getter
     def num_angles(self):
         return len(self.angles)
+
+    @ProjectionGeometry.angles.getter
+    def angles(self):
+        return np.copy(self._angles)
 
     @ProjectionGeometry.src_pos.getter
     def src_pos(self):

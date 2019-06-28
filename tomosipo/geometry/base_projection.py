@@ -131,6 +131,20 @@ class ProjectionGeometry(object):
         raise NotImplementedError()
 
     @property
+    def angles(self):
+        """The angles from which projections are acquired.
+
+        This property is specific to non-vector geometries.
+
+        :returns:
+            A numpy array of shape with length `num_angles` containing
+            the angles in radians.
+        :rtype: `np.array`
+
+        """
+        raise NotImplementedError()
+
+    @property
     def src_pos(self):
         """The source positions of the geometry.
 

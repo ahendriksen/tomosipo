@@ -296,8 +296,8 @@ class ConeVectorGeometry(ProjectionGeometry):
 
         intersection = vc.intersect(v_origin, v_direction, det_pos, det_normal)
 
-        det_i_u = np.sum(intersection * det_u, axis=1) / vc.squared_norm(det_u)
-        det_i_v = np.sum(intersection * det_v, axis=1) / vc.squared_norm(det_v)
+        det_i_u = vc.dot(intersection - det_pos, det_u) / vc.squared_norm(det_u)
+        det_i_v = vc.dot(intersection - det_pos, det_v) / vc.squared_norm(det_v)
 
         return np.stack((det_i_v, det_i_u), axis=-1)
 

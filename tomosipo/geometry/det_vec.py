@@ -227,7 +227,8 @@ class DetectorVectorGeometry(ProjectionGeometry):
         # This is the detector normal and has norm 1. In right-handed
         # coordinates, it would point towards the source usually. Now
         # it points "into" the detector.
-        v = vc.cross_product(u, w)
+        v = self.det_normal
+        v = v / vc.norm(v)[:, None]
 
         # TODO: Warn when detector size changes during rotation.
         det_height, det_width = self.det_sizes[0]
@@ -270,7 +271,9 @@ class DetectorVectorGeometry(ProjectionGeometry):
     def det_u(self):
         return np.copy(self._det_u)
 
-    # TODO: det_normal
+    @ProjectionGeometry.det_normal.getter
+    def det_normal(self):
+        return vc.cross_product(self._det_u, self.det_v)
 
     @ProjectionGeometry.ray_dir.getter
     def ray_dir(self):

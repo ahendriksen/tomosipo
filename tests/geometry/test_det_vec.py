@@ -130,6 +130,13 @@ def test_det_properties(det_vecs):
         assert pg.corners.shape == (pg.num_angles, 4, 3)
 
 
+def test_det_normal(det_vecs):
+    unit_det = ts.geometry.det_vec.det_vec(
+        shape=1, det_pos=(0, 0, 0), det_v=(1, 0, 0), det_u=(0, 0, 1)
+    )
+    assert unit_det.det_normal == approx(np.array([(0, 1, 0)]))
+
+
 def test_corners(det_vecs):
     for pg in det_vecs:
         assert pg.lower_left_corner == approx(pg.corners[:, 0, :])

@@ -231,7 +231,9 @@ class ParallelVectorGeometry(ProjectionGeometry):
     def det_u(self):
         return self._det_vec.det_u
 
-    # TODO: det_normal
+    @ProjectionGeometry.det_normal.getter
+    def det_normal(self):
+        return self._det_vec.det_normal
 
     @ProjectionGeometry.ray_dir.getter
     def ray_dir(self):
@@ -281,10 +283,9 @@ class ParallelVectorGeometry(ProjectionGeometry):
         v_origin = vc.to_vec(point)
 
         det_pos = self._det_vec.det_pos
-        det_v = self._det_vec.det_v
-        det_u = self._det_vec.det_u
-
-        det_normal = vc.cross_product(det_u, det_v)
+        det_v = self.det_v
+        det_u = self.det_u
+        det_normal = self.det_normal
         v_direction = self._ray_dir
 
         intersection = vc.intersect(v_origin, v_direction, det_pos, det_normal)

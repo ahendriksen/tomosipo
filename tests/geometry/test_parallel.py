@@ -168,8 +168,7 @@ def test_project_point(par_geoms):
             assert pg.project_point(p) == approx(T(pg).project_point(p))
             # ray_dir is orthogonal to the detector plane, so we should
             # also be able to move along the detector normal:
-            det_normal = vc.cross_product(pg.det_v, pg.det_u)
-            T = ts.translate(det_normal)
+            T = ts.translate(pg.det_normal)
             assert pg.project_point(p).shape == T(pg).project_point(p).shape
             assert pg.project_point(p) == approx(T(pg).project_point(p))
             # Translating the detector by (v,u) should reduce project_point by (1, 1):

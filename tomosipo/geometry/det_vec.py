@@ -19,7 +19,7 @@ def det_vec(shape, det_pos, det_v, det_u):
 
     :param shape: (`int`, `int`) or `int`
         The detector shape in pixels. If tuple, the order is
-        (height, width). Else the pixel has the same number of
+        (height, width). Otherwise, the pixel has the same number of
         pixels in the U and V direction.
     :param det_pos:
         A numpy array of dimension (num_positions, 3) with the
@@ -56,9 +56,13 @@ def random_det_vec():
 
 
 class DetectorVectorGeometry(ProjectionGeometry):
-    """Documentation for DetectorVectorGeometry
+    """A class for representing detector vector geometries.
 
-    A class for representing detector vector geometries.
+    This class is a helper for the ConeVectorGeometry and
+    ParallelVectorGeometry. It represents the detector part of these
+    geometries. It does not have any references to a source or ray
+    directions.
+
     """
 
     def __init__(self, shape, det_pos, det_v, det_u):
@@ -100,7 +104,7 @@ class DetectorVectorGeometry(ProjectionGeometry):
 
     def __repr__(self):
         return (
-            f"(DetectorVectorGeometry\n"
+            f"DetectorVectorGeometry(\n"
             f"    shape={self.det_shape},\n"
             f"    det_pos={self.detector_positions},\n"
             f"    det_u={self.detector_vs},\n"
@@ -124,6 +128,21 @@ class DetectorVectorGeometry(ProjectionGeometry):
         )
 
     def __getitem__(self, key):
+        """Slice the geometry to create a sub-geometry
+
+        This geometry can be sliced in the number of projections:
+
+        >>> ts.geometry.random_det_vec()[0::2]
+
+        Or in the detector plane:
+
+        >>> ts.geometry.random_det_vec()[:, ::2, ::2]
+
+        :param key:
+        :returns:
+        :rtype:
+
+        """
         full_slice = slice(None, None, None)
 
         if isinstance(key, Integral) or isinstance(key, slice):
@@ -188,12 +207,6 @@ class DetectorVectorGeometry(ProjectionGeometry):
         return det_vec(shape, det_pos[:, ::-1], det_v[:, ::-1], det_u[:, ::-1])
 
     def to_vec(self):
-        """Return a vector geometry of the current geometry
-
-        :returns:
-        :rtype: ProjectionGeometry
-
-        """
         return self
 
     def to_box(self):

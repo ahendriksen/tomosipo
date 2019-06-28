@@ -7,7 +7,7 @@ from . import det_vec as dv
 
 
 def cone_vec(shape, source_positions, detector_positions, detector_vs, detector_us):
-    """Create a cone beam vector geometry
+    """Create a cone-beam vector geometry
 
     :param shape: (`int`, `int`) or `int`
         The detector shape in pixels. If tuple, the order is
@@ -62,7 +62,7 @@ class ConeVectorGeometry(ProjectionGeometry):
     def __init__(
         self, shape, source_positions, detector_positions, detector_vs, detector_us
     ):
-        """Create a cone beam vector geometry
+        """Create a cone-beam vector geometry
 
         :param shape: (`int`, `int`) or `int`
             The detector shape in pixels. If tuple, the order is
@@ -125,6 +125,23 @@ class ConeVectorGeometry(ProjectionGeometry):
         return self._det_vec == other._det_vec and np.all(abs(spos_diff) < ts.epsilon)
 
     def __getitem__(self, key):
+        """Slice the geometry to create a sub-geometry
+
+        This geometry can be sliced by angle. The following obtains a
+        sub-geometry containing every second projection:
+
+        >>> ts.cone(angles=10).to_vec()[0::2]
+
+        This geometry can also be sliced in the detector plane:
+
+        >>> ts.cone(shape=10).to_vec()[:, ::2, ::2]
+
+        :param key:
+        :returns:
+        :rtype:
+
+        """
+
         det_vec = self._det_vec[key]
         if isinstance(key, tuple):
             key, *_ = key
@@ -178,12 +195,6 @@ class ConeVectorGeometry(ProjectionGeometry):
         )
 
     def to_vec(self):
-        """Return a vector geometry of the current geometry
-
-        :returns:
-        :rtype: ProjectionGeometry
-
-        """
         return self
 
     def to_box(self):
@@ -253,20 +264,6 @@ class ConeVectorGeometry(ProjectionGeometry):
     ###########################################################################
 
     def rescale_det(self, scale):
-        """Rescale detector pixels
-
-        Rescales detector pixels without changing the size of the detector.
-
-        :param scale: `int` or `(int, int)`
-            Indicates how many times to enlarge a detector pixel. Per
-            convention, the first coordinate scales the pixels in the
-            `v` coordinate, and the second coordinate scales the
-            pixels in the `u` coordinate.
-        :returns: a rescaled cone vector geometry
-        :rtype: `ConeVectorGeometry`
-
-        """
-
         det_vec = self._det_vec.rescale_det(scale)
 
         return cone_vec(
@@ -278,49 +275,12 @@ class ConeVectorGeometry(ProjectionGeometry):
         )
 
     def reshape(self, new_shape):
-        """Reshape detector pixels without changing detector size
-
-
-        :param new_shape: int or (int, int)
-            The new shape of the detector in pixels in `v` (height)
-            and `u` (width) direction.
-        :returns: `self`
-        :rtype: ProjectionGeometry
-
-        """
         det_vec = self._det_vec.reshape(new_shape)
         return cone_vec(
             new_shape, self.src_pos, det_vec.det_pos, det_vec.det_v, det_vec.det_u
         )
 
     def project_point(self, point):
-        """Projects point onto detectors
-
-        This function projects onto the virtual detectors described by
-        the projection geometry.
-
-        For each source-detector pair, this function returns
-
-            (detector_intersection_y, detector_intersection_x)
-
-        where the distance is from the detector origin (center) and
-        the units are in detector pixels.
-
-        This function returns `np.nan` if the source-point ray is
-        parallel to the detector plane.
-
-        N.B:
-        This function projects onto the detector even if the ray is
-        moving away from the detector instead of towards it, or if the
-        detector is between the source and point instead of behind the
-        point.
-
-        :param point: A three-dimensional vector (preferably np.array)
-        :returns: np.array([[detector_intersection_y, detector_intersection_x],
-                            .....])
-        :rtype: np.array (num_angles * 2)
-
-        """
         if np.isscalar(point):
             point = up_tuple(point, 3)
 

@@ -3,13 +3,23 @@ from tomosipo.utils import up_tuple
 
 
 def is_projection(g):
+    """Determine if a geometry is a projection geometry
+
+    A geometry object can be a volume geometry or a projection
+    geometry.
+
+    :param g: a geometry object
+    :returns: `True` if `g` is a projection geometry
+    :rtype: bool
+
+    """
     return isinstance(g, ProjectionGeometry)
 
 
 class ProjectionGeometry(object):
-    """Documentation for ProjectionGeometry
+    """A general base class for projection geometries
 
-    A general base class for projection geometries.
+
     """
 
     def __init__(self, shape=1):
@@ -28,13 +38,26 @@ class ProjectionGeometry(object):
 
         self._shape = (height, width)
 
+    ###########################################################################
+    #                               __dunders__                               #
+    ###########################################################################
     def __repr__(self):
         raise NotImplementedError()
 
     def __eq__(self, other):
         raise NotImplementedError()
 
+    ###########################################################################
+    #                               to_* methods                              #
+    ###########################################################################
     def to_astra(self):
+        """Convert geometry to astra geometry
+
+        :returns: An astra representation of the current geometry.
+        :rtype: dict
+
+        """
+
         raise NotImplementedError()
 
     def to_vec(self):
@@ -46,16 +69,42 @@ class ProjectionGeometry(object):
         """
         raise NotImplementedError()
 
+    ###########################################################################
+    #                                Properties                               #
+    ###########################################################################
     @property
     def is_cone(self):
+        """Is this geometry a cone-beam geometry?
+
+        :returns:
+        :rtype:
+
+        """
         return self._is_cone
 
     @property
     def is_parallel(self):
+        """Is this geometry a parallel-beam geometry?
+
+        :returns:
+        :rtype:
+
+        """
         return self._is_parallel
 
     @property
     def is_vec(self):
+        """Is this a vector geometry?
+
+        A geometry can either be a vector geometry, like
+        ``ConeVectorGeometry``, or ``ParallelVectorGeometry``, or it
+        can be a parametrized geometry like ``ConeGeometry`` or
+        ``ParallelGeometry``.
+
+        :returns:
+        :rtype:
+
+        """
         return self._is_vector
 
     @property
@@ -177,6 +226,9 @@ class ProjectionGeometry(object):
         """
         raise NotImplementedError()
 
+    ###########################################################################
+    #                          Transormation methods                          #
+    ###########################################################################
     def rescale_det(self, scale):
         """Rescale detector pixels
 
@@ -187,15 +239,14 @@ class ProjectionGeometry(object):
             convention, the first coordinate scales the pixels in the
             `v` coordinate, and the second coordinate scales the
             pixels in the `u` coordinate.
-        :returns: a rescaled cone geometry
-        :rtype: `ConeGeometry`
+        :returns: a rescaled geometry
+        :rtype: `ProjectionGeometry`
 
         """
         raise NotImplementedError()
 
     def reshape(self, new_shape):
         """Reshape detector pixels without changing detector size
-
 
         :param new_shape: int or (int, int)
             The new shape of the detector in pixels in `v` (height)

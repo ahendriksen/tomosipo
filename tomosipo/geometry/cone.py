@@ -9,10 +9,10 @@ from .cone_vec import ConeVectorGeometry
 
 
 def cone(angles=1, size=np.sqrt(2), shape=1, detector_distance=0, source_distance=2):
-    """Create a cone beam geometry
+    """Create a cone-beam geometry
 
         :param angles: `np.array` or integral value
-            If integral value: the number of angles in the cone beam
+            If integral value: the number of angles in the cone-beam
             geometry. This describes a full arc (2 pi radians) with
             uniform placement and without the start and end point
             overlapping.
@@ -33,14 +33,14 @@ def cone(angles=1, size=np.sqrt(2), shape=1, detector_distance=0, source_distanc
             The detector-origin distance.
         :param source_distance: float
             the source-origin distance.
-        :returns: a cone beam geometry
+        :returns: a cone-beam geometry
         :rtype: ConeGeometry
     """
     return ConeGeometry(angles, size, shape, detector_distance, source_distance)
 
 
 def random_cone():
-    """Returns a random cone beam geometry
+    """Returns a random cone-beam geometry
 
     *Note*: this geometry is not circular. It just samples random
      points on a circular path.
@@ -59,49 +59,16 @@ def random_cone():
 
 
 class ConeGeometry(ProjectionGeometry):
-    """Documentation for ConeGeometry
-
-    Cone beam geometry
+    """A parametrized circular cone-beam geometry
     """
-
-    def __getitem__(self, key):
-        """Return self[key]
-
-        :param key: An int, tuple of ints,
-        :returns:
-        :rtype:
-
-        """
-
-        one_key = isinstance(key, Integral) or isinstance(key, slice)
-
-        if one_key:
-            key = up_slice(key)
-            return ConeGeometry(
-                angles=np.asarray(self.angles[key]),
-                size=self.size,
-                shape=self.det_shape,
-                detector_distance=self.detector_distance,
-                source_distance=self.source_distance,
-            )
-        if isinstance(key, tuple):
-            raise IndexError(
-                f"Expected 1 index to ConeGeometry, got {len(key)}. "
-                f"Indexing on the detector plane is not supported, "
-                f"since it might move the detector center. "
-            )
-        raise TypeError(
-            f"Indexing a ConeGeometry with {type(key)} is not supported. "
-            f"Try int or slice instead."
-        )
 
     def __init__(
         self, angles=1, size=np.sqrt(2), shape=1, detector_distance=0, source_distance=2
     ):
-        """Create a cone beam geometry
+        """Create a cone-beam geometry
 
         :param angles: `np.array` or integral value
-            If integral value: the number of angles in the cone beam
+            If integral value: the number of angles in the cone-beam
             geometry. This describes a full arc (2 pi radians) with
             uniform placement and without the start and end point
             overlapping.
@@ -122,7 +89,7 @@ class ConeGeometry(ProjectionGeometry):
             The detector-origin distance.
         :param source_distance: float
             the source-origin distance.
-        :returns: a cone beam geometry
+        :returns: a cone-beam geometry
         :rtype: ConeGeometry
 
         """
@@ -177,6 +144,37 @@ class ConeGeometry(ProjectionGeometry):
             and np.all(self.det_shape == other.det_shape)
             and abs(diff_detector) < ts.epsilon
             and abs(diff_source) < ts.epsilon
+        )
+
+    def __getitem__(self, key):
+        """Return self[key]
+
+        :param key: An int, tuple of ints,
+        :returns:
+        :rtype:
+
+        """
+
+        one_key = isinstance(key, Integral) or isinstance(key, slice)
+
+        if one_key:
+            key = up_slice(key)
+            return ConeGeometry(
+                angles=np.asarray(self.angles[key]),
+                size=self.size,
+                shape=self.det_shape,
+                detector_distance=self.detector_distance,
+                source_distance=self.source_distance,
+            )
+        if isinstance(key, tuple):
+            raise IndexError(
+                f"Expected 1 index to ConeGeometry, got {len(key)}. "
+                f"Indexing on the detector plane is not supported, "
+                f"since it might move the detector center. "
+            )
+        raise TypeError(
+            f"Indexing a ConeGeometry with {type(key)} is not supported. "
+            f"Try int or slice instead."
         )
 
     def to_vec(self):
@@ -264,19 +262,6 @@ class ConeGeometry(ProjectionGeometry):
         return self.to_vec().transform(matrix)
 
     def rescale_det(self, scale):
-        """Rescale detector pixels
-
-        Rescales detector pixels without changing the size of the detector.
-
-        :param scale: `int` or `(int, int)`
-            Indicates how many times to enlarge a detector pixel. Per
-            convention, the first coordinate scales the pixels in the
-            `v` coordinate, and the second coordinate scales the
-            pixels in the `u` coordinate.
-        :returns: a rescaled cone geometry
-        :rtype: `ConeGeometry`
-
-        """
         scaleV, scaleU = up_tuple(scale, 2)
         scaleV, scaleU = int(scaleV), int(scaleU)
 
@@ -291,16 +276,6 @@ class ConeGeometry(ProjectionGeometry):
         )
 
     def reshape(self, new_shape):
-        """Reshape detector pixels without changing detector size
-
-
-        :param new_shape: int or (int, int)
-            The new shape of the detector in pixels in `v` (height)
-            and `u` (width) direction.
-        :returns: `self`
-        :rtype: ProjectionGeometry
-
-        """
         new_shape = up_tuple(new_shape, 2)
         return cone(
             self.angles_original,

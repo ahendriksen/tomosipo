@@ -109,7 +109,7 @@ class TestConeVectorGeometry(unittest.TestCase):
         shape = (10, 40)
         size = (30, 80)
 
-        pg = ts.cone(1, size, shape, source_distance=10).to_vec()
+        pg = ts.cone(1, size, shape, src_obj_dist=10, src_det_dist=10).to_vec()
         self.assertAlmostEqual(np.abs(pg.project_point((0, 0, 0))).sum(), 0)
 
         self.assertAlmostEqual(
@@ -120,7 +120,7 @@ class TestConeVectorGeometry(unittest.TestCase):
         )
 
         shape = (100, 400)
-        pg = ts.cone(1, size, shape, source_distance=10).to_vec()
+        pg = ts.cone(1, size, shape, src_obj_dist=10, src_det_dist=10).to_vec()
         self.assertAlmostEqual(np.abs(pg.project_point((0, 0, 0))).sum(), 0)
         self.assertAlmostEqual(
             np.abs(pg.project_point((0.3, 0, 0)) - [1.0, 0.0]).sum(), 0
@@ -148,8 +148,8 @@ class TestConeVectorGeometry(unittest.TestCase):
         self.assertEqual(pg1.corners.shape, (5, 4, 3))
 
     def test_src_pos(self):
-        pg1 = ts.cone(source_distance=1).to_vec()
-        pg2 = ts.cone(source_distance=2).to_vec()
+        pg1 = ts.cone(src_obj_dist=1, src_det_dist=1).to_vec()
+        pg2 = ts.cone(src_obj_dist=2, src_det_dist=2).to_vec()
 
         source_diff = pg1.src_pos * 2 - pg2.src_pos
         self.assertTrue(np.all(abs(source_diff) < ts.epsilon))
@@ -165,9 +165,7 @@ class TestConeVectorGeometry(unittest.TestCase):
             self.assertEqual(ts.identity()(pg), pg)
 
     def test_to_box(self):
-        pg = ts.cone(
-            10, shape=(5, 3), detector_distance=10, source_distance=11
-        ).to_vec()
+        pg = ts.cone(10, shape=(5, 3), src_obj_dist=11, src_det_dist=21).to_vec()
         src_box, det_box = pg.to_box()
 
         self.assertAlmostEqual(

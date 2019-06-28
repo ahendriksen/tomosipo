@@ -8,35 +8,34 @@ from .base_projection import ProjectionGeometry
 from .cone_vec import ConeVectorGeometry
 
 
-def cone(angles=1, size=np.sqrt(2), shape=1, detector_distance=0, source_distance=2):
+def cone(angles=1, size=np.sqrt(2), shape=1, src_obj_dist=2.0, src_det_dist=2.0):
     """Create a cone-beam geometry
 
-        :param angles: `np.array` or integral value
-            If integral value: the number of angles in the cone-beam
-            geometry. This describes a full arc (2 pi radians) with
-            uniform placement and without the start and end point
-            overlapping.
+    :param angles: `np.array` or integral value
+        If integral value: the number of angles in the cone-beam
+        geometry. This describes a full arc (2 pi radians) with
+        uniform placement and without the start and end point
+        overlapping.
 
-            If np.array: the values of the array are taken as
-            projection angle (units are radians).
-        :param size: (float, float) or float
-            The detector size. If a single float is provided, the
-            detector is square with equal width and height.
+        If np.array: the values of the array are taken as
+        projection angle (units are radians).
+    :param size: (float, float) or float
+        The detector size. If a single float is provided, the
+        detector is square with equal width and height.
 
-            The order is (height, width), i.e. (v, u).
-
-        :param shape: (`int`, `int`) or `int`
-            The detector shape in pixels. If tuple, the order is
-            (height, width). Else the pixel has the same number of
-            pixels in the U and V direction.
-        :param detector_distance: float
-            The detector-origin distance.
-        :param source_distance: float
-            the source-origin distance.
-        :returns: a cone-beam geometry
-        :rtype: ConeGeometry
+        The order is (height, width), i.e. (v, u).
+    :param shape: (`int`, `int`) or `int`
+        The detector shape in pixels. If tuple, the order is
+        (height, width). Else the pixel has the same number of
+        pixels in the U and V direction.
+    :param src_obj_dist: scalar
+        The source to object distance.
+    :param src_det_dist:
+        The source to detector distance.
+    :returns: a cone-beam geometry
+    :rtype: ConeGeometry
     """
-    return ConeGeometry(angles, size, shape, detector_distance, source_distance)
+    return ConeGeometry(angles, size, shape, src_obj_dist, src_det_dist)
 
 
 def random_cone():
@@ -52,10 +51,13 @@ def random_cone():
     angles = np.random.normal(size=20)
     size = np.random.uniform(10, 20, size=2)
     shape = np.random.uniform(10, 20, size=2)
-    detector_distance = np.random.uniform(0, 10)
-    source_distance = np.random.uniform(0, 10)
+    src_obj_dist = np.random.uniform(0, 10)
+    obj_det_dist = np.random.uniform(0, 10)
+    src_det_dist = src_obj_dist + obj_det_dist
 
-    return ts.cone(angles, size, shape, detector_distance, source_distance)
+    return ts.cone(
+        angles, size, shape, src_obj_dist=src_obj_dist, src_det_dist=src_det_dist
+    )
 
 
 class ConeGeometry(ProjectionGeometry):
@@ -63,7 +65,7 @@ class ConeGeometry(ProjectionGeometry):
     """
 
     def __init__(
-        self, angles=1, size=np.sqrt(2), shape=1, detector_distance=0, source_distance=2
+        self, angles=1, size=np.sqrt(2), shape=1, src_obj_dist=2.0, src_det_dist=2.0
     ):
         """Create a cone-beam geometry
 
@@ -80,18 +82,16 @@ class ConeGeometry(ProjectionGeometry):
             detector is square with equal width and height.
 
             The order is (height, width), i.e. (v, u).
-
         :param shape: (`int`, `int`) or `int`
             The detector shape in pixels. If tuple, the order is
             (height, width). Else the pixel has the same number of
             pixels in the U and V direction.
-        :param detector_distance: float
-            The detector-origin distance.
-        :param source_distance: float
-            the source-origin distance.
+        :param src_obj_dist: scalar
+            The source to object distance.
+        :param src_det_dist:
+            The source to detector distance.
         :returns: a cone-beam geometry
         :rtype: ConeGeometry
-
         """
         super(ConeGeometry, self).__init__(shape=shape)
         self.angles_original = angles
@@ -107,10 +107,10 @@ class ConeGeometry(ProjectionGeometry):
             )
         size = up_tuple(size, 2)
 
-        self.angles = angles
-        self.size = size
-        self.detector_distance = detector_distance
-        self.source_distance = source_distance
+        self._angles = angles
+        self._size = tuple(size)
+        self._src_obj_dist = float(src_obj_dist)
+        self._src_det_dist = float(src_det_dist)
 
         self._is_cone = True
         self._is_parallel = False
@@ -121,10 +121,10 @@ class ConeGeometry(ProjectionGeometry):
         return (
             f"ConeGeometry(\n"
             f"    angles={self.angles_original},\n"
-            f"    size={self.size},\n"
+            f"    size={self.det_size},\n"
             f"    shape={self.det_shape},\n"
-            f"    detector_distance={self.detector_distance},\n"
-            f"    source_distance={self.source_distance}\n"
+            f"    src_obj_dist={self._src_obj_dist},\n"
+            f"    src_det_dist={self._src_det_dist}\n"
             f")"
         )
 
@@ -133,17 +133,17 @@ class ConeGeometry(ProjectionGeometry):
             return False
 
         diff_angles = np.array(self.angles) - np.array(other.angles)
-        diff_size = np.array(self.size) - np.array(other.size)
-        diff_detector = self.detector_distance - other.detector_distance
-        diff_source = self.source_distance - other.source_distance
+        diff_size = np.array(self.det_size) - np.array(other.det_size)
+        diff_sod = self.src_obj_dist - other.src_obj_dist
+        diff_sdd = self.src_det_dist - other.src_det_dist
 
         return (
             len(self.angles) == len(other.angles)
             and np.all(abs(diff_angles) < ts.epsilon)
             and np.all(abs(diff_size) < ts.epsilon)
             and np.all(self.det_shape == other.det_shape)
-            and abs(diff_detector) < ts.epsilon
-            and abs(diff_source) < ts.epsilon
+            and abs(diff_sod) < ts.epsilon
+            and abs(diff_sdd) < ts.epsilon
         )
 
     def __getitem__(self, key):
@@ -161,10 +161,10 @@ class ConeGeometry(ProjectionGeometry):
             key = up_slice(key)
             return ConeGeometry(
                 angles=np.asarray(self.angles[key]),
-                size=self.size,
+                size=self.det_size,
                 shape=self.det_shape,
-                detector_distance=self.detector_distance,
-                source_distance=self.source_distance,
+                src_obj_dist=self.src_obj_dist,
+                src_det_dist=self.src_det_dist,
             )
         if isinstance(key, tuple):
             raise IndexError(
@@ -181,15 +181,16 @@ class ConeGeometry(ProjectionGeometry):
         return ConeVectorGeometry.from_astra(astra.geom_2vec(self.to_astra()))
 
     def to_astra(self):
-        detector_spacing = np.array(self.size) / np.array(self.det_shape)
+        detector_spacing = np.array(self.det_size) / np.array(self.det_shape)
+        origin_det_dist = self.src_det_dist - self.src_obj_dist
         return astra.create_proj_geom(
             "cone",
             detector_spacing[1],
             detector_spacing[0],  # u, then v (reversed)
             *self.det_shape,
             self.angles,
-            self.source_distance,
-            self.detector_distance,
+            self.src_obj_dist,
+            origin_det_dist,
         )
 
     def from_astra(astra_pg):
@@ -200,12 +201,15 @@ class ConeGeometry(ProjectionGeometry):
             shape = (astra_pg["DetectorRowCount"], astra_pg["DetectorColCount"])
             angles = astra_pg["ProjectionAngles"]
             size = np.array(det_spacing) * np.array(shape)
+
+            origin_det_dist = astra_pg["DistanceOriginDetector"]
+            src_origin_dist = astra_pg["DistanceOriginSource"]
             return ConeGeometry(
                 angles=angles,
                 size=size,
                 shape=shape,
-                detector_distance=astra_pg["DistanceOriginDetector"],
-                source_distance=astra_pg["DistanceOriginSource"],
+                src_obj_dist=src_origin_dist,
+                src_det_dist=src_origin_dist + origin_det_dist,
             )
         else:
             raise ValueError(
@@ -215,6 +219,27 @@ class ConeGeometry(ProjectionGeometry):
     ###########################################################################
     #                                Properties                               #
     ###########################################################################
+
+    @property
+    def src_obj_dist(self):
+        """The source to object distance
+        """
+        return self._src_obj_dist
+
+    @property
+    def src_det_dist(self):
+        """The source to detector distance
+        """
+        return self._src_det_dist
+
+    @property
+    def angles(self):
+        return np.copy(self._angles)
+
+    @property
+    def det_size(self):
+        return self._size
+
     @ProjectionGeometry.num_angles.getter
     def num_angles(self):
         return len(self.angles)
@@ -243,7 +268,7 @@ class ConeGeometry(ProjectionGeometry):
 
     @ProjectionGeometry.det_sizes.getter
     def det_sizes(self):
-        return np.repeat([self.size], self.num_angles, axis=0)
+        return np.repeat([self.det_size], self.num_angles, axis=0)
 
     @ProjectionGeometry.corners.getter
     def corners(self):
@@ -269,20 +294,20 @@ class ConeGeometry(ProjectionGeometry):
 
         return cone(
             self.angles_original,
-            self.size,
+            self.det_size,
             shape,
-            self.detector_distance,
-            self.source_distance,
+            self.src_obj_dist,
+            self.src_det_dist,
         )
 
     def reshape(self, new_shape):
         new_shape = up_tuple(new_shape, 2)
         return cone(
             self.angles_original,
-            self.size,
+            self.det_size,
             new_shape,
-            self.detector_distance,
-            self.source_distance,
+            self.src_obj_dist,
+            self.src_det_dist,
         )
 
     def project_point(self, point):

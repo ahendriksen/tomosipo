@@ -18,8 +18,7 @@ def test_display_random_parallel_geometry():
 
 
 def test_display_cone_geometry():
-    """Test something."""
-    pg = ts.cone(angles=100, source_distance=10, detector_distance=5)
+    pg = ts.cone(angles=100, src_obj_dist=10, src_det_dist=15)
     vg = ts.volume_from_projection_geometry(pg, inside=False)
 
     if interactive:

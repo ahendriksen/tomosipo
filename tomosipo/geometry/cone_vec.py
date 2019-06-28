@@ -43,14 +43,8 @@ def random_cone_vec():
     :rtype: `ConeVectorGeometry`
 
     """
-    angles = np.random.normal(size=20)
-    size = np.random.uniform(10, 20, size=2)
-    shape = np.random.uniform(10, 20, size=2)
-    detector_distance = np.random.uniform(0, 10)
-    source_distance = np.random.uniform(0, 10)
 
-    pg = ts.cone(angles, size, shape, detector_distance, source_distance)
-    return pg.to_vec()
+    return ts.geometry.random_cone().to_vec()
 
 
 class ConeVectorGeometry(ProjectionGeometry):

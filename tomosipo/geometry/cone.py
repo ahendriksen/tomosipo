@@ -232,10 +232,6 @@ class ConeGeometry(ProjectionGeometry):
         """
         return self._src_det_dist
 
-    @property
-    def det_size(self):
-        return self._size
-
     @ProjectionGeometry.num_angles.getter
     def num_angles(self):
         return len(self.angles)
@@ -265,6 +261,10 @@ class ConeGeometry(ProjectionGeometry):
     @ProjectionGeometry.ray_dir.getter
     def ray_dir(self):
         raise NotImplementedError()
+
+    @ProjectionGeometry.det_size.getter
+    def det_size(self):
+        return self._size
 
     @ProjectionGeometry.det_sizes.getter
     def det_sizes(self):

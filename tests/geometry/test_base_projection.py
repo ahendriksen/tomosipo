@@ -3,7 +3,10 @@
 
 """Tests for ProjectionGeometry."""
 
+
 import pytest
+from pytest import approx
+import numpy as np
 import tomosipo as ts
 from tomosipo.geometry.base_projection import ProjectionGeometry, is_projection
 
@@ -64,6 +67,22 @@ def test_interface(default_proj_geoms):
         assert pg.det_pos.shape == (pg.num_angles, 3)
         assert pg.det_v.shape == (pg.num_angles, 3)
         assert pg.det_u.shape == (pg.num_angles, 3)
+
+        if pg.is_vec and pg.num_angles == 1:
+            assert pg.det_sizes[0] == approx(pg.det_size)
+        if pg.is_vec and pg.num_angles > 1:
+            with pytest.raises(ValueError):
+                # If the detector size is constant, check that it is
+                # consistent.
+                assert pg.det_sizes[0] == approx(pg.det_size)
+                # If so, make the detector size differ:
+                S = ts.scale(np.random.normal(size=(pg.num_angles, 3)))
+                # The detector size should not be uniform anymore, and
+                # this should raise an error.
+                S(pg).det_size
+        else:
+            assert len(pg.det_size) == 2
+
         assert pg.det_sizes.shape == (pg.num_angles, 2)
         assert pg.corners.shape == (pg.num_angles, 4, 3)
         if pg.det_shape[0] % 2 == 0 and pg.det_shape[1] % 2 == 0:

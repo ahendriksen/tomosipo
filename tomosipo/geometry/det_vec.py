@@ -276,6 +276,19 @@ class DetectorVectorGeometry(ProjectionGeometry):
     def ray_dir(self):
         raise NotImplementedError()
 
+    @ProjectionGeometry.det_size.getter
+    def det_size(self):
+        height = vc.norm(self._det_v * self.det_shape[0])
+        width = vc.norm(self._det_u * self.det_shape[1])
+
+        height_constant = abs(min(height) - max(height)) < ts.epsilon
+        width_constant = abs(min(width) - max(width)) < ts.epsilon
+
+        if height_constant and width_constant:
+            return (height[0], width[0])
+        else:
+            raise ValueError("The size of the detector is not constant. ")
+
     @ProjectionGeometry.det_sizes.getter
     def det_sizes(self):
         height = vc.norm(self._det_v * self.det_shape[0])

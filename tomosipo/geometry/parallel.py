@@ -224,6 +224,10 @@ class ParallelGeometry(ProjectionGeometry):
     def ray_dir(self):
         return self.to_vec().ray_dir
 
+    @ProjectionGeometry.det_size.getter
+    def det_size(self):
+        return self._size
+
     @ProjectionGeometry.det_sizes.getter
     def det_sizes(self):
         return np.repeat([self._size], self.num_angles, axis=0)

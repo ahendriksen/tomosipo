@@ -240,6 +240,10 @@ class ConeVectorGeometry(ProjectionGeometry):
     def ray_dir(self):
         raise NotImplementedError()
 
+    @ProjectionGeometry.det_size.getter
+    def det_size(self):
+        return self._det_vec.det_size
+
     @ProjectionGeometry.det_sizes.getter
     def det_sizes(self):
         return self._det_vec.det_sizes

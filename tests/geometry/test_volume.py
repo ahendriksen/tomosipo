@@ -175,7 +175,7 @@ class TestVolumeGeometry(unittest.TestCase):
     def test_to_box(self):
         vg = ts.volume(shape=(3, 5, 7))
         box = vg.to_box()
-        self.assertAlmostEqual(box.size, vg.size())
+        self.assertAlmostEqual(0.0, np.sum(abs(box.abs_size - vg.size())))
 
     def test_transform(self):
         for _ in range(10):

@@ -199,7 +199,7 @@ class ConeVectorGeometry(ProjectionGeometry):
         # The source of course does not really have a size, but we
         # want to be able to visualize it, so we take the height
         # divided by 10.
-        src_size = (det_box.size[0] / 10,) * 3
+        src_size = (det_box.rel_size[0] / 10,) * 3
         # We set the orientation of the source to be identical to
         # that of the detector.
         src_box = ts.box(src_size, self.src_pos, det_box.w, det_box.v, det_box.u)

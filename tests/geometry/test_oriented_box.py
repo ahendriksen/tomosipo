@@ -37,6 +37,19 @@ def test_init():
         ts.box(1, [(0, 0, 0)] * N, [(1, 0, 0)] * N, [(0, 1, 0)] * N, [(0, 1, 0)] * 3)
 
 
+def test_repr():
+    unit_box = ts.box(size=1, pos=(0, 0, 0))
+    r = """OrientedBox(
+    size=(1, 1, 1),
+    pos=[[0 0 0]],
+    w=[[1 0 0]],
+    v=[[0 1 0]],
+    u=[[0 0 1]],
+)"""
+
+    assert repr(unit_box) == r
+
+
 def test_eq():
     ob = ts.box(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1))
 
@@ -54,17 +67,24 @@ def test_eq():
         assert ob != u
 
 
-def test_abs_size():
+def test_size_properties():
     basis = np.array(((1, 0, 0), (0, 1, 0), (0, 0, 1)))
     ob = ts.box(1, 0, *basis)
 
     for s in np.random.uniform(ts.epsilon, 1, 10):
-        assert approx(0.0) == np.sum(
-            abs(ob.abs_size - ts.box(s, 0, *(basis / s)).abs_size)
-        )
-        assert approx(0.0) == np.sum(
-            abs(ob.abs_size - ts.box(1 / s, 0, *(basis * s)).abs_size)
-        )
+        assert approx(ob.abs_size) == ts.box(s, 0, *(basis / s)).abs_size
+        assert approx(ob.abs_size) == ts.box(1 / s, 0, *(basis * s)).abs_size
+
+    # Check that `size` fails:
+    with pytest.raises(NotImplementedError), pytest.warns(DeprecationWarning):
+        ob.size
+
+    # Check that abs_size and rel_size behave under scaling:
+    N = 4
+    for s in np.random.normal(size=(N, 5, 3)):
+        S = ts.scale(s)
+        assert ob.rel_size == S(ob).rel_size
+        assert ob.abs_size * abs(s) == approx(S(ob).abs_size)
 
 
 def test_corners():

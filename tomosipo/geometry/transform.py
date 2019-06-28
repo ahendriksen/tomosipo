@@ -118,7 +118,7 @@ def scale(s):
     return Transform(S)
 
 
-def rotate(position, axis, *, rad=None, deg=None, right_handed=True):
+def rotate(pos, axis, *, rad=None, deg=None, right_handed=True):
     """Rotate around axis through position by some angle
 
     The parameters `position` and `axis` are interpreted as
@@ -133,7 +133,7 @@ def rotate(position, axis, *, rad=None, deg=None, right_handed=True):
     `right_handed=True` is set (the default), then the rotation is
     translated to a left-handed rotation matrix.
 
-    :param position: `np.array` or `scalar`
+    :param pos: `np.array` or `scalar`
         The position through which the axis moves.
     :param axis:
         The axis of rotation.
@@ -167,12 +167,12 @@ def rotate(position, axis, *, rad=None, deg=None, right_handed=True):
     # 3) Undo the perspective change
 
     # Create perspective transformation:
-    if np.isscalar(position):
-        position = up_tuple(position, 3)
-    position = vc.to_homogeneous_point(position)
+    if np.isscalar(pos):
+        pos = up_tuple(pos, 3)
+    pos = vc.to_homogeneous_point(pos)
     axis = vc.to_homogeneous_vec(axis)
     a0, a1, a2 = vc.orthogonal_basis_from_axis(axis)
-    S = from_perspective(position, a0, a1, a2)
+    S = from_perspective(pos, a0, a1, a2)
 
     # Create rotation matrix
     zero = np.zeros_like(theta)

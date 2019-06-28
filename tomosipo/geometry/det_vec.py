@@ -94,9 +94,9 @@ class DetectorVectorGeometry(ProjectionGeometry):
 
         vc.check_same_shapes(det_pos, det_v, det_u)
 
-        self.detector_positions = det_pos
-        self.detector_vs = det_v
-        self.detector_us = det_u
+        self._det_pos = det_pos
+        self._det_v = det_v
+        self._det_u = det_u
 
         self._is_cone = False
         self._is_parallel = False
@@ -106,9 +106,9 @@ class DetectorVectorGeometry(ProjectionGeometry):
         return (
             f"DetectorVectorGeometry(\n"
             f"    shape={self.det_shape},\n"
-            f"    det_pos={self.detector_positions},\n"
-            f"    det_u={self.detector_vs},\n"
-            f"    det_v={self.detector_us}"
+            f"    det_pos={self._det_pos},\n"
+            f"    det_u={self._det_v},\n"
+            f"    det_v={self._det_u}"
             f")"
         )
 
@@ -116,9 +116,9 @@ class DetectorVectorGeometry(ProjectionGeometry):
         if not isinstance(other, DetectorVectorGeometry):
             return False
 
-        dpos_diff = self.detector_positions - other.detector_positions
-        us_diff = self.detector_us - other.detector_us
-        vs_diff = self.detector_vs - other.detector_vs
+        dpos_diff = self._det_pos - other._det_pos
+        us_diff = self._det_u - other._det_u
+        vs_diff = self._det_v - other._det_v
 
         return (
             self.det_shape == other.det_shape
@@ -164,8 +164,8 @@ class DetectorVectorGeometry(ProjectionGeometry):
 
             new_shape = (lenV, lenU)
             new_det_pos = new_center[up_slice(key[0])]
-            new_det_vs = self.detector_vs[up_slice(key[0])] * stepV
-            new_det_us = self.detector_us[up_slice(key[0])] * stepU
+            new_det_vs = self._det_v[up_slice(key[0])] * stepV
+            new_det_us = self._det_u[up_slice(key[0])] * stepU
 
             return det_vec(new_shape, new_det_pos, new_det_vs, new_det_us)
 
@@ -175,10 +175,10 @@ class DetectorVectorGeometry(ProjectionGeometry):
         # three columns to zero.
         vectors = np.concatenate(
             [
-                self.detector_positions[:, ::-1] * 0,
-                self.detector_positions[:, ::-1],
-                self.detector_us[:, ::-1],
-                self.detector_vs[:, ::-1],
+                self._det_pos[:, ::-1] * 0,
+                self._det_pos[:, ::-1],
+                self._det_u[:, ::-1],
+                self._det_v[:, ::-1],
             ],
             axis=1,
         )
@@ -216,9 +216,9 @@ class DetectorVectorGeometry(ProjectionGeometry):
         :rtype:  `OrientedBox`
 
         """
-        det_pos = self.detector_positions
-        w = self.detector_vs  # v points up, w points up
-        u = self.detector_us  # detector_u and u point in the same direction
+        det_pos = self._det_pos
+        w = self._det_v  # v points up, w points up
+        u = self._det_u  # detector_u and u point in the same direction
 
         # TODO: Fix vc.norm so we do not need [:, None]
         # We do not want to introduce scaling, so we normalize w and u.
@@ -248,7 +248,7 @@ class DetectorVectorGeometry(ProjectionGeometry):
 
     @ProjectionGeometry.num_angles.getter
     def num_angles(self):
-        return len(self.detector_positions)
+        return len(self._det_pos)
 
     @ProjectionGeometry.src_pos.getter
     def src_pos(self):
@@ -256,15 +256,15 @@ class DetectorVectorGeometry(ProjectionGeometry):
 
     @ProjectionGeometry.det_pos.getter
     def det_pos(self):
-        return np.copy(self.detector_positions)
+        return np.copy(self._det_pos)
 
     @ProjectionGeometry.det_v.getter
     def det_v(self):
-        return np.copy(self.detector_vs)
+        return np.copy(self._det_v)
 
     @ProjectionGeometry.det_u.getter
     def det_u(self):
-        return np.copy(self.detector_us)
+        return np.copy(self._det_u)
 
     # TODO: det_normal
 
@@ -274,15 +274,15 @@ class DetectorVectorGeometry(ProjectionGeometry):
 
     @ProjectionGeometry.det_sizes.getter
     def det_sizes(self):
-        height = vc.norm(self.detector_vs * self.det_shape[0])
-        width = vc.norm(self.detector_us * self.det_shape[1])
+        height = vc.norm(self._det_v * self.det_shape[0])
+        width = vc.norm(self._det_u * self.det_shape[1])
         return np.stack([height, width], axis=1)
 
     @ProjectionGeometry.corners.getter
     def corners(self):
-        ds = self.detector_positions
-        u_offset = self.detector_us * self.det_shape[1] / 2
-        v_offset = self.detector_vs * self.det_shape[0] / 2
+        ds = self._det_pos
+        u_offset = self._det_u * self.det_shape[1] / 2
+        v_offset = self._det_v * self.det_shape[0] / 2
 
         return np.array(
             [
@@ -296,9 +296,9 @@ class DetectorVectorGeometry(ProjectionGeometry):
     @property
     def lower_left_corner(self):
         return (
-            self.detector_positions
-            - (self.detector_vs * self.det_shape[0]) / 2
-            - (self.detector_us * self.det_shape[1]) / 2
+            self._det_pos
+            - (self._det_v * self.det_shape[0]) / 2
+            - (self._det_u * self.det_shape[1]) / 2
         )
 
     ###########################################################################
@@ -323,10 +323,10 @@ class DetectorVectorGeometry(ProjectionGeometry):
         scaleV, scaleU = int(scaleV), int(scaleU)
 
         shape = (self.det_shape[0] // scaleV, self.det_shape[1] // scaleU)
-        det_v = self.detector_vs * scaleV
-        det_u = self.detector_us * scaleU
+        det_v = self._det_v * scaleV
+        det_u = self._det_u * scaleU
 
-        return det_vec(shape, self.detector_positions, det_v, det_u)
+        return det_vec(shape, self._det_pos, det_v, det_u)
 
     def reshape(self, new_shape):
         """Reshape detector pixels without changing detector size
@@ -349,9 +349,9 @@ class DetectorVectorGeometry(ProjectionGeometry):
         raise NotImplementedError()
 
     def transform(self, matrix):
-        det_pos = vc.to_homogeneous_point(self.detector_positions)
-        det_v = vc.to_homogeneous_vec(self.detector_vs)
-        det_u = vc.to_homogeneous_vec(self.detector_us)
+        det_pos = vc.to_homogeneous_point(self._det_pos)
+        det_v = vc.to_homogeneous_vec(self._det_v)
+        det_u = vc.to_homogeneous_vec(self._det_u)
 
         det_pos = vc.to_vec(vc.matrix_transform(matrix, det_pos))
         det_v = vc.to_vec(vc.matrix_transform(matrix, det_v))

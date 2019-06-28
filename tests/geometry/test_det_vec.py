@@ -5,6 +5,7 @@ import tomosipo as ts
 from tomosipo.geometry import random_transform
 import tomosipo.geometry.det_vec as dv
 from tomosipo.utils import up_tuple
+from tomosipo.geometry import transform
 
 
 @pytest.fixture
@@ -161,7 +162,7 @@ def test_transform(det_vecs):
         T2 = random_transform()
 
         assert T1(T2)(pg) == T1(T2(pg))
-        assert ts.identity()(pg) == pg
+        assert transform.identity()(pg) == pg
 
 
 def test_project_point(det_vecs):

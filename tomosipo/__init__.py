@@ -18,7 +18,6 @@ from .geometry.parallel_vec import parallel_vec
 from .geometry.parallel import parallel
 from .geometry.oriented_box import box
 from .geometry.transform import (
-    identity,
     translate,
     scale,
     rotate,

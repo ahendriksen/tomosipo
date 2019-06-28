@@ -9,6 +9,7 @@ import numpy as np
 import tomosipo as ts
 from tomosipo.geometry import random_transform, random_cone_vec
 import tomosipo.vector_calc as vc
+from tomosipo.geometry import transform
 
 
 class TestConeVectorGeometry(unittest.TestCase):
@@ -162,7 +163,7 @@ class TestConeVectorGeometry(unittest.TestCase):
             T2 = random_transform()
 
             self.assertEqual(T1(T2)(pg), T1(T2(pg)))
-            self.assertEqual(ts.identity()(pg), pg)
+            self.assertEqual(transform.identity()(pg), pg)
 
     def test_to_box(self):
         pg = ts.cone(10, shape=(5, 3), src_obj_dist=11, src_det_dist=21).to_vec()

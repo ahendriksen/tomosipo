@@ -7,10 +7,11 @@
 import tomosipo as ts
 from tomosipo.geometry import random_box
 import numpy as np
+from tomosipo.geometry import transform
 
 
 def test_identity():
-    T = ts.identity()
+    T = transform.identity()
     box = ts.box(1, (-1, -2, -3), (2, 3, 5), (7, 11, 13), (17, 19, 23))
     assert T(box) == box
     for _ in range(5):
@@ -20,7 +21,7 @@ def test_identity():
 
 
 def test_eq():
-    T = ts.identity()
+    T = transform.identity()
     assert T == T
     for _ in range(5):
         params = np.random.normal(0, 1, size=(1, 3))
@@ -145,7 +146,7 @@ def test_perspective():
         assert unit == to_unit_cube(random_box)
 
         # Check that to_unit_cube is the inverse of to_random_box
-        assert to_random_box(to_unit_cube) == ts.identity()
+        assert to_random_box(to_unit_cube) == transform.identity()
 
         # Check that we can use pos, w, v, u parameters:
         to_random_box2 = ts.to_perspective(

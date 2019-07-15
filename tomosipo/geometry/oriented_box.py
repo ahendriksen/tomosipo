@@ -286,6 +286,7 @@ class OrientedBox(object):
 def display_oriented_box(*boxes):
     app = get_app()
     view = gl.GLViewWidget()
+    view.setBackgroundColor(0.95)
     view.show()
 
     idx = []

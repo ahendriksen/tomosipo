@@ -76,7 +76,6 @@ def test_scale():
 
 
 def test_rotate(interactive):
-    # TODO: Test continuity as axis approaches (0, 0, 1)
     N = 50
     for p, axis in np.random.normal(size=(N, 2, 3)):
         angle = 2 * np.pi * np.random.normal()
@@ -120,7 +119,7 @@ def test_rotate(interactive):
     R = ts.rotate((0, 0, 0), (1, 0, 0), deg=s, right_handed=True)
 
     if interactive:
-        ts.display(R(box), top_box)
+        ts.display(R * box, top_box)
 
 
 def test_perspective():

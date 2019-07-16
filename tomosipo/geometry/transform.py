@@ -13,13 +13,12 @@ class Transform(object):
         super(Transform, self).__init__()
         self.matrix, _ = vc._broadcastmm(matrix, matrix)
 
-    def __call__(self, x):
-        if hasattr(x, "transform"):
-            return x.transform(self.matrix)
+    def __mul__(self, other):
+        if isinstance(other, Transform):
+            M = vc.matrix_matrix_transform(self.matrix, other.matrix)
+            return Transform(M)
         else:
-            raise TypeError(
-                f"Transform does not support transforming objects of type {type(x)}."
-            )
+            return NotImplemented
 
     def __repr__(self):
         return f"Transform(\n" f"    {self.matrix}\n" f")"
@@ -30,10 +29,6 @@ class Transform(object):
         A, B = vc._broadcastmm(self.matrix, other.matrix)
 
         return np.all(abs(A - B) < ts.epsilon)
-
-    def transform(self, matrix):
-        M = vc.matrix_matrix_transform(matrix, self.matrix)
-        return Transform(M)
 
     @property
     def inv(self):
@@ -188,7 +183,7 @@ def rotate(pos, axis, *, rad=None, deg=None, right_handed=True):
     # 2) Rotate around the `Z` axis;
     # 3) Undo the perspective change
     #       (3) (2)(1)
-    return S.inv(R)(S)
+    return S.inv * R * S
 
 
 def to_perspective(pos=None, w=None, v=None, u=None, box=None):
@@ -267,4 +262,4 @@ def random_transform():
     R = ts.rotate(pos, axis, rad=angle)
     S = ts.scale(s)
 
-    return R(S)(T)
+    return R * S * T

@@ -57,7 +57,7 @@ T = ts.translate(t)
 
 # Once we have obtained a translation, we can apply it to the
 # projection geometry we already have and visualize the result:
-helical_pg = T(pg)
+helical_pg = T * pg
 ts.display(helical_pg, vg)
 
 # XXX: Why do we want to change everything into boxes now?
@@ -70,23 +70,23 @@ ts.display(src_box, vol_box, det_box)
 # This is the same as what we have seen before. However, we may also
 # look at it from the perspective of the detector!
 S = ts.from_perspective(box=det_box)
-ts.display(S(src_box), S(vol_box), S(det_box))
+ts.display(S * src_box, S * vol_box, S * det_box)
 
 # What if the detector is actually a bit tilted? Let's say 10 degrees.
 rot10 = ts.rotate(det_box.pos, det_box.v, deg=10)
 # This is what it looks like:
-ts.display(src_box, vol_box, rot10(det_box))
+ts.display(src_box, vol_box, rot10 * det_box)
 
 # And from the perspective of the detector:
-S = ts.from_perspective(box=rot10(det_box))
-ts.display(S(src_box), S(vol_box), S(det_box))
+S = ts.from_perspective(box=rot10 * det_box)
+ts.display(S * src_box, S * vol_box, S * det_box)
 
 # Alright. That looks like our acquisition geometry
-ts.display(vg, rot10(helical_pg))
+ts.display(vg, rot10 * helical_pg)
 
 # Now let's do some tomography! First generate data.
 vd = ts.data(vg)
-pd = ts.data(rot10(helical_pg))
+pd = ts.data(rot10 * helical_pg)
 
 # Let's put a hollow box phantom in the volume and visualize it.
 ts.phantom.hollow_box(vd)
@@ -101,7 +101,7 @@ ts.display(pd)
 # To do a reconstruction, we use SIRT. But to use SIRT, we need C and
 # R matrices. This is what we are going to calculate with two
 # temporary data objects, helpfully named vd_tmp and pd_tmp.
-with ts.data(vg) as vd_tmp, ts.data(rot10(helical_pg)) as pd_tmp:
+with ts.data(vg) as vd_tmp, ts.data(rot10 * helical_pg) as pd_tmp:
     # Calculate R
     vd_tmp.data[:] = 1.0
     ts.forward(vd_tmp, pd_tmp)
@@ -175,7 +175,7 @@ with pd.clone() as tmp:
     ts.display(tmp)
 
 # This whole business could actually be done quicker:
-A = ts.operator(vg, rot10(helical_pg))
+A = ts.operator(vg, rot10 * helical_pg)
 with A(vd) as tmp:
     tmp.data[:] -= pd.data
     ts.display(tmp)

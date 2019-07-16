@@ -13,11 +13,11 @@ from tomosipo.geometry import transform
 def test_identity():
     T = transform.identity()
     box = ts.box(1, (-1, -2, -3), (2, 3, 5), (7, 11, 13), (17, 19, 23))
-    assert T(box) == box
+    assert T * box == box
     for _ in range(5):
         params = np.random.normal(0, 1, size=(5, 3))
         box = ts.box(*params)
-        assert T(box) == box
+        assert T * box == box
 
 
 def test_eq():
@@ -35,12 +35,14 @@ def test_translate():
 
     # "Simple case": we check that the position of a rotated box
     # changes correctly.
-    rotate = ts.rotate((2, 3, 5), axis=(7, 11, -13), deg=15)
-    original = rotate(ts.box(size=(3, 4, 5), pos=(2, 3, 5)))
+    R = ts.rotate((2, 3, 5), axis=(7, 11, -13), deg=15)
+    original = R * ts.box(size=(3, 4, 5), pos=(2, 3, 5))
 
     t = np.array((3, 4, 5))
     T = ts.translate(t)
-    assert T(original) == ts.box(
+    print(T * original)
+    print(ts.box((3, 4, 5), t + (2, 3, 5), original.w, original.v, original.u))
+    assert T * original == ts.box(
         (3, 4, 5), t + (2, 3, 5), original.w, original.v, original.u
     )
 
@@ -52,14 +54,14 @@ def test_translate():
         T2 = ts.translate(t2)
         T = ts.translate(t1 + t2)
 
-        assert T1(T2)(box) == T1(T2(box))
-        assert T1(T2) == T
+        assert (T1 * T2) * box == T1 * (T2 * box)
+        assert T1 * T2 == T
 
 
 def test_scale():
     unit = ts.box(size=1, pos=0)
-    assert ts.scale(5)(unit) == ts.box(5, 0)
-    assert ts.scale((5, 3, 2))(unit) == ts.box(size=(5, 3, 2), pos=0)
+    assert ts.scale(5) * unit == ts.box(5, 0)
+    assert ts.scale((5, 3, 2)) * unit == ts.box(size=(5, 3, 2), pos=0)
 
     # Check that scaling by s1 and s2 is the same as scaling by s1 + s2.
     N = 10
@@ -69,8 +71,8 @@ def test_scale():
         S2 = ts.scale(s2)
         S = ts.scale(s1 * s2)
 
-        assert S1(S2)(box) == S1(S2(box))
-        assert S1(S2) == S
+        assert (S1 * S2) * box == S1 * (S2 * box)
+        assert S1 * S2 == S
 
 
 def test_rotate(interactive):
@@ -105,8 +107,8 @@ def test_rotate(interactive):
         R2 = ts.rotate(pos, axis, rad=theta2)
         R = ts.rotate(pos, axis, rad=theta1 + theta2)
 
-        assert R1(R2)(box) == R1(R2(box))
-        assert R1(R2) == R
+        assert (R1 * R2) * box == R1 * (R2 * box)
+        assert R1 * R2 == R
 
     # Show a box rotating around the Z-axis:
     box = ts.box((5, 2, 2), 0, (1, 0, 0), (0, 1, 0), (0, 0, 1))
@@ -135,18 +137,18 @@ def test_perspective():
         T = ts.translate(t)
         R = ts.rotate(p, axis, rad=angle)
         # We now have a unit cube on some random location:
-        random_box = R(T)(unit)
+        random_box = (R * T) * unit
 
         # Check that we can move the unit cube to the random box:
         to_random_box = ts.to_perspective(box=random_box)
-        assert random_box == to_random_box(unit)
+        assert random_box == to_random_box * unit
 
         # Check that we can move the random box to the unit cube:
         to_unit_cube = ts.from_perspective(box=random_box)
-        assert unit == to_unit_cube(random_box)
+        assert unit == to_unit_cube * random_box
 
         # Check that to_unit_cube is the inverse of to_random_box
-        assert to_random_box(to_unit_cube) == transform.identity()
+        assert to_random_box * to_unit_cube == transform.identity()
 
         # Check that we can use pos, w, v, u parameters:
         to_random_box2 = ts.to_perspective(

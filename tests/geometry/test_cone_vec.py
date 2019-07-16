@@ -162,8 +162,8 @@ class TestConeVectorGeometry(unittest.TestCase):
             T1 = random_transform()
             T2 = random_transform()
 
-            self.assertEqual(T1(T2)(pg), T1(T2(pg)))
-            self.assertEqual(transform.identity()(pg), pg)
+            self.assertEqual((T1 * T2) * pg, T1 * (T2 * pg))
+            self.assertEqual(transform.identity() * pg, pg)
 
     def test_to_box(self):
         pg = ts.cone(10, shape=(5, 3), src_obj_dist=11, src_det_dist=21).to_vec()
@@ -193,5 +193,5 @@ class TestConeVectorGeometry(unittest.TestCase):
             # should not affect project_point.
             p = vc.to_vec((3, 5, 7))
             T = ts.translate(np.random.normal() * (pg.src_pos - p))
-            assert pg.project_point(p).shape == T(pg).project_point(p).shape
-            assert pg.project_point(p) == approx(T(pg).project_point(p))
+            assert pg.project_point(p).shape == (T * pg).project_point(p).shape
+            assert pg.project_point(p) == approx((T * pg).project_point(p))

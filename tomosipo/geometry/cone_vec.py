@@ -4,6 +4,7 @@ import tomosipo.vector_calc as vc
 from tomosipo.utils import up_tuple, up_slice
 from .base_projection import ProjectionGeometry
 from . import det_vec as dv
+from .transform import Transform
 
 
 def cone_vec(shape, src_pos, det_pos, det_v, det_u):
@@ -301,11 +302,13 @@ class ConeVectorGeometry(ProjectionGeometry):
 
         return np.stack((det_i_v, det_i_u), axis=-1)
 
-    def transform(self, matrix):
-        src_pos = vc.to_homogeneous_point(self._src_pos)
-        src_pos = vc.to_vec(vc.matrix_transform(matrix, src_pos))
+    def __rmul__(self, other):
+        if isinstance(other, Transform):
+            matrix = other.matrix
+            src_pos = vc.to_homogeneous_point(self._src_pos)
+            src_pos = vc.to_vec(vc.matrix_transform(matrix, src_pos))
 
-        det_vec = self._det_vec.transform(matrix)
-        return ConeVectorGeometry(
-            self.det_shape, src_pos, det_vec.det_pos, det_vec.det_v, det_vec.det_u
-        )
+            det_vec = other * self._det_vec
+            return ConeVectorGeometry(
+                self.det_shape, src_pos, det_vec.det_pos, det_vec.det_v, det_vec.det_u
+            )

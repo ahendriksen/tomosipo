@@ -133,7 +133,7 @@ def reconstruct(proj, param_dict):
     src = ts.box(size=1, pos=src_pos)
     det = ts.box((det_size[0], 0, det_size[1]), pos=det_pos)
     R = ts.rotate(obj_pos, (1, 0, 0), rad=angles)
-    vol = R(ts.box(size=det_size[0] / 5, pos=obj_pos))
+    vol = R * ts.box(size=det_size[0] / 5, pos=obj_pos)
 
     axes = ["Z", "Y", "X"]
     src_coords = tuple(param_dict[" ".join(["Src", ax])] for ax in axes)
@@ -143,20 +143,20 @@ def reconstruct(proj, param_dict):
     src_tr = ts.translate(src_coords)
     vol_tr = ts.translate(vol_coords)
     det_tr = ts.translate(det_coords)
-    src_cor = src_tr(src)
-    vol_cor = vol_tr(vol)
-    det_cor = det_tr(det)
+    src_cor = src_tr * src
+    vol_cor = vol_tr * vol
+    det_cor = det_tr * det
 
     P = ts.from_perspective(box=vol_cor)
     # We create projection geometry using the positions that we have
     # determined above:
     pg = ts.cone_vec(
         shape=original_shape,
-        src_pos=P(src_cor).pos,
-        det_pos=P(det_cor).pos,
+        src_pos=(P * src_cor).pos,
+        det_pos=(P * det_cor).pos,
         # w is the upward pointing vector of the detector box.
-        det_v=s.original_pixel_size * P(det_cor).w,
-        det_u=s.original_pixel_size * P(det_cor).u,
+        det_v=s.original_pixel_size * (P * det_cor).w,
+        det_u=s.original_pixel_size * (P * det_cor).u,
     )
     # Determine volume geometry
     vg = ts.volume_from_projection_geometry(pg)

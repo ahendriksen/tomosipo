@@ -172,8 +172,8 @@ def test_transform():
         T2 = random_transform()
 
         with pytest.warns(Warning):
-            assert T1(T2)(pg) == T1(T2(pg))
-            assert transform.identity()(pg) == pg.to_vec()
+            assert (T1 * T2) * pg == T1 * (T2 * pg)
+            assert transform.identity() * pg == pg.to_vec()
 
 
 def test_to_box():

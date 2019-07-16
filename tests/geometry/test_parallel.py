@@ -149,7 +149,7 @@ def test_transform(par_geoms):
             # parallel vector geometry behind the scenes, for which we
             # get a warning.
             T = random_transform()
-            T(pg)
+            T * pg
 
 
 def test_project_point(par_geoms):
@@ -164,15 +164,15 @@ def test_project_point(par_geoms):
             # Translating the parallel geometry converts it to a
             # parallel vector geometry behind the scenes, for which we
             # get a warning.
-            assert pg.project_point(p).shape == T(pg).project_point(p).shape
-            assert pg.project_point(p) == approx(T(pg).project_point(p))
+            assert pg.project_point(p).shape == (T * pg).project_point(p).shape
+            assert pg.project_point(p) == approx((T * pg).project_point(p))
             # ray_dir is orthogonal to the detector plane, so we should
             # also be able to move along the detector normal:
             T = ts.translate(pg.det_normal)
-            assert pg.project_point(p).shape == T(pg).project_point(p).shape
-            assert pg.project_point(p) == approx(T(pg).project_point(p))
+            assert pg.project_point(p).shape == (T * pg).project_point(p).shape
+            assert pg.project_point(p) == approx((T * pg).project_point(p))
             # Translating the detector by (v,u) should reduce project_point by (1, 1):
             T = ts.translate(pg.det_v + pg.det_u)
-            assert pg.project_point(p) - T(pg).project_point(p) == approx(
+            assert pg.project_point(p) - (T * pg).project_point(p) == approx(
                 np.ones((pg.num_angles, 2))
             )

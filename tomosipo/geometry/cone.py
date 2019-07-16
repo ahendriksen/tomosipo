@@ -6,6 +6,7 @@ import tomosipo as ts
 from tomosipo.utils import up_tuple, up_slice
 from .base_projection import ProjectionGeometry
 from .cone_vec import ConeVectorGeometry
+from .transform import Transform
 
 
 def cone(angles=1, size=np.sqrt(2), shape=1, src_obj_dist=2.0, src_det_dist=2.0):
@@ -283,14 +284,15 @@ class ConeGeometry(ProjectionGeometry):
     ###########################################################################
     #                                 Methods                                 #
     ###########################################################################
-    def transform(self, matrix):
-        warnings.warn(
-            "Converting cone geometry to vector geometry. "
-            "Use `T(pg.to_vec())` to inhibit this warning. ",
-            stacklevel=2,
-        )
+    def __rmul__(self, other):
+        if isinstance(other, Transform):
+            warnings.warn(
+                "Converting cone geometry to vector geometry. "
+                "Use `T * pg.to_vec()` to inhibit this warning. ",
+                stacklevel=2,
+            )
 
-        return self.to_vec().transform(matrix)
+            return other * self.to_vec()
 
     def rescale_det(self, scale):
         scaleV, scaleU = up_tuple(scale, 2)

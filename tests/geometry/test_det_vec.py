@@ -168,8 +168,8 @@ def test_transform(det_vecs):
         T1 = random_transform()
         T2 = random_transform()
 
-        assert T1(T2)(pg) == T1(T2(pg))
-        assert transform.identity()(pg) == pg
+        assert (T1 * T2) * pg == T1 * (T2 * pg)
+        assert transform.identity() * pg == pg
 
 
 def test_project_point(det_vecs):

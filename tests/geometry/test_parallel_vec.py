@@ -169,12 +169,12 @@ def test_transform(par_vecs):
         T1 = random_transform()
         T2 = random_transform()
 
-        assert T1(T2)(pg) == T1(T2(pg))
-        assert transform.identity()(pg) == pg
+        assert (T1 * T2) * pg == T1 * (T2 * pg)
+        assert transform.identity() * pg == pg
 
     for pg in par_vecs:
         T = ts.translate(np.random.normal(size=3))
-        assert T(pg).ray_dir == approx(pg.ray_dir)
+        assert (T * pg).ray_dir == approx(pg.ray_dir)
 
 
 def test_project_point(par_vecs):
@@ -185,5 +185,5 @@ def test_project_point(par_vecs):
         # should not affect project_point.
         p = vc.to_vec((3, 5, 7))
         T = ts.translate(pg.ray_dir)
-        assert pg.project_point(p).shape == T(pg).project_point(p).shape
-        assert pg.project_point(p) == approx(T(pg).project_point(p))
+        assert pg.project_point(p).shape == (T * pg).project_point(p).shape
+        assert pg.project_point(p) == approx((T * pg).project_point(p))

@@ -6,6 +6,7 @@ import warnings
 import itertools
 from tomosipo.utils import up_tuple, slice_interval
 import tomosipo as ts
+from .transform import Transform
 
 
 def is_volume(g):
@@ -379,13 +380,14 @@ class VolumeGeometry:
         """
         return ts.box(self.size(), self.get_center(), (1, 0, 0), (0, 1, 0), (0, 0, 1))
 
-    def transform(self, matrix):
-        warnings.warn(
-            "Converting VolumeGeometry to OrientedBox. "
-            "Use `T(vg.to_box())` to inhibit this warning. ",
-            stacklevel=2,
-        )
-        return self.to_box().transform(matrix)
+    def __rmul__(self, other):
+        if isinstance(other, Transform):
+            warnings.warn(
+                "Converting VolumeGeometry to OrientedBox. "
+                "Use `T * vg.to_box()` to inhibit this warning. ",
+                stacklevel=2,
+            )
+            return other * self.to_box()
 
     def __getitem__(self, key):
         """Return self[key]

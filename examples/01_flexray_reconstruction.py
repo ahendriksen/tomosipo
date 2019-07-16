@@ -117,7 +117,7 @@ angles = -np.linspace(0, 2 * np.pi, num_angles, endpoint=True)
 src = ts.box(size=det_size[0] / 10, pos=src_pos)
 det = ts.box((det_size[0], 0, det_size[1]), pos=det_pos)
 R = ts.rotate(obj_pos, (1, 0, 0), rad=angles)
-vol = R(ts.box(size=det_size[0] / 5, pos=obj_pos))
+vol = R * ts.box(size=det_size[0] / 5, pos=obj_pos)
 
 # We can visualize the geometry. NB: Do zoom out to see the whole
 # scene.
@@ -127,9 +127,9 @@ ts.display(src, vol, det)
 det_tan = ts.translate((0, 0, 24))  # 'det_tan': 24,
 src_ort = ts.translate((-7, 0, 0))  # 'src_ort': -7,
 axs_tan = ts.translate((0, 0, -0.5))  # 'axs_tan': -0.5,
-src_cor = src_ort(src)
-vol_cor = axs_tan(vol)
-det_cor = det_tan(det)
+src_cor = src_ort * src
+vol_cor = axs_tan * vol
+det_cor = det_tan * det
 
 # We can visualize the corrections by displaying the original
 # configuration alongside the corrected configuration. Note that you
@@ -141,17 +141,17 @@ ts.display(src, vol, det, src_cor, vol_cor, det_cor)
 # of the volume. This should look familiar to those accustomed to
 # Astra projection geometries.
 P = ts.from_perspective(box=vol_cor)
-ts.display(P(src_cor), P(vol_cor), P(det_cor))
+ts.display(P * src_cor, P * vol_cor, P * det_cor)
 
 # We create projection geometry using the positions that we have
 # determined above:
 pg = ts.cone_vec(
     shape=original_shape,
-    src_pos=P(src_cor).pos,
-    det_pos=P(det_cor).pos,
+    src_pos=(P * src_cor).pos,
+    det_pos=(P * det_cor).pos,
     # w is the upward pointing vector of the detector box.
-    det_v=s.original_pixel_size * P(det_cor).w,
-    det_u=s.original_pixel_size * P(det_cor).u,
+    det_v=s.original_pixel_size * (P * det_cor).w,
+    det_u=s.original_pixel_size * (P * det_cor).u,
 )
 # For most reasonable geometries, tomosipo can deduce the size and
 # position of a reasonable volume geometry for us.

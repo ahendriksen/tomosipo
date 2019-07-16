@@ -6,6 +6,7 @@ import tomosipo as ts
 from tomosipo.utils import up_tuple, up_slice
 from .base_projection import ProjectionGeometry
 from .parallel_vec import ParallelVectorGeometry
+from .transform import Transform
 
 
 def parallel(angles=1, size=np.sqrt(2), shape=1):
@@ -259,11 +260,11 @@ class ParallelGeometry(ProjectionGeometry):
     def project_point(self, point):
         return self.to_vec().project_point(point)
 
-    def transform(self, matrix):
-        warnings.warn(
-            "Converting parallel geometry to vector geometry. "
-            "Use `T(pg.to_vec())` to inhibit this warning. ",
-            stacklevel=2,
-        )
-
-        return self.to_vec().transform(matrix)
+    def __rmul__(self, other):
+        if isinstance(other, Transform):
+            warnings.warn(
+                "Converting parallel geometry to vector geometry. "
+                "Use `T * pg.to_vec()` to inhibit this warning. ",
+                stacklevel=2,
+            )
+            return other * self.to_vec()

@@ -12,6 +12,7 @@ import tomosipo.vector_calc as vc
 from tomosipo.utils import up_tuple, up_slice, slice_interval
 from numbers import Integral
 from .base_projection import ProjectionGeometry
+from .transform import Transform
 
 
 def det_vec(shape, det_pos, det_v, det_u):
@@ -368,13 +369,15 @@ class DetectorVectorGeometry(ProjectionGeometry):
     def project_point(self, point):
         raise NotImplementedError()
 
-    def transform(self, matrix):
-        det_pos = vc.to_homogeneous_point(self._det_pos)
-        det_v = vc.to_homogeneous_vec(self._det_v)
-        det_u = vc.to_homogeneous_vec(self._det_u)
+    def __rmul__(self, other):
+        if isinstance(other, Transform):
+            matrix = other.matrix
+            det_pos = vc.to_homogeneous_point(self._det_pos)
+            det_v = vc.to_homogeneous_vec(self._det_v)
+            det_u = vc.to_homogeneous_vec(self._det_u)
 
-        det_pos = vc.to_vec(vc.matrix_transform(matrix, det_pos))
-        det_v = vc.to_vec(vc.matrix_transform(matrix, det_v))
-        det_u = vc.to_vec(vc.matrix_transform(matrix, det_u))
+            det_pos = vc.to_vec(vc.matrix_transform(matrix, det_pos))
+            det_v = vc.to_vec(vc.matrix_transform(matrix, det_v))
+            det_u = vc.to_vec(vc.matrix_transform(matrix, det_u))
 
-        return det_vec(self.det_shape, det_pos, det_v, det_u)
+            return det_vec(self.det_shape, det_pos, det_v, det_u)

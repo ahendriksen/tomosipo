@@ -8,6 +8,7 @@ import pyqtgraph.opengl as gl
 from tomosipo.display import run_app, get_app, rainbow_colormap
 import itertools
 from tomosipo import vector_calc as vc
+from .transform import Transform
 
 
 def box(size, pos, w=(1, 0, 0), v=(0, 1, 0), u=(0, 0, 1)):
@@ -56,7 +57,7 @@ def random_box():
 
     RT = ts.geometry.random_transform()
     box = ts.box(size, pos)
-    return RT(box)
+    return RT * box
 
 
 class OrientedBox(object):
@@ -268,18 +269,20 @@ class OrientedBox(object):
         """
         return len(self._pos)
 
-    def transform(self, matrix):
-        pos = vc.to_homogeneous_point(self._pos)
-        w = vc.to_homogeneous_vec(self._w)
-        v = vc.to_homogeneous_vec(self._v)
-        u = vc.to_homogeneous_vec(self._u)
+    def __rmul__(self, other):
+        if isinstance(other, Transform):
+            matrix = other.matrix
+            pos = vc.to_homogeneous_point(self._pos)
+            w = vc.to_homogeneous_vec(self._w)
+            v = vc.to_homogeneous_vec(self._v)
+            u = vc.to_homogeneous_vec(self._u)
 
-        new_pos = vc.to_vec(vc.matrix_transform(matrix, pos))
-        new_w = vc.to_vec(vc.matrix_transform(matrix, w))
-        new_v = vc.to_vec(vc.matrix_transform(matrix, v))
-        new_u = vc.to_vec(vc.matrix_transform(matrix, u))
+            new_pos = vc.to_vec(vc.matrix_transform(matrix, pos))
+            new_w = vc.to_vec(vc.matrix_transform(matrix, w))
+            new_v = vc.to_vec(vc.matrix_transform(matrix, v))
+            new_u = vc.to_vec(vc.matrix_transform(matrix, u))
 
-        return OrientedBox(self.rel_size, new_pos, new_w, new_v, new_u)
+            return OrientedBox(self.rel_size, new_pos, new_w, new_v, new_u)
 
 
 @ts.display.register(OrientedBox)

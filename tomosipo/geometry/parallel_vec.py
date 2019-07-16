@@ -8,6 +8,7 @@ import tomosipo.vector_calc as vc
 from tomosipo.utils import up_tuple, up_slice
 from .base_projection import ProjectionGeometry
 from . import det_vec as dv
+from .transform import Transform
 
 
 def parallel_vec(shape, ray_dir, det_pos, det_v, det_u):
@@ -295,11 +296,13 @@ class ParallelVectorGeometry(ProjectionGeometry):
 
         return np.stack((det_i_v, det_i_u), axis=-1)
 
-    def transform(self, matrix):
-        ray_dir = vc.to_homogeneous_vec(self._ray_dir)
-        ray_dir = vc.to_vec(vc.matrix_transform(matrix, ray_dir))
+    def __rmul__(self, other):
+        if isinstance(other, Transform):
+            matrix = other.matrix
+            ray_dir = vc.to_homogeneous_vec(self._ray_dir)
+            ray_dir = vc.to_vec(vc.matrix_transform(matrix, ray_dir))
 
-        det_vec = self._det_vec.transform(matrix)
-        return parallel_vec(
-            self.det_shape, ray_dir, det_vec.det_pos, det_vec.det_v, det_vec.det_u
-        )
+            det_vec = other * self._det_vec
+            return parallel_vec(
+                self.det_shape, ray_dir, det_vec.det_pos, det_vec.det_v, det_vec.det_u
+            )

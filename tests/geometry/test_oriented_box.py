@@ -84,8 +84,8 @@ def test_size_properties():
     N = 4
     for s in np.random.normal(size=(N, 5, 3)):
         S = ts.scale(s)
-        assert ob.rel_size == S(ob).rel_size
-        assert ob.abs_size * abs(s) == approx(S(ob).abs_size)
+        assert ob.rel_size == (S * ob).rel_size
+        assert ob.abs_size * abs(s) == approx((S * ob).abs_size)
 
 
 def test_corners():
@@ -151,15 +151,15 @@ def test_transform():
         T1 = random_transform()
         T2 = random_transform()
 
-        assert T1(T2)(box) == T1(T2(box))
-        assert transform.identity()(box) == box
+        assert (T1 * T2) * box == T1 * (T2 * box)
+        assert transform.identity() * box == box
 
-        assert T1.inv(T1(box)) == box
-        assert T1.inv(T1)(box) == box
+        assert T1.inv * (T1 * box) == box
+        assert (T1.inv * T1) * box == box
 
 
 def test_display_auto_center(interactive):
-    boxes = [ts.scale(.01)(random_box()) for _ in range(16)]
+    boxes = [ts.scale(.01) * random_box() for _ in range(16)]
 
     if interactive:
         ts.display(*boxes)
@@ -197,5 +197,5 @@ def test_transform_example(interactive):
 
     if interactive:
         ts.display(ob1, ob2)
-        ts.display(ob1.transform(M1.matrix), ob2.transform(M1.matrix))
-        ts.display(ob1.transform(M2.matrix), ob2.transform(M2.matrix))
+        ts.display(M1 * ob1, M1 * ob2)
+        ts.display(M2 * ob1, M2 * ob2)

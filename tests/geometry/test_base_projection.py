@@ -82,7 +82,7 @@ def test_interface(default_proj_geoms):
                 S = ts.scale(np.random.normal(size=(pg.num_angles, 3)))
                 # The detector size should not be uniform anymore, and
                 # this should raise an error.
-                S(pg).det_size
+                (S * pg).det_size
         else:
             assert len(pg.det_size) == 2
 

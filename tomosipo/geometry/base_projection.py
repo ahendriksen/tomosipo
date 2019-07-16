@@ -1,5 +1,6 @@
 import numpy as np
 from tomosipo.utils import up_tuple
+from .transform import Transform
 
 
 def is_projection(g):
@@ -345,14 +346,17 @@ class ProjectionGeometry(object):
 
         raise NotImplementedError()
 
-    def transform(self, matrix):
+    def __rmul__(self, other):
         """Applies a projective matrix transformation to geometry
 
-        :param matrix: `np.array`
+        :param other: `np.array`
             A transformation matrix
         :returns: A transformed geometry
         :rtype: `ProjectionGeometry`
 
         """
 
-        raise NotImplementedError()
+        if isinstance(other, Transform):
+            raise NotImplementedError()
+
+        return NotImplemented

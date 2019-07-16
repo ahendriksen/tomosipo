@@ -113,6 +113,7 @@ def scale(s):
     return Transform(S)
 
 
+
 def rotate(pos, axis, *, rad=None, deg=None, right_handed=True):
     """Rotate around axis through position by some angle
 
@@ -145,6 +146,14 @@ def rotate(pos, axis, *, rad=None, deg=None, right_handed=True):
     :rtype:
 
     """
+    if np.isscalar(pos):
+        pos = up_tuple(pos, 3)
+    pos = vc.to_homogeneous_point(pos)
+    axis = vc.to_homogeneous_vec(axis)
+    pos, axis = vc._broadcastv(pos, axis)
+
+    axis = axis / vc.norm(axis)
+
     if rad is None and deg is None:
         raise ValueError("At least one of `rad=` or `deg=` parameters is required.")
     # Define theta in radians
@@ -152,38 +161,41 @@ def rotate(pos, axis, *, rad=None, deg=None, right_handed=True):
     # Make theta of shape `(num_steps, 1)`
     theta = vc.to_scalar(theta)
 
-    # Make the rotation right-handed if necessary
-    if right_handed:
+    # Make the rotation left-handed if necessary
+    if not right_handed:
         theta = -theta
 
     # Do the following:
-    # 1) Move to a perspective where the axis of rotation aligns with the `Z` axis;
-    # 2) Rotate around the `Z` axis;
-    # 3) Undo the perspective change
+    # 1) Translate such that `pos` is at the origin;
+    # 2) Rotate around `axis`;
+    # 3) Undo the translation.
 
-    # Create perspective transformation:
-    if np.isscalar(pos):
-        pos = up_tuple(pos, 3)
-    pos = vc.to_homogeneous_point(pos)
-    axis = vc.to_homogeneous_vec(axis)
-    a0, a1, a2 = vc.orthogonal_basis_from_axis(axis)
-    S = from_perspective(pos, a0, a1, a2)
+    # 1) Translation matrix
+    T = ts.translate(-pos)
+    # 2) Rotation matrix
+    # https://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
+    axis_0, axis_1, axis_2 = axis[:, 0], axis[:, 1], axis[:, 2]
+    R00 = np.cos(theta) + np.square(axis_0) * (1 - np.cos(theta))
+    R01 = axis_0 * axis_1 * (1 - np.cos(theta)) - axis_2 * np.sin(theta)
+    R02 = axis_0 * axis_2 * (1 - np.cos(theta)) + axis_1 * np.sin(theta)
 
-    # Create rotation matrix
-    zero = np.zeros_like(theta)
-    one = np.ones_like(theta)
-    R0 = np.stack([one, zero, zero, zero], axis=1)
-    R1 = np.stack([zero, np.cos(theta), np.sin(theta), zero], axis=1)
-    R2 = np.stack([zero, -np.sin(theta), np.cos(theta), zero], axis=1)
+    R10 = axis_1 * axis_0 * (1 - np.cos(theta)) + axis_2 * np.sin(theta)
+    R11 = np.cos(theta) + np.square(axis_1) * (1 - np.cos(theta))
+    R12 = axis_1 * axis_2 * (1 - np.cos(theta)) - axis_0 * np.sin(theta)
+
+    R20 = axis_2 * axis_0 * (1 - np.cos(theta)) - axis_1 * np.sin(theta)
+    R21 = axis_2 * axis_1 * (1 - np.cos(theta)) + axis_0 * np.sin(theta)
+    R22 = np.cos(theta) + np.square(axis_2) * (1 - np.cos(theta))
+
+    one = np.ones_like(R00)
+    zero = np.zeros_like(R00)
+    R0 = np.stack([R00, R01, R02, zero], axis=1)
+    R1 = np.stack([R10, R11, R12, zero], axis=1)
+    R2 = np.stack([R20, R21, R22, zero], axis=1)
     R3 = np.stack([zero, zero, zero, one], axis=1)
     R = Transform(np.concatenate([R0, R1, R2, R3], axis=2))
 
-    # Do the following:
-    # 1) Move to a perspective where the axis of rotation aligns with the `Z` axis;
-    # 2) Rotate around the `Z` axis;
-    # 3) Undo the perspective change
-    #       (3) (2)(1)
-    return S.inv * R * S
+    return T.inv * R * T
 
 
 def to_perspective(pos=None, w=None, v=None, u=None, box=None):

@@ -34,7 +34,7 @@ class TorchBackend(object):
             raise ValueError(f"Expected initial_value to be a `torch.Tensor'. Got {initial_value.__class__}")
 
         if initial_value.shape == torch.Size([]):
-            self._data = torch.zeros(shape, dtype=torch.float32)
+            self._data = torch.zeros(shape, dtype=torch.float32, device=initial_value.device)
             self._data[:] = initial_value
         else:
             if shape != initial_value.shape:

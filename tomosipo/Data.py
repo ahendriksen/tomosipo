@@ -58,7 +58,6 @@ class Data(object):
         """
         super(Data, self).__init__()
         self.geometry = geometry
-        self.initial_value = initial_value
         self.astra_geom = geometry.to_astra()
 
         if self.is_volume():

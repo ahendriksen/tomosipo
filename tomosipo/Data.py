@@ -66,7 +66,7 @@ class Data(object):
             shape = geometry.shape
         elif self.is_projection():
             astra_data_type = "-sino"
-            shape = (geometry.shape[0], geometry.num_angles, geometry.shape[1])
+            shape = (geometry.det_shape[0], geometry.num_angles, geometry.det_shape[1])
         else:
             raise ValueError(
                 f"Geometry '{geometry.__class__}' is not supported. Cannot determine if volume or projection geometry."
@@ -147,7 +147,6 @@ class NumpyBackend(object):
         super(NumpyBackend, self).__init__()
         self._shape = shape
 
-
         if initial_value is None:
             self._data = np.zeros(shape, dtype=np.float32)
         elif np.isscalar(initial_value):
@@ -171,7 +170,6 @@ class NumpyBackend(object):
                 )
                 initial_value = np.ascontiguousarray(initial_value)
             self._data = initial_value
-
 
     def get_linkable_array(self):
         return self._data

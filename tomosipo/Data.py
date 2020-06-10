@@ -37,6 +37,12 @@ def data(geometry, initial_value=None):
     return Data(geometry, initial_value)
 
 
+backends = [
+    # NumpyBackend is appended below;
+    # TorchBackend is only supported when explicitly imported.
+]
+
+
 class Data(object):
     """Data: a data manager for Astra
 
@@ -68,10 +74,19 @@ class Data(object):
             shape = (geometry.det_shape[0], geometry.num_angles, geometry.det_shape[1])
         else:
             raise ValueError(
-                f"Geometry '{geometry.__class__}' is not supported. Cannot determine if volume or projection geometry."
+                f"Geometry '{type(geometry)}' is not supported. Cannot determine if volume or projection geometry."
             )
 
-        self._backend = NumpyBackend(shape, initial_value)
+        self._backend = None
+        for backend in backends:
+            if backend.accepts_initial_value(initial_value):
+                self._backend = backend(shape, initial_value)
+
+        if self._backend is None:
+            raise ValueError(
+                f"An initial_value of class {type(initial_value)} is not supported. "
+                f"For torch support please `import tomosipo.torch_support`. "
+            )
 
         self.astra_id = astra.data3d.link(
             astra_data_type, self.astra_geom, self._backend.get_linkable_array()
@@ -137,7 +152,6 @@ class Data(object):
         return self.astra_id
 
 
-
 class NumpyBackend(object):
     """Documentation for NumpyBackend
 
@@ -170,6 +184,17 @@ class NumpyBackend(object):
                 initial_value = np.ascontiguousarray(initial_value)
             self._data = initial_value
 
+    @staticmethod
+    def accepts_initial_value(initial_value):
+        # `NumpyBackend' is the default backend, so it should accept
+        # an initial_value of `None'.
+        if initial_value is None:
+            return True
+        if isinstance(initial_value, np.ndarray):
+            return True
+        else:
+            return False
+
     def get_linkable_array(self):
         return self._data
 
@@ -195,12 +220,16 @@ class NumpyBackend(object):
 
     @data.setter
     def data(self, val):
-        if val != self._data:
-            raise AttributeError(
-                "You cannot change which numpy array backs a dataset.\n"
-                "To change the underlying data instead, use: \n"
-                " >>> vd.data[:] = new_data\n"
-            )
+        raise AttributeError(
+            "You cannot change which numpy array backs a dataset.\n"
+            "To change the underlying data instead, use: \n"
+            " >>> vd.data[:] = new_data\n"
+        )
+
+
+backends.append(NumpyBackend)
+
+
 
 
 @ts.display.register(Data)

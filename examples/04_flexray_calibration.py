@@ -1,7 +1,8 @@
 """
 This example requires numexpr:
 
-!conda install numexpr
+conda install numexpr tifffile pyqtgraph tqdm -c defaults -c conda-forge
+pip install git+https://github.com/ahendriksen/tomosipo.git@develop
 
 """
 import tomosipo as ts
@@ -19,8 +20,8 @@ from pyqtgraph.parametertree import Parameter, ParameterTree
 ###############################################################################
 #                                  Parameters                                 #
 ###############################################################################
-initial_binning = 2
-path = "/export/scratch2/hendriks/datasets/oatmeal/zoom1"
+initial_binning = 1
+path = "/export/scratch1/hendriks/noisy"
 path = Path(path).expanduser().resolve()
 
 ###############################################################################
@@ -128,6 +129,7 @@ def reconstruct(proj, param_dict):
 
     # The object rotates clockwise:
     angles = np.linspace(0, 2 * np.pi, num_angles, endpoint=True)
+    angles += param_dict["Angle offset"]
     if param_dict["Rotate clockwise"]:
         angles *= -1
     src = ts.box(size=1, pos=src_pos)
@@ -159,11 +161,21 @@ def reconstruct(proj, param_dict):
         det_u=s.original_pixel_size * (P * det_cor).u,
     )
     # Determine volume geometry
-    vg = ts.volume_from_projection_geometry(pg)
+    vol_ver_voxels = param_dict["Vol vertical voxels"]
+    vol_hor_voxels = param_dict["Vol horizontal voxels"]
+    vol_shape = np.array((vol_ver_voxels, vol_hor_voxels, vol_hor_voxels))
     voxel_size = (
         s.sod / s.sdd * s.original_pixel_size * s.binning_value * initial_binning
     )
-    vg = vg.with_voxel_size(voxel_size)
+    vol_size = voxel_size * vol_shape
+    vol_center = (
+        param_dict["Vol Z"],
+        param_dict["Vol Y"],
+        param_dict["Vol X"],
+    )
+    vg = ts.volume(shape=vol_shape, center=vol_center, size=vol_size)
+    # vg = ts.volume_from_projection_geometry(pg)
+    # vg = vg.with_voxel_size(voxel_size)
 
     # Take region of interest on detector plane
     l, t, r, b = s["roi_ltrb"]
@@ -175,6 +187,11 @@ def reconstruct(proj, param_dict):
     # Apply additional software binning:
     additional_binning = param_dict["Additional binning"]
     pg = pg[::additional_binning, ::additional_binning, ::additional_binning]
+
+    print(pg)
+    print("det_pos", pg.det_pos)
+    print("src_pos", pg.src_pos)
+    print("vol_pos", vg.get_center())
     ###############################################################################
     #                                Reconstruction                               #
     ###############################################################################
@@ -230,6 +247,9 @@ params = [
             {"name": "Vol Z", "type": "float", "value": 0.0, "step": 0.1},
             {"name": "Vol Y", "type": "float", "value": 0.0, "step": 0.1},
             {"name": "Vol X", "type": "float", "value": -0.5, "step": 0.1},
+            {"name": "Angle offset", "type": "float", "value": 0.0, "step": 0.1},
+            {"name": "Vol vertical voxels", "type": "int", "value": 1600, "step": 1},
+            {"name": "Vol horizontal voxels", "type": "int", "value": 1600, "step": 1},
             {"name": "Det Z", "type": "float", "value": 0.0, "step": 0.1},
             {"name": "Det Y", "type": "float", "value": 0.0, "step": 0.1},
             {"name": "Det X", "type": "float", "value": 24.0, "step": 0.1},
@@ -254,6 +274,9 @@ def make_param_dict():
         for ax in axes:
             d[" ".join([obj, ax])] = 0.0
 
+    d["Angle offset"] = 0.0
+    d["Vol vertical voxels"] = 100
+    d["Vol horizontal voxels"] = 100
     d["Rotate clockwise"] = True
     d["Additional binning"] = 4
     d["Show XY"] = True

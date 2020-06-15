@@ -21,7 +21,7 @@ def astra_projector(
 
 
 def project(
-    *data, voxel_supersampling=1, detector_supersampling=1, forward=None, additive=False
+        *data, voxel_supersampling=1, detector_supersampling=1, forward=None, additive=False, projector=None,
 ):
     """Project forward or backward
 
@@ -46,6 +46,9 @@ def project(
     :param additive: bool
         If True, add projection data to existing data. Otherwise
         overwrite data.
+    :param projector: ??
+        It is possible to provide a pre-generated ASTRA projector. Use
+        `ts.Operator.astra_projector' to generate an astra projector.
     :returns:
     :rtype:
 
@@ -60,12 +63,13 @@ def project(
         raise ValueError(
             "Expected at least one projection dataset and one volume dataset"
         )
-    projector = astra_projector(
-        vol_data[0].geometry,
-        proj_data[0].geometry,
-        voxel_supersampling=voxel_supersampling,
-        detector_supersampling=detector_supersampling,
-    )
+    if projector is None:
+        projector = astra_projector(
+            vol_data[0].geometry,
+            proj_data[0].geometry,
+            voxel_supersampling=voxel_supersampling,
+            detector_supersampling=detector_supersampling,
+        )
     # These constants have become the default. See:
     # https://github.com/astra-toolbox/astra-toolbox/commit/4d673b3cdb6d27d430087758a8081e4a10267595
     MODE_SET = 1
@@ -80,7 +84,7 @@ def project(
     )
 
 
-def forward(*data, voxel_supersampling=1, detector_supersampling=1, additive=False):
+def forward(*data, voxel_supersampling=1, detector_supersampling=1, additive=False, projector=None):
     """Forward project
 
     Projects all volumes on all projection datasets.
@@ -99,6 +103,9 @@ def forward(*data, voxel_supersampling=1, detector_supersampling=1, additive=Fal
         will be used.  This should only be used if your voxels in
         the reconstruction volume are larger than the detector
         pixels.  (default: 1)
+    :param projector: ??
+        It is possible to provide a pre-generated ASTRA projector. Use
+        `ts.Operator.astra_projector' to generate an astra projector.
     :returns:
     :rtype:
     """
@@ -108,11 +115,12 @@ def forward(*data, voxel_supersampling=1, detector_supersampling=1, additive=Fal
         voxel_supersampling=voxel_supersampling,
         detector_supersampling=detector_supersampling,
         additive=additive,
-        forward=True
+        forward=True,
+        projector=projector,
     )
 
 
-def backward(*data, voxel_supersampling=1, detector_supersampling=1, additive=False):
+def backward(*data, voxel_supersampling=1, detector_supersampling=1, additive=False, projector=None):
     """Backproject
 
     Backprojects all projection datasets on all volumes.
@@ -131,6 +139,9 @@ def backward(*data, voxel_supersampling=1, detector_supersampling=1, additive=Fa
         will be used.  This should only be used if your voxels in
         the reconstruction volume are larger than the detector
         pixels.  (default: 1)
+    :param projector: ??
+        It is possible to provide a pre-generated ASTRA projector. Use
+        `ts.Operator.astra_projector' to generate an astra projector.
     :returns:
     :rtype:
 
@@ -140,7 +151,8 @@ def backward(*data, voxel_supersampling=1, detector_supersampling=1, additive=Fa
         voxel_supersampling=voxel_supersampling,
         detector_supersampling=detector_supersampling,
         additive=additive,
-        forward=False
+        forward=False,
+        projector=projector,
     )
 
 

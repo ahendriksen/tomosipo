@@ -198,6 +198,18 @@ class NumpyBackend(object):
     def get_linkable_array(self):
         return self._data
 
+    def new_zeros(self, shape):
+        return NumpyBackend(
+            shape,
+            np.zeros(shape, dtype=self._data.dtype),
+        )
+
+    def new_full(self, shape, value):
+        return NumpyBackend(
+            shape,
+            np.full(shape, value, dtype=self._data.dtype),
+        )
+
     @property
     def data(self):
         """Returns a shared numpy array with the underlying data.

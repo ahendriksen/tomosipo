@@ -79,6 +79,18 @@ class TorchBackend(object):
             # modify it. So this should be fine.
             return self._data.detach().numpy()
 
+    def new_zeros(self, shape):
+        return TorchBackend(
+            shape,
+            self._data.new_zeros(shape)
+        )
+
+    def new_full(self, shape, value):
+        return TorchBackend(
+            shape,
+            self._data.new_full(shape, value)
+        )
+
     @property
     def data(self):
         """Returns a shared array with the underlying data.

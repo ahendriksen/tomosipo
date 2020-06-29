@@ -43,6 +43,29 @@ backends = [
 ]
 
 
+def get_linkable_array(shape, arr):
+    for backend in backends:
+        if backend.accepts_initial_value(arr):
+            return backend(shape, arr)
+    raise ValueError(
+        f"An initial_value of class {type(arr)} is not supported. "
+        f"For torch support please `import tomosipo.torch_support`. "
+    )
+
+
+def get_geometry_shape(geometry):
+    g = geometry
+
+    if ts.geometry.is_volume(g):
+        return g.shape
+    elif ts.geometry.is_projection(g):
+        return (g.det_shape[0], g.num_angles, g.det_shape[1])
+    else:
+        raise ValueError(
+            f"Geometry '{type(geometry)}' is not supported. Cannot determine if volume or projection geometry."
+        )
+
+
 class Data(object):
     """Data: a data manager for Astra
 
@@ -66,12 +89,11 @@ class Data(object):
         self.geometry = geometry
         self.astra_geom = geometry.to_astra()
 
+        shape = get_geometry_shape(geometry)
         if self.is_volume():
             astra_data_type = "-vol"
-            shape = geometry.shape
         elif self.is_projection():
             astra_data_type = "-sino"
-            shape = (geometry.det_shape[0], geometry.num_angles, geometry.det_shape[1])
         else:
             raise ValueError(
                 f"Geometry '{type(geometry)}' is not supported. Cannot determine if volume or projection geometry."

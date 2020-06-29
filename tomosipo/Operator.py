@@ -229,6 +229,100 @@ def operator(
     )
 
 
+def direct_project(
+        projector, vol_data, proj_data, forward=None, additive=False,
+):
+    """Project forward or backward
+
+    Forward/back projects a volume onto a projection dataset.
+
+    # TODO: Describe vol_data and proj_data
+    :param projector: ??
+        It is possible to provide a pre-generated ASTRA projector. Use
+        `ts.Operator.astra_projector' to generate an astra projector.
+
+    :param forward: bool
+        True for forward project, False for backproject.
+    :param additive: bool
+        If True, add projection data to existing data. Otherwise
+        overwrite data.
+    :returns:
+    :rtype:
+
+    """
+    if forward is None:
+        raise ValueError("project must be given a forward argument (True/False).")
+
+    # These constants have become the default. See:
+    # https://github.com/astra-toolbox/astra-toolbox/commit/4d673b3cdb6d27d430087758a8081e4a10267595
+    MODE_SET = 1
+    MODE_ADD = 0
+
+    astra.experimental.direct_FPBP3D(
+        projector,
+        vol_data,
+        proj_data,
+        MODE_ADD if additive else MODE_SET,
+        "FP" if forward else "BP",
+    )
+
+
+def direct_fp(
+        projector, vol_data, proj_data, additive=False,
+):
+    """Project forward or backward
+
+    Forward/back projects a volume onto a projection dataset.
+
+    # TODO: Describe vol_data and proj_data
+    :param projector: ??
+        It is possible to provide a pre-generated ASTRA projector. Use
+        `ts.Operator.astra_projector' to generate an astra projector.
+    :param additive: bool
+        If True, add projection data to existing data. Otherwise
+        overwrite data.
+    :returns:
+    :rtype:
+
+    """
+
+    return direct_project(
+        projector,
+        vol_data,
+        proj_data,
+        forward=True,
+        additive=additive,
+    )
+
+
+def direct_bp(
+        projector, vol_data, proj_data, additive=False,
+):
+    """Project forward or backward
+
+    Forward/back projects a volume onto a projection dataset.
+
+    # TODO: Describe vol_data and proj_data
+    :param projector: ??
+        It is possible to provide a pre-generated ASTRA projector. Use
+        `ts.Operator.astra_projector' to generate an astra projector.
+    :param additive: bool
+        If True, add projection data to existing data. Otherwise
+        overwrite data.
+    :returns:
+    :rtype:
+
+    """
+
+    return direct_project(
+        projector,
+        vol_data,
+        proj_data,
+        forward=False,
+        additive=additive,
+    )
+
+
 class Operator(object):
     """Documentation for Operator
 

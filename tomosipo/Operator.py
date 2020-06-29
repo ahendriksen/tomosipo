@@ -362,11 +362,13 @@ class Operator(object):
         self.volume_geometry = volume_geometry
         self.projection_geometry = projection_geometry
 
-        self.opts = dict(
+        self.astra_projector = astra_projector(
+            volume_geometry,
+            projection_geometry,
             voxel_supersampling=voxel_supersampling,
             detector_supersampling=detector_supersampling,
-            additive=additive,
         )
+        self.additive = additive
 
     def __call__(self, volume, out=None):
         """Apply forward projection
@@ -392,12 +394,24 @@ class Operator(object):
         :rtype: `Data`
 
         """
-        vd = ts.data(self.volume_geometry, volume)
-        pd = ts.data(self.projection_geometry, out)
+        vshape = ts.Data.get_geometry_shape(self.volume_geometry)
+        pshape = ts.Data.get_geometry_shape(self.projection_geometry)
+        vlink = ts.Data.get_linkable_array(vshape, volume)
 
-        forward(vd, pd, **self.opts)
+        if out is not None:
+            plink = ts.Data.get_linkable_array(pshape, out)
+        else:
+            # TODO: use new_empty
+            plink = vlink.new_zeros(pshape)
 
-        return pd
+        direct_fp(
+            self.astra_projector,
+            vlink.get_linkable_array(),
+            plink.get_linkable_array(),
+            additive=self.additive
+        )
+
+        return plink.data
 
     def transpose(self, projection, out=None):
         """Apply backprojection
@@ -424,9 +438,22 @@ class Operator(object):
         :rtype: `Data`
 
         """
-        vd = ts.data(self.volume_geometry, out)
-        pd = ts.data(self.projection_geometry, projection)
+        vshape = ts.Data.get_geometry_shape(self.volume_geometry)
+        pshape = ts.Data.get_geometry_shape(self.projection_geometry)
 
-        backward(vd, pd, **self.opts)
+        plink = ts.Data.get_linkable_array(pshape, projection)
 
-        return vd
+        if out is not None:
+            vlink = ts.Data.get_linkable_array(vshape, out)
+        else:
+            # TODO: use new_empty
+            vlink = plink.new_zeros(vshape)
+
+        direct_bp(
+            self.astra_projector,
+            vlink.get_linkable_array(),
+            plink.get_linkable_array(),
+            additive=self.additive
+        )
+
+        return vlink.data

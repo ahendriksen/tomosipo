@@ -4,7 +4,7 @@ import tomosipo as ts
 import warnings
 import pyqtgraph as pq
 from tomosipo.display import get_app, run_app
-
+from contextlib import contextmanager
 
 def data(geometry, initial_value=None):
     """Create a managed Astra Data3d object
@@ -231,6 +231,29 @@ class NumpyBackend(object):
             shape,
             np.full(shape, value, dtype=self._data.dtype),
         )
+
+    def __compatible_with__(self, other):
+        if isinstance(other, NumpyBackend):
+            return True
+        else:
+            return NotImplemented
+
+    @contextmanager
+    def context(self):
+        """Context-manager to manage ASTRA interactions
+
+        This is a no-op for numpy data.
+
+        This context-manager used, for example, for pytorch data on
+        GPU to make sure the current CUDA stream is set to the device
+        of the input data.
+
+        :returns:
+        :rtype:
+
+        """
+
+        yield
 
     @property
     def data(self):

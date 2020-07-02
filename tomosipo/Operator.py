@@ -1,5 +1,6 @@
 import astra
 import tomosipo as ts
+import warnings
 
 
 def astra_projector(
@@ -229,8 +230,27 @@ def operator(
     )
 
 
+def links_are_compatible(link_a, link_b):
+    a_compat_with_b = link_a.__compatible_with__(link_b)
+    if a_compat_with_b is True:
+        return True
+    elif a_compat_with_b == NotImplemented:
+        b_compat_with_a = link_b.__compatible_with__(link_a)
+        if b_compat_with_a is True:
+            return True
+        elif b_compat_with_a == NotImplemented:
+            warnings.warn(
+                f"Cannot determine of link of type {type(link_a)} is compatible with {type(link_b)}. "
+                "Continuing anyway."
+            )
+        else:
+            return False
+    else:
+        return False
+
+
 def direct_project(
-        projector, vol_data, proj_data, forward=None, additive=False,
+        projector, vol_link, proj_link, forward=None, additive=False,
 ):
     """Project forward or backward
 
@@ -258,13 +278,20 @@ def direct_project(
     MODE_SET = 1
     MODE_ADD = 0
 
-    astra.experimental.direct_FPBP3D(
-        projector,
-        vol_data,
-        proj_data,
-        MODE_ADD if additive else MODE_SET,
-        "FP" if forward else "BP",
-    )
+    if not links_are_compatible(vol_link, proj_link):
+        raise ValueError(
+            "Cannot perform ASTRA projection on volume and projection data, because they are not compatible. "
+            "Usually, this indicates that the data are located on different computing devices. "
+        )
+
+    with vol_link.context():
+        astra.experimental.direct_FPBP3D(
+            projector,
+            vol_link.get_linkable_array(),
+            proj_link.get_linkable_array(),
+            MODE_ADD if additive else MODE_SET,
+            "FP" if forward else "BP",
+        )
 
 
 def direct_fp(
@@ -406,8 +433,8 @@ class Operator(object):
 
         direct_fp(
             self.astra_projector,
-            vlink.get_linkable_array(),
-            plink.get_linkable_array(),
+            vlink,
+            plink,
             additive=self.additive
         )
 
@@ -451,9 +478,9 @@ class Operator(object):
 
         direct_bp(
             self.astra_projector,
-            vlink.get_linkable_array(),
-            plink.get_linkable_array(),
-            additive=self.additive
+            vlink,
+            plink,
+            additive=self.additive,
         )
 
         return vlink.data

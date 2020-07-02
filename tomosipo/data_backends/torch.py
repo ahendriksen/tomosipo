@@ -17,7 +17,11 @@ been tested. It is unsupported(!).
 
 """
 import astra
-from tomosipo.Data import backends
+from tomosipo.Data import (
+    backends,
+    NumpyBackend,
+)
+from contextlib import contextmanager
 import warnings
 import torch
 
@@ -90,6 +94,35 @@ class TorchBackend(object):
             shape,
             self._data.new_full(shape, value)
         )
+
+    def __compatible_with__(self, other):
+        dev_self = self._data.device
+        if isinstance(other, NumpyBackend):
+            dev_other = torch.device("cpu")
+        elif isinstance(other, TorchBackend):
+            dev_other = other._data.device
+        else:
+            return NotImplemented
+
+        return dev_self == dev_other
+
+    @contextmanager
+    def context(self):
+        """Context-manager to manage ASTRA interactions
+
+        This context-manager makes sure that the current CUDA
+        stream is set to the CUDA device of the current linked data.
+
+        :returns:
+        :rtype:
+
+        """
+        if self._data.is_cuda:
+            with torch.cuda.device_of(self._data):
+                yield
+        else:
+            # no-op for cpu-stored data
+            yield
 
     @property
     def data(self):

@@ -24,6 +24,7 @@ from .geometry.transform import (
     to_perspective,
     from_perspective,
 )
+from .links.base import link
 
 from . import phantom
 import warnings

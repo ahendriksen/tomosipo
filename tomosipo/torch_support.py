@@ -5,7 +5,7 @@ To enable support for torch tensors in tomosipo, use:
 >>> import tomosipo.torch_support
 
 """
-import tomosipo.data_backends.torch
+import tomosipo.links.torch
 import tomosipo as ts
 import torch
 from torch.autograd import Function

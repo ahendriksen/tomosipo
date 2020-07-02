@@ -1,10 +1,8 @@
-import numpy as np
 import astra
 import tomosipo as ts
-import warnings
 import pyqtgraph as pq
 from tomosipo.display import get_app, run_app
-from contextlib import contextmanager
+
 
 def data(geometry, initial_value=None):
     """Create a managed Astra Data3d object
@@ -37,35 +35,6 @@ def data(geometry, initial_value=None):
     return Data(geometry, initial_value)
 
 
-backends = [
-    # NumpyBackend is appended below;
-    # TorchBackend is only supported when explicitly imported.
-]
-
-
-def get_linkable_array(shape, arr):
-    for backend in backends:
-        if backend.accepts_initial_value(arr):
-            return backend(shape, arr)
-    raise ValueError(
-        f"An initial_value of class {type(arr)} is not supported. "
-        f"For torch support please `import tomosipo.torch_support`. "
-    )
-
-
-def get_geometry_shape(geometry):
-    g = geometry
-
-    if ts.geometry.is_volume(g):
-        return g.shape
-    elif ts.geometry.is_projection(g):
-        return (g.det_shape[0], g.num_angles, g.det_shape[1])
-    else:
-        raise ValueError(
-            f"Geometry '{type(geometry)}' is not supported. Cannot determine if volume or projection geometry."
-        )
-
-
 class Data(object):
     """Data: a data manager for Astra
 
@@ -89,7 +58,6 @@ class Data(object):
         self.geometry = geometry
         self.astra_geom = geometry.to_astra()
 
-        shape = get_geometry_shape(geometry)
         if self.is_volume():
             astra_data_type = "-vol"
         elif self.is_projection():
@@ -99,19 +67,10 @@ class Data(object):
                 f"Geometry '{type(geometry)}' is not supported. Cannot determine if volume or projection geometry."
             )
 
-        self._backend = None
-        for backend in backends:
-            if backend.accepts_initial_value(initial_value):
-                self._backend = backend(shape, initial_value)
-
-        if self._backend is None:
-            raise ValueError(
-                f"An initial_value of class {type(initial_value)} is not supported. "
-                f"For torch support please `import tomosipo.torch_support`. "
-            )
+        self._link = ts.link(geometry, initial_value)
 
         self.astra_id = astra.data3d.link(
-            astra_data_type, self.astra_geom, self._backend.get_linkable_array()
+            astra_data_type, self.astra_geom, self._link.linked_data
         )
 
     def clone(self):
@@ -124,7 +83,7 @@ class Data(object):
         :rtype: Data
 
         """
-        data_copy = np.copy(self.data)
+        data_copy = self._link.clone().data
         return Data(self.geometry, data_copy)
 
     def __enter__(self):
@@ -152,11 +111,13 @@ class Data(object):
         :rtype: np.array
 
         """
-        return self._backend.data
+        return self._link.data
 
     @data.setter
     def data(self, val):
-        self._backend.data = val
+        self._link.data = val
+
+    # TODO: Implement .numpy() so that display_data can also show data from gpu..
 
     def is_volume(self):
         return ts.geometry.is_volume(self.geometry)
@@ -172,121 +133,6 @@ class Data(object):
 
         """
         return self.astra_id
-
-
-class NumpyBackend(object):
-    """Documentation for NumpyBackend
-
-    """
-    def __init__(self, shape, initial_value):
-        super(NumpyBackend, self).__init__()
-        self._shape = shape
-
-        if initial_value is None:
-            self._data = np.zeros(shape, dtype=np.float32)
-        elif np.isscalar(initial_value):
-            self._data = np.zeros(shape, dtype=np.float32)
-            self._data[:] = initial_value
-        else:
-            initial_value = np.array(initial_value, copy=False)
-            # Make contiguous:
-            if initial_value.dtype != np.float32:
-                warnings.warn(
-                    f"The parameter initial_value is of type {initial_value.dtype}; expected `np.float32`. "
-                    f"The type has been Automatically converted."
-                )
-                initial_value = initial_value.astype(np.float32)
-            if not (
-                initial_value.flags["C_CONTIGUOUS"] and initial_value.flags["ALIGNED"]
-            ):
-                warnings.warn(
-                    f"The parameter initial_value should be C_CONTIGUOUS and ALIGNED."
-                    f"It has been automatically made contiguous and aligned."
-                )
-                initial_value = np.ascontiguousarray(initial_value)
-            self._data = initial_value
-
-    @staticmethod
-    def accepts_initial_value(initial_value):
-        # `NumpyBackend' is the default backend, so it should accept
-        # an initial_value of `None'.
-        if initial_value is None:
-            return True
-        if isinstance(initial_value, np.ndarray):
-            return True
-        else:
-            return False
-
-    def get_linkable_array(self):
-        return self._data
-
-    def new_zeros(self, shape):
-        return NumpyBackend(
-            shape,
-            np.zeros(shape, dtype=self._data.dtype),
-        )
-
-    def new_full(self, shape, value):
-        return NumpyBackend(
-            shape,
-            np.full(shape, value, dtype=self._data.dtype),
-        )
-
-    def __compatible_with__(self, other):
-        if isinstance(other, NumpyBackend):
-            return True
-        else:
-            return NotImplemented
-
-    @contextmanager
-    def context(self):
-        """Context-manager to manage ASTRA interactions
-
-        This is a no-op for numpy data.
-
-        This context-manager used, for example, for pytorch data on
-        GPU to make sure the current CUDA stream is set to the device
-        of the input data.
-
-        :returns:
-        :rtype:
-
-        """
-
-        yield
-
-    @property
-    def data(self):
-        """Returns a shared numpy array with the underlying data.
-
-        Changes to the return value will be reflected in the astra
-        data.
-
-        If you want to avoid this, consider copying the data
-        immediately, using `np.copy` for instance.
-
-        NOTE: if the underlying object is an Astra projection data
-        type, the order of the axes will be in (Y, num_angles, X)
-        order.
-
-        :returns: np.array
-        :rtype: np.array
-
-        """
-        return self._data
-
-    @data.setter
-    def data(self, val):
-        raise AttributeError(
-            "You cannot change which numpy array backs a dataset.\n"
-            "To change the underlying data instead, use: \n"
-            " >>> vd.data[:] = new_data\n"
-        )
-
-
-backends.append(NumpyBackend)
-
-
 
 
 @ts.display.register(Data)

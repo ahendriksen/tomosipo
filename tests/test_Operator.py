@@ -25,6 +25,9 @@ def test_forward_backward():
 
 
 def test_fdk(interactive):
+    if interactive:
+        from tomosipo.qt import display
+
     pg = ts.cone(angles=100, shape=100)
     vg = ts.volume_from_projection_geometry(pg).reshape(100)
     pd = ts.data(pg)
@@ -36,13 +39,13 @@ def test_fdk(interactive):
     ts.forward(vd, pd)
 
     if interactive:
-        ts.display(vg, pg)
-        ts.display(pd)
+        display(vg, pg)
+        display(pd)
 
     ts.fdk(vd, pd)
 
     if interactive:
-        ts.display(vd)
+        display(vd)
 
 
 def test_operator():

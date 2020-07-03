@@ -12,10 +12,7 @@ with open('README.org') as readme_file:
 #     history = history_file.read()
 
 requirements = [
-    'pyqtgraph',
-    'pyqt5',
     'astra-toolbox',
-    'pyopengl',
     'numpy',
 ]
 

@@ -119,7 +119,8 @@ def test_rotate(interactive):
     R = ts.rotate((0, 0, 0), (1, 0, 0), deg=s, right_handed=True)
 
     if interactive:
-        ts.display(R * box, top_box)
+        from tomosipo.qt import display
+        display(R * box, top_box)
 
 
 def test_perspective():

@@ -6,7 +6,6 @@ __author__ = """Allard Hendriksen"""
 __email__ = "allard.hendriksen@cwi.nl"
 __version__ = "0.0.1"
 
-from .display import display
 from .Operator import forward, backward, fdk, operator
 from .Data import data
 from .geometry.volume import volume, volume_from_projection_geometry

@@ -142,7 +142,8 @@ def test_display(interactive):
     ob2 = ts.box(2, pos2, w, v, u)
 
     if interactive:
-        ts.display(ob1, ob2)
+        from tomosipo.qt import display
+        display(ob1, ob2)
 
 
 def test_transform():
@@ -162,14 +163,16 @@ def test_display_auto_center(interactive):
     boxes = [ts.scale(.01) * random_box() for _ in range(16)]
 
     if interactive:
-        ts.display(*boxes)
+        from tomosipo.qt import display
+        display(*boxes)
 
 
 def test_display_colors(interactive):
     boxes = [random_box() for _ in range(16)]
 
     if interactive:
-        ts.display(*boxes)
+        from tomosipo.qt import display
+        display(*boxes)
 
 
 def test_transform_example(interactive):
@@ -196,6 +199,7 @@ def test_transform_example(interactive):
     M2 = ts.from_perspective(box=ob2)
 
     if interactive:
-        ts.display(ob1, ob2)
-        ts.display(M1 * ob1, M1 * ob2)
-        ts.display(M2 * ob1, M2 * ob2)
+        from tomosipo.qt import display
+        display(ob1, ob2)
+        display(M1 * ob1, M1 * ob2)
+        display(M2 * ob1, M2 * ob2)

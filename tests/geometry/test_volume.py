@@ -247,8 +247,6 @@ class TestVolumeGeometry(unittest.TestCase):
             with ts.data(vg) as vd, ts.data(pg) as pd:
                 vd.data[:] = 1.0
                 ts.forward(vd, pd)
-                # ts.display(pd)
-                # ts.display(pg, vg)
                 self.assertGreater(
                     np.min(np.abs(pd.data)),
                     0,

@@ -8,7 +8,6 @@ from . import conversion
 from . import oriented_box
 from . import transform
 from . import volume
-from . import display
 
 # The "creation" functions cone, cone_vec, box, and volume are exposed
 # at the top-level. We expose the random versions here, because they

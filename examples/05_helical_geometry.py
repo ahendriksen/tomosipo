@@ -14,6 +14,7 @@ In the process,
 """
 import numpy as np
 import tomosipo as ts
+from tomosipo.qt import display
 
 # Set up some parameters for the helical scanning geometry.
 helix_height = 2
@@ -40,7 +41,7 @@ vg = ts.volume(128)
 # console, or by visualizing the geometries.
 print(pg)
 print(vg)
-ts.display(pg, vg)
+display(pg, vg)
 
 # Now that we have a circular cone beam scan, let's transform it into
 # a helical scan. First create a translation that first moves the
@@ -58,31 +59,31 @@ T = ts.translate(t)
 # Once we have obtained a translation, we can apply it to the
 # projection geometry we already have and visualize the result:
 helical_pg = T * pg
-ts.display(helical_pg, vg)
+display(helical_pg, vg)
 
 # XXX: Why do we want to change everything into boxes now?
 # We can also visualize the geometry from the perspective of the
 # detector.
 src_box, det_box = helical_pg.to_box()
 vol_box = vg.to_box()
-ts.display(src_box, vol_box, det_box)
+display(src_box, vol_box, det_box)
 
 # This is the same as what we have seen before. However, we may also
 # look at it from the perspective of the detector!
 S = ts.from_perspective(box=det_box)
-ts.display(S * src_box, S * vol_box, S * det_box)
+display(S * src_box, S * vol_box, S * det_box)
 
 # What if the detector is actually a bit tilted? Let's say 10 degrees.
 rot10 = ts.rotate(det_box.pos, det_box.v, deg=10)
 # This is what it looks like:
-ts.display(src_box, vol_box, rot10 * det_box)
+display(src_box, vol_box, rot10 * det_box)
 
 # And from the perspective of the detector:
 S = ts.from_perspective(box=rot10 * det_box)
-ts.display(S * src_box, S * vol_box, S * det_box)
+display(S * src_box, S * vol_box, S * det_box)
 
 # Alright. That looks like our acquisition geometry
-ts.display(vg, rot10 * helical_pg)
+display(vg, rot10 * helical_pg)
 
 # Now let's do some tomography! First generate data.
 vd = ts.data(vg)
@@ -90,11 +91,11 @@ pd = ts.data(rot10 * helical_pg)
 
 # Let's put a hollow box phantom in the volume and visualize it.
 ts.phantom.hollow_box(vd)
-ts.display(vd)
+display(vd)
 
 # Forward project and visualize.
 ts.forward(vd, pd)
-ts.display(pd)
+display(pd)
 
 # TODO: the joy of non-uniform pixel sizes..
 
@@ -134,13 +135,13 @@ vd.data[:] = 0.0
 
 # Then do a single iterative iteration
 iter_naive(vd, pd)
-ts.display(vd)
-ts.display(pd)
+display(vd)
+display(pd)
 # hmm.. not there yet.
 
 for _ in range(100):
     iter_naive(vd, pd)
-ts.display(vd)
+display(vd)
 
 # Let's see if we can make it converge faster :)
 
@@ -160,10 +161,10 @@ def iter_SIRT(vd, pd, R, C, iterations=1):
 # Clear the volume again.. No Cheating!
 vd.data[:] = 0
 iter_SIRT(vd, pd, R, C, 1)
-ts.display(vd)
+display(vd)
 
 iter_SIRT(vd, pd, R, C, 100)
-ts.display(vd)
+display(vd)
 
 # There are some distinct artifacts. In theory, they shouldn't be
 # there and you can see that there is still a difference on the
@@ -172,10 +173,10 @@ with pd.clone() as tmp:
     ts.forward(vd, tmp)
     tmp.data[:] *= -1
     tmp.data[:] += pd.data
-    ts.display(tmp)
+    display(tmp)
 
 # This whole business could actually be done quicker:
 A = ts.operator(vg, rot10 * helical_pg)
 with A(vd) as tmp:
     tmp.data[:] -= pd.data
-    ts.display(tmp)
+    display(tmp)

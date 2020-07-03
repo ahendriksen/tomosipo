@@ -1,4 +1,5 @@
 import tomosipo as ts
+from tomosipo.qt import display
 import tifffile
 from pathlib import Path
 from tqdm import tqdm
@@ -121,7 +122,7 @@ vol = R * ts.box(size=det_size[0] / 5, pos=obj_pos)
 
 # We can visualize the geometry. NB: Do zoom out to see the whole
 # scene.
-ts.display(src, vol, det)
+display(src, vol, det)
 
 # Apply correction profile 'cwi-flexray-2019-04-24':
 det_tan = ts.translate((0, 0, 24))  # 'det_tan': 24,
@@ -135,13 +136,13 @@ det_cor = det_tan * det
 # configuration alongside the corrected configuration. Note that you
 # can recognize the original configuration by the fact that their
 # boxes have the same color as they did in the previous visualization.
-ts.display(src, vol, det, src_cor, vol_cor, det_cor)
+display(src, vol, det, src_cor, vol_cor, det_cor)
 
 # We can also visualize the acquisition geometry from the perspective
 # of the volume. This should look familiar to those accustomed to
 # Astra projection geometries.
 P = ts.from_perspective(box=vol_cor)
-ts.display(P * src_cor, P * vol_cor, P * det_cor)
+display(P * src_cor, P * vol_cor, P * det_cor)
 
 # We create projection geometry using the positions that we have
 # determined above:
@@ -158,7 +159,7 @@ pg = ts.cone_vec(
 vg = ts.volume_from_projection_geometry(pg)
 voxel_size = s.sod / s.sdd * s.original_pixel_size * s.binning_value * binning
 vg = vg.with_voxel_size(voxel_size)
-ts.display(pg, vg)
+display(pg, vg)
 
 # Sometimes, only a region of interest is acquired on the detector. In
 # that case, we can adjust the projection geometry to take this into
@@ -193,5 +194,5 @@ ts.fdk(vd, pd)
 #                            Display reconstruction                           #
 ###############################################################################
 
-ts.display(vd)
-ts.display(pd)
+display(vd)
+display(pd)

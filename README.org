@@ -32,6 +32,7 @@ Simple examples:
   import astra
   import numpy as np
   import tomosipo as ts
+  from tomosipo.qt import display
 
   # Create 'unit' cone geometry
   pg = ts.cone(angles=100)
@@ -42,7 +43,7 @@ Simple examples:
   print(vg)
 
   # Display an animation of the acquisition geometry
-  ts.display_geometry(pg, vg)
+  display(pg, vg)
 
   # Get a volume geometry that fits in the cone beam:
   v_inside = ts.volume_from_projection_geometry(pg, inside=True)
@@ -50,8 +51,8 @@ Simple examples:
   print(v_inside)
   print(v_outside)
   # Animate the geometries:
-  ts.display_geometry(pg, v_inside)
-  ts.display_geometry(pg, v_outside)
+  display(pg, v_inside)
+  display(pg, v_outside)
 #+END_SRC
 
 #+RESULTS:
@@ -72,6 +73,7 @@ VolumeGeometry < extent: ((-0.7071067811865476, 0.7071067811865476), (-1.0938365
 #+BEGIN_SRC python :result output
   import numpy as np
   import tomosipo as ts
+  from tomosipo.qt import display
 
   # Get astra projection geometry:
   pg = ts.cone(angles=100, shape=100)
@@ -94,7 +96,7 @@ VolumeGeometry < extent: ((-0.7071067811865476, 0.7071067811865476), (-1.0938365
   ts.fdk(vd, pd)
 
   # Display result:
-  ts.display_data(vd)
+  display(vd)
 #+END_SRC
 ** Clean up memory
 Sometimes you want to work with large datasets and you want to clean
@@ -107,6 +109,7 @@ are only temporary.
 #+BEGIN_SRC python
   import numpy as np
   import tomosipo as ts
+  from tomosipo.qt import display
 
   # If you want to see intermediate results, set `interactive` to True.
   interactive = False
@@ -133,7 +136,7 @@ are only temporary.
 
           # Display result:
           if interactive:
-              ts.display_data(vd)
+              display(vd)
 
           # pd and vd are cleaned up when you exit the with
           # statement. No need to be afraid of memory errors!

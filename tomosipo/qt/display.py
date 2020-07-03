@@ -1,6 +1,7 @@
 import numpy as np
 import pyqtgraph as pq
-from functools import singledispatch
+
+display_backends = {}
 
 
 def get_app():
@@ -11,9 +12,13 @@ def run_app(app):
     app.exec_()
 
 
-@singledispatch
 def display(arg, *items):
-    raise ValueError(f"Display not implemented for type {type(arg)}")
+    for type_key, f in display_backends.items():
+        if isinstance(arg, type_key):
+            f(arg, *items)
+            return
+    else:
+        raise ValueError(f"Display not implemented for type {type(arg)}")
 
 
 rainbow_colormap = np.array(

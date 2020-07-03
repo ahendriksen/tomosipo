@@ -1,11 +1,14 @@
-import numpy as np
 import itertools
-import tomosipo as ts
-from tomosipo.display import get_app, rainbow_colormap
+import numpy as np
 from pyqtgraph.Qt import QtCore
 import pyqtgraph.opengl as gl
-from .volume import VolumeGeometry, is_volume
-from .base_projection import ProjectionGeometry, is_projection
+from .display import (
+    get_app,
+    rainbow_colormap,
+    display_backends,
+)
+from tomosipo.geometry.base_projection import ProjectionGeometry, is_projection
+from tomosipo.geometry.volume import VolumeGeometry, is_volume
 
 
 def _pg_items(pg, colors, i):
@@ -68,8 +71,6 @@ def _take(xs, n):
     return r
 
 
-@ts.display.register(VolumeGeometry)
-@ts.display.register(ProjectionGeometry)
 def display_geometry(*geometries):
     """Display a 3D animation of the acquisition geometry
 
@@ -125,3 +126,7 @@ def display_geometry(*geometries):
     timer.start(5000 / max_angles)
     on_timer()
     app.exec_()
+
+
+display_backends[ProjectionGeometry] = display_geometry
+display_backends[VolumeGeometry] = display_geometry

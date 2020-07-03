@@ -5,10 +5,56 @@ To enable support for torch tensors in tomosipo, use:
 >>> import tomosipo.torch_support
 
 """
-import tomosipo.links.torch
 import tomosipo as ts
 import torch
 from torch.autograd import Function
+
+# This import is needed to enable to pytorch linking backend.
+import tomosipo.links.torch
+
+
+class OperatorFunction(Function):
+    @staticmethod
+    def forward(ctx, input, operator):
+        if input.requires_grad:
+            ctx.operator = operator
+
+        return operator(input)
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        operator = ctx.operator
+
+        # do not return gradient for operator
+        return operator.T(grad_output), None
+
+
+def to_autograd(operator):
+    """Converts an operator to an autograd function
+
+    Example:
+
+    >>> A = ts.operator(vg, pg)
+    >>> f = to_autograd(A)
+    >>> vd = torch.randn(ts.links.geometry_shape(vg), requires_grad=True)
+    >>> f(vd).sum().backward()
+    >>> print(vd.grad)
+
+    Likewise, you may use the transpose:
+    >>> g = to_autograd(A.T)
+    >>> pd = torch.randn(ts.links.geometry_shape(pg), requires_grad=True)
+    >>> g(pd).sum().backward()
+    >>> print(vd.grad)
+
+    :param operator: a `ts.Operator'
+    :returns: an autograd function
+    :rtype:
+
+    """
+    def f(x):
+        return OperatorFunction.apply(x, operator)
+
+    return f
 
 
 class Forward(Function):

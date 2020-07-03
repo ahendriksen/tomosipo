@@ -183,8 +183,8 @@ class TestVolumeGeometry(unittest.TestCase):
             vg = random_volume()
             T1 = random_transform()
             T2 = random_transform()
-            self.assertEqual((T1 * T2) * vg, T1 * (T2 * vg))
-            self.assertEqual(transform.identity() * vg, T1.inv * (T1 * vg))
+            self.assertEqual((T1 * T2) * vg.to_box(), T1 * (T2 * vg.to_box()))
+            self.assertEqual(transform.identity() * vg.to_box(), T1.inv * (T1 * vg.to_box()))
 
     def test_with_voxel_size(self):
         vg = ts.volume(shape=10, size=10, center=0)

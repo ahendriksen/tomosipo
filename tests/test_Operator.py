@@ -61,8 +61,8 @@ def test_operator():
     assert np.sum(abs(y.data - y_.data)) == approx(0.0)
 
     # Test with `Data` and `np.array` again:
-    x1 = A.transpose(y)
-    x2 = A.transpose(y.data)
+    x1 = A.T(y)
+    x2 = A.T(y.data)
 
     assert np.sum(abs(x1.data - x2.data)) == approx(0.0)
 
@@ -80,6 +80,4 @@ def test_operator_additive():
     B(x, out=y)
     B(x, out=y)
 
-    # approx is not the fastest function, so we use mean to reduce the
-    # problem size.
-    assert np.mean(abs(2 * A(x).data)) == approx(np.mean(abs(y.data)))
+    assert np.allclose(2 * A(x).data, y.data)

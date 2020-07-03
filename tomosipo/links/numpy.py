@@ -44,7 +44,9 @@ class NumpyLink(Link):
         # an initial_value of `None'.
         if initial_value is None:
             return True
-        if isinstance(initial_value, np.ndarray):
+        elif isinstance(initial_value, np.ndarray):
+            return True
+        elif np.isscalar(initial_value):
             return True
         else:
             return False

@@ -430,7 +430,7 @@ class Operator(object):
         plink = _to_link(self.projection_geometry, projection)
 
         if out is not None:
-            plink = _to_link(self.volume_geometry, out)
+            vlink = _to_link(self.volume_geometry, out)
         else:
             shape = ts.links.base.geometry_shape(self.volume_geometry)
             if self.additive:

@@ -374,31 +374,9 @@ class Operator(object):
             detector_supersampling=detector_supersampling,
         )
         self.additive = additive
+        self._transpose = BackprojectionOperator(self)
 
-    def __call__(self, volume, out=None):
-        """Apply forward projection
-
-        *Note*: when `volume` is not an instance of `Data`, then this
-         function leaks memory. An intermediate `Data` element is
-         created for the volume that is not freed, and it cannot be
-         freed by the caller. Therefore, it is recommended to only use
-         numpy arrays as input, for small data or one-off scripts.
-
-        :param volume: `np.array` or `Data`
-            An input volume. If a numpy array, the shape must match
-            the operator geometry. If the input volume is an instance
-            of `Data`, its geometry must match the operator geometry.
-        :param out: `np.array` or `Data` (optional)
-            An optional output value. If a numpy array, the shape must
-            match the operator geometry. If the out parameter is an
-            instance of of `Data`, its geometry must match the
-            operator geometry.
-        :returns:
-            A projection dataset on which the volume has been forward
-            projected.
-        :rtype: `Data`
-
-        """
+    def _fp(self, volume, out=None):
         vlink = ts.link(self.volume_geometry, volume)
 
         if out is not None:
@@ -419,7 +397,7 @@ class Operator(object):
 
         return plink.data
 
-    def transpose(self, projection, out=None):
+    def _bp(self, projection, out=None):
         """Apply backprojection
 
         *Note*: when `projection` is not an instance of `Data`, then
@@ -463,3 +441,91 @@ class Operator(object):
         )
 
         return vlink.data
+
+    def __call__(self, volume, out=None):
+        """Apply operator
+
+        :param volume: `np.array` or `Data`
+            An input volume. If a numpy array, the shape must match
+            the operator geometry. If the input volume is an instance
+            of `Data`, its geometry must match the operator geometry.
+        :param out: `np.array` or `Data` (optional)
+            An optional output value. If a numpy array, the shape must
+            match the operator geometry. If the out parameter is an
+            instance of of `Data`, its geometry must match the
+            operator geometry.
+        :returns:
+            A projection dataset on which the volume has been forward
+            projected.
+        :rtype: `Data`
+
+        """
+        return self._fp(volume, out)
+
+    def transpose(self):
+        """Return backprojection operator"""
+        return self._transpose
+
+    @property
+    def T(self):
+        return self.transpose()
+
+
+class BackprojectionOperator(object):
+    """Transpose of the Forward operator
+
+    The idea of having a dedicated class for the backprojection
+    operator, which just saves a link to the "real" operator has
+    been shamelessly ripped from OpTomo.
+
+    We have the following property:
+
+    >>> op = ts.operator(vg, pg)
+    >>> op.T == op.T.T.T
+
+    It is nice that we do not allocate a new object every time we use
+    `op.T'. If we did, users might save the transpose in a separate
+    variable for 'performance reasons', writing
+
+    >>> op = ts.operator(vg, pg)
+    >>> op_T = op.T
+
+    This is a waste of time.
+    """
+
+    def __init__(
+            self,
+            parent,
+    ):
+        """Create a new tomographic operator
+        """
+        super(BackprojectionOperator, self).__init__()
+        self.parent = parent
+
+    def __call__(self, projection, out=None):
+        """Apply operator
+
+        :param projection: `np.array` or `Data`
+            An input projection. If a numpy array, the shape must match
+            the operator geometry. If the input volume is an instance
+            of `Data`, its geometry must match the operator geometry.
+        :param out: `np.array` or `Data` (optional)
+            An optional output value. If a numpy array, the shape must
+            match the operator geometry. If the out parameter is an
+            instance of of `Data`, its geometry must match the
+            operator geometry.
+        :returns:
+            A projection dataset on which the volume has been forward
+            projected.
+        :rtype: `Data`
+
+        """
+        return self.parent._bp(projection, out)
+
+    def transpose(self):
+        """Return forward projection operator"""
+        return self.parent
+
+    @property
+    def T(self):
+        return self.transpose()

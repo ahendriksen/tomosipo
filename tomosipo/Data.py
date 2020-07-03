@@ -115,6 +115,10 @@ class Data(object):
     def data(self, val):
         self._link.data = val
 
+    @property
+    def link(self):
+        return self._link
+
     # TODO: Implement .numpy() so that display_data can also show data from gpu..
 
     def is_volume(self):

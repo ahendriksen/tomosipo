@@ -1,5 +1,6 @@
 import astra
 import tomosipo as ts
+from tomosipo.Data import Data
 
 
 def astra_projector(
@@ -328,6 +329,13 @@ def direct_bp(
     )
 
 
+def _to_link(geometry, x):
+    if isinstance(x, Data):
+        return x.link
+    else:
+        return ts.link(geometry, x)
+
+
 class Operator(object):
     """Documentation for Operator
 
@@ -377,10 +385,10 @@ class Operator(object):
         self._transpose = BackprojectionOperator(self)
 
     def _fp(self, volume, out=None):
-        vlink = ts.link(self.volume_geometry, volume)
+        vlink = _to_link(self.volume_geometry, volume)
 
         if out is not None:
-            plink = ts.link(self.projection_geometry, out)
+            plink = _to_link(self.projection_geometry, out)
         else:
             shape = ts.links.base.geometry_shape(self.projection_geometry)
             if self.additive:
@@ -395,16 +403,13 @@ class Operator(object):
             additive=self.additive
         )
 
-        return plink.data
+        if isinstance(volume, Data):
+            return ts.data(self.projection_geometry, plink.data)
+        else:
+            return plink.data
 
     def _bp(self, projection, out=None):
         """Apply backprojection
-
-        *Note*: when `projection` is not an instance of `Data`, then
-         this function leaks memory. An intermediate `Data` element is
-         created for the projection that is not freed, and it cannot
-         be freed by the caller. Therefore, it is recommended to only
-         use numpy arrays as input, for small data or one-off scripts.
 
         :param projection: `np.array` or `Data`
             An input projection dataset. If a numpy array, the shape
@@ -422,10 +427,10 @@ class Operator(object):
         :rtype: `Data`
 
         """
-        plink = ts.link(self.projection_geometry, projection)
+        plink = _to_link(self.projection_geometry, projection)
 
         if out is not None:
-            plink = ts.link(self.volume_geometry, out)
+            plink = _to_link(self.volume_geometry, out)
         else:
             shape = ts.links.base.geometry_shape(self.volume_geometry)
             if self.additive:
@@ -440,7 +445,10 @@ class Operator(object):
             additive=self.additive,
         )
 
-        return vlink.data
+        if isinstance(projection, Data):
+            return ts.data(self.volume_geometry, vlink.data)
+        else:
+            return vlink.data
 
     def __call__(self, volume, out=None):
         """Apply operator

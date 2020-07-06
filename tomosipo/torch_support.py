@@ -18,15 +18,29 @@ class OperatorFunction(Function):
     def forward(ctx, input, operator):
         if input.requires_grad:
             ctx.operator = operator
+        assert input.ndim == 4, \
+            "Autograd operator expects a 4-dimensional input (3+1 for Batch dimension). "
 
-        return operator(input)
+        B, C, H, W = input.shape
+        out = input.new_empty(B, *operator.range_shape)
+
+        for i in range(B):
+            operator(input[i], out=out[i])
+
+        return out
 
     @staticmethod
     def backward(ctx, grad_output):
         operator = ctx.operator
 
+        B, C, H, W = grad_output.shape
+        grad_input = grad_output.new_empty(B, *operator.domain_shape)
+
+        for i in range(B):
+            operator.T(grad_output[i], out=grad_input[i])
+
         # do not return gradient for operator
-        return operator.T(grad_output), None
+        return grad_input, None
 
 
 def to_autograd(operator):
@@ -34,15 +48,16 @@ def to_autograd(operator):
 
     Example:
 
+    >>> B = 1  # batch dimension
     >>> A = ts.operator(vg, pg)
     >>> f = to_autograd(A)
-    >>> vd = torch.randn(ts.links.geometry_shape(vg), requires_grad=True)
+    >>> vd = torch.randn((B, *A.domain_shape), requires_grad=True)
     >>> f(vd).sum().backward()
     >>> print(vd.grad)
 
     Likewise, you may use the transpose:
     >>> g = to_autograd(A.T)
-    >>> pd = torch.randn(ts.links.geometry_shape(pg), requires_grad=True)
+    >>> pd = torch.randn((B, *A.T.domain_shape), requires_grad=True)
     >>> g(pd).sum().backward()
     >>> print(vd.grad)
 

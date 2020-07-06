@@ -390,11 +390,10 @@ class Operator(object):
         if out is not None:
             plink = _to_link(self.projection_geometry, out)
         else:
-            shape = ts.links.base.geometry_shape(self.projection_geometry)
             if self.additive:
-                plink = vlink.new_zeros(shape)
+                plink = vlink.new_zeros(self.range_shape)
             else:
-                plink = vlink.new_empty(shape)
+                plink = vlink.new_empty(self.range_shape)
 
         direct_fp(
             self.astra_projector,
@@ -432,11 +431,10 @@ class Operator(object):
         if out is not None:
             vlink = _to_link(self.volume_geometry, out)
         else:
-            shape = ts.links.base.geometry_shape(self.volume_geometry)
             if self.additive:
-                vlink = plink.new_zeros(shape)
+                vlink = plink.new_zeros(self.domain_shape)
             else:
-                vlink = plink.new_empty(shape)
+                vlink = plink.new_empty(self.domain_shape)
 
         direct_bp(
             self.astra_projector,
@@ -477,6 +475,22 @@ class Operator(object):
     @property
     def T(self):
         return self.transpose()
+
+    @property
+    def domain(self):
+        return self.volume_geometry
+
+    @property
+    def range(self):
+        return self.projection_geometry
+
+    @property
+    def domain_shape(self):
+        return ts.links.geometry_shape(self.domain)
+
+    @property
+    def range_shape(self):
+        return ts.links.geometry_shape(self.range)
 
 
 class BackprojectionOperator(object):
@@ -537,3 +551,19 @@ class BackprojectionOperator(object):
     @property
     def T(self):
         return self.transpose()
+
+    @property
+    def domain(self):
+        return self.parent.range
+
+    @property
+    def range(self):
+        return self.parent.domain
+
+    @property
+    def domain_shape(self):
+        return self.parent.range_shape
+
+    @property
+    def range_shape(self):
+        return self.parent.domain_shape

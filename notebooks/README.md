@@ -224,5 +224,6 @@ Comparing the two implementations, we find the following performance figures:
 * DP  = Data-parallel using vanilla pytorch (`learned_pd_benchmark.py`)
 
 In this benchmark, for single-gpu training, pytorch-lightning is
-slightly slower than a vanilla pytorch implementation. For multi-gpu
-training, it obtains almost a 3.3-fold speedup on 4 GPUs.
+slightly slower than a vanilla pytorch implementation (177 versus 170
+seconds per epoch). For multi-gpu training, pytorch-lightning obtains
+almost a 3.3-fold speedup on 4 GPUs (53 versus 177 seconds per epoch).

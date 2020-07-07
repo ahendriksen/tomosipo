@@ -6,6 +6,22 @@ implementation of the simultaneous iterative reconstruction technique
 (SIRT) and of learned primal-dual reconstruction (Adler & Öktem,
 Learned Primal-Dual Reconstruction, IEEE TMI, (2018)).
 
+## Requirements
+
+The preferred way to obtain dependencies is using Conda. Run:
+
+``` bash
+# Create environment 'tomosipo-demo'
+conda create -n tomosipo-demo \
+	python=3.6 cudatoolkit=10.1 pytorch astra-toolbox tqdm matplotlib pytorch-lightning \
+	-c pytorch -c defaults -c astra-toolbox/label/dev -c conda-forge
+# Activate environment
+conda activate tomosipo-demo
+# Install latest tomosipo dev-branch:
+pip install git+https://github.com/ahendriksen/tomosipo.git@WIP-multi-gpu
+
+```
+
 ## SIRT
 
 We describe how to implement SIRT in `sirt.ipynb`. This describes how
@@ -22,6 +38,7 @@ $ python sirt_benchmark.py --N 256 --num_burnin 1 --num_trials 5 --n_iter=200 --
 Benchmark..
 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [01:29<00:00, 17.92s/it]
 Time (seconds): 17.914+-0.076 in range (17.780 -- 17.984)
+
 $ python sirt_benchmark.py --N 256 --num_burnin 1 --num_trials 5 --n_iter=200 --astra
 [.. snip ..]
 Benchmark..
@@ -36,11 +53,14 @@ A visual introduction to learned-primal dual is given in
 `learned_pd.ipynb`. We obtain nice results on a toy problem by testing
 on the training set.
 
+
+### Removing the pingpong
+
 The benchmark script `learned_pd_benchmark.py` shows that keeping the
 data on the GPU during training improves performance. Before the
 direct integration with ASTRA and pytorch, it was more difficult to
 directly operate on GPU arrays using ASTRA. Therefore, a "pingpong"
-scheme was used: before any ASTRA operation,
+scheme was used. Before any ASTRA operation,
 
 1. the data was moved from GPU to CPU,
 2. ASTRA moved it to GPU,
@@ -90,6 +110,8 @@ Now we know that removing this pingpong scheme enables a speedup of
 
 This shows that the additional integration with GPU arrays was worth the effort!
 
+### Multi-GPU training
+
 In addition, we describe how to obtain a speedup from multi-gpu
 training. This is not straightforward. Using the single-process,
 multi-gpu approach of `torch.nn.DataParallel`, training actually
@@ -130,7 +152,7 @@ Comparing the two implementations, we find the following performance figures:
 
 <tbody>
 <tr>
-<td class="org-left">DDP\*</td>
+<td class="org-left">DDP*</td>
 <td class="org-right">512</td>
 <td class="org-right">1</td>
 <td class="org-right">4</td>
@@ -141,7 +163,7 @@ Comparing the two implementations, we find the following performance figures:
 
 
 <tr>
-<td class="org-left">DDP\*</td>
+<td class="org-left">DDP*</td>
 <td class="org-right">512</td>
 <td class="org-right">2</td>
 <td class="org-right">4</td>
@@ -152,7 +174,7 @@ Comparing the two implementations, we find the following performance figures:
 
 
 <tr>
-<td class="org-left">DDP\*</td>
+<td class="org-left">DDP*</td>
 <td class="org-right">512</td>
 <td class="org-right">1</td>
 <td class="org-right">1</td>
@@ -164,7 +186,7 @@ Comparing the two implementations, we find the following performance figures:
 
 <tbody>
 <tr>
-<td class="org-left">DP\*</td>
+<td class="org-left">DP*</td>
 <td class="org-right">512</td>
 <td class="org-right">1</td>
 <td class="org-right">1</td>
@@ -175,7 +197,7 @@ Comparing the two implementations, we find the following performance figures:
 
 
 <tr>
-<td class="org-left">DP\*</td>
+<td class="org-left">DP*</td>
 <td class="org-right">512</td>
 <td class="org-right">2</td>
 <td class="org-right">1</td>
@@ -186,7 +208,7 @@ Comparing the two implementations, we find the following performance figures:
 
 
 <tr>
-<td class="org-left">DP\*</td>
+<td class="org-left">DP*</td>
 <td class="org-right">512</td>
 <td class="org-right">4</td>
 <td class="org-right">4</td>
@@ -198,8 +220,8 @@ Comparing the two implementations, we find the following performance figures:
 </table>
 
 
-* DDP = Distributed data-parallel using pytorch-lightning (this file)
-* DP  = Data-parallel using pytorch and tomosipo (`learned_pd_benchmark.py`)
+* DDP = Distributed data-parallel using pytorch-lightning (`learned_pd_lightning.py`)
+* DP  = Data-parallel using vanilla pytorch (`learned_pd_benchmark.py`)
 
 In this benchmark, for single-gpu training, pytorch-lightning is
 slightly slower than a vanilla pytorch implementation. For multi-gpu

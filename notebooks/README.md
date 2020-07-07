@@ -30,6 +30,13 @@ forward and backward projection operator. Specifically, we compare to
 ASTRA's internal `SIRT3D_CUDA` algorithm and find that we get almost
 the same results (up to 1e-8).
 
+The update step of the SIRT algorithm can be implemented in a single
+line without impeeding performance:
+``` python
+for i in range(num_iters):
+    x += C * A.T(R * (y - A(x)))
+```
+
 To compare speed, we have included a benchmark script `sirt_benchmark.py`.
 Here, we find that tomosipo can be faster than the `SIRT3D_CUDA` algorithm:
 ``` bash

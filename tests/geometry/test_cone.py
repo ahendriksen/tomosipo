@@ -28,8 +28,6 @@ def test_init(interactive):
     assert pg.num_angles == 100
 
     with pytest.raises(ValueError):
-        pg = ts.cone(angles="asdf")
-    with pytest.raises(ValueError):
         pg = ts.cone(angles=[])
 
     representation = repr(pg)

@@ -49,8 +49,8 @@ def test_interface(default_proj_geoms):
         assert is_projection(pg)
         repr(pg)
         assert pg == pg
-        pg_fix = ts.from_astra_geometry(pg.to_astra())
-        assert pg_fix == ts.from_astra_geometry(pg_fix.to_astra())
+        pg_fix = ts.from_astra(pg.to_astra())
+        assert pg_fix == ts.from_astra(pg_fix.to_astra())
         assert pg.to_vec() == pg.to_vec().to_vec()
         pg.is_vec
         pg.num_angles

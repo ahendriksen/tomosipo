@@ -233,7 +233,7 @@ class TestVolumeGeometry(unittest.TestCase):
             pg = astra.create_proj_geom(
                 "cone", *d_spacing, *num_pixels, proj_angles, src_dist, det_dist
             )
-            pg = ts.from_astra_geometry(pg)
+            pg = ts.from_astra(pg)
             vg = ts.volume_from_projection_geometry(pg, inside=True)
             with ts.data(vg) as vd, ts.data(pg) as pd:
                 pd.data[:] = 1.0

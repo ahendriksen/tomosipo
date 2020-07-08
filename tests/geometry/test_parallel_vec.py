@@ -103,7 +103,7 @@ def test_getitem(par_vecs):
 def test_astra(par_vecs):
     for pg in par_vecs:
         astra_pg = pg.to_astra()
-        assert pg == ts.from_astra_geometry(astra_pg)
+        assert pg == ts.from_astra(astra_pg)
 
 
 def test_to_vec(par_vecs):

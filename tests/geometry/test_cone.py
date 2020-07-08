@@ -130,7 +130,7 @@ def test_to_from_astra():
 
         pg1 = ts.cone(angles, size, shape, d_dst, s_dst)
         astra_pg = pg1.to_astra()
-        pg2 = ts.from_astra_geometry(astra_pg)
+        pg2 = ts.from_astra(astra_pg)
 
         assert pg1 == pg2
 

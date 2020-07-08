@@ -100,7 +100,7 @@ class TestConeVectorGeometry(unittest.TestCase):
 
             pg = ts.cone_vec(shape, v1, v2, v3, v4)
             astra_pg = pg.to_astra()
-            self.assertEqual(pg, ts.from_astra_geometry(astra_pg))
+            self.assertEqual(pg, ts.from_astra(astra_pg))
 
     def test_project_point_detector_spacing(self):
         """Test project_point with detector spacing

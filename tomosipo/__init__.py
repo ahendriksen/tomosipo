@@ -34,12 +34,12 @@ epsilon = 1e-8
 
 try:
     from astra.experimental import accumulate_FDK
-    from astra.experimental import do_composite_BP
-    from astra.experimental import do_composite_FP
+    from astra.experimental import do_composite
+    from astra.experimental import direct_FPBP3D
 except AttributeError:
     warnings.warn(
         "Cannot find all required astra.experimental methods. \n"
-        "Please make sure you have at least astra version 1.9.x installed. \n"
-        "Currently, you can install the astra development version using: \n"
-        "> conda install -c astra-toolbox/label/dev astra-toolbox"
+        "Please make sure you have at least ASTRA version 1.9.9-dev4 installed. \n"
+        "You can install the latest ASTRA development version using: \n"
+        "> conda install astra-toolbox -c astra-toolbox/label/dev "
     )

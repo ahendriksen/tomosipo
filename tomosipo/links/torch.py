@@ -41,14 +41,16 @@ class TorchLink(Link):
             if initial_value.dtype != torch.float32:
                 warnings.warn(
                     f"The parameter initial_value is of type {initial_value.dtype}; expected `torch.float32`. "
-                    f"The type has been Automatically converted."
+                    f"The type has been automatically converted. "
+                    f"Use `ts.link(x.to(dtype=torch.float32))' to inhibit this warning. "
                 )
                 initial_value = initial_value.to(dtype=torch.float32)
             # Make contiguous:
             if not initial_value.is_contiguous():
                 warnings.warn(
                     f"The parameter initial_value should be contiguous. "
-                    f"It has been automatically made contiguous."
+                    f"It has been automatically made contiguous. "
+                    f"Use `ts.link(x.contiguous())' to inhibit this warning. "
                 )
                 initial_value = initial_value.contiguous()
             self._data = initial_value

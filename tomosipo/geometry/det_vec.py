@@ -292,7 +292,10 @@ class DetectorVectorGeometry(ProjectionGeometry):
         if height_constant and width_constant:
             return (height[0], width[0])
         else:
-            raise ValueError("The size of the detector is not constant. ")
+            raise ValueError(
+                "The size of the detector is not constant. "
+                "To prevent this error, use `pg.det_sizes'. "
+            )
 
     @ProjectionGeometry.det_sizes.getter
     def det_sizes(self):

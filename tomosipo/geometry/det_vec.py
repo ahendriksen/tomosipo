@@ -237,7 +237,8 @@ class DetectorVectorGeometry(ProjectionGeometry):
         if np.any(abs(np.ptp(self.det_sizes, axis=0)) > ts.epsilon):
             warnings.warn(
                 "The detector size is not uniform. "
-                "Using first detector size for the box"
+                "Using first detector size for the box. "
+                "To inhibit this warning, please make sure that the absolute size of the detector does not change. "
             )
 
         det_box = ts.box((det_height, 0, det_width), det_pos, w, v, u)

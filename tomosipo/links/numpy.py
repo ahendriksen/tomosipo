@@ -22,15 +22,17 @@ class NumpyLink(Link):
             if initial_value.dtype != np.float32:
                 warnings.warn(
                     f"The parameter initial_value is of type {initial_value.dtype}; expected `np.float32`. "
-                    f"The type has been Automatically converted."
+                    f"The type has been Automatically converted. "
+                    f"Use `ts.link(x.astype(np.float32))' to inhibit this warning. "
                 )
                 initial_value = initial_value.astype(np.float32)
             if not (
                 initial_value.flags["C_CONTIGUOUS"] and initial_value.flags["ALIGNED"]
             ):
                 warnings.warn(
-                    f"The parameter initial_value should be C_CONTIGUOUS and ALIGNED."
-                    f"It has been automatically made contiguous and aligned."
+                    f"The parameter initial_value should be C_CONTIGUOUS and ALIGNED. "
+                    f"It has been automatically made contiguous and aligned. "
+                    f"Use `ts.link(np.ascontiguousarray(x))' to inhibit this warning. "
                 )
                 initial_value = np.ascontiguousarray(initial_value)
             self._data = initial_value

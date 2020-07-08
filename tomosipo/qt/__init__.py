@@ -8,7 +8,7 @@ except ModuleNotFoundError:
         "\n------------------------------------------------------------\n\n"
         "Cannot import all required QT packages. \n"
         "Please make sure to install pyqtgraph, pyqt5, and pyopengl. \n"
-        "Currently, you can install these using: \n\n"
+        "You can install these using: \n\n"
         " > conda install pyqtgraph pyqt pyopengl \n"
         "\n------------------------------------------------------------\n\n"
     )

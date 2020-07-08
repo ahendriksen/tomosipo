@@ -265,6 +265,9 @@ def direct_project(
             "Usually, this indicates that the data are located on different computing devices. "
         )
 
+    # If necessary, the link may adjust the current state of the
+    # program temporarily to ensure ASTRA runs correctly. For torch
+    # tensors, this may entail changing the currently active GPU.
     with vol_link.context():
         astra.experimental.direct_FPBP3D(
             projector,

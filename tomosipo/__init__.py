@@ -11,7 +11,6 @@ from .Data import data
 from .geometry.volume import volume, volume_from_projection_geometry
 from . import geometry
 from .geometry.cone import cone
-from .geometry.conversion import from_astra_geometry
 from .geometry.cone_vec import cone_vec
 from .geometry.parallel_vec import parallel_vec
 from .geometry.parallel import parallel
@@ -24,6 +23,12 @@ from .geometry.transform import (
     from_perspective,
 )
 from .links.base import link
+from .astra import (
+    from_astra,
+    to_astra,
+)
+
+
 
 from . import phantom
 import warnings

@@ -8,11 +8,11 @@ from .parallel import ParallelGeometry
 # TODO: change the name of this module.
 
 # The name of this module is unfortunately chosen. The
-# from_astra_geometry function cannot be defined in
+# from_astra_projection_geometry function cannot be defined in
 # ProjectionGeometry.py: that would cause a circular import.
 
 
-def from_astra_geometry(astra_pg):
+def from_astra_projection_geometry(astra_pg):
     pg_type = astra_pg["type"]
     if pg_type == "cone":
         return ConeGeometry.from_astra(astra_pg)

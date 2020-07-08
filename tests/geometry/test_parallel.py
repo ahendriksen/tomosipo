@@ -74,13 +74,13 @@ def test_getitem(par_geoms):
 def test_astra(par_geoms):
     for pg in par_geoms:
         astra_pg = pg.to_astra()
-        assert pg == ts.from_astra_geometry(astra_pg)
+        assert pg == ts.from_astra(astra_pg)
         # check that the following yields the same result:
         # 1) parallel -> to_vec -> to_astra -> from_astra
         # 2) parallel -> to_astra -> from_astra -> to_vec
         assert (
-            ts.from_astra_geometry(pg.to_vec().to_astra())
-            == ts.from_astra_geometry(pg.to_astra()).to_vec()
+            ts.from_astra(pg.to_vec().to_astra())
+            == ts.from_astra(pg.to_astra()).to_vec()
         )
 
 

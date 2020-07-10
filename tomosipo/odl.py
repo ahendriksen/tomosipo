@@ -1,4 +1,6 @@
 import warnings
+from packaging import version
+import astra
 try:
     import odl
 except ModuleNotFoundError:
@@ -27,7 +29,11 @@ def from_odl(geom_or_op):
 
     if is_geometry:
         # convert fan beam and 2D parallel beam geometries to 3D geometries
-        if isinstance(geom_or_op, odl.tomo.FanBeamGeometry):
+        fan_geometry_cls = (
+            odl.tomo.FanBeamGeometry
+            if version.parse(odl.__version__) > version.parse('0.7.0') else
+            odl.tomo.FanFlatGeometry)
+        if isinstance(geom_or_op, fan_geometry_cls):
             geom_or_op = fan_to_cone_beam_geometry(geom_or_op)
         if isinstance(geom_or_op, odl.tomo.Parallel2dGeometry):
             geom_or_op = parallel_2d_to_3d_geometry(geom_or_op)
@@ -52,6 +58,9 @@ def fan_to_cone_beam_geometry(fb_geometry, det_z_span=1.):
     """
     Convert 2D `odl.tomo.FanBeamGeometry` to 3D `odl.tomo.ConeBeamGeometry`,
     by adding a trivial third axis.
+    
+    For odl<='0.7.0' the classes are `odl.tomo.FanFlatGeometry` and
+    `odl.tomo.ConeFlatGeometry`.
 
     Parameters
     ----------
@@ -67,18 +76,24 @@ def fan_to_cone_beam_geometry(fb_geometry, det_z_span=1.):
         The cone beam geometry that coincides with the given fan beam geometry
         at the central slice (third coordinate equals zero).
     """
-    if not isinstance(fb_geometry, odl.tomo.FanBeamGeometry):
-        raise TypeError('expected a `FanBeamGeometry`')
+    if version.parse(odl.__version__) <= version.parse('0.7.0'):
+        if not isinstance(fb_geometry, odl.tomo.FanFlatGeometry):
+            raise TypeError('expected a `FanFlatGeometry`')
+    else:
+        if not isinstance(fb_geometry, odl.tomo.FanBeamGeometry):
+            raise TypeError('expected a `FanBeamGeometry`')
     apart = fb_geometry.motion_partition
-    det_min_pt = [fb_geometry.det_partition.min_pt[0], -det_z_span / 2.]
-    det_max_pt = [fb_geometry.det_partition.max_pt[0], +det_z_span / 2.]
+    det_min_pt = [fb_geometry.det_partition.min_pt[0], -det_z_span/2.]
+    det_max_pt = [fb_geometry.det_partition.max_pt[0], +det_z_span/2.]
     dpart = odl.discr.RectPartition(
         odl.set.IntervalProd(det_min_pt, det_max_pt),
         odl.discr.RectGrid(fb_geometry.det_partition.coord_vectors[0], [0.]))
     src_radius = fb_geometry.src_radius
     det_radius = fb_geometry.det_radius
-    det_curvature_radius = (None if fb_geometry.det_curvature_radius is None
-                            else (fb_geometry.det_curvature_radius, None))
+    if version.parse(odl.__version__) > version.parse('0.7.0'):
+        det_curvature_radius = (
+            None if fb_geometry.det_curvature_radius is None
+            else (fb_geometry.det_curvature_radius, None))
     src_to_det_init = [fb_geometry.src_to_det_init[0],
                        fb_geometry.src_to_det_init[1],
                        0.]
@@ -89,6 +104,17 @@ def fan_to_cone_beam_geometry(fb_geometry, det_z_span=1.):
     translation = [fb_geometry.translation[0],
                    fb_geometry.translation[1],
                    0.]
+    if version.parse(odl.__version__) <= version.parse('0.7.0'):
+        cb_geometry = odl.tomo.ConeFlatGeometry(
+            apart, dpart, src_radius, det_radius,
+            pitch=0.,
+            axis=[0., 0., 1.],
+            src_to_det_init=src_to_det_init,
+            det_axes_init=det_axes_init,
+            translation=translation,
+            check_bounds=fb_geometry.check_bounds
+            )
+        return cb_geometry
     cb_geometry = odl.tomo.ConeBeamGeometry(
         apart, dpart, src_radius, det_radius,
         det_curvature_radius=det_curvature_radius,
@@ -130,6 +156,13 @@ def parallel_2d_to_3d_geometry(pb2d_geometry, det_z_shape=1, det_z_span=None):
     """
     if not isinstance(pb2d_geometry, odl.tomo.Parallel2dGeometry):
         raise TypeError('expected a `Parallel2dGeometry`')
+    if (version.parse(odl.__version__) <= version.parse('0.7.0') and
+            version.parse(astra.__version__) > version.parse('1.9.0.dev')):
+        warnings.warn(
+            'versions of odl and astra are incompatible, the '
+            'RayTransform for the 3d geometry will scale correctly in '
+            'contrast to the 2d geometry, which is multiplied by the factor '
+            '``1. / pb2d_geometry.det_partition.cell_volume``.')
     apart = pb2d_geometry.motion_partition
     if det_z_span is None:
         det_z_span = (-det_z_shape/2., det_z_shape/2.)

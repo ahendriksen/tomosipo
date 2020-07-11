@@ -205,13 +205,13 @@ def parallel_2d_to_3d_geometry(pb2d_geometry, det_z_shape=1, det_z_span=None):
     return pb3d_geometry
 
 
-def discretized_space_2d_to_3d(fb_space, z_shape=1, z_span=None):
+def discretized_space_2d_to_3d(space, z_shape=1, z_span=None):
     """
     Convert 2D `odl.discr.DiscretizedSpace` to 3D by adding a third axis.
 
     Parameters
     ----------
-    fb_space : `odl.discr.DiscretizedSpace`
+    space : `odl.discr.DiscretizedSpace`
         2D space to be converted.
     z_shape : int, optional
         Number of points in the third axis.
@@ -225,7 +225,7 @@ def discretized_space_2d_to_3d(fb_space, z_shape=1, z_span=None):
 
     Returns
     -------
-    cb_space : `odl.discr.DiscretizedSpace`
+    space3d : `odl.discr.DiscretizedSpace`
         The 3D space that contains the given 2D space as a single
         third-axis-slice.
     """
@@ -235,20 +235,38 @@ def discretized_space_2d_to_3d(fb_space, z_shape=1, z_span=None):
         z_span = (-z_span / 2., z_span / 2.)
     z_partition = odl.uniform_partition(
         min_pt=z_span[0], max_pt=z_span[1], shape=z_shape)
-    cb_space = odl.discr.DiscretizedSpace(
-        odl.discr.RectPartition(
+    rect_partition = odl.discr.RectPartition(
             odl.set.IntervalProd(
-                [fb_space.min_pt[0],
-                 fb_space.min_pt[1],
-                 z_partition.min_pt],
-                [fb_space.max_pt[0],
-                 fb_space.max_pt[1],
-                 z_partition.max_pt]),
-            odl.discr.RectGrid(fb_space.partition.coord_vectors[0],
-                               fb_space.partition.coord_vectors[1],
-                               z_partition.coord_vectors[0])),
-        odl.space.space_utils.tensor_space(
-            (fb_space.tspace.shape[0], fb_space.tspace.shape[1], z_shape),
-            dtype=fb_space.tspace.dtype,
-            impl=fb_space.tspace.impl))
-    return cb_space
+                [space.min_pt[0],
+                 space.min_pt[1],
+                 z_partition.min_pt[0]],
+                [space.max_pt[0],
+                 space.max_pt[1],
+                 z_partition.max_pt[0]]),
+            odl.discr.RectGrid(space.partition.coord_vectors[0],
+                               space.partition.coord_vectors[1],
+                               z_partition.coord_vectors[0]))
+    tensor_space = odl.space.space_utils.tensor_space(
+            (space.tspace.shape[0], space.tspace.shape[1], z_shape),
+            dtype=space.tspace.dtype,
+            impl=space.tspace.impl)
+    if version.parse(odl.__version__) <= version.parse('0.7.0'):
+        if not (isinstance(space, odl.discr.DiscreteLp) and
+                isinstance(space.fspace.domain, odl.IntervalProd)):
+            raise NotImplementedError(
+                'for odl <= 0.7.0 only `DiscreteLp` spaces on `IntervalProd` '
+                'sets are supported')
+        function_space = odl.FunctionSpace(
+            odl.IntervalProd([space.fspace.domain.min_pt[0],
+                              space.fspace.domain.min_pt[1],
+                              z_partition.min_pt[0]],
+                             [space.fspace.domain.max_pt[0],
+                              space.fspace.domain.max_pt[1],
+                              z_partition.max_pt[0]]),
+            out_dtype=space.fspace.out_dtype
+            )
+        space3d = odl.discr.DiscreteLp(
+            function_space, rect_partition, tensor_space)
+        return space3d
+    space3d = odl.discr.DiscretizedSpace(rect_partition, tensor_space)
+    return space3d

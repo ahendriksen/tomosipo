@@ -57,7 +57,7 @@ def to_odl(geom_or_op):
 def fan_to_cone_beam_geometry(fb_geometry, det_z_span=1.):
     """
     Convert 2D `odl.tomo.FanBeamGeometry` to 3D `odl.tomo.ConeBeamGeometry`,
-    by adding a trivial third axis.
+    by adding a trivial 0-th axis.
     
     For odl<='0.7.0' the classes are `odl.tomo.FanFlatGeometry` and
     `odl.tomo.ConeFlatGeometry`.
@@ -67,14 +67,14 @@ def fan_to_cone_beam_geometry(fb_geometry, det_z_span=1.):
     fb_geometry : `odl.tomo.FanBeamGeometry`
         The fan beam geometry to be converted.
     det_z_span : float, optional
-        Size of the detector in the trivial third dimension.
+        Size of the detector in the trivial 0-th dimension.
         The default is ``1.``.
 
     Returns
     -------
     cb_geometry : `odl.tomo.ConeBeamGeometry`
         The cone beam geometry that coincides with the given fan beam geometry
-        at the central slice (third coordinate equals zero).
+        at the central slice (0-th coordinate equals zero).
     """
     if version.parse(odl.__version__) <= version.parse('0.7.0'):
         if not isinstance(fb_geometry, odl.tomo.FanFlatGeometry):
@@ -132,17 +132,17 @@ def fan_to_cone_beam_geometry(fb_geometry, det_z_span=1.):
 def parallel_2d_to_3d_geometry(pb2d_geometry, det_z_shape=1, det_z_span=None):
     """
     Convert `odl.tomo.Parallel2dGeometry` to `odl.tomo.Parallel3dAxisGeometry`,
-    by adding a trivial third axis.
+    by adding a trivial 0-th axis.
 
     Parameters
     ----------
     pb2d_geometry : `odl.tomo.Parallel2dGeometry`
         The 2d parallel beam geometry to be converted.
     det_z_shape : int, optional
-        Number of detector pixels in the third dimension.
+        Number of detector pixels in the 0-th dimension.
         Can be used to batch multiple 2d projections into one 3d projection.
     det_z_span : float or 2-tuple of float, optional
-        Minimum and maximum point of the third axis (like passed to
+        Minimum and maximum point of the 0-th axis (like passed to
         `uniform_partition`).
         If a single float is passed, ``(-det_z_span/2., det_z_span/2.)`` is
         used.
@@ -153,7 +153,7 @@ def parallel_2d_to_3d_geometry(pb2d_geometry, det_z_shape=1, det_z_span=None):
     -------
     pb3d_geometry : `odl.tomo.Parallel3dAxisGeometry`
         A 3d parallel beam geometry that coincides with the given 2d geometry
-        in every slice (third coordinate fixed).
+        in every slice (0-th coordinate fixed).
     """
     if not isinstance(pb2d_geometry, odl.tomo.Parallel2dGeometry):
         raise TypeError('expected a `Parallel2dGeometry`')
@@ -208,16 +208,16 @@ def parallel_2d_to_3d_geometry(pb2d_geometry, det_z_shape=1, det_z_span=None):
 
 def discretized_space_2d_to_3d(space, z_shape=1, z_span=None):
     """
-    Convert 2D `odl.discr.DiscretizedSpace` to 3D by adding a third axis.
+    Convert 2D `odl.discr.DiscretizedSpace` to 3D by adding a 0-th axis.
 
     Parameters
     ----------
     space : `odl.discr.DiscretizedSpace`
         2D space to be converted.
     z_shape : int, optional
-        Number of points in the third axis.
+        Number of points in the 0-th axis.
     z_span : float, optional
-        Minimum and maximum point of the third axis (like passed to
+        Minimum and maximum point of the 0-th axis (like passed to
         `uniform_partition`).
         If a single float is passed, ``(-z_span/2., z_span/2.)`` is
         used.
@@ -228,7 +228,7 @@ def discretized_space_2d_to_3d(space, z_shape=1, z_span=None):
     -------
     space3d : `odl.discr.DiscretizedSpace`
         The 3D space that contains the given 2D space as a single
-        third-axis-slice.
+        0-th-axis-slice.
     """
     if z_span is None:
         z_span = (-z_shape / 2., z_shape / 2.)

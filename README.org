@@ -1,33 +1,46 @@
 * Tomosipo
-Tomosipo is a library to make tomographic reconstructions with astra
-more user friendly.
+Tomosipo is a pythonic wrapper for the ASTRA-toolbox of
+high-performance GPU primitives for 3D tomography.
 
-The scope of this library is as follows:
-- 3D geometries (no 2D geometries)
-- Try to interface with other packages (ODL, astra, flexbox)
+The aim of this library is as to:
+- Expose a user-friendly API for high-performance 3D tomography, while
+  allowing strict control over resource usage
+- Enable easy manipulation of 3D geometries
+- Provide easy integration with
+  - Deep learning toolkits, such as [[https://pytorch.org][PyTorch]]
+  - [[https://github.com/odlgroup/odl][The operator discretization library (ODL)]] for optimization in
+    inverse problems
+  - [[http://pyqtgraph.org/][PyQtGraph]] for interactive visualization of geometries and data
 
-Usability:
-- Axis parameters are *always* in the Z, Y, X order
-- Detector parameters are *always* in the v, u order (~v~ being 'up'
-  and ~u~ being 'right')
-- Data and geometry visualization built in using =pyqtgraph=.
-- Unfortunately, *projection data is still in (Y, num_angles, X)
-  order*.
 
 * Installation
-Requirements:
+A minimal installation requires:
 - python >= 3.6
-- Astra (the 1.9.x development version is *required*)
-- pyopengl (optional)
-- pyqtgraph (optional)
+- ASTRA-toolbox (the latest 1.9.x development version is *required*)
+- CUDA
 
+These requirements can be installed using conda (replace =<X.X>= by your
+CUDA version)
 #+BEGIN_SRC sh
-conda create -y -n tomosipo python=3.6 tomosipo -c astra-toolbox/label/dev -c aahendriksen
+conda create -y -n tomosipo python=3.6 astra-toolbox cudatoolkit=<X.X> -c astra-toolbox/label/dev
+pip install https://github.com/ahendriksen/tomosipo@develop
 source activate tomosipo
 #+END_SRC
+
+To use tomosipo with PyTorch, QT, ODL, and cupy, install:
+#+BEGIN_SRC sh
+  conda create -y -n tomosipo python=3.6 astra-toolbox cudatoolkit=<X.X> pytorch cupy pyqtgraph pyqt pyopengl cupy \
+        -c defaults -c astra-toolbox/label/dev -c pytorch -c conda-forge
+  source activate tomosipo
+  # Install latest version of ODL:
+  pip install git+https://github.com/odlgroup/odl
+  # Install development version of tomosipo:
+  pip install https://github.com/ahendriksen/tomosipo@develop
+#+END_SRC
+
 * Usage
 Simple examples:
-** Create and manipulate geometries
+** Create and visualize geometries
 #+BEGIN_SRC python :results output
   import astra
   import numpy as np
@@ -44,15 +57,6 @@ Simple examples:
 
   # Display an animation of the acquisition geometry
   display(pg, vg)
-
-  # Get a volume geometry that fits in the cone beam:
-  v_inside = ts.volume_from_projection_geometry(pg, inside=True)
-  v_outside = ts.volume_from_projection_geometry(pg, inside=False)
-  print(v_inside)
-  print(v_outside)
-  # Animate the geometries:
-  display(pg, v_inside)
-  display(pg, v_outside)
 #+END_SRC
 
 #+RESULTS:
@@ -69,112 +73,159 @@ VolumeGeometry < extent: ((-0.47151685419122136, 0.47151685419122136), (-0.47141
 VolumeGeometry < extent: ((-0.7071067811865476, 0.7071067811865476), (-1.0938365340665575, 1.0938365340665575), (-1.0938365340665575, 1.0938365340665575)), shape: (1, 1, 1)>
 VolumeGeometry < extent: ((-0.7071067811865476, 0.7071067811865476), (-1.0938365340665575, 1.0938365340665575), (-1.0938365340665575, 1.0938365340665575)), shape: (1, 1, 1)>
 #+end_example
-** Do a simple reconstruction
-#+BEGIN_SRC python :result output
+** Express algorithms succinctly
+
+In the following example, we implement the simultaneous iterative
+reconstruction algorithm (SIRT) in a couple of lines. This examples
+demonstrates the use of the forward and backward projection.
+
+First, the SIRT algorithm is implemented using numpy arrays, which
+reside in system RAM. Then, we move all data onto the GPU, and compute
+the same algorithm using PyTorch. This is faster, because no transfers
+between system RAM and GPU are necessary.
+
+#+begin_src python :results output
+  import astra
   import numpy as np
   import tomosipo as ts
-  from tomosipo.qt import display
+  from timeit import default_timer as timer
 
-  # Get astra projection geometry:
-  pg = ts.cone(angles=100, shape=100)
-  vg = ts.volume(100)
+  # Create 'unit' cone geometry, and a
+  pg = ts.cone(angles=100, shape=(128, 192))
+  # Create volume geometry of a unit cube on the origin
+  vg = ts.volume(shape=128)
+  # Create projection operator
+  A = ts.operator(vg, pg)
 
-  # Create data objects
-  pd = ts.data(pg)
-  vd = ts.data(vg)
+  # Create a phantom containing a small cube:
+  phantom = np.zeros(A.domain_shape)
+  phantom[20:50, 20:50, 20:50] = 1.0
 
-  # Make a small cube in the volume:
-  vd.data[20:50, 20:50, 20:50] = 1.0
+  # Prepare preconditioning matrices R and C
+  R = 1 / A(np.ones(A.domain_shape))
+  R = np.minimum(R, 1 / ts.epsilon)
+  C = 1 / A.T(np.ones(A.range_shape))
+  C = np.minimum(C, 1 / ts.epsilon)
 
-  # Forward project onto detector (pd)
-  r = ts.forward(vd, pd)
+  # Reconstruct from sinogram y into x_rec in 100 iterations
+  y = A(phantom)
+  x_rec = np.zeros(A.domain_shape)
+  num_iters = 100
 
-  # Reset volume
-  vd.data[:] = 0.0
+  start = timer()
+  for i in range(num_iters):
+      x_rec += C * A.T(R * (y - A(x_rec)))
+  print(f"SIRT finished in {timer() - start:0.2f} seconds")
 
-  # Reconstruct small cube using FDK:
-  ts.fdk(vd, pd)
+  # Perform the same computation on the GPU using PyTorch.
+  # First, import support for pytorch tensors
+  import tomosipo.torch_support
 
-  # Display result:
-  display(vd)
-#+END_SRC
-** Clean up memory
-Sometimes you want to work with large datasets and you want to clean
-them up. Perhaps tomosipo is for you!
+  # Move all data to GPU:
+  dev = torch.device("cuda")
+  y = torch.from_numpy(y).to(dev)
+  R = torch.from_numpy(R).to(dev)
+  C = torch.from_numpy(C).to(dev)
+  x_rec = torch.zeros(A.domain_shape, device=dev)
 
-In the following example, we loop to create datasets that are easily 1
-GB in size. Using a ~with~ statement, we make sure these allocations
-are only temporary.
+  # Perform algorithm
+  start = timer()
+  for i in range(num_iters):
+      x_rec += C * A.T(R * (y - A(x_rec)))
 
-#+BEGIN_SRC python
-  import numpy as np
-  import tomosipo as ts
-  from tomosipo.qt import display
+  # Convert reconstruction back to numpy array:
+  x_rec = x_rec.cpu().numpy()
+  print(f"SIRT finished in {timer() - start:0.2f} seconds using PyTorch")
+#+end_src
 
-  # If you want to see intermediate results, set `interactive` to True.
-  interactive = False
-  # Get astra projection geometry:
-  pg = ts.cone(angles=100, shape=1000)
-  vg = ts.volume(1000)
+#+begin_example
+SIRT finished in 2.07 seconds
+SIRT finished in 0.94 seconds using PyTorch
+#+end_example
+** More examples
+Please checkout the =examples= and =notebooks= directory for more examples.
 
-  for _ in range (100):
-      # Create data objects such that they are only available in the
-      # with statement:
-      with ts.data(pg) as pd, ts.data(vg) as vd:
+* Conventions
+** Axes and indexing
 
-          # Make a small cube in the volume:
-          vd.data[20:50, 20:50, 20:50] = 1.0
+Tomosipo follows numpy's indexing convention. In the image below, we
+display the coordinate axes and indexing into a volume cube.
+The z-axis points upward.
 
-          # Forward project onto detector (pd)
-          ts.forward(vd, pd)
+[[file:./img/volume_geometry.png]]
 
-          # Reset volume
-          vd.data[:] = 0.0
+We display an example for a parallel geometry with its associated
+sinogram indexing below. The detector coordinate frame is defined by
+two vectors
+- u :: Usually points sideways and to the "right" from the perspective
+       of the source. The length of u defines the width of a detector
+       pixel.
+- v :: Usually points upwards. The length of v defines the height of a
+       detector pixel.
 
-          # Reconstruct small cube using FDK:
-          ts.fdk(vd, pd)
+[[file:img/projection_geometry.png]]
 
-          # Display result:
-          if interactive:
-              display(vd)
 
-          # pd and vd are cleaned up when you exit the with
-          # statement. No need to be afraid of memory errors!
-#+END_SRC
+In short,
+- volume geometry and data are indexed  in (Z, Y, X) order
+- projection geometries are indexed in (angle, v, u) order
+- projection data is stored as a stack of sinograms, indexed in (V,
+  angle, U) order.
 
-TODO: discuss segfaults when trying to access cleaned up objects.
+The coordinate system (z, y, x) is *left-handed* rather than
+right-handed.
+** Conventions in naming and ordering
+Whenever a function takes as parameters a volume geometry,
+projection geometry, or operator, there is a fixed ordering:
+1. operator
+2. volume (data or geometry)
+3. projection (data or geometry)
 
-** Make an FDK reconstruction of a scanned object
+As parameters, properties, and in function names, we use:
+- shape :: The number of voxels / pixels in each dimension
+- size :: The physical size of the object in each dimension
+- dist :: Short for distance
+- vec :: Short for vector
+- obj :: Short for object
+- vol :: Short for volume
+- pos :: Short for position
+- src :: Short for source
+- det :: Short for detector
+- pos :: Short for position
+- len :: Short for length
+- rel :: Short for relative
+- abs :: Short for absolute
+- num_* :: Number of * (angles for instance)
 
-#+BEGIN_SRC python
-  import numpy as np
-  import flexbox as flex
-  import tomosipo as ts
-  import os.path
-  import glob
-  g = "~/datasets/oatmeal/zoom*"
-  paths= glob.iglob(os.path.realpath(os.path.expanduser(g)))
-  for p in paths:
-      # Get astra projection geometry:
-      astra_pg = flex.data.astra_proj_geom(flex.data.read_log(p))
-      pg = ts.ProjectionGeometry.from_astra(astra_pg)
-      vg = ts.fit_volume_in_projection(pg)
-      # Read data (skip darks and flats)
-      proj = flex.data.read_raw(path, 'scan_', **read_raw_options)
-      proj = flex.data.raw2astra(proj)
-      # Reconstruct
-      with pg.with_data(proj) as pd, vg.with_data() as vd:
-          ts.fdk(vd, pd)
-          vd.display()    # show reconstruction -- good utility!
-      # Data is automatically freed -- no MemoryErrors!
+In examples and code we use:
+- pg :: projection geometry
+- vg :: volume geometry
+- pd :: projection data
+- vd :: volume data
 
-#+END_SRC
-* Known bugs and or possible issues
-- Parallel geometries have not yet been implemented.
-- Memmapping of projection and/or volume data has not yet been implemented.
-- There are no doctests yet.
-- There is no documentation website yet.
+** Geometry
+There are several helper functions to create a geometry:
+- ~ts.parallel~: creates a 3D circular parallel beam geometry
+- ~ts.cone~: creates a 3D circular cone beam geometry
+- ~ts.parallel_vec~: creates a 3D parallel beam geometry where the
+  beam and detector can be arbitrarily oriented
+- ~ts.cone_vec~: creates a 3D cone beam geometry where the
+  source and detector can be arbitrarily oriented
+- ~ts.volume~: creates an axis-aligned volume geometry
+- ~ts.box~: creates an arbitrarily oriented box. This object cannot be
+  converted to ASTRA directly, but can be used in geometric computations.
 
+*** Transformations
+TODO
+- Translation
+- Rotation
+- Scaling
+- Perspective
+
+** Warnings
+All warnings should
+1) Explain what is wrong
+2) Explain how the warning can be prevented
 * Contributions
 ** Building conda packages
 #+BEGIN_SRC sh

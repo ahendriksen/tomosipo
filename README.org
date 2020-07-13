@@ -1,3 +1,5 @@
+[[file:./img/logo.svg]]
+
 * Tomosipo
 Tomosipo is a pythonic wrapper for the ASTRA-toolbox of
 high-performance GPU primitives for 3D tomography.

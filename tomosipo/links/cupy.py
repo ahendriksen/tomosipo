@@ -13,7 +13,6 @@ Now, you may use cupy arrays as you would numpy arrays:
 """
 import astra
 from .base import (Link, backends)
-from .numpy import NumpyLink
 from contextlib import contextmanager
 import warnings
 import cupy

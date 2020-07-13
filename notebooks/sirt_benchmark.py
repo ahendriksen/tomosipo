@@ -4,7 +4,7 @@ This demo requires the following packages:
 
 ```
 conda install pytorch cudatoolkit=X.X  astra-toolbox matplotlib tqdm -c astra-toolbox/label/dev -c pytorch
-pip install git+https://github.com/ahendriksen/tomosipo.git@WIP-multi-gpu
+pip install git+https://github.com/ahendriksen/tomosipo.git
 ```
 
 To see the difference between ASTRA's SIRT3D_CUDA and a tomosipo

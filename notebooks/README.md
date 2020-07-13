@@ -18,7 +18,7 @@ conda create -n tomosipo-demo \
 # Activate environment
 conda activate tomosipo-demo
 # Install latest tomosipo dev-branch:
-pip install git+https://github.com/ahendriksen/tomosipo.git@WIP-multi-gpu
+pip install git+https://github.com/ahendriksen/tomosipo.git
 
 ```
 

@@ -8,7 +8,7 @@ To install, use:
 ```
 conda install python=3.6 cudatoolkit=10.1 pytorch astra-toolbox tqdm matplotlib pytorch-lightning \
                 -c pytorch -c defaults -c astra-toolbox/label/dev -c conda-forge
-pip install git+https://github.com/ahendriksen/tomosipo.git@WIP-multi-gpu
+pip install git+https://github.com/ahendriksen/tomosipo.git
 
 ```
 

@@ -103,7 +103,6 @@ def display_geometry(*geometries):
     colors = itertools.cycle(colors)
     pg_colors = [tuple(_take(colors, 2)) for _ in pgs]
 
-    print(pg_colors)
     assert len(pg_colors) == len(pgs)
 
     tmp_items = []
@@ -122,7 +121,7 @@ def display_geometry(*geometries):
 
     timer = QtCore.QTimer()
     timer.timeout.connect(on_timer)
-    max_angles = max(pg.num_angles for pg in pgs)
+    max_angles = max([1, *(pg.num_angles for pg in pgs)])
     timer.start(5000 / max_angles)
     on_timer()
     app.exec_()

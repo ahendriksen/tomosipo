@@ -11,6 +11,20 @@ from .display import (
 from tomosipo.geometry.oriented_box import OrientedBox
 
 
+def _box_item(box, i, color=(1.0, 1.0, 1.0, 1.0)):
+    # 8 corners in (XYZ) formation
+    i = i % box.num_steps
+    c = box.corners[i, :, ::-1]
+    volume_mesh = np.array(list(itertools.product(c, c, c)))
+    return gl.GLMeshItem(
+        vertexes=volume_mesh,
+        smooth=False,
+        color=color,
+        drawEdges=True,
+        drawFaces=True,
+    )
+
+
 def display_oriented_box(*boxes):
     app = get_app()
     view = gl.GLViewWidget()
@@ -27,19 +41,6 @@ def display_oriented_box(*boxes):
     #                         Show volume geometry                        #
     #######################################################################
 
-    def draw_orientation(box, i, color=(1.0, 1.0, 1.0, 1.0)):
-        # 8 corners in (XYZ) formation
-        i = i % box.num_steps
-        c = box.corners[i, :, ::-1]
-        volume_mesh = np.array(list(itertools.product(c, c, c)))
-        return gl.GLMeshItem(
-            vertexes=volume_mesh,
-            smooth=False,
-            color=color,
-            drawEdges=True,
-            drawFaces=True,
-        )
-
     i = 0
     meshes = []
 
@@ -52,7 +53,7 @@ def display_oriented_box(*boxes):
 
         meshes = []
         for (box, color) in zip(boxes, colors):
-            m = draw_orientation(box, i, color=color)
+            m = _box_item(box, i, color=color)
             meshes.append(m)
             view.addItem(m)
         i += 1

@@ -1,8 +1,12 @@
 # First, import from tomosipo.qt to catch import errors.
+import tomosipo as ts
 from tomosipo.qt.geometry import (
     _vg_item,
     _pg_items,
     _take,
+)
+from tomosipo.qt.oriented_box import (
+    _box_item,
 )
 from tomosipo.qt.display import (
     get_app,
@@ -16,53 +20,83 @@ import pyqtgraph.opengl as gl
 
 from tomosipo.geometry.base_projection import is_projection
 from tomosipo.geometry.volume import is_volume
-
-import matplotlib.pyplot as plt
-from matplotlib import animation
 import warnings
 
-if not animation.writers.is_available('ffmpeg'):
-    warnings.warn(
-        "FFMPEG encoding is not available. Make sure that ffmpeg is installed using: \n"
-        "> conda install ffmpeg \n"
-        "In addition use \n"
-        "> import matplotlib.pyplot as plt \n"
-        "> plt.rcParams['animation.ffmpeg_path'] = '/path/to/ffmpeg' \n"
-        "before importing `tomosipo.qt.animate'. \n"
-    )
+# TODO: Check that ffmpeg is available.
+# warnings.warn(
+#     "FFMPEG encoding is not available. Make sure that ffmpeg is installed using: \n"
+#     "> conda install ffmpeg \n"
+#     "In addition use \n"
+#     "> import matplotlib.pyplot as plt \n"
+#     "> plt.rcParams['animation.ffmpeg_path'] = '/path/to/ffmpeg' \n"
+#     "before importing `tomosipo.qt.animate'. \n"
+# )
+
+import ffmpeg
+import subprocess
+from tempfile import TemporaryDirectory
+from pathlib import Path
+import base64
 
 
-def geometry_animation(*geometries, total_length_seconds=3):
-    if plt.rcParams['animation.html'] != 'html5':
-        warnings.warn(
-            "For proper animated videos in Jupyter notebooks, make sure that you set \n"
-            "> plt.rc('animation', html='html5') \n"
+class Animation(object):
+    """Documentation for Animation
+
+    """
+    def __init__(self, *geometries):
+        super().__init__()
+        self.geometries = geometries
+
+    def video_array(self):
+        return geometry_video(*self.geometries)
+
+    def save(self, path):
+        video = self.video_array()
+        print("video shape ", video.shape)
+        height, width = video.shape[1:3]
+
+        args = (
+            ffmpeg
+            .input('pipe:', format='rawvideo', pix_fmt='rgb24', s='{}x{}'.format(width, height))
+            .output(str(path), vcodec='h264', pix_fmt='yuv420p')
+            .overwrite_output()
+            .compile()
         )
-    video = geometry_video(*geometries)
+        print(args)
+        process = None
+        try:
+            process = subprocess.Popen(args, stdin=subprocess.PIPE)
+            for frame in video:
+                frame = frame[..., :3]  # Remove alpha channel
+                process.stdin.write(frame.astype(np.uint8).tobytes())
+        finally:
+            if process is not None:
+                process.stdin.close()
+                process.wait()
 
-    fig, ax = plt.subplots()
-    ax.set_xticks([])
-    ax.set_yticks([])
-    for s in ax.spines.values():
-        s.set_visible(False)
+    def _repr_html_(self):
+        if hasattr(self, "base64_video"):
+            return self.base64_video
+        else:
+            with TemporaryDirectory() as tmpdir:
+                path = Path(tmpdir, "temp.m4v")
+                path = Path("temp.m4v")
 
-    ims = ax.imshow(video[0])
-    fig.tight_layout()
+                self.save(path)
+                # Now open and base64 encode.
+                vid64 = base64.encodebytes(path.read_bytes()).decode('ascii')
 
-    def animate(i):
-        nonlocal ims
-        ims = ax.imshow(video[i])
-        return (ims,)
+                options = ['controls', 'autoplay', 'loop']
+                VIDEO_TAG = r'''<video width="320" height="240" {options}>
+              <source type="video/mp4" src="data:video/mp4;base64,{video}">
+              Your browser does not support the video tag.
+            </video>'''
+                self.base64_video = VIDEO_TAG.format(
+                    video=vid64,
+                    options=' '.join(options)
+                )
 
-    interval_ms = 1000 * total_length_seconds / len(video)
-    anim = animation.FuncAnimation(
-        fig,
-        animate,
-        frames=len(video),
-        interval=interval_ms,
-        blit=False
-    )
-    return anim
+                return self.base64_video
 
 
 def geometry_video(*geometries):
@@ -77,6 +111,7 @@ def geometry_video(*geometries):
 
     pgs = [g for g in geometries if is_projection(g)]
     vgs = [g for g in geometries if is_volume(g)]
+    boxes = [g for g in geometries if isinstance(g, ts.geometry.oriented_box.OrientedBox)]
 
     _ = get_app()
     view = gl.GLViewWidget()
@@ -93,16 +128,21 @@ def geometry_video(*geometries):
 
     colors = itertools.cycle(colors)
     pg_colors = [tuple(_take(colors, 2)) for _ in pgs]
+    box_colors = [_take(colors, 1)[0] for _ in boxes]
 
     assert len(pg_colors) == len(pgs)
 
     tmp_items = []
 
-    max_angles = max([1, *(pg.num_angles for pg in pgs)])
+    max_steps = max([
+        1,
+        *(pg.num_angles for pg in pgs),
+        *(b.num_steps for b in boxes)
+    ])
     shape = (640, 480)
-    out_video = np.zeros((max_angles, shape[1], shape[0], 4), dtype=np.uint8)
+    out_video = np.zeros((max_steps, shape[1], shape[0], 4), dtype=np.uint8)
 
-    for i in range(max_angles):
+    for i in range(max_steps):
         for item in tmp_items:
             view.removeItem(item)
         tmp_items = []
@@ -110,6 +150,10 @@ def geometry_video(*geometries):
             for item in _pg_items(pg, c, i):
                 view.addItem(item)
                 tmp_items.append(item)
+        for box, c in zip(boxes, box_colors):
+            item = _box_item(box, i, color=c)
+            view.addItem(item)
+            tmp_items.append(item)
 
         video_frame = render_to_array(view, shape)
         # Flip x, y

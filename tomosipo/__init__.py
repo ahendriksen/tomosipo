@@ -9,6 +9,7 @@ __version__ = "0.0.1"
 from .Operator import forward, backward, fdk, operator
 from .Data import data
 from .geometry.volume import volume
+from .geometry.volume_vec import volume_vec
 from . import geometry
 from .geometry.cone import cone
 from .geometry.cone_vec import cone_vec

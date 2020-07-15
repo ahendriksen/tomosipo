@@ -228,6 +228,7 @@ def to_perspective(pos=None, w=None, v=None, u=None, box=None):
     :rtype:
 
     """
+    # TODO: Rename box argument
     if box is not None:
         pos, w, v, u = box.pos, box.w, box.v, box.u
 

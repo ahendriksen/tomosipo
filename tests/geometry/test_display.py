@@ -21,7 +21,7 @@ def test_display_cone_geometry(interactive):
         from tomosipo.qt import display
 
     pg = ts.cone(angles=100, src_obj_dist=10, src_det_dist=15)
-    vg = ts.volume_from_projection_geometry(pg, inside=False)
+    vg = ts.volume()
 
     if interactive:
         display(pg, vg)

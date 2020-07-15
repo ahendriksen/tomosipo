@@ -29,13 +29,11 @@ def test_fdk(interactive):
         from tomosipo.qt import display
 
     pg = ts.cone(angles=100, shape=100)
-    vg = ts.volume_from_projection_geometry(pg).reshape(100)
+    vg = ts.volume(shape=100)
     pd = ts.data(pg)
     vd = ts.data(vg)
 
-    # Fill the projection data with random noise:
     ts.phantom.hollow_box(vd)
-
     ts.forward(vd, pd)
 
     if interactive:

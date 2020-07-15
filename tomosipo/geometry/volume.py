@@ -121,11 +121,11 @@ class VolumeGeometry:
         return f"VolumeGeometry < extent: {self.extent}, " f"shape: {self.shape}>"
 
     def __eq__(self, other):
-        return (
-            isinstance(other, VolumeGeometry)
-            and self.extent == other.extent
-            and self.shape == other.shape
-        )
+        if not isinstance(other, VolumeGeometry):
+            return False
+
+        d_extent = np.array(self.extent) - np.array(other.extent)
+        return self.shape == other.shape and np.all(abs(d_extent) < ts.epsilon)
 
     def __abs__(self):
         return np.prod(self.size())
@@ -138,10 +138,9 @@ class VolumeGeometry:
         )
         return vg
 
-    def __round__(self, places):
-        c = self.copy()
-        c.extent = tuple((round(l, places), round(r, places)) for l, r in c.extent)
-        return c
+    @property
+    def voxel_size(self):
+        return tuple(size / shape for size, shape in zip(self.size(), self.shape))
 
     def to_astra(self):
         """Return an Astra volume geometry.
@@ -286,40 +285,6 @@ class VolumeGeometry:
         center = self.get_center()
         return self.to_center().multiply(scale).translate(center)
 
-    def size_floor(self):
-        """Converts the extent of the volume to integers.
-
-        This function makes the volume smaller. Use `size_ceil` to
-        make the volume larger.
-
-        Does not affect the shape (voxels) of the volume. Use
-        `reshape` to change the shape.
-
-        :returns: a new volume with integral extent
-        :rtype: VolumeGeometry
-
-        """
-        c = self.copy()
-        c.extent = tuple((np.ceil(l), np.floor(r)) for l, r in c.extent)
-        return c
-
-    def size_ceil(self):
-        """Converts the extent of the volume to integers.
-
-        This function makes the volume larger. Use `size_floor` to
-        make the volume smaller.
-
-        Does not affect the shape (voxels) of the volume. Use
-        `reshape` to change the shape.
-
-        :returns: a new volume with integral extent
-        :rtype: VolumeGeometry
-
-        """
-        c = self.copy()
-        c.extent = tuple((np.floor(l), np.ceil(r)) for l, r in c.extent)
-        return c
-
     def __contains__(self, other):
         """Check if other volume is contained in current volume
 
@@ -378,16 +343,39 @@ class VolumeGeometry:
         :rtype:
 
         """
+        # TODO: remove
         return ts.box(self.size(), self.get_center(), (1, 0, 0), (0, 1, 0), (0, 0, 1))
+
+    def to_vec(self):
+        """Returns a vector representation of the volume
+
+        :returns:
+        :rtype: VolumeVectorGeometry
+
+        """
+        return ts.volume_vec(
+            self.shape, self.get_center(), (1, 0, 0), (0, 1, 0), (0, 0, 1)
+        )
 
     def __rmul__(self, other):
         if isinstance(other, Transform):
+            # Check if it is possible to apply transformation and
+            # remain a VolumeGeometry.
+            if other.num_steps == 1:
+                translation = other.matrix[0, :3, 3]
+                scale = other.matrix[0].diagonal()[:3]
+                T = ts.translate(translation) * ts.scale(scale)
+                if T == other:
+                    # implement scaling and translation ourselves
+                    return self.scale(scale).translate(translation)
+
+            # Convert to vector geometry and apply transformation
             warnings.warn(
-                "Converting VolumeGeometry to OrientedBox. "
-                "Use `T * vg.to_box()` to inhibit this warning. ",
+                "Converting VolumeGeometry to VolumeVectorGeometry. "
+                "Use `T * vg.to_vec()` to inhibit this warning. ",
                 stacklevel=2,
             )
-            return other * self.to_box()
+            return other * self.to_vec()
 
     def __getitem__(self, key):
         """Return self[key]
@@ -441,174 +429,3 @@ def from_astra(avg):
 
     c.shape = (voxZ, voxY, voxX)
     return c
-
-
-def volume_from_projection_geometry(projection_geometry, inside=False):
-    """Fit a VolumeGeometry inside or around acquisition photon beam.
-
-    Assumptions:
-
-    1) All detectors are parallel to the z-axis. Specifically, v,
-       the vector from detector pixel (0,0) to (1,0), must be
-       parallel to the z-axis.
-
-    2) This is a cone beam geometry. The code has not yet been
-       tested with parallel beam geometries.
-
-    :param projection_geometry: ProjectionGeometry
-        Any projection geometry. Currently, only cone beam geometries
-        are tested and supported.
-    :param inside:
-        Determines whether the volume should fit inside the cone
-        angle, or outside the cone angle. For a 'normal'
-        reconstruction, `inside=False` is the right default.
-    :returns:
-        A VolumeGeometry that fits within (inside=True) the cone
-        angle, or a cube that hugs the cone angle from the outside.
-    :rtype: VolumeGeometry
-
-    """
-    # TODO: perhaps a third option (apart from inside and outside)
-    # should be provided, where a cylinder fits exactly inside the
-    # VolumeGeometry and inside the photon beam.
-
-    pg = projection_geometry.to_vec()
-
-    if pg.is_parallel:
-        warnings.warn(
-            "volume_from_projection_geometry has not been tested with parallel geometries."
-        )
-
-    # Create a volume with the lowerleft corner on the origin which
-    # has size maxi-mini. It is determined by the maximal extent
-    # of the detector positions. If the ellipse below describes
-    # the detector positions, then the square describes the cube
-    # that we are creating below.
-    #                                               (maxi)
-    # +-----------------------------------------------+
-    # |          ----/    ( detector ) \----          |
-    # |      ---/         (  curve   )      \---      |
-    # |    -/                                   \-    |
-    # |  -/                                       \-  |
-    # | /                                           \ |
-    # |/                                             \|
-    # | -------------------------------------------   |
-    # |(                                           )  |
-    # | -------------------------------------------   |
-    # |\                (source curve)               /|
-    # | \                                           / |
-    # |  -\                                       /-  |
-    # |    -\                                   /-    |
-    # |      ---\                           /---      |
-    # |          ----\                 /----          |
-    # +-----------------------------------------------+
-    # (mini)
-
-    # Gather detector information
-    detector_width = pg.det_shape[1]
-    detector_height = pg.det_shape[0]
-
-    # Create a (_, 3) shaped array of the corners
-    corners = pg.corners.swapaxes(0, 1)
-    corners = np.concatenate(corners, axis=0)
-    source_pos = pg.src_pos
-    all_pos = np.concatenate([corners, source_pos], axis=0)
-
-    mini = np.min(all_pos, axis=0)
-    maxi = np.max(all_pos, axis=0)
-    # Make X and Y size equal.
-    maxi[1:] = np.max(maxi[1:])
-    mini[1:] = np.min(mini[1:])
-    max_size = maxi - mini
-
-    # Create cube that hits all source positions and detector corners.
-    vg0 = VolumeGeometry().to_origin().multiply(max_size).to_center()
-
-    # Depending on whether you want an inside or outside fit, the
-    # preliminary best fit is either the maximal cube or a
-    # minimally sized cube.
-    s0 = np.array(vg0.size())
-    if inside:
-        s_best = np.array([ts.epsilon] * 3, dtype=np.int)
-    else:
-        s_best = np.copy(s0)
-
-    # First, optimize the size of the volume in the XY plane and
-    # then in the Z direction. We need a base mask and unit vector
-    # to represent the possible cubes. Furthermore, we need a high
-    # and low mark.
-    axial_basis = (
-        np.array([1, 0, 0], dtype=np.int),  # base mask
-        np.array([0, 1, 1], dtype=np.int),  # unit vector
-        ts.epsilon,  # low
-        np.min(s0[1:]),  # high
-        (0, detector_width),  # detector size
-        (0, 1),  # detector comparison direction
-    )
-
-    z_basis = (
-        np.array([0, 1, 1], dtype=np.int),  # base mask
-        np.array([1, 0, 0], dtype=np.int),  # unit vector
-        ts.epsilon,  # low
-        s0[0],  # high
-        (detector_height, 0),  # detector size
-        (1, 0),  # detector comparison direction
-    )
-
-    for (base, unit, low, high, detector_size, cmp_v) in [axial_basis, z_basis]:
-        detector_size = np.array(detector_size)
-        cmp_v = np.array(cmp_v)
-        detector_max = np.sum(np.abs(detector_size * cmp_v) / 2)
-        base = s_best * base
-
-        while ts.epsilon < high - low:
-            mid = (low + high) / 2
-            s = base + mid * unit
-            v = vg0.scale(s / s0)
-
-            on_detector = True
-            all_corners_off = True
-            for p in v.get_corners():
-                projections = pg.project_point(p)
-                pdot = np.abs(np.sum(cmp_v * projections, axis=1))
-
-                # If ray is parallel to detector plane, we get an
-                # np.nan. Hitting means that the ray hits the
-                # detector plane, but not necessarily within the
-                # boundaries of the detector.
-                parallel = np.isnan(pdot)
-                hitting = np.logical_not(parallel)
-
-                on_detector = np.logical_and(hitting, on_detector)
-                on_detector = np.logical_and(pdot < detector_max, on_detector)
-
-                all_corners_off = np.logical_or(parallel, all_corners_off)
-                all_corners_off = np.logical_and(detector_max < pdot, all_corners_off)
-
-            # on_detector is `True` if all corners under any angle
-            # are projected on the detector.
-            on_detector = np.all(on_detector)
-
-            # all_corners_off is `True` if there is an angle under
-            # which all corners fall outside the detector
-            all_corners_off = np.any(all_corners_off)
-
-            go_up = on_detector if inside else not all_corners_off
-
-            # print(
-            #     f"go{'up' if go_up else 'down'}: {s} | {all_corners_off} | {on_detector}"
-            # )
-            # gtmp = Geometry(c0.scale_around_center(s / s0).to_astra(), self.astra_proj_geom)
-
-            if go_up:
-                low = mid
-            else:
-                high = mid
-
-            # Save best if going up and inside
-            #           or going down and outside
-            if go_up == inside:
-                s_best = np.copy(s)
-
-    result_cube = vg0.scale(s_best / s0)
-    return result_cube

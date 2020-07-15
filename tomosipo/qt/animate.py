@@ -52,7 +52,6 @@ class Animation(object):
 
     def save(self, path):
         video = self.video_array()
-        print("video shape ", video.shape)
         height, width = video.shape[1:3]
 
         args = (
@@ -62,7 +61,6 @@ class Animation(object):
             .overwrite_output()
             .compile()
         )
-        print(args)
         process = None
         try:
             process = subprocess.Popen(args, stdin=subprocess.PIPE)

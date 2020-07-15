@@ -2,7 +2,6 @@ import numpy as np
 import warnings
 from tomosipo.utils import up_tuple
 import tomosipo as ts
-import itertools
 from tomosipo import vector_calc as vc
 from .transform import Transform
 

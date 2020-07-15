@@ -18,8 +18,9 @@ class OperatorFunction(Function):
     def forward(ctx, input, operator):
         if input.requires_grad:
             ctx.operator = operator
-        assert input.ndim == 4, \
-            "Autograd operator expects a 4-dimensional input (3+1 for Batch dimension). "
+        assert (
+            input.ndim == 4
+        ), "Autograd operator expects a 4-dimensional input (3+1 for Batch dimension). "
 
         B, C, H, W = input.shape
         out = input.new_empty(B, *operator.range_shape)
@@ -66,6 +67,7 @@ def to_autograd(operator):
     :rtype:
 
     """
+
     def f(x):
         return OperatorFunction.apply(x, operator)
 
@@ -95,9 +97,7 @@ class Forward(Function):
         projector = ctx.projector
 
         input_type = torch.scalar_tensor(
-            0.0,
-            dtype=torch.float32,
-            device=grad_output.device
+            0.0, dtype=torch.float32, device=grad_output.device
         )
 
         with ts.data(vg, input_type) as vd, ts.data(pg, grad_output) as pd:
@@ -133,9 +133,7 @@ class Backward(Function):
         projector = ctx.projector
 
         input_type = torch.scalar_tensor(
-            0.0,
-            dtype=torch.float32,
-            device=grad_output.device
+            0.0, dtype=torch.float32, device=grad_output.device
         )
 
         with ts.data(vg, grad_output) as vd, ts.data(pg, input_type) as pd:

@@ -12,7 +12,7 @@ Now, you may use cupy arrays as you would numpy arrays:
 
 """
 import astra
-from .base import (Link, backends)
+from .base import Link, backends
 from contextlib import contextmanager
 import warnings
 import cupy
@@ -22,23 +22,28 @@ class CupyLink(Link):
     """Link implementation for cupy arrays
 
     """
+
     def __init__(self, shape, initial_value):
         super().__init__(shape, initial_value)
 
         if not isinstance(initial_value, cupy.ndarray):
-            raise ValueError(f"Expected initial_value to be a `cupy.ndarray'. Got {initial_value.__class__}")
+            raise ValueError(
+                f"Expected initial_value to be a `cupy.ndarray'. Got {initial_value.__class__}"
+            )
 
         if shape != initial_value.shape:
-            raise ValueError(f"Expected initial_value with shape {shape}. Got {initial_value.shape}")
+            raise ValueError(
+                f"Expected initial_value with shape {shape}. Got {initial_value.shape}"
+            )
         # Ensure float32
-        if initial_value.dtype != cupy.dtype('float32'):
+        if initial_value.dtype != cupy.dtype("float32"):
             warnings.warn(
                 f"The parameter initial_value is of type {initial_value.dtype}; expected `cupy.dtype('float32')`. "
                 f"The type has been automatically converted. "
                 f"Use `ts.link(x.astype('float32'))' to inhibit this warning. "
             )
-            initial_value = initial_value.astype('float32')
-        # Make contiguous:
+            initial_value = initial_value.astype("float32")
+            # Make contiguous:
             if not (
                 initial_value.flags["C_CONTIGUOUS"] and initial_value.flags["ALIGNED"]
             ):
@@ -75,7 +80,7 @@ class CupyLink(Link):
     @property
     def linked_data(self):
         z, y, x = self._data.shape
-        pitch = x * 4       # we assume 4 byte float32 values
+        pitch = x * 4  # we assume 4 byte float32 values
         link = astra.data3d.GPULink(self._data.data.ptr, x, y, z, pitch)
         return link
 
@@ -130,34 +135,22 @@ class CupyLink(Link):
     def new_zeros(self, shape):
         # Ensure data is created on same device
         with self.context():
-            return CupyLink(
-                shape,
-                cupy.zeros(shape, dtype=self._data.dtype)
-            )
+            return CupyLink(shape, cupy.zeros(shape, dtype=self._data.dtype))
 
     def new_full(self, shape, value):
         # Ensure data is created on same device
         with self.context():
-            return CupyLink(
-                shape,
-                cupy.full(shape, value, dtype=self._data.dtype)
-            )
+            return CupyLink(shape, cupy.full(shape, value, dtype=self._data.dtype))
 
     def new_empty(self, shape):
         # Ensure data is created on same device
         with self.context():
-            return CupyLink(
-                shape,
-                cupy.empty(shape, dtype=self._data.dtype)
-            )
+            return CupyLink(shape, cupy.empty(shape, dtype=self._data.dtype))
 
     def clone(self):
         # Ensure data is created on same device
         with self.context():
-            return CupyLink(
-                self._data.shape,
-                self._data.copy()
-            )
+            return CupyLink(self._data.shape, self._data.copy())
 
 
 backends.append(CupyLink)

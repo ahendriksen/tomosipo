@@ -14,7 +14,7 @@ Now, you may use torch tensors as you would numpy arrays:
 
 """
 import astra
-from .base import (Link, backends)
+from .base import Link, backends
 from .numpy import NumpyLink
 from contextlib import contextmanager
 import warnings
@@ -25,18 +25,25 @@ class TorchLink(Link):
     """Link implementation for torch arrays
 
     """
+
     def __init__(self, shape, initial_value):
         super(TorchLink, self).__init__(shape, initial_value)
 
         if not isinstance(initial_value, torch.Tensor):
-            raise ValueError(f"Expected initial_value to be a `torch.Tensor'. Got {initial_value.__class__}")
+            raise ValueError(
+                f"Expected initial_value to be a `torch.Tensor'. Got {initial_value.__class__}"
+            )
 
         if initial_value.shape == torch.Size([]):
-            self._data = torch.zeros(shape, dtype=torch.float32, device=initial_value.device)
+            self._data = torch.zeros(
+                shape, dtype=torch.float32, device=initial_value.device
+            )
             self._data[:] = initial_value
         else:
             if shape != initial_value.shape:
-                raise ValueError(f"Expected initial_value with shape {shape}. Got {initial_value.shape}")
+                raise ValueError(
+                    f"Expected initial_value with shape {shape}. Got {initial_value.shape}"
+                )
             # Ensure float32
             if initial_value.dtype != torch.float32:
                 warnings.warn(
@@ -81,7 +88,7 @@ class TorchLink(Link):
     def linked_data(self):
         if self._data.is_cuda:
             z, y, x = self._data.shape
-            pitch = x * 4       # we assume 4 byte float32 values
+            pitch = x * 4  # we assume 4 byte float32 values
             link = astra.data3d.GPULink(self._data.data_ptr(), x, y, z, pitch)
             return link
         else:
@@ -145,28 +152,16 @@ class TorchLink(Link):
     #                            New data creation                            #
     ###########################################################################
     def new_zeros(self, shape):
-        return TorchLink(
-            shape,
-            self._data.new_zeros(shape)
-        )
+        return TorchLink(shape, self._data.new_zeros(shape))
 
     def new_full(self, shape, value):
-        return TorchLink(
-            shape,
-            self._data.new_full(shape, value)
-        )
+        return TorchLink(shape, self._data.new_full(shape, value))
 
     def new_empty(self, shape):
-        return TorchLink(
-            shape,
-            self._data.new_empty(shape)
-        )
+        return TorchLink(shape, self._data.new_empty(shape))
 
     def clone(self):
-        return TorchLink(
-            self._data.shape,
-            self._data.clone()
-        )
+        return TorchLink(self._data.shape, self._data.clone())
 
 
 backends.append(TorchLink)

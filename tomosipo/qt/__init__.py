@@ -1,4 +1,5 @@
 import warnings
+
 try:
     import pyqtgraph
     from pyqtgraph.Qt import QtCore

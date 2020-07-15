@@ -15,7 +15,13 @@ from tomosipo.geometry import (
 
 
 def test_to_from_astra():
-    rs = [random_cone, random_cone_vec, random_parallel, random_parallel_vec, random_volume]
+    rs = [
+        random_cone,
+        random_cone_vec,
+        random_parallel,
+        random_parallel_vec,
+        random_volume,
+    ]
 
     for r in rs:
         g = r()

@@ -8,7 +8,7 @@ def astra_projector(
     projection_geometry,
     *,
     voxel_supersampling=1,
-    detector_supersampling=1
+    detector_supersampling=1,
 ):
     return astra.create_projector(
         "cuda3d",
@@ -22,7 +22,12 @@ def astra_projector(
 
 
 def project(
-        *data, voxel_supersampling=1, detector_supersampling=1, forward=None, additive=False, projector=None,
+    *data,
+    voxel_supersampling=1,
+    detector_supersampling=1,
+    forward=None,
+    additive=False,
+    projector=None,
 ):
     """Project forward or backward
 
@@ -85,7 +90,13 @@ def project(
     )
 
 
-def forward(*data, voxel_supersampling=1, detector_supersampling=1, additive=False, projector=None):
+def forward(
+    *data,
+    voxel_supersampling=1,
+    detector_supersampling=1,
+    additive=False,
+    projector=None,
+):
     """Forward project
 
     Projects all volumes on all projection datasets.
@@ -121,7 +132,13 @@ def forward(*data, voxel_supersampling=1, detector_supersampling=1, additive=Fal
     )
 
 
-def backward(*data, voxel_supersampling=1, detector_supersampling=1, additive=False, projector=None):
+def backward(
+    *data,
+    voxel_supersampling=1,
+    detector_supersampling=1,
+    additive=False,
+    projector=None,
+):
     """Backproject
 
     Backprojects all projection datasets on all volumes.
@@ -231,7 +248,7 @@ def operator(
 
 
 def direct_project(
-        projector, vol_link, proj_link, forward=None, additive=False,
+    projector, vol_link, proj_link, forward=None, additive=False,
 ):
     """Project forward or backward
 
@@ -279,7 +296,7 @@ def direct_project(
 
 
 def direct_fp(
-        projector, vol_data, proj_data, additive=False,
+    projector, vol_data, proj_data, additive=False,
 ):
     """Project forward or backward
 
@@ -297,16 +314,12 @@ def direct_fp(
 
     """
     return direct_project(
-        projector,
-        vol_data,
-        proj_data,
-        forward=True,
-        additive=additive,
+        projector, vol_data, proj_data, forward=True, additive=additive,
     )
 
 
 def direct_bp(
-        projector, vol_data, proj_data, additive=False,
+    projector, vol_data, proj_data, additive=False,
 ):
     """Project forward or backward
 
@@ -324,11 +337,7 @@ def direct_bp(
 
     """
     return direct_project(
-        projector,
-        vol_data,
-        proj_data,
-        forward=False,
-        additive=additive,
+        projector, vol_data, proj_data, forward=False, additive=additive,
     )
 
 
@@ -398,12 +407,7 @@ class Operator(object):
             else:
                 plink = vlink.new_empty(self.range_shape)
 
-        direct_fp(
-            self.astra_projector,
-            vlink,
-            plink,
-            additive=self.additive
-        )
+        direct_fp(self.astra_projector, vlink, plink, additive=self.additive)
 
         if isinstance(volume, Data):
             return ts.data(self.projection_geometry, plink.data)
@@ -440,10 +444,7 @@ class Operator(object):
                 vlink = plink.new_empty(self.domain_shape)
 
         direct_bp(
-            self.astra_projector,
-            vlink,
-            plink,
-            additive=self.additive,
+            self.astra_projector, vlink, plink, additive=self.additive,
         )
 
         if isinstance(projection, Data):
@@ -519,8 +520,7 @@ class BackprojectionOperator(object):
     """
 
     def __init__(
-            self,
-            parent,
+        self, parent,
     ):
         """Create a new tomographic operator
         """

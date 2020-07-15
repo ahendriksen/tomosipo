@@ -56,6 +56,7 @@ class Link(object):
     """A General base class for link types
 
     """
+
     def __init__(self, shape, initial_value):
         super(Link, self).__init__()
 

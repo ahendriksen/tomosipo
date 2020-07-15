@@ -20,7 +20,7 @@ def _pg_items(pg, colors, i):
     curve_opts = dict(width=1, mode="line_strip", antialias=True)
     det_curve_opts = dict(**curve_opts, color=det_color)
     src_curve_opts = dict(**curve_opts, color=src_curve_color)
-    ray_opts = dict(**curve_opts, color=(0.0, 0.0, 0.0, .3))
+    ray_opts = dict(**curve_opts, color=(0.0, 0.0, 0.0, 0.3))
     det_opts = dict(smooth=True, drawEdges=True, color=det_color)
 
     # Detector Curve

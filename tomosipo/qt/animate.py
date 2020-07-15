@@ -5,9 +5,7 @@ from tomosipo.qt.geometry import (
     _pg_items,
     _take,
 )
-from tomosipo.qt.oriented_box import (
-    _box_item,
-)
+from tomosipo.qt.oriented_box import _box_item
 from tomosipo.qt.display import (
     get_app,
     rainbow_colormap,
@@ -43,6 +41,7 @@ class Animation(object):
     """Documentation for Animation
 
     """
+
     def __init__(self, *geometries):
         super().__init__()
         self.geometries = geometries
@@ -55,9 +54,13 @@ class Animation(object):
         height, width = video.shape[1:3]
 
         args = (
-            ffmpeg
-            .input('pipe:', format='rawvideo', pix_fmt='rgb24', s='{}x{}'.format(width, height))
-            .output(str(path), vcodec='h264', pix_fmt='yuv420p')
+            ffmpeg.input(
+                "pipe:",
+                format="rawvideo",
+                pix_fmt="rgb24",
+                s="{}x{}".format(width, height),
+            )
+            .output(str(path), vcodec="h264", pix_fmt="yuv420p")
             .overwrite_output()
             .compile()
         )
@@ -82,16 +85,15 @@ class Animation(object):
 
                 self.save(path)
                 # Now open and base64 encode.
-                vid64 = base64.encodebytes(path.read_bytes()).decode('ascii')
+                vid64 = base64.encodebytes(path.read_bytes()).decode("ascii")
 
-                options = ['controls', 'autoplay', 'loop']
-                VIDEO_TAG = r'''<video width="320" height="240" {options}>
+                options = ["controls", "autoplay", "loop"]
+                VIDEO_TAG = r"""<video width="320" height="240" {options}>
               <source type="video/mp4" src="data:video/mp4;base64,{video}">
               Your browser does not support the video tag.
-            </video>'''
+            </video>"""
                 self.base64_video = VIDEO_TAG.format(
-                    video=vid64,
-                    options=' '.join(options)
+                    video=vid64, options=" ".join(options)
                 )
 
                 return self.base64_video
@@ -109,7 +111,9 @@ def geometry_video(*geometries):
 
     pgs = [g for g in geometries if is_projection(g)]
     vgs = [g for g in geometries if is_volume(g)]
-    boxes = [g for g in geometries if isinstance(g, ts.geometry.oriented_box.OrientedBox)]
+    boxes = [
+        g for g in geometries if isinstance(g, ts.geometry.oriented_box.OrientedBox)
+    ]
 
     _ = get_app()
     view = gl.GLViewWidget()
@@ -132,11 +136,7 @@ def geometry_video(*geometries):
 
     tmp_items = []
 
-    max_steps = max([
-        1,
-        *(pg.num_angles for pg in pgs),
-        *(b.num_steps for b in boxes)
-    ])
+    max_steps = max([1, *(pg.num_angles for pg in pgs), *(b.num_steps for b in boxes)])
     shape = (640, 480)
     out_video = np.zeros((max_steps, shape[1], shape[0], 4), dtype=np.uint8)
 
@@ -188,41 +188,85 @@ def render_to_array(gl_view_widget, size, textureSize=1024, padding=256):
         data = np.zeros((texwidth, texwidth, 4), dtype=np.ubyte)
 
         # Test texture dimensions first
-        glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_RGBA, texwidth, texwidth, 0, GL_RGBA, GL_UNSIGNED_BYTE, None)
+        glTexImage2D(
+            GL_PROXY_TEXTURE_2D,
+            0,
+            GL_RGBA,
+            texwidth,
+            texwidth,
+            0,
+            GL_RGBA,
+            GL_UNSIGNED_BYTE,
+            None,
+        )
         if glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH) == 0:
-            raise Exception("OpenGL failed to create 2D texture (%dx%d); too large for this hardware." % shape[:2])
+            raise Exception(
+                "OpenGL failed to create 2D texture (%dx%d); too large for this hardware."
+                % shape[:2]
+            )
         # Create texture
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texwidth, texwidth, 0, GL_RGBA, GL_UNSIGNED_BYTE, data.transpose((1,0,2)))
+        glTexImage2D(
+            GL_TEXTURE_2D,
+            0,
+            GL_RGBA,
+            texwidth,
+            texwidth,
+            0,
+            GL_RGBA,
+            GL_UNSIGNED_BYTE,
+            data.transpose((1, 0, 2)),
+        )
 
         # Create depth buffer
         depth_buf = glGenRenderbuffers(1)
         glBindRenderbuffer(GL_RENDERBUFFER, depth_buf)
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, texwidth, texwidth)
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_buf)
+        glFramebufferRenderbuffer(
+            GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_buf
+        )
 
-        gl_view_widget.opts['viewport'] = (0, 0, w, h)  # viewport is the complete image; this ensures that paintGL(region=...)
-                                              # is interpreted correctly.
+        gl_view_widget.opts["viewport"] = (
+            0,
+            0,
+            w,
+            h,
+        )  # viewport is the complete image; this ensures that paintGL(region=...)
+        # is interpreted correctly.
         p2 = 2 * padding
-        for x in range(-padding, w-padding, texwidth-p2):
-            for y in range(-padding, h-padding, texwidth-p2):
-                x2 = min(x+texwidth, w+padding)
-                y2 = min(y+texwidth, h+padding)
-                w2 = x2-x
-                h2 = y2-y
+        for x in range(-padding, w - padding, texwidth - p2):
+            for y in range(-padding, h - padding, texwidth - p2):
+                x2 = min(x + texwidth, w + padding)
+                y2 = min(y + texwidth, h + padding)
+                w2 = x2 - x
+                h2 = y2 - y
 
                 ## render to texture
-                glfbo.glFramebufferTexture2D(glfbo.GL_FRAMEBUFFER, glfbo.GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0)
+                glfbo.glFramebufferTexture2D(
+                    glfbo.GL_FRAMEBUFFER,
+                    glfbo.GL_COLOR_ATTACHMENT0,
+                    GL_TEXTURE_2D,
+                    tex,
+                    0,
+                )
 
-                gl_view_widget.paintGL(region=(x, h-y-h2, w2, h2), viewport=(0, 0, w2, h2))  # only render sub-region
-                glBindTexture(GL_TEXTURE_2D, tex) # fixes issue #366
+                gl_view_widget.paintGL(
+                    region=(x, h - y - h2, w2, h2), viewport=(0, 0, w2, h2)
+                )  # only render sub-region
+                glBindTexture(GL_TEXTURE_2D, tex)  # fixes issue #366
 
                 ## read texture back to array
                 data = glGetTexImage(GL_TEXTURE_2D, 0, format, type)
-                data = np.fromstring(data, dtype=np.ubyte).reshape(texwidth,texwidth,4).transpose(1,0,2)[:, ::-1]
-                output[x+padding:x2-padding, y+padding:y2-padding] = data[padding:w2-padding, -(h2-padding):-padding]
+                data = (
+                    np.fromstring(data, dtype=np.ubyte)
+                    .reshape(texwidth, texwidth, 4)
+                    .transpose(1, 0, 2)[:, ::-1]
+                )
+                output[x + padding : x2 - padding, y + padding : y2 - padding] = data[
+                    padding : w2 - padding, -(h2 - padding) : -padding
+                ]
 
     finally:
-        gl_view_widget.opts['viewport'] = None
+        gl_view_widget.opts["viewport"] = None
         glfbo.glBindFramebuffer(glfbo.GL_FRAMEBUFFER, 0)
         glBindTexture(GL_TEXTURE_2D, 0)
         if tex is not None:

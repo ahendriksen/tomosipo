@@ -17,11 +17,7 @@ def _box_item(box, i, color=(1.0, 1.0, 1.0, 1.0)):
     c = box.corners[i, :, ::-1]
     volume_mesh = np.array(list(itertools.product(c, c, c)))
     return gl.GLMeshItem(
-        vertexes=volume_mesh,
-        smooth=False,
-        color=color,
-        drawEdges=True,
-        drawFaces=True,
+        vertexes=volume_mesh, smooth=False, color=color, drawEdges=True, drawFaces=True,
     )
 
 

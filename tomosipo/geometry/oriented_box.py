@@ -134,6 +134,14 @@ class OrientedBox(object):
             and np.all(abs(d_u) < ts.epsilon)
         )
 
+    def __getitem__(self, i):
+        if not (isinstance(i, slice) or isinstance(i, int)):
+            raise TypeError(
+                f"OrientedBox only support one-dimensional indexing. Got: {i}"
+            )
+
+        return OrientedBox(self.rel_size, self.pos[i], self.w[i], self.v[i], self.u[i],)
+
     @property
     def corners(self):
         c = np.array(

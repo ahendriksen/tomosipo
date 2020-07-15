@@ -30,6 +30,17 @@ class Transform(object):
 
         return np.all(abs(A - B) < ts.epsilon)
 
+    def __getitem__(self, i):
+        if not (isinstance(i, slice) or isinstance(i, int)):
+            raise TypeError(
+                f"Transform only support one-dimensional indexing. Got: {i}"
+            )
+        return Transform(self.matrix[i])
+
+    @property
+    def num_steps(self):
+        return self.matrix.shape[0]
+
     @property
     def inv(self):
         return Transform(vc.invert_transformation_matrix(self.matrix))
@@ -111,7 +122,6 @@ def scale(s):
 
     S = np.concatenate([S0, S1, S2, S3], axis=2)
     return Transform(S)
-
 
 
 def rotate(pos, axis, *, rad=None, deg=None, right_handed=True):

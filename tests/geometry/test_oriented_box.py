@@ -68,6 +68,17 @@ def test_eq():
         assert ob != u
 
 
+def test_get_item():
+    box = random_box()
+    assert box[0] == box
+    assert box[:1] == box
+    assert ts.concatenate(box, box)[0] == box
+    assert ts.concatenate(box, box)[1] == box
+    with pytest.raises(TypeError):
+        box[0, 0]
+        box[...]
+
+
 def test_size_properties():
     basis = np.array(((1, 0, 0), (0, 1, 0), (0, 0, 1)))
     ob = ts.box(1, 0, *basis)
@@ -143,6 +154,7 @@ def test_display(interactive):
 
     if interactive:
         from tomosipo.qt import display
+
         display(ob1, ob2)
 
 
@@ -160,10 +172,11 @@ def test_transform():
 
 
 def test_display_auto_center(interactive):
-    boxes = [ts.scale(.01) * random_box() for _ in range(16)]
+    boxes = [ts.scale(0.01) * random_box() for _ in range(16)]
 
     if interactive:
         from tomosipo.qt import display
+
         display(*boxes)
 
 
@@ -172,6 +185,7 @@ def test_display_colors(interactive):
 
     if interactive:
         from tomosipo.qt import display
+
         display(*boxes)
 
 
@@ -200,6 +214,7 @@ def test_transform_example(interactive):
 
     if interactive:
         from tomosipo.qt import display
+
         display(ob1, ob2)
         display(M1 * ob1, M1 * ob2)
         display(M2 * ob1, M2 * ob2)

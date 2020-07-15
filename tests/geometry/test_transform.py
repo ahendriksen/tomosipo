@@ -3,7 +3,7 @@
 
 """Tests for Transform."""
 
-
+import pytest
 import tomosipo as ts
 from tomosipo.geometry import random_box
 import numpy as np
@@ -27,6 +27,17 @@ def test_eq():
         params = np.random.normal(0, 1, size=(1, 3))
         T = ts.translate(*params)
         assert T == T
+
+
+def test_get_item():
+    T = transform.random_transform()
+    assert T[0] == T
+    assert T[:1] == T
+    assert ts.concatenate(T, T)[0] == T
+    assert ts.concatenate(T, T)[1] == T
+    with pytest.raises(TypeError):
+        T[0, 0]
+        T[...]
 
 
 def test_translate():

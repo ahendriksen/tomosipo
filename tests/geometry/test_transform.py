@@ -33,8 +33,8 @@ def test_get_item():
     T = transform.random_transform()
     assert T[0] == T
     assert T[:1] == T
-    assert ts.concatenate(T, T)[0] == T
-    assert ts.concatenate(T, T)[1] == T
+    assert ts.concatenate([T, T])[0] == T
+    assert ts.concatenate([T, T])[1] == T
     with pytest.raises(TypeError):
         T[0, 0]
         T[...]
@@ -124,13 +124,14 @@ def test_rotate(interactive):
     box = ts.box((5, 2, 2), 0, (1, 0, 0), (0, 1, 0), (0, 0, 1))
     # top_box is located above (Z-axis) the box to show in
     # which direction the Z-axis points
-    top_box = ts.box(.5, (3, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1))
+    top_box = ts.box(0.5, (3, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1))
 
     s = np.linspace(0, 360, 361, endpoint=True)
     R = ts.rotate((0, 0, 0), (1, 0, 0), deg=s, right_handed=True)
 
     if interactive:
         from tomosipo.qt import display
+
         display(R * box, top_box)
 
 

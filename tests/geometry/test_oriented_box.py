@@ -72,8 +72,8 @@ def test_get_item():
     box = random_box()
     assert box[0] == box
     assert box[:1] == box
-    assert ts.concatenate(box, box)[0] == box
-    assert ts.concatenate(box, box)[1] == box
+    assert ts.concatenate([box, box])[0] == box
+    assert ts.concatenate([box, box])[1] == box
     with pytest.raises(TypeError):
         box[0, 0]
         box[...]

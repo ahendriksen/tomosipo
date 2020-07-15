@@ -22,6 +22,8 @@ from .geometry.transform import (
     to_perspective,
     from_perspective,
 )
+from .geometry.concatenate import concatenate
+
 from .links.base import link
 from .astra import (
     from_astra,

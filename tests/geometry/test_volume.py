@@ -41,7 +41,7 @@ class TestVolumeGeometry(unittest.TestCase):
         extent = ((0, 1),) * 3
         self.assertEqual(ts.volume(extent=(0, 1)).extent, extent)
 
-        self.assertEqual(ts.volume(center=.5, size=1).extent, extent)
+        self.assertEqual(ts.volume(center=0.5, size=1).extent, extent)
 
         # Check errors
         with self.assertRaises(ValueError):
@@ -184,7 +184,9 @@ class TestVolumeGeometry(unittest.TestCase):
             T1 = random_transform()
             T2 = random_transform()
             self.assertEqual((T1 * T2) * vg.to_box(), T1 * (T2 * vg.to_box()))
-            self.assertEqual(transform.identity() * vg.to_box(), T1.inv * (T1 * vg.to_box()))
+            self.assertEqual(
+                transform.identity() * vg.to_box(), T1.inv * (T1 * vg.to_box())
+            )
 
     def test_with_voxel_size(self):
         vg = ts.volume(shape=10, size=10, center=0)

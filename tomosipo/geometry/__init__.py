@@ -21,5 +21,15 @@ from .oriented_box import random_box
 from .volume import random_volume
 from .transform import random_transform
 
+# Expose classes at this level as well.
+from .cone import ConeGeometry
+from .cone_vec import ConeVectorGeometry
+from .parallel import ParallelGeometry
+from .parallel_vec import ParallelVectorGeometry
+from .volume import VolumeGeometry
+from .oriented_box import OrientedBox
+from .transform import Transform
+
+
 from .base_projection import is_projection
 from .volume import is_volume

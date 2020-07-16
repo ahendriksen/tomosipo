@@ -142,6 +142,14 @@ class VolumeGeometry:
     def voxel_size(self):
         return tuple(size / shape for size, shape in zip(self.size(), self.shape))
 
+    @property
+    def num_steps(self):
+        """The number of orientations and positions of this volume
+
+        A VolumeGeometry always has only a single step.
+        """
+        return 1
+
     def to_astra(self):
         """Return an Astra volume geometry.
 

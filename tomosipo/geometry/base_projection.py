@@ -132,6 +132,20 @@ class ProjectionGeometry(object):
         raise NotImplementedError()
 
     @property
+    def num_steps(self):
+        """The number of orientations in the geometry
+
+        This property equals `num_angles' and is provided so
+        projection geometries and volume geometries share the same
+        interface.
+
+        :returns:
+        :rtype:
+
+        """
+        return self.num_angles
+
+    @property
     def angles(self):
         """The angles from which projections are acquired.
 

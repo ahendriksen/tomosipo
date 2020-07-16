@@ -19,4 +19,3 @@ except ModuleNotFoundError:
 from .display import display
 from . import data
 from . import geometry
-from . import oriented_box

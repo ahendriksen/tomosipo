@@ -133,8 +133,8 @@ def test_transform():
         # volume has been converted to a vector geometry.
         with pytest.warns(UserWarning):
             T1 * T2 * vg
-        assert (T1 * T2) * vg.to_box() == T1 * (T2 * vg.to_box())
-        assert transform.identity() * vg.to_box() == T1.inv * (T1 * vg.to_box())
+        assert (T1 * T2) * vg.to_vec() == T1 * (T2 * vg.to_vec())
+        assert transform.identity() * vg.to_vec() == T1.inv * (T1 * vg.to_vec())
 
 
 def test_contains():
@@ -177,10 +177,10 @@ def test_reshape():
     assert vg1 == vg2
 
 
-def test_to_box():
+def test_to_vec():
     vg = ts.volume(shape=(3, 5, 7))
-    box = vg.to_box()
-    assert np.allclose(box.abs_size, vg.size())
+    vg_vec = vg.to_vec()
+    assert np.allclose(vg_vec.size, vg.size())
 
 
 def test_with_voxel_size():

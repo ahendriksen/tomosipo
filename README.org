@@ -214,7 +214,7 @@ There are several helper functions to create a geometry:
 - ~ts.cone_vec~: creates a 3D cone beam geometry where the
   source and detector can be arbitrarily oriented
 - ~ts.volume~: creates an axis-aligned volume geometry
-- ~ts.box~: creates an arbitrarily oriented box. This object cannot be
+- ~ts.volume_vec~: creates an arbitrarily oriented volume. This object cannot be
   converted to ASTRA directly, but can be used in geometric computations.
 
 *** Transformations

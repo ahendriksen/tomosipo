@@ -188,24 +188,13 @@ class ConeVectorGeometry(ProjectionGeometry):
         return self
 
     def to_box(self):
-        """Returns two boxes representating the source and detector respectively
+        """Returns an oriented box representating the detector
 
-        :returns: (source_box, detector_box)
-        :rtype:  `(OrientedBox, OrientedBox)`
+        :returns: an oriented box representating the detector
+        :rtype:  `VolumeVectorGeometry`
 
         """
-
-        det_box = self._det_vec.to_box()
-
-        # The source of course does not really have a size, but we
-        # want to be able to visualize it, so we take the height
-        # divided by 10.
-        src_size = (det_box.rel_size[0] / 10,) * 3
-        # We set the orientation of the source to be identical to
-        # that of the detector.
-        src_box = ts.box(src_size, self.src_pos, det_box.w, det_box.v, det_box.u)
-
-        return src_box, det_box
+        return self._det_vec.to_box()
 
     ###########################################################################
     #                                Properties                               #

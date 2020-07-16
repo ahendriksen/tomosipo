@@ -101,12 +101,8 @@ def test_to_vec(det_vecs):
 
 
 def test_to_box(det_vecs):
-    with pytest.warns(Warning):
-        # Should for non-uniform detector sizes
-        for pg in det_vecs:
-            assert pg.det_pos == approx(pg.to_box().pos)
-
-    # TODO: This test deserves better..
+    for pg in det_vecs:
+        assert pg.det_pos == approx(pg.to_box().pos)
 
 
 def test_src_pos(det_vecs):

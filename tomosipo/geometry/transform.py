@@ -222,7 +222,7 @@ def to_perspective(pos=None, w=None, v=None, u=None, box=None):
         The second coordinate of the new frame of reference.
     :param u:
         The second coordinate of the new frame of reference.
-    :param box: `OrientedBox` (optional)
+    :param box: `VolumeVectorGeometry` (optional)
         Retrieve `pos, w, v, u` arguments from a box.
     :returns:
     :rtype:
@@ -263,7 +263,7 @@ def from_perspective(pos=None, w=None, v=None, u=None, box=None):
         The second coordinate of the new frame of reference.
     :param u:
         The second coordinate of the new frame of reference.
-    :param box: `OrientedBox` (optional)
+    :param box: `VolumeVectorGeometry` (optional)
         Retrieve `pos, w, v, u` arguments from a box.
     :returns:
     :rtype:

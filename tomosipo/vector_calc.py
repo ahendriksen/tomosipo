@@ -3,7 +3,7 @@
 Many objects in tomosipo contain vectors that change over time. Think
 of a `ts.ConeVectorGeometry`, for wich the source and detector
 positions change with each angle. The same is true for a
-`OrientedBox`.
+`VolumeVectorGeometry`.
 
 Therefore, it makes to sense to force these vectors into a common
 format and provide some basic common functionality. In tomosipo, the

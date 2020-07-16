@@ -166,12 +166,10 @@ class TestConeVectorGeometry(unittest.TestCase):
             self.assertEqual(transform.identity() * pg, pg)
 
     def test_to_box(self):
-        pg = ts.cone(10, shape=(5, 3), src_obj_dist=11, src_det_dist=21).to_vec()
-        src_box, det_box = pg.to_box()
 
-        self.assertAlmostEqual(
-            abs(vc.norm(src_box.pos - det_box.pos) - (10 + 11)).sum(), 0
-        )
+        pg = ts.cone(10, shape=(5, 3), src_obj_dist=11, src_det_dist=21).to_vec()
+
+        self.assertTrue(np.allclose(pg.det_pos, pg.to_box().pos))
         # XXX: Really do not know what to test here..
 
     def test_rescale_det(self):

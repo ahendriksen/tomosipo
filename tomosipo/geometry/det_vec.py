@@ -211,37 +211,22 @@ class DetectorVectorGeometry(ProjectionGeometry):
         return self
 
     def to_box(self):
-        """Returns a box representating the detector
+        """Returns an oriented box representating the detector
 
-        :returns: detector_box
-        :rtype:  `OrientedBox`
+        :returns: an oriented box representating the detector
+        :rtype:  `VolumeVectorGeometry`
 
         """
         det_pos = self._det_pos
         w = self._det_v  # v points up, w points up
         u = self._det_u  # detector_u and u point in the same direction
-
-        # TODO: Fix vc.norm so we do not need [:, None]
-        # We do not want to introduce scaling, so we normalize w and u.
-        w = w / vc.norm(w)[:, None]
-        u = u / vc.norm(u)[:, None]
         # This is the detector normal and has norm 1. In right-handed
         # coordinates, it would point towards the source usually. Now
         # it points "into" the detector.
         v = self.det_normal
-        v = v / vc.norm(v)[:, None]
 
-        # TODO: Warn when detector size changes during rotation.
-        det_height, det_width = self.det_sizes[0]
-
-        if np.any(abs(np.ptp(self.det_sizes, axis=0)) > ts.epsilon):
-            warnings.warn(
-                "The detector size is not uniform. "
-                "Using first detector size for the box. "
-                "To inhibit this warning, please make sure that the absolute size of the detector does not change. "
-            )
-
-        det_box = ts.box((det_height, 0, det_width), det_pos, w, v, u)
+        det_shape = self.det_shape
+        det_box = ts.volume_vec((det_shape[0], 0, det_shape[1]), det_pos, w, v, u)
 
         return det_box
 

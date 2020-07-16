@@ -344,16 +344,6 @@ class VolumeGeometry:
         """
         return list(itertools.product(*self.extent))
 
-    def to_box(self):
-        """Returns an oriented box representating the volume
-
-        :returns:
-        :rtype:
-
-        """
-        # TODO: remove
-        return ts.box(self.size(), self.get_center(), (1, 0, 0), (0, 1, 0), (0, 0, 1))
-
     def to_vec(self):
         """Returns a vector representation of the volume
 

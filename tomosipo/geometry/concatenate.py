@@ -8,7 +8,6 @@ from . import (
     ParallelVectorGeometry,
     VolumeGeometry,
     VolumeVectorGeometry,
-    OrientedBox,
 )
 
 
@@ -77,20 +76,6 @@ def concatenate(items):
             w=np.concatenate([i.to_vec().w for i in items]),
             v=np.concatenate([i.to_vec().v for i in items]),
             u=np.concatenate([i.to_vec().u for i in items]),
-        )
-
-    if all(isinstance(i, OrientedBox) for i in items):
-        if not all(i.rel_size == items[0].rel_size for i in items):
-            raise ValueError(
-                "Cannot concatenate oriented boxes. Not all sizes are equal."
-            )
-
-        return OrientedBox(
-            size=items[0].rel_size,
-            pos=np.concatenate([i.pos for i in items]),
-            w=np.concatenate([i.w for i in items]),
-            v=np.concatenate([i.v for i in items]),
-            u=np.concatenate([i.u for i in items]),
         )
 
     types = set(type(i) for i in items)

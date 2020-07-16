@@ -322,10 +322,10 @@ class ConeGeometry(ProjectionGeometry):
         return self.to_vec().project_point(point)
 
     def to_box(self):
-        """Returns two boxes representating the source and detector respectively
+        """Returns an oriented box representating the detector
 
-        :returns: (source_box, detector_box)
-        :rtype:  `(OrientedBox, OrientedBox)`
+        :returns: an oriented box representating the detector
+        :rtype:  `VolumeVectorGeometry`
 
         """
         return self.to_vec().to_box()

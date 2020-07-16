@@ -176,6 +176,4 @@ def test_transform():
 
 def test_to_box():
     pg = ts.cone(10, shape=(5, 3), src_obj_dist=11, src_det_dist=21)
-    src_box, det_box = pg.to_box()
-
-    assert pytest.approx(0) == vc.norm(src_box.pos - det_box.pos) - (10 + 11)
+    assert pg.det_pos == approx(pg.to_box().pos)

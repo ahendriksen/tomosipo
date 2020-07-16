@@ -1,11 +1,10 @@
 # First, import from tomosipo.qt to catch import errors.
 import tomosipo as ts
 from tomosipo.qt.geometry import (
-    _vg_item,
-    _pg_items,
+    to_mesh_items,
+    num_colors,
     _take,
 )
-from tomosipo.qt.oriented_box import _box_item
 from tomosipo.qt.display import (
     get_app,
     rainbow_colormap,
@@ -15,9 +14,6 @@ import itertools
 from OpenGL.GL import *
 import OpenGL.GL.framebufferobjects as glfbo
 import pyqtgraph.opengl as gl
-
-from tomosipo.geometry.base_projection import is_projection
-from tomosipo.geometry.volume import is_volume
 import warnings
 
 # TODO: Check that ffmpeg is available.
@@ -108,13 +104,11 @@ def geometry_video(*geometries):
     :rtype: None
 
     """
+    # Video will be 640 pixels wide and 480 high.
+    SHAPE = (480, 640)
 
-    pgs = [g for g in geometries if is_projection(g)]
-    vgs = [g for g in geometries if is_volume(g)]
-    boxes = [
-        g for g in geometries if isinstance(g, ts.geometry.oriented_box.OrientedBox)
-    ]
-
+    # We get the current active instance of the QT app. We do not have
+    # to close it.
     _ = get_app()
     view = gl.GLViewWidget()
     view.setBackgroundColor(0.95)
@@ -123,54 +117,46 @@ def geometry_video(*geometries):
     for i in range(8):
         idx = idx + list(range(i, 256, 32))
     colors = map(tuple, rainbow_colormap[idx])
-
-    for vg in vgs:
-        color, *colors = colors
-        view.addItem(_vg_item(vg, color))
-
     colors = itertools.cycle(colors)
-    pg_colors = [tuple(_take(colors, 2)) for _ in pgs]
-    box_colors = [_take(colors, 1)[0] for _ in boxes]
 
-    assert len(pg_colors) == len(pgs)
+    geometry_colors = [_take(colors, num_colors(g)) for g in geometries]
+
+    assert len(geometry_colors) == len(geometries)
 
     tmp_items = []
-
-    max_steps = max([1, *(pg.num_angles for pg in pgs), *(b.num_steps for b in boxes)])
-    shape = (640, 480)
-    out_video = np.zeros((max_steps, shape[1], shape[0], 4), dtype=np.uint8)
+    max_steps = max([1, *(g.num_steps for g in geometries)])
+    out_video = np.zeros((max_steps, *SHAPE, 4), dtype=np.uint8)
 
     for i in range(max_steps):
         for item in tmp_items:
             view.removeItem(item)
         tmp_items = []
-        for pg, c in zip(pgs, pg_colors):
-            for item in _pg_items(pg, c, i):
+        for g, c in zip(geometries, geometry_colors):
+            for item in to_mesh_items(g, c, i):
                 view.addItem(item)
                 tmp_items.append(item)
-        for box, c in zip(boxes, box_colors):
-            item = _box_item(box, i, color=c)
-            view.addItem(item)
-            tmp_items.append(item)
 
-        video_frame = render_to_array(view, shape)
+        video_frame = render_to_array(view, SHAPE)
         # Flip x, y
         video_frame = video_frame.transpose(1, 0, 2)
         # Move alpha channel to back (ARGB -> RGBA)
         video_frame = np.roll(video_frame, 3, axis=2)
         out_video[i] = video_frame
 
+    # Close view widget
+    view.close()
+
     return out_video
 
 
-def render_to_array(gl_view_widget, size, textureSize=1024, padding=256):
+def render_to_array(gl_view_widget, shape, textureSize=1024, padding=256):
     # This is a modified version of GLViewWidget.renderToArray().
     # Here, this PR has been incorporated:
     # https://github.com/pyqtgraph/pyqtgraph/pull/1306
     # At some point, we should consider removing this function.
     format = GL_BGRA
     type = GL_UNSIGNED_BYTE
-    w, h = map(int, size)
+    h, w = map(int, shape)
 
     gl_view_widget.makeCurrent()
     tex = None

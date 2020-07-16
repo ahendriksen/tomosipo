@@ -1,5 +1,6 @@
 import collections
 from numbers import Integral
+import numpy as np
 
 
 def up_tuple(x, n):
@@ -8,10 +9,46 @@ def up_tuple(x, n):
         if len(x) == 1:
             return (x[0],) * n
         if len(x) != n:
-            raise ValueError(f"Expected container with {n} elements.")
+            raise ValueError(f"Expected tuple with {n} elements.")
         return x
     # Make tuple
     return (x,) * n
+
+
+def to_shape(shape, dim=3):
+    shape = up_tuple(shape, dim)
+    for s in shape:
+        if not isinstance(s, Integral):
+            raise TypeError(
+                f"Shape must contain only integers. Got {shape} with type {type(s)}. "
+            )
+    shape = tuple(map(int, shape))
+    if not all(s >= 0 for s in shape):
+        raise ValueError(f"Shape must be non-negative. Got {shape}.")
+
+    return shape
+
+
+def to_pos(pos, dim=3):
+    if np.isscalar(pos) and pos == 0.0:
+        pos = up_tuple(pos, dim)
+    elif np.isscalar(pos):
+        raise ValueError(
+            f"Position {pos} is not automatically converted to {up_tuple(pos, dim)}. "
+            f"Provide a tuple instead. "
+        )
+
+    # TODO: Check if pos is a vector and nicely shaped.
+    return pos
+
+
+def to_size(size, dim=3):
+    if np.isscalar(size):
+        size = up_tuple(size, dim)
+    if not all(s >= 0.0 for s in size):
+        raise ValueError(f"Size must be non-negative. Got {size}")
+    # TODO: Check if size is a vector and nicely shaped.
+    return size
 
 
 def up_slice(key):

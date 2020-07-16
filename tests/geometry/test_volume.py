@@ -8,8 +8,24 @@ import pytest
 import numpy as np
 import tomosipo as ts
 from tomosipo.geometry import random_volume, random_transform
-from tomosipo.geometry.volume import from_astra
+from tomosipo.geometry.volume import (
+    from_astra,
+    _pos_size_to_extent,
+    _extent_to_pos_size,
+)
 from tomosipo.geometry import transform
+
+
+def test_pos_size_and_extent():
+    N = 10
+    for _ in range(N):
+        pos = np.random.normal(size=3)
+        size = np.square(np.random.normal(size=3))
+        extent = _pos_size_to_extent(pos, size)
+        newpos, newsize = _extent_to_pos_size(extent)
+
+        assert np.allclose(newpos, pos)
+        assert np.allclose(newsize, size)
 
 
 def test_is_volume():
@@ -28,12 +44,11 @@ def test_init():
     extent = ((0, 1), (3, 4), (5, 6))
     assert ts.volume(extent=extent).extent == extent
     extent = ((0, 1),) * 3
-    assert ts.volume(extent=(0, 1)).extent == extent
 
-    assert ts.volume(center=0.5, size=1).extent == extent
+    assert ts.volume(center=(0.5, 0.5, 0.5), size=1).extent == extent
 
     # Check errors
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         ts.volume(extent=(1, 0))
     with pytest.raises(TypeError):
         ts.volume(extent=3)
@@ -57,6 +72,20 @@ def test_equal():
         assert vg != u
 
 
+def test_repr():
+    # TODO: Use ts.volume when reparametrized
+    unit_box = ts.geometry.VolumeGeometry(
+        shape=(1, 2, 3), pos=(4, 5, 6), size=(7, 8, 9)
+    )
+    r = """VolumeGeometry(
+    shape=(1, 2, 3),
+    pos=(4.0, 5.0, 6.0),
+    size=(7.0, 8.0, 9.0),
+)"""
+
+    assert repr(unit_box) == r
+
+
 def test_volume():
     assert ts.volume() == ts.volume()
     shapes = [2, (1, 4, 5), (10, 10, 10)]
@@ -75,6 +104,9 @@ def test_astra():
 def test_getitem():
     vg = ts.volume(shape=(3, 4, 5), extent=((11, 13), (17, 19), (23, 29)))
 
+    print(vg)
+    print(vg[:, :, :])
+
     assert vg == vg[:, :, :]
     assert vg == vg[:, :]
     assert vg == vg[:]
@@ -85,17 +117,16 @@ def test_getitem():
 
     assert vg[::3, ::4, ::5].shape == (1, 1, 1)
     # Check that voxel size is preserved:
-    assert np.allclose(vg[0, 1, 2].size(), (np.array(vg.size()) / vg.shape))
+    assert np.allclose(vg[0, 1, 2].size, (np.array(vg.size) / vg.shape))
 
-    assert np.allclose(vg.size()[1], vg[:, ::2, :].size()[1])
+    assert np.allclose(vg.size[1], vg[:, ::2, :].size[1])
     assert np.allclose(vg.shape[1], 2 * vg[:, ::2].shape[1])
 
     assert np.allclose(
-        2 * vg.size()[1] / vg.shape[1],
-        vg[:, ::2, :].size()[1] / vg[:, ::2, :].shape[1],
+        2 * vg.size[1] / vg.shape[1], vg[:, ::2, :].size[1] / vg[:, ::2, :].shape[1],
     )
 
-    assert np.allclose(vg[:, ::2, :].size(), vg[:, 1::2, :].size())
+    assert np.allclose(vg[:, ::2, :].size, vg[:, 1::2, :].size)
 
 
 def test_translate():
@@ -139,33 +170,12 @@ def test_transform():
 
 def test_contains():
     vg = ts.volume()
-    assert not (vg in vg.translate(1))
+    t = (5, 5, 5)
+    assert vg in vg
+    assert not (vg in vg.translate(t))
     assert not (vg in vg.scale(0.5))
     assert vg in vg.scale(2)
-    assert vg.translate(5) in vg.translate(5).scale(2)
-    assert vg in vg
-
-
-def test_intersection():
-    vg = ts.volume()
-
-    for _ in range(100):
-        t = np.random.normal(size=3)
-        r = np.random.normal(size=3)
-        r = abs(r) + 0.01
-
-        vg2 = vg.translate(t).scale(r)
-
-        intersection = vg.intersect(vg2)
-
-        if intersection is not None:
-            assert intersection in vg
-            assert intersection in vg2
-        else:
-            assert not (vg in vg2)
-            assert not (vg2 in vg)
-
-        assert vg2 == vg2.intersect(vg2)
+    assert vg.translate(t) in vg.translate(t).scale(2)
 
 
 def test_reshape():
@@ -180,7 +190,7 @@ def test_reshape():
 def test_to_vec():
     vg = ts.volume(shape=(3, 5, 7))
     vg_vec = vg.to_vec()
-    assert np.allclose(vg_vec.size, vg.size())
+    assert np.allclose(vg_vec.size, vg.size)
 
 
 def test_with_voxel_size():

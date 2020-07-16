@@ -19,7 +19,7 @@ vgs = [
 ]
 
 translations = [
-    ts.translate((0, 0, 0)),    # identity
+    ts.translate((0, 0, 0)),  # identity
     ts.translate(*np.random.normal(0, 1, size=(1, 3))),
 ]
 
@@ -27,11 +27,13 @@ rotations = [
     ts.rotate(pos=0, axis=(1, 0, 0), rad=0),  # identity
     ts.rotate(pos=0, axis=(1, 0, 0), rad=1.0),
     ts.rotate(*np.random.normal(0, 1, size=(2, 3)), deg=np.random.normal()),
-    ts.rotate(*np.random.normal(0, 1, size=(2, 3)), deg=np.random.normal(), right_handed=False),
+    ts.rotate(
+        *np.random.normal(0, 1, size=(2, 3)), deg=np.random.normal(), right_handed=False
+    ),
 ]
 
 scalings = [
-    ts.scale(1),                # identity
+    ts.scale(1),  # identity
     ts.scale(np.random.normal()),  # uniform random scaling in each direction
     ts.scale(np.random.normal(size=3)),  # random scaling in each direction
 ]
@@ -39,7 +41,9 @@ scalings = [
 transformations = translations + rotations + scalings
 
 
-@pytest.mark.parametrize('vg, T, R, S', itertools.product(vgs, translations, rotations, scalings))
+@pytest.mark.parametrize(
+    "vg, T, R, S", itertools.product(vgs, translations, rotations, scalings)
+)
 def test_equations(vg, T, R, S):
     # identity:
     id = transform.identity()
@@ -59,13 +63,13 @@ def test_equations(vg, T, R, S):
     assert (T * S * R).inv == R.inv * S.inv * T.inv
 
 
-@pytest.mark.parametrize('vg', vgs)
+@pytest.mark.parametrize("vg", vgs)
 def test_identity(vg):
     T = transform.identity()
     assert T * vg == vg
 
 
-@pytest.mark.parametrize('T', transformations)
+@pytest.mark.parametrize("T", transformations)
 def test_eq(T):
     assert T == T
     assert T != ts.translate((0.1, 0.1, 0.1)) * T
@@ -73,7 +77,7 @@ def test_eq(T):
     assert T != ts.rotate(pos=0, axis=(1, 0, 0), deg=1) * T
 
 
-@pytest.mark.parametrize('T', translations)
+@pytest.mark.parametrize("T", translations)
 def test_get_item(T):
     assert T[0] == T
     assert T[:1] == T
@@ -92,6 +96,7 @@ def test_translate_simple_case():
 
     t = np.array((3, 4, 5))
     T = ts.translate(t)
+
     assert T * original == ts.volume_vec(
         (3, 4, 5), t + (2, 3, 5), original.w, original.v, original.u
     )
@@ -117,7 +122,9 @@ def test_scale_simple_case():
     s = np.random.normal()
     assert ts.scale(s) * unit == ts.volume_vec(1, 0, s * unit.w, s * unit.v, s * unit.u)
     s = np.random.normal(size=3)
-    assert ts.scale(s) * unit == ts.volume_vec(1, 0, s[0] * unit.w, s[1] * unit.v, s[2] * unit.u)
+    assert ts.scale(s) * unit == ts.volume_vec(
+        1, 0, s[0] * unit.w, s[1] * unit.v, s[2] * unit.u
+    )
 
 
 def test_scale():

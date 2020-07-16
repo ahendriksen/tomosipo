@@ -51,10 +51,10 @@ def test_repr():
     unit_box = ts.volume_vec(shape=1, pos=(0, 0, 0))
     r = """VolumeVectorGeometry(
     shape=(1, 1, 1),
-    pos=[[0 0 0]],
-    w=[[1 0 0]],
-    v=[[0 1 0]],
-    u=[[0 0 1]],
+    pos=[[ 0.  0.  0.]],
+    w=[[ 1.  0.  0.]],
+    v=[[ 0.  1.  0.]],
+    u=[[ 0.  0.  1.]],
 )"""
 
     assert repr(unit_box) == r
@@ -66,7 +66,7 @@ def test_eq():
     unequal = [
         ts.cone(),
         ts.volume_vec(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 99)),
-        ts.volume_vec(1.1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0)),
+        ts.volume_vec(2, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0)),
         ts.volume_vec(1, (1, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0)),
         ts.volume_vec(1, (0, 0, 0), (0, 1, 0), (1, 0, 0), (0, 1, 0)),
     ]
@@ -77,14 +77,30 @@ def test_eq():
         assert ob != u
 
 
+def test_lower_left_corner():
+    assert approx(ts.volume_vec(1, pos=0).lower_left_corner) == [(-0.5, -0.5, -0.5)]
+    assert approx(ts.volume_vec(1, pos=(0.5, 0.5, 0.5)).lower_left_corner) == [
+        (0, 0, 0)
+    ]
+
+
 def test_get_item():
     vg = random_volume_vec()
     assert vg[0] == vg
     assert vg[:1] == vg
+    assert vg[-1] == vg
+    assert vg[:] == vg
     assert ts.concatenate([vg, vg])[0] == vg
     assert ts.concatenate([vg, vg])[1] == vg
+
+    assert ts.volume_vec(shape=3)[:, 1, 1, 1] == ts.volume_vec(shape=1)
+    T = random_transform()
+    assert T * vg[:, 1, 2, 3] == (T * vg)[:, 1, 2, 3]
+    assert T * vg[:, :1, :2, :3] == (T * vg)[:, :1, :2, :3]
+    assert T * vg[:, 1:, 2:, 3:] == (T * vg)[:, 1:, 2:, 3:]
+    with pytest.raises(ValueError):
+        vg[1, 2, 3, 4, 5]
     with pytest.raises(TypeError):
-        vg[0, 0]
         vg[...]
 
 

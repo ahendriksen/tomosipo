@@ -301,7 +301,7 @@ class ProjectionGeometry(object):
         raise NotImplementedError()
 
     ###########################################################################
-    #                          Transormation methods                          #
+    #                          Transformation methods                         #
     ###########################################################################
     def rescale_det(self, scale):
         """Rescale detector pixels

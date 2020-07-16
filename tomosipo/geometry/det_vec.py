@@ -341,7 +341,6 @@ class DetectorVectorGeometry(ProjectionGeometry):
     def reshape(self, new_shape):
         """Reshape detector pixels without changing detector size
 
-
         :param new_shape: int or (int, int)
             The new shape of the detector in pixels in `v` (height)
             and `u` (width) direction.

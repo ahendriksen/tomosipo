@@ -49,9 +49,8 @@ def volume(shape=(1, 1, 1), extent=None, center=None, size=None):
     :rtype: VolumeGeometry
 
     """
-    vg = VolumeGeometry()
-    shape = up_tuple(shape, 3)
-    vg = vg.reshape(shape)
+    shape = ts.utils.to_shape(shape)
+    vg = VolumeGeometry(shape)
 
     if center is None and size is not None:
         raise ValueError("Both center and size must be provided.")
@@ -63,27 +62,11 @@ def volume(shape=(1, 1, 1), extent=None, center=None, size=None):
         )
 
     if center is not None and size is not None:
-        center = np.array(up_tuple(center, 3))
-        size = np.array(up_tuple(size, 3))
-        l = center - size / 2
-        r = center + size / 2
-        extent = tuple(zip(l, r))
+        return VolumeGeometry(shape, center, size)
 
     if extent is not None:
-        if isinstance(extent, Iterator) or isinstance(extent, Iterable):
-            if len(extent) == 2:
-                extent = up_tuple((extent,), 3)
-        try:
-            (x, X), (y, Y), (z, Z) = extent
-            for (a, A) in ((x, X), (y, Y), (z, Z)):
-                if A < a:
-                    raise ValueError(f"Extent (x, X) must satisfy x <= X; got: {(a,A)}")
-            vg.extent = tuple(
-                (float(a), float(A)) for (a, A) in ((x, X), (y, Y), (z, Z))
-            )
-
-        except TypeError:
-            raise TypeError(f"Extent should be a tuple of ints, got {extent}")
+        pos, size = _extent_to_pos_size(extent)
+        return VolumeGeometry(shape, pos, size)
 
     return vg
 
@@ -96,59 +79,145 @@ def random_volume():
 
     """
     center, size = 1 + abs(np.random.normal(size=(2, 3)))
-    shape = np.random.uniform(2, 100, 3)
+    shape = np.random.uniform(2, 100, 3).astype(int)
     return volume(shape).translate(center).scale(size)
 
 
-class VolumeGeometry:
-    def __init__(self):
-        """Create a unit VolumeGeometry
+def _pos_size_to_extent(pos, size):
+    pos = np.array(ts.utils.to_pos(pos))
+    size = np.array(ts.utils.to_size(size))
 
-        A VolumeGeometry is a unit cube centered on the origin. Each
-        side has length 1.
+    min_extent = pos - 0.5 * size
+    max_extent = pos + 0.5 * size
+
+    return tuple((l, r) for l, r in zip(min_extent, max_extent))
+
+
+def _extent_to_pos_size(extent):
+    size = ts.utils.to_size(tuple(r - l for l, r in extent))
+    pos = ts.utils.to_pos(tuple((r + l) / 2 for l, r in extent))
+
+    return (pos, size)
+
+
+class VolumeGeometry:
+    """VolumeGeometry
+
+    A VolumeGeometry describes a 3D axis-aligned cuboid that is
+    divided into voxels.
+
+    The number of voxels in each dimension determine the object's
+    `shape'. The voxel size is thus determined by the size of
+    the object and its shape.
+
+    A VolumeGeometry cannot move in time and cannot be arbitrarily
+    oriented. To obtain a moving volume geometry, convert the object
+    to a vector representation using `.to_vec()`.
+
+    """
+
+    def __init__(self, shape=(1, 1, 1), pos=0, size=None):
+        """Create a new volume geometry
+
+        A VolumeGeometry is an axis-aligned cuboid centered on
+        `pos`.
+
+        If not `size' is not given, then the voxel size defaults to 1
+        in each dimension.
 
         VolumeGeometry is indexed(Z, Y, X) just like numpy. The
         conversion to and from an astra_vol_geom depends on this.
 
-        :returns:
-        :rtype:
+        :param shape: `(int, int, int)` or `int`
+            The shape of the volume as measured in voxels.
+        :param pos: `0.0`, or `(scalar, scalar, scalar)`
+            The center of the object. To center on the origin, pass
+            `0` (the default).
+        :param size: `scalar` or `(scalar, scalar, scalar)`
+            The size of the object (must be non-negative). If `size`
+            is a sing value, the volume equally sized in each
+            dimension.
+        :returns: a new volume geometry
+        :rtype: `VolumeGeometry`
 
         """
-        self.extent = ((-0.5, 0.5),) * 3
-        self.shape = (1, 1, 1)
+        shape = ts.utils.to_shape(shape)
+        pos = ts.utils.to_pos(pos)
+
+        if size is None:
+            # Make geometry where voxel size equals (1, 1, 1)
+            self._inner = ts.volume_vec(shape, pos)
+        else:
+            size = ts.utils.to_size(size)
+            # voxel size
+            vs = tuple(sz / sh for sz, sh in zip(size, shape))
+            w = (vs[0], 0, 0)
+            v = (0, vs[1], 0)
+            u = (0, 0, vs[2])
+            self._inner = ts.volume_vec(shape, pos, w, v, u)
+
+        np.array(self._inner.pos[0])
+        np.array(self._inner.size)
 
     def __repr__(self):
-        return f"VolumeGeometry < extent: {self.extent}, " f"shape: {self.shape}>"
+        return (
+            f"VolumeGeometry(\n"
+            f"    shape={self._inner.shape},\n"
+            f"    pos={tuple(self.pos[0])},\n"
+            f"    size={self.size},\n"
+            f")"
+        )
 
     def __eq__(self, other):
         if not isinstance(other, VolumeGeometry):
             return False
+        return self._inner == other._inner
 
-        d_extent = np.array(self.extent) - np.array(other.extent)
-        return self.shape == other.shape and np.all(abs(d_extent) < ts.epsilon)
+    def __getitem__(self, key):
+        """Slice the volume geometry
 
-    def __abs__(self):
-        return np.prod(self.size())
+        The key may be up to three-dimensional. Both examples below
+        yield the same geometry describing the axial central slice:
 
-    def __sub__(self, other):
-        vg = self.copy()
-        vg.extent = tuple(
-            (ls - lo, rs - ro)
-            for ((ls, rs), (lo, ro)) in zip(self.extent, other.extent)
-        )
-        return vg
+        >>> ts.volume(128)[64, :, :]
+        >>> ts.volume(128)[64]
 
-    @property
-    def voxel_size(self):
-        return tuple(size / shape for size, shape in zip(self.size(), self.shape))
+        :param key:
+        :returns:
+        :rtype:
 
-    @property
-    def num_steps(self):
-        """The number of orientations and positions of this volume
-
-        A VolumeGeometry always has only a single step.
         """
-        return 1
+        if isinstance(key, tuple):
+            new_inner = self._inner[(0, *key)]
+        else:
+            new_inner = self._inner[0, key]
+
+        return VolumeGeometry(new_inner.shape, new_inner.pos[0], new_inner.size,)
+
+    def __contains__(self, other):
+        """Check if other volume is contained in current volume
+
+        :param other: VolumeGeometry
+            Another volumegeometry.
+        :returns: True if other Volume is contained in this one.
+        :rtype: Boolean
+
+        """
+        # Find the left and right boundary in each dimension
+        return all(
+            s[0] <= o[0] and o[1] <= s[1] for s, o in zip(self.extent, other.extent)
+        )
+
+    # def __abs__(self):
+    #     return np.prod(self.size)
+
+    # def __sub__(self, other):
+    #     vg = self.copy()
+    #     vg.extent = tuple(
+    #         (ls - lo, rs - ro)
+    #         for ((ls, rs), (lo, ro)) in zip(self.extent, other.extent)
+    #     )
+    #     return vg
 
     def to_astra(self):
         """Return an Astra volume geometry.
@@ -167,6 +236,136 @@ class VolumeGeometry:
         e = self.extent
         return astra.create_vol_geom(v[1], v[2], v[0], *e[2], *e[1], *e[0])
 
+    def to_vec(self):
+        """Returns a vector representation of the volume
+
+        :returns:
+        :rtype: VolumeVectorGeometry
+
+        """
+        return self._inner
+
+    ###########################################################################
+    #                                Properties                               #
+    ###########################################################################
+
+    @property
+    def num_steps(self):
+        """The number of orientations and positions of this volume
+
+        A VolumeGeometry always has only a single step.
+        """
+        return 1
+
+    @property
+    def pos(self):
+        return self._inner.pos
+
+    @property
+    def w(self):
+        return self._inner.w
+
+    @property
+    def v(self):
+        return self._inner.v
+
+    @property
+    def u(self):
+        return self._inner.u
+
+    @property
+    def shape(self):
+        return self._inner.shape
+
+    @property
+    def sizes(self):
+        """Returns the absolute sizes of the volume
+
+        For consistency with vector geometries, `sizes` is an array
+        with shape `(1, 3)`.
+
+        :returns: a numpy array of shape `(1, 3)` describing the size of the object.
+        :rtype:
+
+        """
+        return self._inner.sizes
+
+    @property
+    def size(self):
+        """Returns the absolute size of the volume
+
+        :returns: the size in each dimension of the volume
+        :rtype: `(scalar, scalar, scalar)`
+
+        """
+        return self._inner.size
+
+    @property
+    def voxel_sizes(self):
+        """The voxel sizes of the volume
+
+        *Note*: For consistency with vector geometries, `voxel_sizes`
+         is an array with shape `(1, 3)`.
+
+        :returns: a numpy array of shape `(1, 3)` describing the voxel size of the volume.
+        :rtype: `np.array`
+
+        """
+        return self._inner.voxel_sizes
+
+    @property
+    def voxel_size(self):
+        """The voxel size of the volume
+
+        :returns: the size in each dimension of the volume
+        :rtype: `(scalar, scalar, scalar)`
+        """
+        return self._inner.voxel_size
+
+    @property
+    def extent(self):
+        """The extent of the volume in each dimension
+
+        :returns: `((min_z, max_z), (min_y, max_y), (min_x, max_x))`
+        :rtype: `((scalar, scalar), (scalar, scalar), (scalar, scalar))`
+
+        """
+        return _pos_size_to_extent(self._inner.pos[0], self._inner.size)
+
+    @property
+    def corners(self):
+        """Returns a vector with the corners of the volume
+
+        For consistency with the volume vector geometry, the returned
+        array has leading dimension `1`.
+
+        :returns: np.array
+            Array with shape (1, 8, 3), describing the 8
+            corners of volume orientation in (Z, Y, X)-coordinates.
+        :rtype: np.array
+
+        """
+        return self._inner.corners
+
+    @property
+    def lower_left_corner(self):
+        """Returns a vector with the positions of the lower-left corner the object
+
+        For consistency with the volume vector geometry, the returned
+        array has leading dimension `1`.
+
+        :returns: np.array
+            Array with shape (1, 3), describing the position of the
+            lower-left corner of the volume in (Z, Y, X)-coordinates.
+        :rtype: np.array
+
+        """
+        return self._inner.lower_left_corner
+
+    ###########################################################################
+    #                          Transformation methods                         #
+    ###########################################################################
+
     def with_voxel_size(self, voxel_size):
         """Returns a new volume with the specified voxel size
 
@@ -181,101 +380,31 @@ class VolumeGeometry:
 
         """
         voxel_size = up_tuple(voxel_size, 3)
-        new_shape = (np.array(self.size()) / voxel_size).astype(np.int)
+        new_shape = (np.array(self.size) / voxel_size).astype(np.int)
 
-        return volume(new_shape, center=self.get_center(), size=new_shape * voxel_size)
+        return VolumeGeometry(new_shape, pos=self.pos[0], size=new_shape * voxel_size)
 
     def reshape(self, new_shape):
         """Reshape the VolumeGeometry
 
         :param new_shape: `int` or (`int`, `int`, `int`)
-            The new shape that the cube must have
+            The new shape that the volume must have
         :returns:
             A new volume with the required shape
         :rtype: VolumeGeometry
 
         """
-        new_shape = up_tuple(new_shape, 3)
-        vg = self.copy()
-        vg.shape = tuple(new_shape)
+        return VolumeGeometry(new_shape, pos=self.pos[0], size=self.size,)
 
-        return vg
+    def translate(self, t):
+        t = ts.utils.to_pos(t)
 
-    def size(self):
-        """The size in real units of the volume.
+        new_pos = tuple(p + t for p, t in zip(self.pos[0], t))
 
-        :returns: (Z-size, Y-size, X-size)
-        :rtype: (np.int, np.int, np.int)
-
-        """
-
-        return tuple(r - l for l, r in self.extent)
-
-    def displacement(self):
-        """The distance from the origin of the volume.
-
-
-        :returns: the coordinate of the  'lowerleft' corner of the volume.
-        :rtype: (np.float, np.float, np.float)
-
-        """
-
-        return tuple(l for l, _ in self.extent)
-
-    def get_center(self):
-        return tuple(d + s / 2 for d, s in zip(self.displacement(), self.size()))
-
-    def copy(self):
-        vg = VolumeGeometry()
-        vg.extent = self.extent
-        vg.shape = self.shape
-        return vg
-
-    def to_center(self):
-        """Center the volume on the origin.
-
-        :returns:
-        :rtype:
-
-        """
-        return self.untranslate(self.displacement()).untranslate(
-            tuple(s / 2 for s in self.size())
-        )
-
-    def to_origin(self):
-        """Move the lower-left corner of the volume to the origin.
-
-        :returns: a moved volume.
-        :rtype: VolumeGeometry
-
-        """
-        return self.untranslate(self.displacement())
-
-    def translate(self, ts):
-        ts = up_tuple(ts, 3)
-        c = self.copy()
-        c.extent = tuple((l + t, r + t) for (l, r), t in zip(c.extent, ts))
-        return c
+        return VolumeGeometry(shape=self.shape, pos=new_pos, size=self.size,)
 
     def untranslate(self, ts):
         return self.translate(-np.array(ts))
-
-    def multiply(self, scale):
-        """Multiply the volume's extent by scale
-
-        Does not affect the shape (voxels) of the volume. Use
-        `reshape` to change the shape.
-
-        :param scale: tuple or np.float
-            By how much to multiply the extent of the volume.
-        :returns: VolumeGeometry
-        :rtype: VolumeGeometry
-
-        """
-        scale = up_tuple(scale, 3)
-        c = self.copy()
-        c.extent = tuple((l * t, r * t) for (l, r), t in zip(c.extent, scale))
-        return c
 
     def scale(self, scale):
         """Scales the volume around its center.
@@ -289,76 +418,23 @@ class VolumeGeometry:
         :rtype:
 
         """
-
-        center = self.get_center()
-        return self.to_center().multiply(scale).translate(center)
-
-    def __contains__(self, other):
-        """Check if other volume is contained in current volume
-
-        :param other: VolumeGeometry
-            Another volumegeometry.
-        :returns: True if other Volume is contained in this one.
-        :rtype: Boolean
-
-        """
-        # TODO: Reverse order!! It looks like this function is the
-        # wrong way around.
-
-        # Find the left and right boundary in each dimension
-        return all(
-            s[0] <= o[0] and o[1] <= s[1] for s, o in zip(self.extent, other.extent)
-        )
-
-    def intersect(self, other):
-        """Intersect this volume with another volume.
-
-        The shape of the returned VolumeGeometry is undefined.
-
-        :param other: VolumeGeometry
-            Another volume geometry.
-        :returns: None or a new VolumeGeometry
-        :rtype: NoneType or VolumeGeometry
-
-        """
-        # Find the left and right boundary in each dimension
-        ls = [max(s[0], o[0]) for s, o in zip(self.extent, other.extent)]
-        rs = [min(s[1], o[1]) for s, o in zip(self.extent, other.extent)]
-        # Is the left boundary smaller than the right boundary in each
-        # dimension?
-        separated = all([l < r for l, r in zip(ls, rs)])
-
-        if separated:
-            c = self.copy()
-            c.extent = tuple(zip(ls, rs))
-            return c
-        else:
-            return None
-
-    def get_corners(self):
-        """Compute corner coordinates of volume.
-
-        :returns: (corner, corner, ... )
-        :rtype: list of 3-tuples
-
-        """
-        return list(itertools.product(*self.extent))
-
-    def to_vec(self):
-        """Returns a vector representation of the volume
-
-        :returns:
-        :rtype: VolumeVectorGeometry
-
-        """
-        vs = self.voxel_size
-        w = (vs[0], 0, 0)
-        v = (0, vs[1], 0)
-        u = (0, 0, vs[2])
-
-        return ts.volume_vec(self.shape, self.get_center(), w, v, u)
+        scale = ts.utils.to_size(scale)
+        new_size = tuple(a * b for a, b in zip(scale, self.size))
+        return VolumeGeometry(shape=self.shape, pos=self.pos[0], size=new_size)
 
     def __rmul__(self, other):
+        """Applies a projective matrix transformation to geometry
+
+        If the transformation does not rotate, but only translates and
+        scale, a VolumeGeometry is returned. Otherwise, a
+        VolumeVectorGeometry is returned.
+
+        :param other: `ts.geometry.Transform`
+            A transformation matrix
+        :returns: A transformed geometry
+        :rtype: `VolumeGeometry` or `VolumeVectorGeometry`
+
+        """
         if isinstance(other, Transform):
             # Check if it is possible to apply transformation and
             # remain a VolumeGeometry.
@@ -378,40 +454,18 @@ class VolumeGeometry:
             )
             return other * self.to_vec()
 
-    def __getitem__(self, key):
-        """Return self[key]
 
-        :param key: An int, tuple of ints,
-        :returns:
-        :rtype:
+def from_astra(astra_vol_geom):
+    """Converts an ASTRA 3D volume geometry to a VolumeGeometry
 
-        """
-        full_slice = slice(None, None, None)
-        one_key = isinstance(key, Integral) or isinstance(key, slice)
-        if one_key:
-            key = (key, full_slice, full_slice)
+    :param astra_vol_geom: `dict`
+        A dictionary created by `astra.create_vol_geom` that describes
+        a 3D volume geometry.
+    :returns: a tomosipo volume geometry
+    :rtype: VolumeGeometry
 
-        while isinstance(key, tuple) and len(key) < 3:
-            key = (*key, full_slice)
-
-        if isinstance(key, tuple) and len(key) == 3:
-            indices = [
-                slice_interval(l, r, s, k)
-                for ((l, r), s, k) in zip(self.extent, self.shape, key)
-            ]
-
-            new_shape = tuple(s for (_, _, s, _) in indices)
-            new_extent = tuple((l, r) for (l, r, _, _) in indices)
-
-            return volume(new_shape, new_extent)
-
-        raise TypeError(
-            f"Indexing a ConeGeometry with {type(key)} is not supported. "
-            f"Try int or slice instead."
-        )
-
-
-def from_astra(avg):
+    """
+    avg = astra_vol_geom
     WindowMinX = avg["option"]["WindowMinX"]
     WindowMaxX = avg["option"]["WindowMaxX"]
     WindowMinY = avg["option"]["WindowMinY"]
@@ -423,10 +477,11 @@ def from_astra(avg):
     voxY = avg["GridRowCount"]
     voxX = avg["GridColCount"]
 
-    c = VolumeGeometry()
-    c.extent = tuple(
-        [(WindowMinZ, WindowMaxZ), (WindowMinY, WindowMaxY), (WindowMinX, WindowMaxX)]
+    shape = (voxZ, voxY, voxX)
+    extent = (
+        (WindowMinZ, WindowMaxZ),
+        (WindowMinY, WindowMaxY),
+        (WindowMinX, WindowMaxX),
     )
-
-    c.shape = (voxZ, voxY, voxX)
-    return c
+    pos, size = _extent_to_pos_size(extent)
+    return VolumeGeometry(shape=shape, pos=pos, size=size)

@@ -9,9 +9,7 @@ import tomosipo.vector_calc as vc
 from tomosipo.geometry import transform
 
 
-@pytest.mark.parametrize(
-    "t", [g.random_transform(), g.random_volume_vec()]
-)
+@pytest.mark.parametrize("t", [g.random_transform(), g.random_volume_vec()])
 def test_transform(t):
     assert ts.concatenate([t, t]).num_steps == 2 * t.num_steps
     tt = ts.concatenate([t, t])

@@ -28,9 +28,9 @@ from contextlib import contextmanager
 
 
 def to_vec(x):
-    x = np.array(x, copy=False)
+    x = np.array(x, dtype=np.float64, copy=False)
     s = x.shape
-    x = np.array(x, copy=False, ndmin=2)
+    x = np.array(x, dtype=np.float64, copy=False, ndmin=2)
 
     if x.ndim == 2 and x.shape[1] == 3:
         return x
@@ -44,9 +44,9 @@ def to_vec(x):
 
 
 def to_scalar(x):
-    x = np.array(x, copy=False)
+    x = np.array(x, dtype=np.float64, copy=False)
     s = x.shape
-    x = np.array(x, copy=False, ndmin=1)
+    x = np.array(x, dtype=np.float64, copy=False, ndmin=1)
 
     if x.ndim == 1:
         # Add a single dimension to the right. Note that `to_vec` adds

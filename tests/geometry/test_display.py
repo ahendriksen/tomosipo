@@ -12,7 +12,7 @@ def test_display_parallel_geometry(interactive):
 
     # Test with multiple geometries:
     pg2 = ts.parallel(angles=10, size=2.0)
-    vg2 = ts.volume().translate(1.0)
+    vg2 = ts.volume().translate((1.0, 0, 0))
     if interactive:
         display(vg, vg2, pg, pg2)
 
@@ -27,7 +27,7 @@ def test_display_cone_geometry(interactive):
     # Add volume vector geometry
     R = ts.rotate(pos=0, axis=(1, 0, 0), rad=-np.linspace(0, np.pi, 300))
     T = ts.translate((2, 0, 0))
-    vg_vec = T * R * vg
+    vg_vec = T * R * vg.to_vec()
 
     if interactive:
         display(pg, vg, vg_vec)

@@ -93,10 +93,9 @@ class TestData(unittest.TestCase):
         Here, we test that we have the same behaviour for `ts.data'.
         """
         vg = ts.volume(shape=10)
-        vg_ = vg.copy()
 
         vd = ts.data(vg)
-        vd_ = ts.data(vg_, vd)
+        vd_ = ts.data(vg, vd)
 
         self.assertEqual(id(vd), id(vd_))
 

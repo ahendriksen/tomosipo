@@ -26,19 +26,19 @@ translations = [
 rotations = [
     ts.rotate(pos=0, axis=(1, 0, 0), rad=0),  # identity
     ts.rotate(pos=0, axis=(1, 0, 0), rad=1.0),
-    ts.rotate(*np.random.normal(0, 1, size=(2, 3)), deg=np.random.normal()),
-    ts.rotate(
-        *np.random.normal(0, 1, size=(2, 3)), deg=np.random.normal(), right_handed=False
-    ),
+    ts.rotate(pos=0, axis=np.random.normal(size=3), deg=np.random.normal()),
+    ts.rotate(pos=0, axis=np.random.normal(size=3), deg=np.random.normal(), right_handed=False),
 ]
 
 scalings = [
     ts.scale(1),  # identity
-    ts.scale(np.random.normal()),  # uniform random scaling in each direction
-    ts.scale(np.random.normal(size=3)),  # random scaling in each direction
+    ts.scale(abs(np.random.normal())),  # same random scaling in each direction
+    ts.scale(
+        abs(np.random.normal(size=3))
+    ),  # different random scaling in each direction
 ]
 
-transformations = translations + rotations + scalings
+transforms = translations + rotations + scalings
 
 
 @pytest.mark.parametrize(
@@ -69,7 +69,7 @@ def test_identity(vg):
     assert T * vg == vg
 
 
-@pytest.mark.parametrize("T", transformations)
+@pytest.mark.parametrize("T", transforms)
 def test_eq(T):
     assert T == T
     assert T != ts.translate((0.1, 0.1, 0.1)) * T
@@ -119,9 +119,9 @@ def test_translate():
 
 def test_scale_simple_case():
     unit = ts.volume_vec(shape=1, pos=0)
-    s = np.random.normal()
+    s = abs(np.random.normal())
     assert ts.scale(s) * unit == ts.volume_vec(1, 0, s * unit.w, s * unit.v, s * unit.u)
-    s = np.random.normal(size=3)
+    s = abs(np.random.normal(size=3))
     assert ts.scale(s) * unit == ts.volume_vec(
         1, 0, s[0] * unit.w, s[1] * unit.v, s[2] * unit.u
     )
@@ -130,7 +130,7 @@ def test_scale_simple_case():
 def test_scale():
     # Check that scaling by s1 and s2 is the same as scaling by s1 * s2.
     N = 10
-    for s1, s2 in np.random.normal(size=(N, 2, 3)):
+    for s1, s2 in abs(np.random.normal(size=(N, 2, 3))):
         vg = random_volume_vec()
         S1 = ts.scale(s1)
         S2 = ts.scale(s2)

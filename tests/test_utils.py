@@ -71,6 +71,8 @@ def test_to_shape():
     assert (1, 1, 1) == to_shape(1)
     assert (0, 0, 0) == to_shape(0)
     assert (1, 1) == to_shape(1, dim=2)
+    with pytest.raises(ValueError):
+        to_shape((1,2,3,4))
     with pytest.raises(TypeError):
         to_shape(1.0)
     with pytest.raises(ValueError):
@@ -81,6 +83,8 @@ def test_to_pos():
     assert (0, 0, 0) == to_pos(0)
     assert (0, 0) == to_pos(0, dim=2)
     assert (1, 2, 3) == to_pos((1, 2, 3))
+    two_rows = np.random.normal(size=(2, 3))
+    assert np.allclose(two_rows, to_pos(two_rows))
     with pytest.raises(ValueError):
         to_pos(1.0)
 
@@ -89,6 +93,9 @@ def test_to_size():
     assert (0, 0, 0) == to_size(0)
     assert (0, 0) == to_size(0, dim=2)
     assert (1, 2, 3) == to_size((1, 2, 3))
+
+    two_rows = abs(np.random.normal(size=(2, 3)))
+    assert np.allclose(two_rows, to_size(two_rows))
 
     with pytest.raises(ValueError):
         to_size((-1, 0, 0))

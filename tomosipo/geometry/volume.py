@@ -409,6 +409,23 @@ class VolumeGeometry:
     def scale(self, scale):
         """Scales the volume around its center.
 
+        The position of the volume does not change. This
+        transformation does not affect the shape (voxels) of the
+        volume. Use `reshape` to change the shape.
+
+        :param scale: tuple or np.float
+            By how much to scale the volume.
+        :returns:
+        :rtype:
+
+        """
+        scale = ts.utils.to_size(scale)
+        new_size = tuple(a * b for a, b in zip(scale, self.size))
+        return VolumeGeometry(shape=self.shape, pos=self.pos[0], size=new_size)
+
+    def multiply(self, scale):
+        """Scales the volume including its position.
+
         Does not affect the shape (voxels) of the volume. Use
         `reshape` to change the shape.
 
@@ -420,7 +437,8 @@ class VolumeGeometry:
         """
         scale = ts.utils.to_size(scale)
         new_size = tuple(a * b for a, b in zip(scale, self.size))
-        return VolumeGeometry(shape=self.shape, pos=self.pos[0], size=new_size)
+        new_pos = tuple(a * b for a, b in zip(scale, self.pos[0]))
+        return VolumeGeometry(shape=self.shape, pos=new_pos, size=new_size)
 
     def __rmul__(self, other):
         """Applies a projective matrix transformation to geometry
@@ -440,11 +458,14 @@ class VolumeGeometry:
             # remain a VolumeGeometry.
             if other.num_steps == 1:
                 translation = other.matrix[0, :3, 3]
-                scale = other.matrix[0].diagonal()[:3]
+                # NOTE: scale must be non-negative, otherwise ts.scale
+                # throws an error. This should only be a problem when
+                # `T != other`. That is why we wrap in `abs` below.
+                scale = abs(other.matrix[0].diagonal()[:3])
                 T = ts.translate(translation) * ts.scale(scale)
                 if T == other:
                     # implement scaling and translation ourselves
-                    return self.scale(scale).translate(translation)
+                    return self.multiply(scale).translate(translation)
 
             # Convert to vector geometry and apply transformation
             warnings.warn(

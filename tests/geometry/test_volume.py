@@ -5,7 +5,9 @@
 
 
 import pytest
+from pytest import approx
 import numpy as np
+import itertools
 import tomosipo as ts
 from tomosipo.geometry import random_volume, random_transform
 from tomosipo.geometry.volume import (
@@ -14,6 +16,7 @@ from tomosipo.geometry.volume import (
     _extent_to_pos_size,
 )
 from tomosipo.geometry import transform
+from .test_transform import translations, scalings
 
 
 def test_pos_size_and_extent():
@@ -127,6 +130,49 @@ def test_getitem():
     )
 
     assert np.allclose(vg[:, ::2, :].size, vg[:, 1::2, :].size)
+
+
+@pytest.mark.parametrize(
+    "T, S", itertools.product(translations, scalings)
+)
+def test_properties_under_transformations(T, S):
+    vg = ts.geometry.random_volume()
+    P = ts.from_perspective(box=vg)
+    TS = T * S
+    assert (TS * vg)[0, 0, 0] == TS * vg[0, 0, 0]
+    assert (TS * vg)[-1, -1, -1] == TS * vg[-1, -1, -1]
+    assert (S * P * vg).pos == approx((P * vg).pos)
+    assert (T * vg).w == approx(vg.w)
+    assert (T * vg).v == approx(vg.v)
+    assert (T * vg).u == approx(vg.u)
+    assert (TS * vg).shape == vg.shape
+    assert (T * vg).size == vg.size
+    assert (T * vg).sizes == approx(vg.sizes)
+    assert (T * vg).voxel_sizes == approx(vg.voxel_sizes)
+    assert (T * vg).voxel_size == vg.voxel_size
+    # corners?
+    # lowerleftcorner?
+
+
+@pytest.mark.parametrize("T, S", itertools.product(translations, scalings))
+def test_translation_scaling(T, S):
+    """Test translation and scaling
+
+    VolumeGeometry implements scaling and translation directly. It
+    makes sense to check that performing translation and scaling works
+    the same in vec and non-vec geometries.
+
+    """
+    vg = ts.geometry.random_volume()
+    assert (T * vg).to_vec() == T * vg.to_vec()
+    print(S)
+    print(S * vg)
+    print((S * vg).to_vec())
+    print(S * vg.to_vec())
+    print(vg.to_vec())
+    assert (S * vg).to_vec() == S * vg.to_vec()
+    assert ((S * T) * vg).to_vec() == (S * T) * vg.to_vec()
+    assert ((T * S) * vg).to_vec() == (T * S) * vg.to_vec()
 
 
 def test_translate():

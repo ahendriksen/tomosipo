@@ -7,8 +7,10 @@ import pytest
 from pytest import approx
 import tomosipo as ts
 import numpy as np
+import itertools
 from tomosipo.geometry import random_transform, random_volume_vec
 from tomosipo.geometry import transform
+from .test_transform import vgs, translations, rotations, scalings, transforms
 
 
 def test_init():
@@ -77,6 +79,28 @@ def test_eq():
         assert ob != u
 
 
+@pytest.mark.parametrize(
+    "vg, T, S, R", itertools.product(vgs, translations, scalings, rotations)
+)
+def test_properties_under_transformations(vg, T, S, R):
+    TSR = T * S * R
+    P = ts.from_perspective(box=vg)
+    assert TSR * vg == TSR * vg
+    assert (TSR * vg)[0, 0, 0, 0] == TSR * vg[0, 0, 0, 0]
+    assert (TSR * vg)[-1, -1, -1, -1] == TSR * vg[-1, -1, -1, -1]
+    assert (S * R * P * vg).pos == approx((P * vg).pos)
+    assert (T * vg).w == approx(vg.w)
+    assert (T * vg).v == approx(vg.v)
+    assert (T * vg).u == approx(vg.u)
+    assert (TSR * vg).shape == vg.shape
+    assert (T * vg).size == vg.size
+    assert (T * vg).sizes == approx(vg.sizes)
+    assert (T * vg).voxel_sizes == approx(vg.voxel_sizes)
+    assert (T * vg).voxel_size == vg.voxel_size
+    # corners?
+    # lowerleftcorner?
+
+
 def test_lower_left_corner():
     assert approx(ts.volume_vec(1, pos=0).lower_left_corner) == [(-0.5, -0.5, -0.5)]
     assert approx(ts.volume_vec(1, pos=(0.5, 0.5, 0.5)).lower_left_corner) == [
@@ -102,6 +126,16 @@ def test_get_item():
         vg[1, 2, 3, 4, 5]
     with pytest.raises(TypeError):
         vg[...]
+
+
+def test_size():
+    vg = ts.geometry.random_volume().to_vec()
+    # Non-uniform scaling
+    S = ts.scale(abs(np.random.normal(size=(3, 3))))
+    with pytest.raises(ValueError):
+        (S * vg).size
+    with pytest.raises(ValueError):
+        (S * vg).voxel_size
 
 
 def test_corners():

@@ -106,8 +106,7 @@ def scale(s):
     :rtype:
 
     """
-    if np.isscalar(s):
-        s = up_tuple(s, 3)
+    s = ts.utils.to_size(s)
     s = vc.to_vec(s)
     s0 = s[:, 0:1]  # scaling in coordinate 0
     s1 = s[:, 1:2]  # scaling in coordinate 1
@@ -283,6 +282,6 @@ def random_transform():
     angle = np.random.normal()
     T = ts.translate(t)
     R = ts.rotate(pos, axis, rad=angle)
-    S = ts.scale(s)
+    S = ts.scale(abs(s))
 
     return R * S * T

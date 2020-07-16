@@ -46,21 +46,31 @@ def test_init():
     # Check extent
     extent = ((0, 1), (3, 4), (5, 6))
     assert ts.volume(extent=extent).extent == extent
+
     extent = ((0, 1),) * 3
+    assert ts.volume(pos=(0.5, 0.5, 0.5), size=1).extent == extent
 
-    assert ts.volume(center=(0.5, 0.5, 0.5), size=1).extent == extent
+    size = (1, 1, 1)
+    pos = 0
+    # All 8 possible combinations of providing and not providing pos,
+    # size, and extent. Three of them should raise an error.
+    with pytest.raises(ValueError):
+        ts.volume(pos=pos, size=size, extent=extent)
+    ts.volume(pos=pos, size=size, extent=None)
+    with pytest.raises(ValueError):
+        ts.volume(pos=pos, size=None, extent=extent)
+    ts.volume(pos=pos, size=None, extent=None)
+    with pytest.raises(ValueError):
+        ts.volume(pos=None, size=size, extent=extent)
+    ts.volume(pos=None, size=size, extent=None)
+    ts.volume(pos=None, size=None, extent=extent)
+    ts.volume(pos=None, size=None, extent=None)
 
-    # Check errors
+    # Malformed extent parameter
     with pytest.raises(TypeError):
         ts.volume(extent=(1, 0))
     with pytest.raises(TypeError):
         ts.volume(extent=3)
-    with pytest.raises(ValueError):
-        ts.volume(center=0, size=None)
-    with pytest.raises(ValueError):
-        ts.volume(center=None, size=1)
-    with pytest.raises(ValueError):
-        ts.volume(center=0, size=1, extent=(0, 1))
 
 
 def test_equal():
@@ -240,9 +250,9 @@ def test_to_vec():
 
 
 def test_with_voxel_size():
-    vg = ts.volume(shape=10, size=10, center=0)
+    vg = ts.volume(shape=10, size=10, pos=0)
     assert vg.with_voxel_size(1.0) == vg
-    assert vg.with_voxel_size(2.0) == ts.volume(shape=5, size=10, center=0)
+    assert vg.with_voxel_size(2.0) == ts.volume(shape=5, size=10, pos=0)
 
     assert vg.with_voxel_size(1.0) == vg.with_voxel_size((1.0, 1.0, 1.0))
     assert vg.with_voxel_size(2.0) == vg.with_voxel_size((2.0, 2.0, 2.0))

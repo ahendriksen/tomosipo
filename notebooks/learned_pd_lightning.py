@@ -160,7 +160,7 @@ class LightningPD(pl.LightningModule):
         self.hparams = hparams
 
         N = hparams.N
-        self.vg = ts.volume(size=1, center=0, shape=N)
+        self.vg = ts.volume(size=1, shape=N)
         self.pg = ts.parallel(angles=3 * N // 2, shape=(N, 3 * N // 2), size=(1, 1.5))
 
         self.learned_pd = LearnedPD(self.vg, self.pg, hparams.n_iters, do_pingpong=hparams.pingpong)

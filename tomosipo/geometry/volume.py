@@ -1,10 +1,6 @@
 import astra
-from collections import Iterator, Iterable
 import numpy as np
-from numbers import Integral
 import warnings
-import itertools
-from tomosipo.utils import up_tuple, slice_interval
 import tomosipo as ts
 from .transform import Transform
 
@@ -23,19 +19,17 @@ def is_volume(g):
     return isinstance(g, VolumeGeometry)
 
 
-def volume(shape=(1, 1, 1), extent=None, center=None, size=None):
-    """Create a unit VolumeGeometry
+def volume(shape=(1, 1, 1), pos=None, size=None, extent=None):
+    """Create an axis-aligned volume geometry
 
-    A VolumeGeometry is a unit cube centered on the origin. Each
-    side has length 1.
-
-    VolumeGeometry is indexed(Z, Y, X) just like numpy. The
-    conversion to and from an astra_vol_geom depends on this.
+    A VolumeGeometry is an axis-aligned cuboid centered on `pos`.
 
     You may provide a combination of arguments to create a new volume geometry:
-    - shape
+    - shape (size will equal shape)
+    - shape and pos (size will equal shape)
+    - shape and size (volume will be centered on the origin)
+    - shape, pos, and size.
     - shape and extent
-    - shape and center and size
 
     :param shape: `int` or (`int`, `int`, `int`)
         Shape of the voxel grid underlying the volume.
@@ -50,25 +44,33 @@ def volume(shape=(1, 1, 1), extent=None, center=None, size=None):
 
     """
     shape = ts.utils.to_shape(shape)
-    vg = VolumeGeometry(shape)
 
-    if center is None and size is not None:
-        raise ValueError("Both center and size must be provided.")
-    if size is None and center is not None:
-        raise ValueError("Both center and size must be provided.")
-    if size is not None and center is not None and extent is not None:
-        raise ValueError(
-            "extent must not be provided when size and center already are."
-        )
+    pos_present = pos is not None
+    size_present = size is not None
+    extent_present = extent is not None
 
-    if center is not None and size is not None:
-        return VolumeGeometry(shape, center, size)
+    if extent_present and pos_present:
+        raise ValueError("ts.volume does not accept both `extent` and `pos` arguments. ")
+    if extent_present and size_present:
+        raise ValueError("ts.volume does not accept both `extent` and `size` arguments. ")
 
-    if extent is not None:
+    if pos is None and size is None and extent is None:
+        # shape only
+        return VolumeGeometry(shape, pos=0, size=shape)
+    elif size is None and extent is None:
+        # shape and pos
+        return VolumeGeometry(shape, pos=pos, size=shape)
+    elif pos is None and extent is None:
+        # shape and size
+        return VolumeGeometry(shape, pos=0, size=size)
+    elif extent is None:
+        # shape, pos, and size
+        return VolumeGeometry(shape, pos=pos, size=size)
+    elif extent_present:
         pos, size = _extent_to_pos_size(extent)
         return VolumeGeometry(shape, pos, size)
 
-    return vg
+    assert False, "Dead code path. Please report error. Perhaps you passed `shape=None`?"
 
 
 def random_volume():
@@ -379,7 +381,7 @@ class VolumeGeometry:
         :rtype:
 
         """
-        voxel_size = up_tuple(voxel_size, 3)
+        voxel_size = ts.utils.to_size(voxel_size)
         new_shape = (np.array(self.size) / voxel_size).astype(np.int)
 
         return VolumeGeometry(new_shape, pos=self.pos[0], size=new_shape * voxel_size)

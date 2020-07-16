@@ -198,7 +198,7 @@ if __name__ == '__main__':
 
     # Generate data:
     N = args.N
-    full_vg = ts.volume(size=1, center=0, shape=N)
+    full_vg = ts.volume(shape=N, size=1)
     full_pg = ts.parallel(angles=3 * N // 2, shape=(N, 3 * N // 2), size=(1, 1.5))
     full_A = ts.operator(full_vg, full_pg)
 

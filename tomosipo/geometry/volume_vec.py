@@ -1,6 +1,5 @@
 import numpy as np
-import warnings
-from tomosipo.utils import up_tuple, up_slice, slice_interval
+from tomosipo.utils import up_slice, slice_interval
 from numbers import Integral
 import tomosipo as ts
 from tomosipo import vector_calc as vc

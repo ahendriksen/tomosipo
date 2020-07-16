@@ -103,7 +103,7 @@ if __name__ == '__main__':
 
     # Generate data:
     N = args.N
-    vg = ts.volume(size=1, center=0, shape=N)
+    vg = ts.volume(size=1, shape=N)
     pg = ts.parallel(angles=3 * N // 2, shape=(N, 3 * N // 2), size=(1, 1.5))
     A = ts.operator(vg, pg)
 

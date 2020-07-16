@@ -190,7 +190,7 @@ As parameters, properties, and in function names, we use:
 - vec :: Short for vector
 - obj :: Short for object
 - vol :: Short for volume
-- pos :: Short for position
+- pos :: Short for position: this is alway the *center* of an object
 - src :: Short for source
 - det :: Short for detector
 - pos :: Short for position

@@ -353,9 +353,12 @@ class VolumeGeometry:
         :rtype: VolumeVectorGeometry
 
         """
-        return ts.volume_vec(
-            self.shape, self.get_center(), (1, 0, 0), (0, 1, 0), (0, 0, 1)
-        )
+        vs = self.voxel_size
+        w = (vs[0], 0, 0)
+        v = (0, vs[1], 0)
+        u = (0, 0, vs[2])
+
+        return ts.volume_vec(self.shape, self.get_center(), w, v, u)
 
     def __rmul__(self, other):
         if isinstance(other, Transform):

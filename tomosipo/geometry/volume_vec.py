@@ -232,7 +232,7 @@ class VolumeVectorGeometry(object):
         u_constant = abs(min(U) - max(U)) < ts.epsilon
 
         if w_constant and v_constant and u_constant:
-            return tuple(W[0], V[0], U[0])
+            return (W[0], V[0], U[0])
         else:
             raise ValueError(
                 "The size of the volume is not constant. "

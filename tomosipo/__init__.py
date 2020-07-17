@@ -32,18 +32,29 @@ from .astra import (
 
 
 from . import phantom
-import warnings
 
 # This is a fundamental constant used for equality checking in
 # floating point code.
 epsilon = 1e-8
 
 try:
-    from astra.experimental import accumulate_FDK
-    from astra.experimental import do_composite
-    from astra.experimental import direct_FPBP3D
+
+    def __import_astra_functionality():
+        import astra.experimental
+        from astra.experimental import accumulate_FDK
+        from astra.experimental import do_composite
+        from astra.experimental import direct_FPBP3D
+
+    __import_astra_functionality()
 except AttributeError:
-    warnings.warn(
+    raise ImportError(
+        "Cannot find all required astra.experimental methods. \n"
+        "Please make sure you have at least ASTRA version 1.9.9-dev4 installed. \n"
+        "You can install the latest ASTRA development version using: \n"
+        "> conda install astra-toolbox -c astra-toolbox/label/dev "
+    )
+except ImportError:
+    raise ImportError(
         "Cannot find all required astra.experimental methods. \n"
         "Please make sure you have at least ASTRA version 1.9.9-dev4 installed. \n"
         "You can install the latest ASTRA development version using: \n"

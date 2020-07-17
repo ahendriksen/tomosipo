@@ -31,5 +31,5 @@ from .volume_vec import VolumeVectorGeometry
 from .transform import Transform
 
 
-from .base_projection import is_projection
+from .base_projection import is_projection, is_cone, is_parallel
 from .volume import is_volume

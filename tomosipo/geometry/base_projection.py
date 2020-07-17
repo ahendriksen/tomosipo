@@ -16,6 +16,14 @@ def is_projection(g):
     return isinstance(g, ProjectionGeometry)
 
 
+def is_cone(g):
+    return is_projection(g) and g.is_cone
+
+
+def is_parallel(g):
+    return is_projection(g) and g.is_parallel
+
+
 class ProjectionGeometry(object):
     """A general base class for projection geometries
 

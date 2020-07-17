@@ -1,8 +1,12 @@
 import pytest
 import tomosipo as ts
-from tomosipo.qt import display, animate
 import numpy as np
 from . import skip_if_no_qt
+
+try:
+    from tomosipo.qt import display, animate
+except ModuleNotFoundError:
+    pass
 
 
 @pytest.fixture

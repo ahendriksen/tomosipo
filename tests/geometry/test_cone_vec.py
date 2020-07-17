@@ -26,38 +26,48 @@ class TestConeVectorGeometry(unittest.TestCase):
     def test_init(self):
         """Test something."""
         interactive = False
-        vectors = np.arange(30).reshape((10, 3))
 
         # This should not raise an exception
-        pg = ts.cone_vec(1, vectors, vectors, vectors, vectors)
+        vecs = np.arange(30).reshape((10, 3))
+        kwargs = dict(src_pos=vecs, det_pos=vecs, det_v=vecs, det_u=vecs)
+        pg = ts.cone_vec(shape=1, **kwargs)
 
         representation = repr(pg)
         if interactive:
             print(representation)
 
+        with self.assertRaises(TypeError):
+            ts.cone_vec(0, **kwargs)  # missing shape=
         with self.assertRaises(ValueError):
-            ts.cone_vec(0, vectors, vectors, vectors, vectors)
+            ts.cone_vec(shape=0, **kwargs)  # shape cannot be zero
         with self.assertRaises(ValueError):
-            vecs = np.arange(20).reshape((10, 2))
-            ts.cone_vec(1, vecs, vecs, vecs, vecs)
+            two_dim = np.arange(20).reshape((10, 2))
+            ts.cone_vec(
+                shape=1, src_pos=two_dim, det_pos=two_dim, det_v=two_dim, det_u=two_dim
+            )
         with self.assertRaises(ValueError):
-            ts.cone_vec(1, vectors, vectors, vectors, vecs)
+            diff_shaped_args = dict(
+                src_pos=np.random.normal(size=(10, 3)),
+                det_pos=np.random.normal(size=(11, 3)),
+                det_v=np.random.normal(size=(12, 3)),
+                det_u=np.random.normal(size=(13, 3)),
+            )
+            ts.cone_vec(shape=1, **diff_shaped_args)
 
     def test_equal(self):
         """Test __eq__
 
         Make sure that a ConeVectorGeometry is equal to itself.
         """
-
-        pos = np.array([(0, 0, 0)])
-        pg = ts.cone_vec(10, pos, pos, pos, pos)
+        x = np.array([(0, 0, 0)])
+        pg = ts.cone_vec(shape=10, src_pos=x, det_pos=x, det_v=x, det_u=x)
         unequal = [
-            ts.cone_vec(9, pos, pos, pos, pos),
-            ts.cone_vec(10, pos + 1, pos, pos, pos),
-            ts.cone_vec(10, pos, pos + 1, pos, pos),
-            ts.cone_vec(10, pos, pos, pos + 1, pos),
-            ts.cone_vec(10, pos, pos, pos, pos + 1),
-            ts.cone(angles=2, size=np.sqrt(2), cone_angle=1 / 2),
+            ts.cone_vec(shape=9, src_pos=x, det_pos=x, det_v=x, det_u=x),
+            ts.cone_vec(shape=10, src_pos=x + 1, det_pos=x, det_v=x, det_u=x),
+            ts.cone_vec(shape=10, src_pos=x, det_pos=x + 1, det_v=x, det_u=x),
+            ts.cone_vec(shape=10, src_pos=x, det_pos=x, det_v=x + 1, det_u=x),
+            ts.cone_vec(shape=10, src_pos=x, det_pos=x, det_v=x, det_u=x + 1),
+            ts.cone(angles=2, cone_angle=1 / 2),
             ts.cone(size=np.sqrt(2), cone_angle=1 / 2),
             ts.volume(),
         ]
@@ -98,7 +108,7 @@ class TestConeVectorGeometry(unittest.TestCase):
             shape = tuple(int(np.random.uniform(1, 100)) for _ in range(2))
             v1, v2, v3, v4 = (np.random.uniform(size=(nrows, 3)) for _ in range(4))
 
-            pg = ts.cone_vec(shape, v1, v2, v3, v4)
+            pg = ts.cone_vec(shape=shape, src_pos=v1, det_pos=v2, det_v=v3, det_u=v4)
             astra_pg = pg.to_astra()
             self.assertEqual(pg, ts.from_astra(astra_pg))
 

@@ -58,8 +58,8 @@ def concatenate(items):
             raise ValueError(
                 "Cannot concatenate geometries. Not all detector shapes are equal."
             )
-        return ConeVectorGeometry(
-            items[0].det_shape,
+        return ts.cone_vec(
+            shape=items[0].det_shape,
             src_pos=np.concatenate([i.src_pos for i in items]),
             det_pos=np.concatenate([i.det_pos for i in items]),
             det_v=np.concatenate([i.det_v for i in items]),

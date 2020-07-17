@@ -7,7 +7,7 @@ from . import det_vec as dv
 from .transform import Transform
 
 
-def cone_vec(shape, src_pos, det_pos, det_v, det_u):
+def cone_vec(*, shape, src_pos, det_pos, det_v, det_u):
     """Create a cone-beam vector geometry
 
     :param shape: (`int`, `int`) or `int`
@@ -32,7 +32,9 @@ def cone_vec(shape, src_pos, det_pos, det_v, det_u):
     :rtype:
 
     """
-    return ConeVectorGeometry(shape, src_pos, det_pos, det_v, det_u)
+    return ConeVectorGeometry(
+        shape=shape, src_pos=src_pos, det_pos=det_pos, det_v=det_v, det_u=det_u
+    )
 
 
 def random_cone_vec():
@@ -52,7 +54,7 @@ class ConeVectorGeometry(ProjectionGeometry):
     A class for representing cone vector geometries.
     """
 
-    def __init__(self, shape, src_pos, det_pos, det_v, det_u):
+    def __init__(self, *, shape, src_pos, det_pos, det_v, det_u):
         """Create a cone-beam vector geometry
 
         :param shape: (`int`, `int`) or `int`
@@ -137,12 +139,12 @@ class ConeVectorGeometry(ProjectionGeometry):
             key, *_ = key
 
         new_src_pos = self._src_pos[up_slice(key)]
-        return cone_vec(
-            det_vec.det_shape,
-            new_src_pos,
-            det_vec.det_pos,
-            det_vec.det_v,
-            det_vec.det_u,
+        return ConeVectorGeometry(
+            shape=det_vec.det_shape,
+            src_pos=new_src_pos,
+            det_pos=det_vec.det_pos,
+            det_v=det_vec.det_v,
+            det_u=det_vec.det_u,
         )
 
     def to_astra(self):
@@ -181,7 +183,11 @@ class ConeVectorGeometry(ProjectionGeometry):
 
         shape = (astra_pg["DetectorRowCount"], astra_pg["DetectorColCount"])
         return ConeVectorGeometry(
-            shape, src_pos[:, ::-1], det_pos[:, ::-1], det_v[:, ::-1], det_u[:, ::-1]
+            shape=shape,
+            src_pos=src_pos[:, ::-1],
+            det_pos=det_pos[:, ::-1],
+            det_v=det_v[:, ::-1],
+            det_u=det_u[:, ::-1],
         )
 
     def to_vec(self):
@@ -255,18 +261,22 @@ class ConeVectorGeometry(ProjectionGeometry):
     def rescale_det(self, scale):
         det_vec = self._det_vec.rescale_det(scale)
 
-        return cone_vec(
-            det_vec.det_shape,
-            self.src_pos,
-            det_vec.det_pos,
-            det_vec.det_v,
-            det_vec.det_u,
+        return ConeVectorGeometry(
+            shape=det_vec.det_shape,
+            src_pos=self.src_pos,
+            det_pos=det_vec.det_pos,
+            det_v=det_vec.det_v,
+            det_u=det_vec.det_u,
         )
 
     def reshape(self, new_shape):
         det_vec = self._det_vec.reshape(new_shape)
-        return cone_vec(
-            new_shape, self.src_pos, det_vec.det_pos, det_vec.det_v, det_vec.det_u
+        return ConeVectorGeometry(
+            shape=new_shape,
+            src_pos=self.src_pos,
+            det_pos=det_vec.det_pos,
+            det_v=det_vec.det_v,
+            det_u=det_vec.det_u,
         )
 
     def project_point(self, point):
@@ -299,5 +309,9 @@ class ConeVectorGeometry(ProjectionGeometry):
 
             det_vec = other * self._det_vec
             return ConeVectorGeometry(
-                self.det_shape, src_pos, det_vec.det_pos, det_vec.det_v, det_vec.det_u
+                shape=self.det_shape,
+                src_pos=src_pos,
+                det_pos=det_vec.det_pos,
+                det_v=det_vec.det_v,
+                det_u=det_vec.det_u,
             )

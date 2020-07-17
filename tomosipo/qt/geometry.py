@@ -39,7 +39,7 @@ def pg_num_colors(g):
 
 
 @to_mesh_items.register(ProjectionGeometry)
-def _pg_items(pg, colors, i):
+def pg_to_mesh_items(pg, colors, i):
     pg = pg.to_vec()
     i = i % pg.num_angles
     src_curve_color, det_color, *_ = colors
@@ -84,20 +84,8 @@ def _pg_items(pg, colors, i):
 
 
 @to_mesh_items.register(VolumeGeometry)
-def _vg_item(vg, colors, i):
-    color = colors[0]
-    corners = vg.corners[0, :, ::-1]
-    volume_mesh = np.array(list(itertools.product(corners, corners, corners)))
-
-    return [
-        gl.GLMeshItem(
-            vertexes=volume_mesh,
-            smooth=True,
-            color=color,
-            drawEdges=True,
-            drawFaces=True,
-        )
-    ]
+def vg_to_mesh_items(vg, colors, i):
+    return vg_vec_to_mesh_items(vg.to_vec(), colors, i)
 
 
 @to_mesh_items.register(VolumeVectorGeometry)
@@ -122,62 +110,3 @@ def _take(xs, n):
     for _ in range(n):
         r.append(next(xs))
     return tuple(r)
-
-
-def display_geometry(*geometries):
-    """Display a 3D animation of the acquisition geometry
-
-    Note: requires the installation of pyopengl.
-
-    :param geometries:
-        Any combination of volume and projection geometries.
-    :returns: Nothing
-    :rtype: None
-
-    """
-
-    app = get_app()
-    view = gl.GLViewWidget()
-    view.setBackgroundColor(0.95)
-    view.show()
-
-    idx = []
-    for i in range(8):
-        idx = idx + list(range(i, 256, 32))
-    colors = map(tuple, rainbow_colormap[idx])
-    colors = itertools.cycle(colors)
-
-    geometry_colors = [_take(colors, num_colors(g)) for g in geometries]
-
-    assert len(geometry_colors) == len(geometries)
-
-    print(len(geometries))
-    print(geometries)
-
-    tmp_items = []
-    i = 0
-
-    def on_timer():
-        nonlocal i, tmp_items, geometries, geometry_colors
-        for item in tmp_items:
-            view.removeItem(item)
-        tmp_items = []
-
-        for g, c in zip(geometries, geometry_colors):
-            for item in to_mesh_items(g, c, i):
-                view.addItem(item)
-                tmp_items.append(item)
-        i += 1
-
-    timer = QtCore.QTimer()
-    timer.timeout.connect(on_timer)
-    max_steps = max([1, *(g.num_steps for g in geometries)])
-    # Total time is 5 seconds for the animation
-    timer.start(5000 / max_steps)
-    on_timer()
-    app.exec_()
-
-
-display_backends[ProjectionGeometry] = display_geometry
-display_backends[VolumeGeometry] = display_geometry
-display_backends[VolumeVectorGeometry] = display_geometry

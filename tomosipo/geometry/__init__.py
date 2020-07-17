@@ -22,6 +22,7 @@ from .volume_vec import random_volume_vec
 from .transform import random_transform
 
 # Expose classes at this level as well.
+from .base_projection import ProjectionGeometry
 from .cone import ConeGeometry
 from .cone_vec import ConeVectorGeometry
 from .parallel import ParallelGeometry

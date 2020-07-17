@@ -1,5 +1,6 @@
 import numpy as np
 import pyqtgraph as pq
+import itertools
 
 display_backends = {}
 
@@ -19,6 +20,16 @@ def display(arg, *items):
             return
     else:
         raise ValueError(f"Display not implemented for type {type(arg)}")
+
+
+def get_color_cycle():
+    idx = []
+    for i in range(8):
+        idx = idx + list(range(i, 256, 32))
+    colors = map(tuple, rainbow_colormap[idx])
+    colors = itertools.cycle(colors)
+
+    return colors
 
 
 rainbow_colormap = np.array(

@@ -27,7 +27,9 @@ rotations = [
     ts.rotate(pos=0, axis=(1, 0, 0), rad=0),  # identity
     ts.rotate(pos=0, axis=(1, 0, 0), rad=1.0),
     ts.rotate(pos=0, axis=np.random.normal(size=3), deg=np.random.normal()),
-    ts.rotate(pos=0, axis=np.random.normal(size=3), deg=np.random.normal(), right_handed=False),
+    ts.rotate(
+        pos=0, axis=np.random.normal(size=3), deg=np.random.normal(), right_handed=False
+    ),
 ]
 
 scalings = [

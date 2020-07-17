@@ -143,9 +143,7 @@ def test_getitem():
     assert np.allclose(vg[:, ::2, :].size, vg[:, 1::2, :].size)
 
 
-@pytest.mark.parametrize(
-    "T, S", itertools.product(translations, scalings)
-)
+@pytest.mark.parametrize("T, S", itertools.product(translations, scalings))
 def test_properties_under_transformations(T, S):
     vg = ts.geometry.random_volume()
     P = ts.from_perspective(box=vg)

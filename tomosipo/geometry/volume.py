@@ -51,9 +51,13 @@ def volume(shape=(1, 1, 1), pos=None, size=None, extent=None):
     extent_present = extent is not None
 
     if extent_present and pos_present:
-        raise ValueError("ts.volume does not accept both `extent` and `pos` arguments. ")
+        raise ValueError(
+            "ts.volume does not accept both `extent` and `pos` arguments. "
+        )
     if extent_present and size_present:
-        raise ValueError("ts.volume does not accept both `extent` and `size` arguments. ")
+        raise ValueError(
+            "ts.volume does not accept both `extent` and `size` arguments. "
+        )
 
     if pos is None and size is None and extent is None:
         # shape only
@@ -71,7 +75,9 @@ def volume(shape=(1, 1, 1), pos=None, size=None, extent=None):
         pos, size = _extent_to_pos_size(extent)
         return VolumeGeometry(shape, pos, size)
 
-    assert False, "Dead code path. Please report error. Perhaps you passed `shape=None`?"
+    assert (
+        False
+    ), "Dead code path. Please report error. Perhaps you passed `shape=None`?"
 
 
 def random_volume():

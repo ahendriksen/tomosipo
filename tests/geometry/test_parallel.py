@@ -20,11 +20,17 @@ def par_geoms():
 
 
 def test_init():
-
     assert ts.parallel(angles=1, shape=1).det_shape == (1, 1)
     assert ts.parallel(angles=1, shape=1).num_angles == 1
     assert ts.parallel(angles=1, size=1).det_sizes == approx(np.ones((1, 2)))
     assert ts.parallel(shape=(3, 5)).det_shape == (3, 5)
+
+    assert ts.parallel(shape=(2, 3)).det_size == (2, 3)
+    assert ts.parallel().det_shape == (1, 1)
+
+    # Check that 180° angular arc is created by default.
+    angles = np.linspace(0, np.pi, 10, endpoint=False)
+    assert ts.parallel(angles=10) == ts.parallel(angles=angles)
 
     with pytest.raises(ValueError):
         # Shape of 0 is not allowed

@@ -1,6 +1,5 @@
 import astra
 import warnings
-from numbers import Integral
 import numpy as np
 import tomosipo as ts
 from tomosipo.utils import up_tuple, up_slice
@@ -9,38 +8,40 @@ from .parallel_vec import ParallelVectorGeometry
 from .transform import Transform
 
 
-def parallel(angles=1, size=np.sqrt(2), shape=1):
+def parallel(*, angles=1, shape=1, size=None):
     """Create a parallel-beam geometry
 
-        :param angles: `np.array` or integral value
-            If integral value: the number of angles in the parallel-beam
-            geometry. This describes a full arc (2 pi radians) with
-            uniform placement and without the start and end point
-            overlapping.
+    :param angles: `np.array` or integral value
+        If integral value: the number of angles in the parallel-beam
+        geometry. This describes a full arc (2 pi radians) with
+        uniform placement and without the start and end point
+        overlapping.
 
-            If np.array: the values of the array are taken as
-            projection angle (units are radians).
-        :param size: (float, float) or float
-            The detector size. If a single float is provided, the
-            detector is square with equal width and height.
+        If np.array: the values of the array are taken as
+        projection angle (units are radians).
 
-            The order is (height, width), i.e. (v, u).
+    :param shape: (`int`, `int`) or `int`
+        The detector shape in pixels. If tuple, the order is
+        (height, width). Else the pixel has the same number of
+        pixels in the U and V direction.
+    :param size: (float, float) or float
+        The detector size. If a single float is provided, the
+        detector is square with equal width and height.
 
-        :param shape: (`int`, `int`) or `int`
-            The detector shape in pixels. If tuple, the order is
-            (height, width). Else the pixel has the same number of
-            pixels in the U and V direction.
-        :returns: a parallel-beam geometry
-        :rtype: ParallelGeometry
+        The order is (height, width), i.e. (v, u).
+
+    :returns: a parallel-beam geometry
+    :rtype: ParallelGeometry
+
     """
-    return ParallelGeometry(angles, size, shape)
+    return ParallelGeometry(angles, shape, size)
 
 
 def random_parallel():
     angles = np.random.normal(size=20)
     size = np.random.uniform(10, 20, size=2)
-    shape = np.random.uniform(10, 20, size=2)
-    return parallel(angles, size, shape)
+    shape = np.random.uniform(10, 20, size=2).astype(int)
+    return parallel(angles=angles, shape=shape, size=size)
 
 
 class ParallelGeometry(ProjectionGeometry):
@@ -48,7 +49,7 @@ class ParallelGeometry(ProjectionGeometry):
 
     """
 
-    def __init__(self, angles=1, size=np.sqrt(2), shape=1):
+    def __init__(self, angles=1, shape=1, size=None):
         """Create a parallel-beam geometry
 
             :param angles: `np.array` or integral value
@@ -72,16 +73,16 @@ class ParallelGeometry(ProjectionGeometry):
             :returns: a parallel-beam geometry
             :rtype: ParallelGeometry
         """
-
+        # Shape
         super(ParallelGeometry, self).__init__(shape=shape)
 
+        # Angles
         self._angles_original = angles
-
         if np.isscalar(angles):
-            # XXX: Should maybe include endpoints? -----v
-            angles = np.linspace(0, 2 * np.pi, angles, False)
+            # 180°; first and last angle are not parallel.
+            angles = np.linspace(0, np.pi, angles, endpoint=False)
         else:
-            angles = np.array(angles, copy=False, ndmin=1, dtype=np.float64)
+            angles = np.array(angles, ndmin=1, dtype=np.float64)
 
         if len(angles) == 0:
             raise ValueError(
@@ -91,9 +92,12 @@ class ParallelGeometry(ProjectionGeometry):
             raise ValueError(
                 f"ParallelGeometry expects one-dimensional array of angles; got {self._angles_original}"
             )
-
         self._angles = angles
-        self._size = up_tuple(size, 2)
+
+        # Size
+        if size is None:
+            size = shape
+        self._size = ts.utils.to_size(size, dim=2)
 
         self._is_cone = False
         self._is_parallel = True

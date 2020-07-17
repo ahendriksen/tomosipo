@@ -46,8 +46,8 @@ def concatenate(items):
             raise ValueError(
                 "Cannot concatenate geometries. Not all detector shapes are equal."
             )
-        return ParallelVectorGeometry(
-            items[0].det_shape,
+        return ts.parallel_vec(
+            shape=items[0].det_shape,
             ray_dir=np.concatenate([i.ray_dir for i in items]),
             det_pos=np.concatenate([i.det_pos for i in items]),
             det_v=np.concatenate([i.det_v for i in items]),

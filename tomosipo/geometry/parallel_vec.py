@@ -11,7 +11,7 @@ from . import det_vec as dv
 from .transform import Transform
 
 
-def parallel_vec(shape, ray_dir, det_pos, det_v, det_u):
+def parallel_vec(*, shape, ray_dir, det_pos, det_v, det_u):
     """Create a parallel-beam vector geometry
 
     :param shape: (`int`, `int`) or `int`
@@ -40,13 +40,13 @@ def parallel_vec(shape, ray_dir, det_pos, det_v, det_u):
 
 def random_parallel_vec():
     num_angles = int(np.random.uniform(1, 20))
-    shape = np.random.uniform(10, 20, size=2).astype(np.int)
-    ray_dir = np.random.normal(size=(num_angles, 3))
-    det_pos = np.random.normal(size=(num_angles, 3))
-    det_v = np.random.normal(size=(num_angles, 3))
-    det_u = np.random.normal(size=(num_angles, 3))
-
-    return parallel_vec(shape, ray_dir, det_pos, det_v, det_u)
+    return parallel_vec(
+        shape=np.random.uniform(10, 20, size=2).astype(np.int),
+        ray_dir=np.random.normal(size=(num_angles, 3)),
+        det_pos=np.random.normal(size=(num_angles, 3)),
+        det_v=np.random.normal(size=(num_angles, 3)),
+        det_u=np.random.normal(size=(num_angles, 3)),
+    )
 
 
 class ParallelVectorGeometry(ProjectionGeometry):
@@ -139,11 +139,11 @@ class ParallelVectorGeometry(ProjectionGeometry):
 
         new_ray_dir = self._ray_dir[up_slice(key)]
         return parallel_vec(
-            det_vec.det_shape,
-            new_ray_dir,
-            det_vec.det_pos,
-            det_vec.det_v,
-            det_vec.det_u,
+            shape=det_vec.det_shape,
+            ray_dir=new_ray_dir,
+            det_pos=det_vec.det_pos,
+            det_v=det_vec.det_v,
+            det_u=det_vec.det_u,
         )
 
     def to_astra(self):
@@ -182,7 +182,11 @@ class ParallelVectorGeometry(ProjectionGeometry):
 
         shape = (astra_pg["DetectorRowCount"], astra_pg["DetectorColCount"])
         return parallel_vec(
-            shape, ray_dir[:, ::-1], det_pos[:, ::-1], det_v[:, ::-1], det_u[:, ::-1]
+            shape=shape,
+            ray_dir=ray_dir[:, ::-1],
+            det_pos=det_pos[:, ::-1],
+            det_v=det_v[:, ::-1],
+            det_u=det_u[:, ::-1],
         )
 
     def to_vec(self):
@@ -263,17 +267,21 @@ class ParallelVectorGeometry(ProjectionGeometry):
         det_vec = self._det_vec.rescale_det(scale)
 
         return parallel_vec(
-            det_vec.det_shape,
-            self.ray_dir,
-            det_vec.det_pos,
-            det_vec.det_v,
-            det_vec.det_u,
+            shape=det_vec.det_shape,
+            ray_dir=self.ray_dir,
+            det_pos=det_vec.det_pos,
+            det_v=det_vec.det_v,
+            det_u=det_vec.det_u,
         )
 
     def reshape(self, new_shape):
         det_vec = self._det_vec.reshape(new_shape)
         return parallel_vec(
-            new_shape, self.ray_dir, det_vec.det_pos, det_vec.det_v, det_vec.det_u
+            shape=new_shape,
+            ray_dir=self.ray_dir,
+            det_pos=det_vec.det_pos,
+            det_v=det_vec.det_v,
+            det_u=det_vec.det_u,
         )
 
     def project_point(self, point):
@@ -303,5 +311,9 @@ class ParallelVectorGeometry(ProjectionGeometry):
 
             det_vec = other * self._det_vec
             return parallel_vec(
-                self.det_shape, ray_dir, det_vec.det_pos, det_vec.det_v, det_vec.det_u
+                shape=self.det_shape,
+                ray_dir=ray_dir,
+                det_pos=det_vec.det_pos,
+                det_v=det_vec.det_v,
+                det_u=det_vec.det_u,
             )

@@ -14,10 +14,18 @@ def par_vecs():
     num_angles = 100
     return [
         ts.parallel_vec(
-            (1, 1), num_angles * r, num_angles * p, num_angles * v, num_angles * u
+            shape=(1, 1),
+            ray_dir=num_angles * r,
+            det_pos=num_angles * p,
+            det_v=num_angles * v,
+            det_u=num_angles * u,
         ),
         ts.parallel_vec(
-            100, num_angles * r, num_angles * p, num_angles * v, num_angles * u
+            shape=100,
+            ray_dir=num_angles * r,
+            det_pos=num_angles * p,
+            det_v=num_angles * v,
+            det_u=num_angles * u,
         ),
         random_parallel_vec(),
         random_parallel_vec(),
@@ -28,27 +36,42 @@ def par_vecs():
 
 def test_init():
     vecs = np.arange(30).reshape((10, 3))
-    assert ts.parallel_vec(1, vecs, vecs, vecs, vecs).det_shape == (1, 1)
-    assert ts.parallel_vec((3, 5), vecs, vecs, vecs, vecs).det_shape == (3, 5)
+    kwargs = dict(ray_dir=vecs, det_pos=vecs, det_v=vecs, det_u=vecs,)
+    assert ts.parallel_vec(shape=1, **kwargs).det_shape == (1, 1)
+    assert ts.parallel_vec(shape=(3, 5), **kwargs).det_shape == (3, 5)
+
+    with pytest.raises(TypeError):
+        # must use `shape=1`:
+        ts.parallel_vec(1, **kwargs)
 
     with pytest.raises(ValueError):
         # Shape of 0 is not allowed
-        ts.parallel_vec(0, vecs, vecs, vecs, vecs)
+        ts.parallel_vec(shape=0, **kwargs)
 
     with pytest.raises(ValueError):
         vecs = np.random.normal(size=(10, 2))
-        ts.parallel_vec(1, vecs, vecs, vecs, vecs)
+        two_dim_args = dict(ray_dir=vecs, det_pos=vecs, det_v=vecs, det_u=vecs,)
+        ts.parallel_vec(shape=1, **two_dim_args)
+
+    with pytest.raises(ValueError):
+        diff_shaped_args = dict(
+            ray_dir=np.random.normal(size=(10, 3)),
+            det_pos=np.random.normal(size=(11, 3)),
+            det_v=np.random.normal(size=(12, 3)),
+            det_u=np.random.normal(size=(13, 3)),
+        )
+        ts.parallel_vec(shape=1, **diff_shaped_args)
 
 
 def test_equal():
     x = np.array([(0, 0, 0)])
-    pg = ts.parallel_vec(10, x, x, x, x)
+    pg = ts.parallel_vec(shape=10, ray_dir=x, det_pos=x, det_v=x, det_u=x)
     unequal = [
-        ts.parallel_vec(9, x, x, x, x),
-        ts.parallel_vec(10, x + 1, x, x, x),
-        ts.parallel_vec(10, x, x + 1, x, x),
-        ts.parallel_vec(10, x, x, x + 1, x),
-        ts.parallel_vec(10, x, x, x + 1, x),
+        ts.parallel_vec(shape=9, ray_dir=x, det_pos=x, det_v=x, det_u=x),
+        ts.parallel_vec(shape=10, ray_dir=x + 1, det_pos=x, det_v=x, det_u=x),
+        ts.parallel_vec(shape=10, ray_dir=x, det_pos=x + 1, det_v=x, det_u=x),
+        ts.parallel_vec(shape=10, ray_dir=x, det_pos=x, det_v=x + 1, det_u=x),
+        ts.parallel_vec(shape=10, ray_dir=x, det_pos=x, det_v=x, det_u=x + 1),
         ts.cone(angles=2),
         ts.cone(),
         ts.cone().to_vec(),

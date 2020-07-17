@@ -44,6 +44,10 @@ class TestData(unittest.TestCase):
             v_data = np.ones((vg.shape[0] * 2, *vg.shape[1:]), dtype=np.float32)
             ts.data(vg, v_data[::2, ...])
 
+        # Should raise an error when geometry is not convertible to ASTRA:
+        with self.assertRaises(TypeError):
+            ts.data(vg.to_vec())
+
         ts.data(pg, np.ones(proj_shape, dtype=np.float32))
         ts.data(vg, np.ones(vg.shape, dtype=np.float32))
 

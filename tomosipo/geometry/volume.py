@@ -3,12 +3,13 @@ import numpy as np
 import warnings
 import tomosipo as ts
 from .transform import Transform
+from .volume_vec import VolumeVectorGeometry
 
 
 def is_volume(g):
     """Determine if a geometry is a volume geometry
 
-    A geometry object can be a volume geometry or a projection
+    The object can be a fixed volume geometry or a vector volume
     geometry.
 
     :param g: a geometry object
@@ -16,7 +17,7 @@ def is_volume(g):
     :rtype: bool
 
     """
-    return isinstance(g, VolumeGeometry)
+    return isinstance(g, VolumeGeometry) or isinstance(g, VolumeVectorGeometry)
 
 
 def volume(shape=(1, 1, 1), pos=None, size=None, extent=None):

@@ -54,6 +54,10 @@ class Data(object):
         """
         super(Data, self).__init__()
         self.geometry = geometry
+        if not hasattr(geometry, "to_astra"):
+            raise TypeError(
+                f"Cannot create data object with geometry because it is not convertible to ASTRA: {geometry}"
+            )
         self.astra_geom = geometry.to_astra()
 
         if self.is_volume():

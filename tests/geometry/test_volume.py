@@ -33,6 +33,7 @@ def test_pos_size_and_extent():
 
 def test_is_volume():
     assert ts.geometry.is_volume(ts.volume())
+    assert ts.geometry.is_volume(ts.volume().to_vec())
     assert not ts.geometry.is_volume(ts.cone())
     assert not ts.geometry.is_volume(None)
 

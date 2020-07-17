@@ -58,7 +58,8 @@ class Link(object):
     """
 
     def __init__(self, shape, initial_value):
-        super(Link, self).__init__()
+        self._shape = shape
+        super().__init__()
 
     ###########################################################################
     #                      "Protocol" functions / methods                     #
@@ -108,6 +109,10 @@ class Link(object):
             "To change the underlying data instead, use: \n"
             " >>> x.data[:] = new_data\n"
         )
+
+    @property
+    def shape(self):
+        return self._shape
 
     ###########################################################################
     #                             Context manager                             #

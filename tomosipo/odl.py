@@ -51,16 +51,11 @@ def from_odl(geom_or_op):
     )
 
 
-# TODO: implement converson of tomosipo geometries to ODL geometries.
-def to_odl(geom_or_op):
-    pass
-
-
 def fan_to_cone_beam_geometry(fb_geometry, det_z_span=1.0):
     """
     Convert 2D `odl.tomo.FanBeamGeometry` to 3D `odl.tomo.ConeBeamGeometry`,
     by adding a trivial 0-th axis.
-    
+
     For odl<='0.7.0' the classes are `odl.tomo.FanFlatGeometry` and
     `odl.tomo.ConeFlatGeometry`.
 

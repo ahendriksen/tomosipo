@@ -72,9 +72,9 @@ def test_equal():
         ts.parallel_vec(shape=10, ray_dir=x, det_pos=x + 1, det_v=x, det_u=x),
         ts.parallel_vec(shape=10, ray_dir=x, det_pos=x, det_v=x + 1, det_u=x),
         ts.parallel_vec(shape=10, ray_dir=x, det_pos=x, det_v=x, det_u=x + 1),
-        ts.cone(angles=2),
-        ts.cone(),
-        ts.cone().to_vec(),
+        ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=2),
+        ts.cone(size=np.sqrt(2), cone_angle=1 / 2),
+        ts.cone(size=np.sqrt(2), cone_angle=1 / 2).to_vec(),
         ts.volume(),
     ]
 

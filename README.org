@@ -50,7 +50,7 @@ Simple examples:
   from tomosipo.qt import display
 
   # Create 'unit' cone geometry
-  pg = ts.cone(angles=100)
+  pg = ts.cone(angles=100, size=np.sqrt(2), cone_angle=0.5)
   print(pg)
 
   # Create volume geometry of a unit cube on the origin
@@ -65,16 +65,19 @@ Simple examples:
 #+begin_example
 ConeGeometry(
     angles=100,
-    size=(1.4142135623730951, 1.4142135623730951),
     shape=(1, 1),
-    detector_distance=0,
-    source_distance=2
+    size=(1.4142135623730951, 1.4142135623730951),
+    src_obj_dist=4.242640687119286,
+    src_det_dist=4.242640687119286
 )
-VolumeGeometry < extent: ((-0.5, 0.5), (-0.5, 0.5), (-0.5, 0.5)), shape: (1, 1, 1)>
-VolumeGeometry < extent: ((-0.47151685419122136, 0.47151685419122136), (-0.47141208716416366, 0.47141208716416366), (-0.47141208716416366, 0.47141208716416366)), shape: (1, 1, 1)>
-VolumeGeometry < extent: ((-0.7071067811865476, 0.7071067811865476), (-1.0938365340665575, 1.0938365340665575), (-1.0938365340665575, 1.0938365340665575)), shape: (1, 1, 1)>
-VolumeGeometry < extent: ((-0.7071067811865476, 0.7071067811865476), (-1.0938365340665575, 1.0938365340665575), (-1.0938365340665575, 1.0938365340665575)), shape: (1, 1, 1)>
+VolumeGeometry(
+    shape=(1, 1, 1),
+    pos=(0.0, 0.0, 0.0),
+    size=(1.0, 1.0, 1.0),
+)
 #+end_example
+
+
 ** Express algorithms succinctly
 
 In the following example, we implement the simultaneous iterative
@@ -93,7 +96,7 @@ between system RAM and GPU are necessary.
   from timeit import default_timer as timer
 
   # Create 'unit' cone geometry, and a
-  pg = ts.cone(angles=100, shape=(128, 192))
+  pg = ts.cone(size=np.sqrt(2), cone_angle=1/2, angles=100, shape=(128, 192))
   # Create volume geometry of a unit cube on the origin
   vg = ts.volume(shape=128)
   # Create projection operator

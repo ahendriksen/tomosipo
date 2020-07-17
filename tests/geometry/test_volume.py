@@ -34,7 +34,7 @@ def test_pos_size_and_extent():
 def test_is_volume():
     assert ts.geometry.is_volume(ts.volume())
     assert ts.geometry.is_volume(ts.volume().to_vec())
-    assert not ts.geometry.is_volume(ts.cone())
+    assert not ts.geometry.is_volume(ts.cone(cone_angle=1 / 2))
     assert not ts.geometry.is_volume(None)
 
 
@@ -79,7 +79,11 @@ def test_equal():
 
     """
     vg = ts.volume()
-    unequal = [ts.volume(shape=10), ts.volume(shape=(10, 9, 8)), ts.cone()]
+    unequal = [
+        ts.volume(shape=10),
+        ts.volume(shape=(10, 9, 8)),
+        ts.cone(cone_angle=1 / 2),
+    ]
 
     assert vg == vg
     for u in unequal:

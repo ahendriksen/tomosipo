@@ -66,7 +66,7 @@ def test_eq():
     ob = ts.volume_vec(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1))
 
     unequal = [
-        ts.cone(),
+        ts.cone(size=np.sqrt(2), cone_angle=1 / 2),
         ts.volume_vec(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 99)),
         ts.volume_vec(2, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0)),
         ts.volume_vec(1, (1, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0)),

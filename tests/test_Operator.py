@@ -9,7 +9,7 @@ import tomosipo as ts
 
 
 def test_forward_backward():
-    pd = ts.data(ts.cone(shape=10))
+    pd = ts.data(ts.cone(size=np.sqrt(2), cone_angle=1 / 2, shape=10))
     vd = ts.data(ts.volume(10))
 
     rs = [
@@ -28,7 +28,7 @@ def test_fdk(interactive):
     if interactive:
         from tomosipo.qt import display
 
-    pg = ts.cone(angles=100, shape=100)
+    pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=100, shape=100)
     vg = ts.volume(shape=100)
     pd = ts.data(pg)
     vd = ts.data(vg)
@@ -47,7 +47,7 @@ def test_fdk(interactive):
 
 
 def test_operator():
-    pg = ts.cone(angles=150, shape=100)
+    pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=150, shape=100)
     vg = ts.volume(shape=100)
 
     A = ts.operator(vg, pg, additive=False)
@@ -66,7 +66,7 @@ def test_operator():
 
 
 def test_operator_additive():
-    pg = ts.cone(angles=150, shape=100)
+    pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=150, shape=100)
     vg = ts.volume(shape=100)
 
     A = ts.operator(vg, pg, additive=False)

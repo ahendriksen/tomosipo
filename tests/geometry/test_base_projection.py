@@ -15,12 +15,12 @@ import tomosipo.vector_calc as vc
 @pytest.fixture
 def default_proj_geoms():
     return [
-        ts.cone(),
-        ts.cone().to_vec(),
-        ts.cone(angles=10, shape=(5, 3)),
-        ts.cone(angles=10, shape=(5, 3)).to_vec(),
-        ts.cone(angles=11, shape=(10, 10)),
-        ts.cone(angles=11, shape=(10, 10)).to_vec(),
+        ts.cone(size=np.sqrt(2), cone_angle=1 / 2),
+        ts.cone(size=np.sqrt(2), cone_angle=1 / 2).to_vec(),
+        ts.cone(angles=10, shape=(5, 3), cone_angle=1 / 2),
+        ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=10, shape=(5, 3)).to_vec(),
+        ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=11, shape=(10, 10)),
+        ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=11, shape=(10, 10)).to_vec(),
         ts.geometry.det_vec.random_det_vec(),
         ts.geometry.random_parallel_vec(),
         ts.geometry.random_parallel(),

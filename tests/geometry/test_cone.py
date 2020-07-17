@@ -8,31 +8,54 @@ from pytest import approx
 import numpy as np
 import tomosipo as ts
 from tomosipo.geometry import random_transform, random_cone
-import tomosipo.vector_calc as vc
 from tomosipo.geometry import transform
 
 ###############################################################################
 #                             Creation and dunders                            #
 ###############################################################################
-def test_cone():
-    assert ts.geometry.cone.ConeGeometry() == ts.cone()
 
 
 def test_init(interactive):
     """Test init."""
-    pg = ts.cone()
+
+    pg = ts.cone(cone_angle=1)
+
+    # Check shape and angles
+    with pytest.raises(TypeError):
+        ts.cone(angles=1, shape=None, cone_angle=1)
+    with pytest.raises(TypeError):
+        assert ts.cone(angles=None, shape=1, cone_angle=1).num_angles == 1
+
+    # Check combinations of cone_angle, src_obj_dist, and src_det_dist.
+    ass_kws = dict(angles=1, shape=1, size=1)
+    with pytest.raises(ValueError):
+        ts.cone(**ass_kws, cone_angle=1, src_obj_dist=1, src_det_dist=1)
+    with pytest.raises(ValueError):
+        ts.cone(**ass_kws, cone_angle=1, src_obj_dist=1, src_det_dist=None)
+    with pytest.raises(ValueError):
+        ts.cone(**ass_kws, cone_angle=1, src_obj_dist=None, src_det_dist=1)
+    with pytest.raises(ValueError):
+        ts.cone(**ass_kws, cone_angle=None, src_obj_dist=None, src_det_dist=None)
+    # These should all be fine:
+    ts.cone(**ass_kws, cone_angle=1, src_obj_dist=None, src_det_dist=None)
+    ts.cone(**ass_kws, cone_angle=None, src_obj_dist=1, src_det_dist=1)
+    ts.cone(**ass_kws, cone_angle=None, src_obj_dist=1, src_det_dist=None)
+    ts.cone(**ass_kws, cone_angle=None, src_obj_dist=None, src_det_dist=1)
+
+    # Check that size equals shape if not given:
+    assert ts.cone(shape=2, cone_angle=1).det_size == (2, 2)
+    assert ts.cone(shape=2, size=1, cone_angle=1).det_size == (1, 1)
 
     assert isinstance(pg, ts.geometry.base_projection.ProjectionGeometry)
-
-    pg = ts.cone(angles=np.linspace(0, 1, 100))
+    pg = ts.cone(angles=np.linspace(0, 1, 100), cone_angle=1)
     assert pg.num_angles == 100
 
     with pytest.raises(ValueError):
-        pg = ts.cone(angles=[])
+        pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=[])
 
     representation = repr(pg)
     if interactive:
-        print(ts.cone())
+        print(ts.cone(size=np.sqrt(2), cone_angle=1 / 2))
         print(representation)
 
 
@@ -42,13 +65,13 @@ def test_equal():
     Make sure that a ConeGeometry is equal to it
     """
 
-    pg = ts.cone()
+    pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2)
     unequal = [
-        ts.cone(angles=2),
-        ts.cone(size=5),
-        ts.cone(shape=3),
-        ts.cone(src_obj_dist=50),
-        ts.cone(src_det_dist=50),
+        ts.cone(size=5, cone_angle=1 / 2),
+        ts.cone(angles=2, size=np.sqrt(2), cone_angle=1 / 2),
+        ts.cone(shape=2, size=np.sqrt(2), cone_angle=1 / 2),
+        ts.cone(size=np.sqrt(2), src_obj_dist=50),
+        ts.cone(size=np.sqrt(2), src_det_dist=50),
         ts.volume(),
     ]
 
@@ -59,7 +82,7 @@ def test_equal():
 
 
 def test_get_item():
-    pg = ts.cone(angles=10, shape=20)
+    pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=10, shape=20)
     assert pg[1].num_angles == 1
     assert pg[:1].num_angles == 1
     assert pg[:2].num_angles == 2
@@ -75,7 +98,7 @@ def test_get_item():
 #                                     to_*                                    #
 ###############################################################################
 def test_to_vec():
-    num_tests = 100
+    num_tests = 10
     for _ in range(num_tests):
         num_angles = int(np.random.uniform(1, 100))
 
@@ -92,12 +115,14 @@ def test_to_vec():
             shape = np.random.uniform(1, 100, size=1).astype(np.int)
             size = np.random.uniform(1, 100, size=1)
 
-        s_dst = np.random.uniform(10, 100)
-        d_dst = np.random.uniform(0, 100)
-
-        pg1 = ts.cone(angles, size, shape, d_dst, s_dst)
-        pgv = pg1.to_vec()
-        assert pg1.det_shape == pgv.det_shape
+        pg = ts.cone(
+            angles=angles,
+            shape=shape,
+            size=size,
+            src_obj_dist=np.random.uniform(10, 100),
+            src_det_dist=np.random.uniform(0, 100),
+        )
+        assert pg.det_shape == pg.to_vec().det_shape
 
 
 def test_to_from_astra():
@@ -125,14 +150,11 @@ def test_to_from_astra():
             shape = np.random.uniform(1, 100, size=1).astype(np.int)
             size = np.random.uniform(1, 100, size=1)
 
-        s_dst = np.random.uniform(10, 100)
-        d_dst = np.random.uniform(0, 100)
+        pg = ts.cone(
+            angles=angles, shape=shape, size=size, cone_angle=np.random.uniform(0.5, 1)
+        )
 
-        pg1 = ts.cone(angles, size, shape, d_dst, s_dst)
-        astra_pg = pg1.to_astra()
-        pg2 = ts.from_astra(astra_pg)
-
-        assert pg1 == pg2
+        assert pg == ts.from_astra(pg.to_astra())
 
 
 ###############################################################################
@@ -142,21 +164,21 @@ def test_to_from_astra():
 
 def test_det_sizes():
     size = (1, 2)
-    pg = ts.cone(angles=3, size=size)
+    pg = ts.cone(angles=3, cone_angle=1 / 2, size=size)
     size = np.array(size)[None, ...]
     assert abs(pg.det_sizes - size).sum() < ts.epsilon
 
 
 def test_src_obj_det_dist():
-    assert ts.cone(src_obj_dist=5.0).src_obj_dist == 5.0
-    assert ts.cone(src_det_dist=3.0).src_det_dist == 3.0
+    assert ts.cone(size=np.sqrt(2), src_obj_dist=5.0).src_obj_dist == 5.0
+    assert ts.cone(size=np.sqrt(2), src_det_dist=3.0).src_det_dist == 3.0
 
 
 ###############################################################################
 #                                   Methods                                   #
 ###############################################################################
 def test_rescale_det():
-    pg = ts.cone(angles=10, shape=20)
+    pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=10, shape=20)
 
     assert approx(pg.det_sizes) == pg.rescale_det(2).det_sizes
     assert pg.rescale_det((2, 2)) == pg.rescale_det(2)
@@ -175,5 +197,7 @@ def test_transform():
 
 
 def test_to_box():
-    pg = ts.cone(10, shape=(5, 3), src_obj_dist=11, src_det_dist=21)
+    pg = ts.cone(
+        angles=10, shape=(5, 3), size=np.sqrt(2), src_obj_dist=11, src_det_dist=21
+    )
     assert pg.det_pos == approx(pg.to_box().pos)

@@ -120,11 +120,11 @@ class ConeVectorGeometry(ProjectionGeometry):
         This geometry can be sliced by angle. The following obtains a
         sub-geometry containing every second projection:
 
-        >>> ts.cone(angles=10).to_vec()[0::2]
+        >>> ts.cone(angles=10, cone_angle=1/2).to_vec()[0::2]
 
         This geometry can also be sliced in the detector plane:
 
-        >>> ts.cone(shape=10).to_vec()[:, ::2, ::2]
+        >>> ts.cone(shape=10, cone_angle=1/2).to_vec()[:, ::2, ::2]
 
         :param key:
         :returns:

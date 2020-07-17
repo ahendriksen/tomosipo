@@ -44,9 +44,9 @@ def test_equal():
         dv.det_vec(10, pos + 1, pos, pos),
         dv.det_vec(10, pos, pos + 1, pos),
         dv.det_vec(10, pos, pos, pos + 1),
-        ts.cone(angles=2),
-        ts.cone(),
-        ts.cone().to_vec(),
+        ts.cone(angles=2, size=np.sqrt(2), cone_angle=1 / 2),
+        ts.cone(size=np.sqrt(2), cone_angle=1 / 2),
+        ts.cone(size=np.sqrt(2), cone_angle=1 / 2).to_vec(),
         ts.volume(),
     ]
 

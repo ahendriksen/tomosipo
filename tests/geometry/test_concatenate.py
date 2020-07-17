@@ -35,6 +35,6 @@ def test_concat_errors():
     with pytest.raises(TypeError):
         ts.concatenate([ts.volume()])
         ts.concatenate(ts.volume())
-        ts.concatenate(ts.cone())
+        ts.concatenate(ts.cone(size=np.sqrt(2), cone_angle=1 / 2))
     with pytest.raises(ValueError):
         ts.concatenate([])

@@ -86,7 +86,7 @@ def _pg_items(pg, colors, i):
 @to_mesh_items.register(VolumeGeometry)
 def _vg_item(vg, colors, i):
     color = colors[0]
-    corners = np.array(vg.get_corners())[:, ::-1]
+    corners = vg.corners[0, :, ::-1]
     volume_mesh = np.array(list(itertools.product(corners, corners, corners)))
 
     return [

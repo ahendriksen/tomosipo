@@ -101,8 +101,6 @@ def test_getitem(par_vecs):
         assert pg[1:9:2].ray_dir == approx(pg.ray_dir[1:9:2, :])
         assert pg[-1].ray_dir.shape == pg.ray_dir[-1:, :].shape
         assert pg[-1].ray_dir == approx(pg.ray_dir[-1:, :])
-        assert pg[-2].ray_dir.shape == pg.ray_dir[-2:-1:, :].shape
-        assert pg[-2].ray_dir == approx(pg.ray_dir[-2:-1:, :])
 
         if (
             pg.num_angles % 2 != 0

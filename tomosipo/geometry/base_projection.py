@@ -1,6 +1,5 @@
-import numpy as np
-from tomosipo.utils import up_tuple
 from .transform import Transform
+import tomosipo as ts
 
 
 def is_projection(g):
@@ -31,11 +30,7 @@ class ProjectionGeometry(object):
         :rtype:
 
         """
-        height, width = up_tuple(shape, 2)
-        height, width = int(height), int(width)
-
-        if not np.all(np.array((height, width)) > 0):
-            raise ValueError("Shape must be strictly positive.")
+        height, width = ts.utils.to_shape(shape, dim=2, allow_zeros=False)
 
         self._shape = (height, width)
 

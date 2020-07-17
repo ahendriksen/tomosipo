@@ -15,7 +15,7 @@ def up_tuple(x, n):
     return (x,) * n
 
 
-def to_shape(shape, dim=3):
+def to_shape(shape, dim=3, allow_zeros=True):
     shape = up_tuple(shape, dim)
     for s in shape:
         if not isinstance(s, Integral):
@@ -23,8 +23,12 @@ def to_shape(shape, dim=3):
                 f"Shape must contain only integers. Got {shape} with type {type(s)}. "
             )
     shape = tuple(map(int, shape))
-    if not all(s >= 0 for s in shape):
-        raise ValueError(f"Shape must be non-negative. Got {shape}.")
+    if allow_zeros:
+        if not all(s >= 0 for s in shape):
+            raise ValueError(f"Shape must be non-negative. Got {shape}.")
+    else:
+        if not all(s >= 1 for s in shape):
+            raise ValueError(f"Shape must be positive. Got {shape}.")
 
     return shape
 

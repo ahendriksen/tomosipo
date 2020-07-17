@@ -42,8 +42,8 @@ def random_cone_vec():
     :rtype: `ConeVectorGeometry`
 
     """
-
-    return ts.geometry.random_cone().to_vec()
+    T = ts.geometry.random_transform()
+    return T * ts.geometry.random_cone().to_vec()
 
 
 class ConeVectorGeometry(ProjectionGeometry):

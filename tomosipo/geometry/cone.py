@@ -51,7 +51,7 @@ def random_cone():
     """
     angles = np.random.normal(size=20)
     size = np.random.uniform(10, 20, size=2)
-    shape = np.random.uniform(10, 20, size=2)
+    shape = np.random.uniform(10, 20, size=2).astype(int)
     src_obj_dist = np.random.uniform(0, 10)
     obj_det_dist = np.random.uniform(0, 10)
     src_det_dist = src_obj_dist + obj_det_dist

@@ -79,6 +79,11 @@ class TestConeVectorGeometry(unittest.TestCase):
 
     def test_getitem(self):
         pg = ts.cone(angles=10, shape=100, size=np.sqrt(2), cone_angle=1 / 2).to_vec()
+
+        # Test indexing with boolean arrays
+        assert pg[np.ones(pg.num_angles) == 1] == pg
+        assert pg[np.arange(pg.num_angles) % 2 == 0] == pg[0::2]
+
         self.assertEqual(pg, pg[:, :, :])
 
         self.assertEqual(2 * pg[::2].num_angles, pg.num_angles)

@@ -141,14 +141,16 @@ class ParallelGeometry(ProjectionGeometry):
 
         """
         if isinstance(key, tuple):
-            raise IndexError(
+            raise ValueError(
                 f"Expected 1 index to ParallelGeometry, got {len(key)}. "
                 f"Indexing on the detector plane is not supported, "
                 f"since it might move the detector center. "
                 f"To prevent this error, use `pg.to_vec()[a:b, c:d, e:f]'. "
             )
 
-        new_angles = self._angles[up_slice(key)]
+        new_angles = self._angles[key]
+        if np.isscalar(new_angles):
+            new_angles = np.array([new_angles])
 
         return parallel(angles=new_angles, shape=self.det_shape, size=self._size)
 

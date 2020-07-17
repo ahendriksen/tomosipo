@@ -138,7 +138,7 @@ class ConeVectorGeometry(ProjectionGeometry):
         if isinstance(key, tuple):
             key, *_ = key
 
-        new_src_pos = self._src_pos[up_slice(key)]
+        new_src_pos = self._src_pos[key]
         return ConeVectorGeometry(
             shape=det_vec.det_shape,
             src_pos=new_src_pos,

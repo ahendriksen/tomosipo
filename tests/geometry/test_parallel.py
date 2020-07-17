@@ -61,12 +61,31 @@ def test_equal():
 
 
 def test_getitem(par_geoms):
+    pg = ts.parallel(angles=10, shape=20)
+    assert pg[1].num_angles == 1
+    assert pg[:1].num_angles == 1
+    assert pg[-1].num_angles == 1
+    assert pg[:2].num_angles == 2
+    assert pg[:].num_angles == 10
+    assert pg[-1] == pg[9]
+    assert pg[-2] == pg[8]
+
+    assert pg[np.ones(pg.num_angles) == 1] == pg
+    assert pg[np.arange(pg.num_angles) % 2 == 0] == pg[0::2]
+
+    with pytest.raises(ValueError):
+        # Indexing on the detector plane is not supported.
+        pg[:, 0, 0]
+
+    with pytest.raises(IndexError):
+        ts.parallel(angles=3)[4]
+
     for pg in par_geoms:
         assert pg == pg[:]
 
-        with pytest.raises(IndexError):
+        with pytest.raises(ValueError):
             assert pg == pg[:, :]
-        with pytest.raises(IndexError):
+        with pytest.raises(ValueError):
             assert pg == pg[:, :, :]
 
         assert pg[1::2].num_angles == pg.num_angles // 2

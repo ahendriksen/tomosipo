@@ -186,7 +186,14 @@ class VolumeVectorGeometry(object):
 
             return VolumeVectorGeometry(new_shape, new_pos, new_w, new_v, new_u)
 
-        raise TypeError("Indexing with key {key} is not supported. ")
+        # If key is a boolean array, we may index like this:
+        return VolumeVectorGeometry(
+            shape=self.shape,
+            pos=self.pos[key],
+            w=self.w[key],
+            v=self.v[key],
+            u=self.u[key],
+        )
 
     def to_vec(self):
         """Returns a volume vector geometry

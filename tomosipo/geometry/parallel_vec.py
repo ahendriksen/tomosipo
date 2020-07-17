@@ -137,7 +137,7 @@ class ParallelVectorGeometry(ProjectionGeometry):
         if isinstance(key, tuple):
             key, *_ = key
 
-        new_ray_dir = self._ray_dir[up_slice(key)]
+        new_ray_dir = self._ray_dir[key]
         return parallel_vec(
             shape=det_vec.det_shape,
             ray_dir=new_ray_dir,

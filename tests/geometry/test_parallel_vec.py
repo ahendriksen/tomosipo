@@ -91,6 +91,10 @@ def test_getitem(par_vecs):
         assert pg == pg[:, :]
         assert pg == pg[:, :, :]
 
+        # Test indexing with boolean arrays
+        assert pg[np.ones(pg.num_angles) == 1] == pg
+        assert pg[np.arange(pg.num_angles) % 2 == 0] == pg[0::2]
+
         assert pg[1::2].num_angles == pg.num_angles // 2
         assert pg[9::10].num_angles == pg.num_angles // 10
 

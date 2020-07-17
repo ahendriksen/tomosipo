@@ -212,27 +212,22 @@ class ConeGeometry(ProjectionGeometry):
         :rtype:
 
         """
-
-        one_key = isinstance(key, Integral) or isinstance(key, slice)
-
-        if one_key:
-            key = up_slice(key)
-            return ConeGeometry(
-                angles=np.asarray(self.angles[key]),
-                shape=self.det_shape,
-                size=self.det_size,
-                src_obj_dist=self.src_obj_dist,
-                src_det_dist=self.src_det_dist,
-            )
         if isinstance(key, tuple):
-            raise IndexError(
+            raise ValueError(
                 f"Expected 1 index to ConeGeometry, got {len(key)}. "
                 f"Indexing on the detector plane is not supported, "
                 f"since it might move the detector center. "
             )
-        raise TypeError(
-            f"Indexing a ConeGeometry with {type(key)} is not supported. "
-            f"Try int or slice instead."
+
+        new_angles = self.angles[key]
+        if np.isscalar(new_angles):
+            new_angles = np.array([new_angles])
+        return ConeGeometry(
+            angles=new_angles,
+            shape=self.det_shape,
+            size=self.det_size,
+            src_obj_dist=self.src_obj_dist,
+            src_det_dist=self.src_det_dist,
         )
 
     def to_vec(self):

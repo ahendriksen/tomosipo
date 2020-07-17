@@ -85,13 +85,21 @@ def test_get_item():
     pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=10, shape=20)
     assert pg[1].num_angles == 1
     assert pg[:1].num_angles == 1
+    assert pg[-1].num_angles == 1
     assert pg[:2].num_angles == 2
     assert pg[:].num_angles == 10
     assert pg[-1] == pg[9]
     assert pg[-2] == pg[8]
 
+    assert pg[np.ones(pg.num_angles) == 1] == pg
+    assert pg[np.arange(pg.num_angles) % 2 == 0] == pg[0::2]
+
+    with pytest.raises(IndexError):
+        ts.cone(angles=3, cone_angle=1)[4]
+
     with pytest.raises(ValueError):
-        pg[10]
+        # Indexing on the detector plane is not supported.
+        pg[:, 0, 0]
 
 
 ###############################################################################

@@ -117,6 +117,10 @@ def test_get_item():
     assert ts.concatenate([vg, vg])[0] == vg
     assert ts.concatenate([vg, vg])[1] == vg
 
+    # Test indexing with boolean arrays
+    assert vg[np.ones(vg.num_steps) == 1] == vg
+    assert vg[np.arange(vg.num_steps) % 2 == 0] == vg[0::2]
+
     assert ts.volume_vec(shape=3)[:, 1, 1, 1] == ts.volume_vec(shape=1)
     T = random_transform()
     assert T * vg[:, 1, 2, 3] == (T * vg)[:, 1, 2, 3]
@@ -124,8 +128,6 @@ def test_get_item():
     assert T * vg[:, 1:, 2:, 3:] == (T * vg)[:, 1:, 2:, 3:]
     with pytest.raises(ValueError):
         vg[1, 2, 3, 4, 5]
-    with pytest.raises(TypeError):
-        vg[...]
 
 
 def test_size():

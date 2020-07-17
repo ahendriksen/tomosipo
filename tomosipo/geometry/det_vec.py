@@ -164,11 +164,19 @@ class DetectorVectorGeometry(ProjectionGeometry):
             new_center = (new_llc + new_trc) / 2
 
             new_shape = (lenV, lenU)
-            new_det_pos = new_center[up_slice(key[0])]
-            new_det_vs = self._det_v[up_slice(key[0])] * stepV
-            new_det_us = self._det_u[up_slice(key[0])] * stepU
+            new_det_pos = new_center[key[0]]
+            new_det_vs = self._det_v[key[0]] * stepV
+            new_det_us = self._det_u[key[0]] * stepU
 
             return det_vec(new_shape, new_det_pos, new_det_vs, new_det_us)
+
+        # If key is a boolean array, we may index like this:
+        return det_vec(
+            shape=self.det_shape,
+            det_pos=self.det_pos[key],
+            det_v=self.det_v[key],
+            det_u=self.det_u[key],
+        )
 
     def to_astra(self):
         row_count, col_count = self.det_shape

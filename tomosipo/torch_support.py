@@ -6,7 +6,20 @@ To enable support for torch tensors in tomosipo, use:
 
 """
 import tomosipo as ts
-import torch
+import warnings
+
+try:
+    import torch
+except ModuleNotFoundError:
+    warnings.warn(
+        "\n------------------------------------------------------------\n\n"
+        "Cannot import torch package. \n"
+        "Please make sure to install torch. \n"
+        "You can install torch using: \n\n"
+        " > conda install pytorch -c pytorch \n"
+        "\n------------------------------------------------------------\n\n"
+    )
+    raise
 from torch.autograd import Function
 
 # This import is needed to enable to pytorch linking backend.

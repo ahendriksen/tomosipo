@@ -176,15 +176,16 @@ class ConeGeometry(ProjectionGeometry):
 
     def __repr__(self):
         # Use self.angles_original to make the representation fit on screen.
-        return (
-            f"ConeGeometry(\n"
-            f"    angles={self.angles_original},\n"
-            f"    shape={self.det_shape},\n"
-            f"    size={self.det_size},\n"
-            f"    src_obj_dist={self._src_obj_dist},\n"
-            f"    src_det_dist={self._src_det_dist}\n"
-            f")"
-        )
+        with ts.utils.print_options():
+            return (
+                f"ts.cone(\n"
+                f"    angles={repr(self.angles_original)},\n"
+                f"    shape={self.det_shape},\n"
+                f"    size={self.det_size},\n"
+                f"    src_obj_dist={self._src_obj_dist},\n"
+                f"    src_det_dist={self._src_det_dist},\n"
+                f")"
+            )
 
     def __eq__(self, other):
         if not isinstance(other, ConeGeometry):

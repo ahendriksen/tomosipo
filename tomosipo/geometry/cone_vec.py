@@ -98,15 +98,16 @@ class ConeVectorGeometry(ProjectionGeometry):
         self._is_vector = True
 
     def __repr__(self):
-        return (
-            f"ConeVectorGeometry(\n"
-            f"    shape={self.det_shape},\n"
-            f"    src_pos={self._src_pos},\n"
-            f"    det_pos={self._det_vec.det_pos},\n"
-            f"    det_v={self._det_vec.det_v},\n"
-            f"    det_u={self._det_vec.det_u},\n"
-            f")"
-        )
+        with ts.utils.print_options():
+            return (
+                f"ts.cone_vec(\n"
+                f"    shape={self.det_shape},\n"
+                f"    src_pos={repr(self._src_pos)},\n"
+                f"    det_pos={repr(self._det_vec.det_pos)},\n"
+                f"    det_v={repr(self._det_vec.det_v)},\n"
+                f"    det_u={repr(self._det_vec.det_u)},\n"
+                f")"
+            )
 
     def __eq__(self, other):
         if not isinstance(other, ConeVectorGeometry):

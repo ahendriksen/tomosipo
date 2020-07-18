@@ -44,6 +44,22 @@ def test_init():
         ts.parallel(angles=np.ones((1, 1)))
 
 
+def test_repr():
+    pg = ts.parallel(angles=10, shape=11, size=1)
+    r = """ts.parallel(
+    angles=10,
+    shape=(11, 11),
+    size=(1, 1),
+)"""
+
+    assert repr(pg) == r
+    with np.printoptions(legacy="1.13"):
+        assert repr(pg) == r
+
+    pg = ts.geometry.random_parallel()
+    assert eval(repr(pg), dict(ts=ts, array=np.array)) == pg
+
+
 def test_equal():
     pg = ts.parallel()
     unequal = [

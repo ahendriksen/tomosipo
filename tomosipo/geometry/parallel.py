@@ -104,13 +104,14 @@ class ParallelGeometry(ProjectionGeometry):
         self._is_vector = False
 
     def __repr__(self):
-        return (
-            f"ParallelGeometry(\n"
-            f"    angles={self._angles_original},\n"
-            f"    size={self._size},\n"
-            f"    shape={self.det_shape},\n"
-            f")"
-        )
+        with ts.utils.print_options():
+            return (
+                f"ts.parallel(\n"
+                f"    angles={repr(self._angles_original)},\n"
+                f"    shape={repr(self.det_shape)},\n"
+                f"    size={repr(self._size)},\n"
+                f")"
+            )
 
     def __eq__(self, other):
         if not isinstance(other, ParallelGeometry):

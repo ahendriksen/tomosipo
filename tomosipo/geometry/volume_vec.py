@@ -107,15 +107,16 @@ class VolumeVectorGeometry(object):
             )
 
     def __repr__(self):
-        return (
-            f"VolumeVectorGeometry(\n"
-            f"    shape={self._shape},\n"
-            f"    pos={self.pos},\n"
-            f"    w={self.w},\n"
-            f"    v={self.v},\n"
-            f"    u={self.u},\n"
-            f")"
-        )
+        with ts.utils.print_options():
+            return (
+                f"ts.volume_vec(\n"
+                f"    shape={self._shape},\n"
+                f"    pos={repr(self.pos)},\n"
+                f"    w={repr(self.w)},\n"
+                f"    v={repr(self.v)},\n"
+                f"    u={repr(self.u)},\n"
+                f")"
+            )
 
     def __eq__(self, other):
         if not isinstance(other, VolumeVectorGeometry):

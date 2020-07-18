@@ -20,7 +20,7 @@ def is_volume(g):
     return isinstance(g, VolumeGeometry) or isinstance(g, VolumeVectorGeometry)
 
 
-def volume(shape=(1, 1, 1), pos=None, size=None, extent=None):
+def volume(*, shape=(1, 1, 1), pos=None, size=None, extent=None):
     """Create an axis-aligned volume geometry
 
     A VolumeGeometry is an axis-aligned cuboid centered on `pos`.
@@ -87,9 +87,11 @@ def random_volume():
     :rtype: `VolumeGeometry`
 
     """
-    center, size = 1 + abs(np.random.normal(size=(2, 3)))
-    shape = np.random.uniform(2, 100, 3).astype(int)
-    return volume(shape).translate(center).scale(size)
+    return volume(
+        shape=np.random.uniform(2, 100, 3).astype(int),
+        pos=np.random.normal(size=3),
+        size=np.random.uniform(1, 10, size=3),
+    )
 
 
 def _pos_size_to_extent(pos, size):
@@ -170,7 +172,7 @@ class VolumeGeometry:
 
     def __repr__(self):
         return (
-            f"VolumeGeometry(\n"
+            f"ts.volume(\n"
             f"    shape={self._inner.shape},\n"
             f"    pos={tuple(self.pos[0])},\n"
             f"    size={self.size},\n"

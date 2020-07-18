@@ -54,6 +54,28 @@ class TestConeVectorGeometry(unittest.TestCase):
             )
             ts.cone_vec(shape=1, **diff_shaped_args)
 
+    def test_repr(self):
+        x = [[1, 2, 3], [4, 5, 6]]
+        pg = ts.cone_vec(shape=10, src_pos=x, det_pos=x, det_v=x, det_u=x)
+        r = """ts.cone_vec(
+    shape=(10, 10),
+    src_pos=array([[1., 2., 3.],
+       [4., 5., 6.]]),
+    det_pos=array([[1., 2., 3.],
+       [4., 5., 6.]]),
+    det_v=array([[1., 2., 3.],
+       [4., 5., 6.]]),
+    det_u=array([[1., 2., 3.],
+       [4., 5., 6.]]),
+)"""
+
+        assert repr(pg) == r
+        with np.printoptions(legacy="1.13"):
+            assert repr(pg) == r
+
+        pg = ts.geometry.random_cone_vec()
+        assert eval(repr(pg), dict(ts=ts, array=np.array)) == pg
+
     def test_equal(self):
         """Test __eq__
 

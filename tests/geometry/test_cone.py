@@ -59,6 +59,24 @@ def test_init(interactive):
         print(representation)
 
 
+def test_repr():
+    pg = ts.cone(angles=10, shape=11, size=1, src_obj_dist=5, src_det_dist=6)
+    r = """ts.cone(
+    angles=10,
+    shape=(11, 11),
+    size=(1, 1),
+    src_obj_dist=5.0,
+    src_det_dist=6.0,
+)"""
+
+    assert repr(pg) == r
+    with np.printoptions(legacy="1.13"):
+        assert repr(pg) == r
+
+    pg = ts.geometry.random_cone()
+    assert eval(repr(pg), dict(ts=ts, array=np.array)) == pg
+
+
 def test_equal():
     """Test __eq__
 

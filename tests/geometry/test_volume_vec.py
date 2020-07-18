@@ -51,15 +51,23 @@ def test_init():
 
 def test_repr():
     unit_box = ts.volume_vec(shape=1, pos=(0, 0, 0))
-    r = """VolumeVectorGeometry(
+    r = """ts.volume_vec(
     shape=(1, 1, 1),
-    pos=[[ 0.  0.  0.]],
-    w=[[ 1.  0.  0.]],
-    v=[[ 0.  1.  0.]],
-    u=[[ 0.  0.  1.]],
+    pos=array([[0., 0., 0.]]),
+    w=array([[1., 0., 0.]]),
+    v=array([[0., 1., 0.]]),
+    u=array([[0., 0., 1.]]),
 )"""
 
     assert repr(unit_box) == r
+    # Check that test still succeeds when numpy printoptions are changed:
+    with np.printoptions(legacy="1.13"):
+        assert repr(unit_box) == r
+
+
+@pytest.mark.parametrize("vg", vgs)
+def test_repr_extensive(vg):
+    assert eval(repr(vg), dict(ts=ts, array=np.array)) == vg
 
 
 def test_eq():
@@ -97,6 +105,7 @@ def test_properties_under_transformations(vg, T, S, R):
     assert (T * vg).sizes == approx(vg.sizes)
     assert (T * vg).voxel_sizes == approx(vg.voxel_sizes)
     assert (T * vg).voxel_size == vg.voxel_size
+
     # corners?
     # lowerleftcorner?
 

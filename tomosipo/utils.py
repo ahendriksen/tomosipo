@@ -3,6 +3,35 @@ from numbers import Integral
 import numpy as np
 
 
+def print_options():
+    """This context manager set numpy print options temporarily
+
+    ODL sets the numpy printoptions globally, which makes it difficult
+    to ensure that the representation of geometries is consistent over
+    different installations. Specifically, we want to ensure that
+    testing succeeds regardless of the specific version of ODL.
+
+    :returns:
+    :rtype:
+
+    """
+    # Set printing line width to 71 to allow method docstrings to not extend
+    # beyond 79 characters (2 times indent of 4)
+    return np.printoptions(
+        edgeitems=3,
+        threshold=1000,
+        floatmode="maxprec",
+        precision=8,
+        suppress=False,
+        linewidth=71,
+        nanstr="nan",
+        infstr="inf",
+        sign="-",
+        formatter=None,
+        legacy=False,
+    )
+
+
 def up_tuple(x, n):
     if isinstance(x, collections.Iterator) or isinstance(x, collections.Iterable):
         x = tuple(x)

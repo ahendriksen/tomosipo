@@ -63,6 +63,29 @@ def test_init():
         ts.parallel_vec(shape=1, **diff_shaped_args)
 
 
+def test_repr():
+    x = [[1, 2, 3], [4, 5, 6]]
+    pg = ts.parallel_vec(shape=10, ray_dir=x, det_pos=x, det_v=x, det_u=x)
+    r = """ts.parallel_vec(
+    shape=(10, 10),
+    ray_dir=array([[1., 2., 3.],
+       [4., 5., 6.]]),
+    det_pos=array([[1., 2., 3.],
+       [4., 5., 6.]]),
+    det_v=array([[1., 2., 3.],
+       [4., 5., 6.]]),
+    det_u=array([[1., 2., 3.],
+       [4., 5., 6.]]),
+)"""
+
+    assert repr(pg) == r
+    with np.printoptions(legacy="1.13"):
+        assert repr(pg) == r
+
+    pg = ts.geometry.random_parallel()
+    assert eval(repr(pg), dict(ts=ts, array=np.array)) == pg
+
+
 def test_equal():
     x = np.array([(0, 0, 0)])
     pg = ts.parallel_vec(shape=10, ray_dir=x, det_pos=x, det_v=x, det_u=x)

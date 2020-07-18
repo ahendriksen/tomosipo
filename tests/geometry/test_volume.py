@@ -91,11 +91,8 @@ def test_equal():
 
 
 def test_repr():
-    # TODO: Use ts.volume when reparametrized
-    unit_box = ts.geometry.VolumeGeometry(
-        shape=(1, 2, 3), pos=(4, 5, 6), size=(7, 8, 9)
-    )
-    r = """VolumeGeometry(
+    unit_box = ts.volume(shape=(1, 2, 3), pos=(4, 5, 6), size=(7, 8, 9))
+    r = """ts.volume(
     shape=(1, 2, 3),
     pos=(4.0, 5.0, 6.0),
     size=(7.0, 8.0, 9.0),
@@ -103,12 +100,16 @@ def test_repr():
 
     assert repr(unit_box) == r
 
+    # Test that repr can be executed and yields the same volume.
+    vg = ts.geometry.random_volume()
+    assert eval(repr(vg), dict(ts=ts)) == vg
+
 
 def test_volume():
     assert ts.volume() == ts.volume()
     shapes = [2, (1, 4, 5), (10, 10, 10)]
     for s in shapes:
-        assert ts.volume(s) == ts.volume(s)
+        assert ts.volume(shape=s) == ts.volume(shape=s)
 
 
 def test_astra():

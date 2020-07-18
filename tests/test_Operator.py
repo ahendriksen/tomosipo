@@ -10,7 +10,7 @@ import tomosipo as ts
 
 def test_forward_backward():
     pd = ts.data(ts.cone(size=np.sqrt(2), cone_angle=1 / 2, shape=10))
-    vd = ts.data(ts.volume(10))
+    vd = ts.data(ts.volume(shape=10))
 
     rs = [
         ([pd, vd], {}),

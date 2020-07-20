@@ -3,9 +3,12 @@
 
 """Tests for operator."""
 
+import pytest
 from pytest import approx
 import numpy as np
 import tomosipo as ts
+import itertools
+from .geometry.test_transform import scalings, rotations, translations
 
 
 def test_forward_backward():
@@ -79,3 +82,36 @@ def test_operator_additive():
     B(x, out=y)
 
     assert np.allclose(2 * A(x).data, y.data)
+
+
+@pytest.mark.parametrize(
+    "S, T, R", itertools.product(scalings, translations, rotations)
+)
+def test_operator_volume_vector(S, T, R):
+    """Tests ts.operator with volume vector geometries
+
+    This test ensures that forward and backprojection using volume
+    vector geometries works as expected.
+
+    Specifically, for any geometric transformation T that is a
+    combination of rotation and translation, we must have:
+
+    ts.operator(T * vg, pg) == ts.operator(vg, T^-1 * pg),
+
+    that is: the two operators compute the same function.
+
+    """
+
+    pg = S * ts.parallel(angles=64, shape=96, size=1.5).to_vec()
+    vg = S * ts.volume(shape=64, size=1)
+
+    x = np.random.normal(size=(64, 64, 64)).astype(np.float32)
+
+    # Generate operator by rotating the volume:
+    A_v = ts.operator(T * R * vg.to_vec(), pg)
+    # And by "unrotating" the projection geometry
+    A_p = ts.operator(vg, (T * R).inv * pg)
+
+    # We should get the same forward and backprojection
+    assert np.allclose(A_v(x), A_p(x))
+    assert np.allclose(A_v.T(A_v(x)), A_p.T(A_p(x)))

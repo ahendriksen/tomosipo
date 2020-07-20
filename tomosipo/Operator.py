@@ -1,6 +1,51 @@
 import astra
+import numpy as np
 import tomosipo as ts
 from tomosipo.Data import Data
+
+
+def to_astra_compatible_operator_geometry(vg, pg):
+    """Convert volume vector geometry to volume geometry (if necessary)
+
+    ASTRA does not support arbitrarily oriented volume geometries. If
+    `vg` is a VolumeVectorGeometry, we rotate and translate both `vg`
+    and `pg` such that `vg` is axis-aligned, and positioned on the
+    origin, which renders it ASTRA-compatible.
+
+    :param vg: volume geometry
+    :param pg: projection geometry
+    :returns:
+    :rtype: (VolumeGeometry, ProjectionGeometry)
+
+    """
+    if isinstance(vg, ts.geometry.VolumeGeometry):
+        return (vg, pg)
+
+    if not isinstance(vg, ts.geometry.VolumeVectorGeometry):
+        raise TypeError(f"Expected volume geometry. Got {type(vg)}. ")
+
+    vg = vg.to_vec()
+    # Change perspective *without* changing the voxel volume.
+    P = ts.from_perspective(
+        pos=vg.pos,
+        w=vg.w / ts.vector_calc.norm(vg.w)[None, :],
+        v=vg.v / ts.vector_calc.norm(vg.v)[None, :],
+        u=vg.u / ts.vector_calc.norm(vg.u)[None, :],
+    )
+    # Move vg to perspective:
+    vg = P * vg
+    pg = P * pg
+
+    # Assert that vg is now axis-aligned and positioned on the origin:
+    voxel_size = vg.voxel_size
+    assert np.allclose(vg.pos, np.array([0, 0, 0]))
+    assert np.allclose(vg.w, voxel_size[0] * np.array([1, 0, 0]))
+    assert np.allclose(vg.v, voxel_size[1] * np.array([0, 1, 0]))
+    assert np.allclose(vg.u, voxel_size[2] * np.array([0, 0, 1]))
+
+    axis_aligned_vg = ts.volume(shape=vg.shape, pos=vg.pos, size=vg.size)
+
+    return axis_aligned_vg, pg
 
 
 def astra_projector(
@@ -10,10 +55,16 @@ def astra_projector(
     voxel_supersampling=1,
     detector_supersampling=1,
 ):
+    vg, pg = volume_geometry, projection_geometry
+    if isinstance(vg, ts.geometry.VolumeVectorGeometry):
+        # volume vector geometries are not native to ASTRA. We have to
+        # rotate geometry so that it is axis-aligned:
+        vg, pg = to_astra_compatible_operator_geometry(vg, pg)
+
     return astra.create_projector(
         "cuda3d",
-        projection_geometry.to_astra(),
-        volume_geometry.to_astra(),
+        pg.to_astra(),
+        vg.to_astra(),
         options={
             "VoxelSuperSampling": voxel_supersampling,
             "DetectorSuperSampling": detector_supersampling,

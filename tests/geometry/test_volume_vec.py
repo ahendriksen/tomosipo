@@ -10,7 +10,7 @@ import numpy as np
 import itertools
 from tomosipo.geometry import random_transform, random_volume_vec
 from tomosipo.geometry import transform
-from .test_transform import vgs, translations, rotations, scalings, transforms
+from .test_transform import vgs, translations, rotations, scalings
 
 
 def test_init():
@@ -18,35 +18,27 @@ def test_init():
     z, y, x = (1, 0, 0), (0, 1, 0), (0, 0, 1)
 
     # Create unit cube:
-    ob = ts.volume_vec(1, (0, 0, 0), z, y, x)
+    ob = ts.volume_vec(shape=1, pos=0, w=z, v=y, u=x)
 
     # Test that using a scalar position works as well.
-    assert ob == ts.volume_vec(1, 0, z, y, x)
-    assert ob == ts.volume_vec(1, 0, z, y)
-    assert ob == ts.volume_vec(1, 0, [z], y)
-    assert ob == ts.volume_vec(1, 0, z, y, x)
-    assert ob == ts.volume_vec((1, 1, 1), 0, z, y, x)
-    assert ob == ts.volume_vec((1, 1, 1), 0, z, y, x)
-    assert ob == ts.volume_vec((1, 1, 1), [(0, 0, 0)], z, y, x)
+    assert ob == ts.volume_vec(shape=1, pos=0, w=z, v=y, u=x)
+    assert ob == ts.volume_vec(shape=1, pos=0, w=z, v=y)
+    assert ob == ts.volume_vec(shape=1, pos=0, w=[z], v=y)
+    assert ob == ts.volume_vec(shape=1, pos=0, w=z, v=y, u=x)
+    assert ob == ts.volume_vec(shape=(1, 1, 1), pos=0, w=z, v=y, u=x)
+    assert ob == ts.volume_vec(shape=(1, 1, 1), pos=0, w=z, v=y, u=x)
+    assert ob == ts.volume_vec(shape=(1, 1, 1), pos=[(0, 0, 0)], w=z, v=y, u=x)
 
     # Check that differently shaped arguments for pos, w, v, u raise an error:
     N = 11
     with pytest.raises(ValueError):
-        ts.volume_vec(
-            1, [(0, 0, 0)] * 3, [(1, 0, 0)] * N, [(0, 1, 0)] * N, [(0, 1, 0)] * N
-        )
+        ts.volume_vec(shape=1, pos=[(0, 0, 0)] * 3, w=[z] * N, v=[y] * N, u=[x] * N)
     with pytest.raises(ValueError):
-        ts.volume_vec(
-            1, [(0, 0, 0)] * N, [(1, 0, 0)] * 3, [(0, 1, 0)] * N, [(0, 1, 0)] * N
-        )
+        ts.volume_vec(shape=1, pos=[(0, 0, 0)] * N, w=[z] * 3, v=[y] * N, u=[x] * N)
     with pytest.raises(ValueError):
-        ts.volume_vec(
-            1, [(0, 0, 0)] * N, [(1, 0, 0)] * N, [(0, 1, 0)] * 3, [(0, 1, 0)] * N
-        )
+        ts.volume_vec(shape=1, pos=[(0, 0, 0)] * N, w=[z] * N, v=[y] * 3, u=[x] * N)
     with pytest.raises(ValueError):
-        ts.volume_vec(
-            1, [(0, 0, 0)] * N, [(1, 0, 0)] * N, [(0, 1, 0)] * N, [(0, 1, 0)] * 3
-        )
+        ts.volume_vec(shape=1, pos=[(0, 0, 0)] * N, w=[z] * N, v=[y] * N, u=[x] * 3)
 
 
 def test_repr():
@@ -71,14 +63,15 @@ def test_repr_extensive(vg):
 
 
 def test_eq():
-    ob = ts.volume_vec(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1))
+    zero, z, y, x = (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1)
+    ob = ts.volume_vec(shape=1, pos=zero, w=z, v=y, u=x)
 
     unequal = [
         ts.cone(size=np.sqrt(2), cone_angle=1 / 2),
-        ts.volume_vec(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 99)),
-        ts.volume_vec(2, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0)),
-        ts.volume_vec(1, (1, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0)),
-        ts.volume_vec(1, (0, 0, 0), (0, 1, 0), (1, 0, 0), (0, 1, 0)),
+        ts.volume_vec(shape=2, pos=zero, w=z, v=y, u=x),
+        ts.volume_vec(shape=2, pos=(1, 1, 1), w=z, v=y, u=x),
+        ts.volume_vec(shape=1, pos=zero, w=x, v=z, u=y),
+        ts.volume_vec(shape=1, pos=zero, w=y, v=x, u=z),
     ]
 
     assert ob == ob
@@ -111,8 +104,10 @@ def test_properties_under_transformations(vg, T, S, R):
 
 
 def test_lower_left_corner():
-    assert approx(ts.volume_vec(1, pos=0).lower_left_corner) == [(-0.5, -0.5, -0.5)]
-    assert approx(ts.volume_vec(1, pos=(0.5, 0.5, 0.5)).lower_left_corner) == [
+    assert approx(ts.volume_vec(shape=1, pos=0).lower_left_corner) == [
+        (-0.5, -0.5, -0.5)
+    ]
+    assert approx(ts.volume_vec(shape=1, pos=(0.5, 0.5, 0.5)).lower_left_corner) == [
         (0, 0, 0)
     ]
 
@@ -151,27 +146,27 @@ def test_size():
 
 def test_corners():
     # Test shape of ob.corners
+    zero, z, y, x = (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1)
     N = 11
-    vg = ts.volume_vec(
-        1, [(0, 0, 0)] * N, [(1, 0, 0)] * N, [(0, 1, 0)] * N, [(0, 1, 0)] * N
-    )
+    vg = ts.volume_vec(shape=1, pos=[zero] * N, w=[z] * N, v=[y] * N, u=[x] * N)
     assert vg.corners.shape == (N, 8, 3)
 
     # Test that corners of vg2 are twice as far from the origin as
     # vg's corners.
-    vg1 = ts.volume_vec(1, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0))
-    vg2 = ts.volume_vec(2, (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0))
+    vg1 = ts.volume_vec(shape=1, pos=zero, w=z, v=y, u=x)
+    vg2 = ts.volume_vec(shape=2, pos=zero, w=z, v=y, u=x)
     assert approx(0.0) == np.sum(abs(vg.corners * 2.0 - vg2.corners))
 
-    vg = ts.volume_vec((1, 2, 3), (0, 0, 0), (2, 3, 5), (7, 11, 13), (17, 19, 23))
-    vg2 = ts.volume_vec((2, 4, 6), (0, 0, 0), (2, 3, 5), (7, 11, 13), (17, 19, 23))
+    coord_frame = dict(w=(2, 3, 5), v=(7, 11, 13), u=(17, 19, 23))
+    vg = ts.volume_vec(shape=(1, 2, 3), pos=zero, **coord_frame)
+    vg2 = ts.volume_vec(shape=(2, 4, 6), pos=zero, **coord_frame)
     # Test that corners of vg2 are twice as far from the origin as
     # vg's corners.
     assert approx(0.0) == np.sum(abs(vg.corners * 2.0 - vg2.corners))
 
     # Test that vg2's corners are translated by (5, 7, 11) wrt those of vg1.
-    vg1 = ts.volume_vec((1, 2, 3), (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0))
-    vg2 = ts.volume_vec((1, 2, 3), (5, 7, 11), (1, 0, 0), (0, 1, 0), (0, 1, 0))
+    vg1 = ts.volume_vec(shape=(1, 2, 3), pos=zero, w=z, v=y, u=x)
+    vg2 = ts.volume_vec(shape=(1, 2, 3), pos=(5, 7, 11), w=z, v=y, u=x)
     assert approx(0.0) == np.sum(abs((vg2.corners - vg1.corners) - (5, 7, 11)))
 
 
@@ -189,7 +184,6 @@ def test_display(interactive):
     :rtype:
 
     """
-    # TODO: Implement display for volume_vec geometry!
     h = 3
     s = np.linspace(0, 2 * np.pi, 100)
 
@@ -201,9 +195,9 @@ def test_display(interactive):
     v = np.stack([zero, np.sin(s), np.cos(s)], axis=1)
     u = np.stack([zero, np.sin(s + np.pi / 2), np.cos(s + np.pi / 2)], axis=1)
 
-    ob1 = ts.volume_vec(1, pos, w, v, u)
+    ob1 = ts.volume_vec(shape=1, pos=pos, w=w, v=v, u=u)
     pos2 = np.stack([zero, h * np.sin(s), h * np.cos(s)], axis=1)
-    ob2 = ts.volume_vec(2, pos2, w, v, u)
+    ob2 = ts.volume_vec(shape=2, pos=pos2, w=w, v=v, u=u)
 
     if interactive:
         from tomosipo.qt import display
@@ -258,9 +252,9 @@ def test_transform_example(interactive):
     v = np.stack([zero, np.sin(s), np.cos(s)], axis=1)
     u = np.stack([zero, np.sin(s + np.pi / 2), np.cos(s + np.pi / 2)], axis=1)
 
-    vg1 = ts.volume_vec(1, pos, w, v, u)
+    vg1 = ts.volume_vec(shape=1, pos=pos, w=w, v=v, u=u)
     pos2 = np.stack([zero, h * np.sin(s), h * np.cos(s)], axis=1)
-    vg2 = ts.volume_vec(2, pos2, z, y, x)
+    vg2 = ts.volume_vec(shape=2, pos=pos2, w=z, v=y, u=x)
 
     M1 = ts.from_perspective(box=vg1)
     M2 = ts.from_perspective(box=vg2)

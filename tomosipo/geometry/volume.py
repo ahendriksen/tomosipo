@@ -160,12 +160,11 @@ class VolumeGeometry:
             self._inner = ts.volume_vec(shape, pos)
         else:
             size = ts.utils.to_size(size)
-            # voxel size
+            # voxel size per dimension
             vs = tuple(sz / sh for sz, sh in zip(size, shape))
-            w = (vs[0], 0, 0)
-            v = (0, vs[1], 0)
-            u = (0, 0, vs[2])
-            self._inner = ts.volume_vec(shape, pos, w, v, u)
+            self._inner = ts.volume_vec(
+                shape=shape, pos=pos, w=(vs[0], 0, 0), v=(0, vs[1], 0), u=(0, 0, vs[2]),
+            )
 
         np.array(self._inner.pos[0])
         np.array(self._inner.size)

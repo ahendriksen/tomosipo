@@ -1,12 +1,12 @@
 import numpy as np
-from tomosipo.utils import up_slice, slice_interval
+from tomosipo.utils import slice_interval
 from numbers import Integral
 import tomosipo as ts
 from tomosipo import vector_calc as vc
 from .transform import Transform
 
 
-def volume_vec(shape, pos=0, w=(1, 0, 0), v=(0, 1, 0), u=(0, 0, 1)):
+def volume_vec(*, shape, pos=0, w=(1, 0, 0), v=(0, 1, 0), u=(0, 0, 1)):
     """Create a new volume vector geometry
 
     Like the parallel and cone vector geometries, the volume vector
@@ -48,11 +48,12 @@ def random_volume_vec():
     :rtype: VolumeVectorGeometry
 
     """
-    shape = np.random.uniform(2, 10, size=3).astype(int)
-    pos = np.random.normal(size=3)
 
     RT = ts.geometry.random_transform()
-    vg = ts.volume_vec(shape, pos)
+    vg = ts.volume_vec(
+        shape=np.random.uniform(2, 10, size=3).astype(int),
+        pos=np.random.normal(size=3),
+    )
     return RT * vg
 
 

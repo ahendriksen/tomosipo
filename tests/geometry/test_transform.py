@@ -100,7 +100,7 @@ def test_translate_simple_case():
     T = ts.translate(t)
 
     assert T * original == ts.volume_vec(
-        (3, 4, 5), t + (2, 3, 5), original.w, original.v, original.u
+        shape=(3, 4, 5), pos=t + (2, 3, 5), w=original.w, v=original.v, u=original.u
     )
 
 
@@ -121,12 +121,18 @@ def test_translate():
 
 def test_scale_simple_case():
     unit = ts.volume_vec(shape=1, pos=0)
+    # Uniform scaling
     s = abs(np.random.normal())
-    assert ts.scale(s) * unit == ts.volume_vec(1, 0, s * unit.w, s * unit.v, s * unit.u)
-    s = abs(np.random.normal(size=3))
-    assert ts.scale(s) * unit == ts.volume_vec(
-        1, 0, s[0] * unit.w, s[1] * unit.v, s[2] * unit.u
+    scaled_unit = ts.volume_vec(
+        shape=1, pos=0, w=s * unit.w, v=s * unit.v, u=s * unit.u
     )
+    assert ts.scale(s) * unit == scaled_unit
+    # Non-uniform scaling
+    s = abs(np.random.normal(size=3))
+    scaled_unit = ts.volume_vec(
+        shape=1, pos=0, w=s[0] * unit.w, v=s[1] * unit.v, u=s[2] * unit.u
+    )
+    assert ts.scale(s) * unit == scaled_unit
 
 
 def test_scale():

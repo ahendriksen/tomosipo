@@ -225,16 +225,19 @@ class DetectorVectorGeometry(ProjectionGeometry):
         :rtype:  `VolumeVectorGeometry`
 
         """
-        det_pos = self._det_pos
-        w = self._det_v  # v points up, w points up
-        u = self._det_u  # detector_u and u point in the same direction
-        # This is the detector normal and has norm 1. In right-handed
-        # coordinates, it would point towards the source usually. Now
-        # it points "into" the detector.
-        v = self.det_normal
-
         det_shape = self.det_shape
-        det_box = ts.volume_vec((det_shape[0], 0, det_shape[1]), det_pos, w, v, u)
+        det_box = ts.volume_vec(
+            shape=(det_shape[0], 0, det_shape[1]),
+            pos=self.det_pos,
+            # self.v points up, volume.w points up
+            w=self._det_v,
+            # volume.v is the detector normal and has norm 1. In right-handed
+            # coordinates, it would point towards the source usually. Now
+            # it points "into" the detector.
+            v=self.det_normal,
+            # self.u and volume.u point in the same direction
+            u=self._det_u,
+        )
 
         return det_box
 

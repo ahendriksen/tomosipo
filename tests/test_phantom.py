@@ -4,25 +4,14 @@
 """Tests for phantom generation."""
 
 
-import unittest
+from pytest import approx
 import tomosipo as ts
 
 
-class Testphantom(unittest.TestCase):
-    """Tests for phantom generation."""
+def test_hollow_box():
+    """Test something."""
 
-    def setUp(self):
-        """Set up test fixtures, if any."""
-        pass
-
-    def tearDown(self):
-        """Tear down test fixtures, if any."""
-        pass
-
-    def test_hollow_box(self):
-        """Test something."""
-
-        for s in [10, 20, 30]:
-            vd = ts.data(ts.volume(shape=100))
-            ts.phantom.hollow_box(vd)
-            self.assertAlmostEqual(vd.data.mean(), 0.208)
+    for s in [10, 20, 30]:
+        vd = ts.data(ts.volume(shape=100))
+        ts.phantom.hollow_box(vd)
+        assert vd.data.mean() == approx(0.208)

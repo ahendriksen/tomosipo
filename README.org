@@ -1,4 +1,6 @@
-[[file:./img/logo.svg]]
+#+title: Tomosipo
+#+hugo_base_dir: ./doc/
+[[file:./doc/img/logo.svg]]
 
 * Tomosipo
 Tomosipo is a pythonic wrapper for the ASTRA-toolbox of
@@ -157,7 +159,7 @@ Tomosipo follows numpy's indexing convention. In the image below, we
 display the coordinate axes and indexing into a volume cube.
 The z-axis points upward.
 
-[[file:./img/volume_geometry.png]]
+[[file:./doc/img/volume_geometry.png]]
 
 We display an example for a parallel geometry with its associated
 sinogram indexing below. The detector coordinate frame is defined by
@@ -168,7 +170,7 @@ two vectors
 - v :: Usually points upwards. The length of v defines the height of a
        detector pixel.
 
-[[file:img/projection_geometry.png]]
+[[file:doc/img/projection_geometry.png]]
 
 
 In short,
@@ -231,7 +233,17 @@ TODO
 All warnings should
 1) Explain what is wrong
 2) Explain how the warning can be prevented
-* Contributions
+* Authors and contributors
+tomosipo is developed by the Computational Imaging group at CWI. Original author:
+
+- *Allard Hendriksen*
+
+We thank the following authors for their contribution
+
+- *Johannes Leuschner* - ODL integration
+
+See also the list of contributors who participated in this project.
+
 ** Building conda packages
 #+BEGIN_SRC sh
 conda install conda-build anaconda-client

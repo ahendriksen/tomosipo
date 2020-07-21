@@ -2,3 +2,5 @@
 *.pyc
 /tomosipo.egg-info/
 htmlcov/
+/doc/_build
+/doc/_static

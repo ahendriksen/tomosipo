@@ -46,20 +46,12 @@ def test_with():
 
     Also, that using the with statement works.
     """
-    # TODO: Remove this, segfaults are no longer a feature...
-    seg_fault = True
     pg = ts.cone(cone_angle=1 / 2)
     vg = ts.volume()
 
     with ts.data(pg, 0) as pd, ts.data(vg, 0) as vd:
         proj = pd.data
         vol = vd.data
-
-    # No test to check that the code below segfaults, but it does :)
-    # You can run the code..
-    if seg_fault:
-        proj[:] = 0
-        vol[:] = 0
 
 
 def test_data():

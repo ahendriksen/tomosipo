@@ -1,0 +1,3422 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.geometry package &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tomosipo.links package" href="tomosipo.links.html" />
+    <link rel="prev" title="tomosipo package" href="tomosipo.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Tomosipo</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">tomosipo</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="tomosipo.html">tomosipo package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="tomosipo.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">tomosipo.geometry package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tomosipo.links.html">tomosipo.links package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tomosipo.qt.html">tomosipo.qt package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.Data">tomosipo.Data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.Operator">tomosipo.Operator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.astra">tomosipo.astra module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.cupy">tomosipo.cupy module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.odl">tomosipo.odl module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.phantom">tomosipo.phantom module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.torch_support">tomosipo.torch_support module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.utils">tomosipo.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.vector_calc">tomosipo.vector_calc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">tomosipo</a> &raquo;</li>
+        
+          <li><a href="tomosipo.html">tomosipo package</a> &raquo;</li>
+        
+      <li>tomosipo.geometry package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/tomosipo.geometry.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tomosipo-geometry-package">
+<h1>tomosipo.geometry package<a class="headerlink" href="#tomosipo-geometry-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-tomosipo.geometry.base_projection">
+<span id="tomosipo-geometry-base-projection-module"></span><h2>tomosipo.geometry.base_projection module<a class="headerlink" href="#module-tomosipo.geometry.base_projection" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.geometry.base_projection.</code><code class="sig-name descname">ProjectionGeometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/base_projection.html#ProjectionGeometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A general base class for projection geometries</p>
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.angles">
+<em class="property">property </em><code class="sig-name descname">angles</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The angles from which projections are acquired.</p>
+<p>This property is specific to non-vector geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A numpy array of shape with length <cite>num_angles</cite> containing
+the angles in radians.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>np.array</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.corners">
+<em class="property">property </em><code class="sig-name descname">corners</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.corners" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the corners of each detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 4, 3), describing the 4
+corners of each detector in (Z, Y, X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.det_normal">
+<em class="property">property </em><code class="sig-name descname">det_normal</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.det_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector normal vectors of the geometry.</p>
+<p>In tomosipo, the normal vector usually points “into” the
+detector and away from the source/object. It is orthogonal to
+the <cite>v</cite> and <cite>u</cite> vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the normal vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.det_pos">
+<em class="property">property </em><code class="sig-name descname">det_pos</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.det_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector positions of the geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the detector positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.det_shape">
+<em class="property">property </em><code class="sig-name descname">det_shape</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.det_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The shape of the detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>(int, int)</cite>
+A tuple describing the height and width of the detector in
+pixels.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.det_size">
+<em class="property">property </em><code class="sig-name descname">det_size</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.det_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the detector.</p>
+<p>This property is dangerous for vector geometries, because for
+vector geometries it is not guaranteed that the detector size
+is constant through time. If the detector size is not
+constant, this property raises a ValueError. Otherwise, it
+returns the detector size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The absolute size of the detector in the <cite>v</cite> and the <cite>u</cite>
+direction.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(scalar, scalar)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.det_sizes">
+<em class="property">property </em><code class="sig-name descname">det_sizes</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.det_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of each detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 2) in v and u direction
+(height x width)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.det_u">
+<em class="property">property </em><code class="sig-name descname">det_u</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.det_u" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector u-vectors of the geometry.</p>
+<p>The ‘u’ vector is usually the “sideways” pointing vector
+describing the distance from the (0, 0) to (0, 1) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the u vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.det_v">
+<em class="property">property </em><code class="sig-name descname">det_v</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.det_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector v-vectors of the geometry.</p>
+<p>The ‘v’ vector is usually the “upward” pointing vector
+describing the distance from the (0, 0) to (1, 0) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the v vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.is_cone">
+<em class="property">property </em><code class="sig-name descname">is_cone</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.is_cone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this geometry a cone-beam geometry?</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.is_parallel">
+<em class="property">property </em><code class="sig-name descname">is_parallel</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.is_parallel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this geometry a parallel-beam geometry?</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.is_vec">
+<em class="property">property </em><code class="sig-name descname">is_vec</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.is_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this a vector geometry?</p>
+<p>A geometry can either be a vector geometry, like
+<code class="docutils literal notranslate"><span class="pre">ConeVectorGeometry</span></code>, or <code class="docutils literal notranslate"><span class="pre">ParallelVectorGeometry</span></code>, or it
+can be a parametrized geometry like <code class="docutils literal notranslate"><span class="pre">ConeGeometry</span></code> or
+<code class="docutils literal notranslate"><span class="pre">ParallelGeometry</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.lower_left_corner">
+<em class="property">property </em><code class="sig-name descname">lower_left_corner</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.lower_left_corner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the positions of the lower-left corner the detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 3), describing the position
+of the lower-left corner of each detector in (Z, Y,
+X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.num_angles">
+<em class="property">property </em><code class="sig-name descname">num_angles</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.num_angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of angles in the projection geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of angles in the projection geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.num_steps">
+<em class="property">property </em><code class="sig-name descname">num_steps</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.num_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of orientations in the geometry</p>
+<p>This property equals <a href="#id1"><span class="problematic" id="id2">`</span></a>num_angles’ and is provided so
+projection geometries and volume geometries share the same
+interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.project_point">
+<code class="sig-name descname">project_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">point</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/base_projection.html#ProjectionGeometry.project_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.project_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Projects point onto detectors</p>
+<p>This function projects onto the virtual detectors described by
+the projection geometry.</p>
+<p>For each source-detector pair, this function returns</p>
+<blockquote>
+<div><p>(detector_intersection_y, detector_intersection_x)</p>
+</div></blockquote>
+<p>where the distance is from the detector origin (center) and
+the units are in detector pixels.</p>
+<p>This function returns <cite>np.nan</cite> if the source-point ray is
+parallel to the detector plane.</p>
+<p>This function projects onto the detector even if the ray is
+moving away from the detector instead of towards it, or if the
+detector is between the source and point instead of behind the
+point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>point</strong> – A three-dimensional vector (preferably np.array)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>np.array([[detector_intersection_y, detector_intersection_x],
+…..])</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array (num_angles * 2)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.ray_dir">
+<em class="property">property </em><code class="sig-name descname">ray_dir</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.ray_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ray direction of the geometry.</p>
+<p>This property is not supported on cone geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the ray direction vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.rescale_det">
+<code class="sig-name descname">rescale_det</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/base_projection.html#ProjectionGeometry.rescale_det"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.rescale_det" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rescale detector pixels</p>
+<p>Rescales detector pixels without changing the size of the detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> – <cite>int</cite> or <cite>(int, int)</cite>
+Indicates how many times to enlarge a detector pixel. Per
+convention, the first coordinate scales the pixels in the
+<cite>v</cite> coordinate, and the second coordinate scales the
+pixels in the <cite>u</cite> coordinate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a rescaled geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>ProjectionGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.reshape">
+<code class="sig-name descname">reshape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/base_projection.html#ProjectionGeometry.reshape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reshape detector pixels without changing detector size</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_shape</strong> – int or (int, int)
+The new shape of the detector in pixels in <cite>v</cite> (height)
+and <cite>u</cite> (width) direction.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>self</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.src_pos">
+<em class="property">property </em><code class="sig-name descname">src_pos</code><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.src_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The source positions of the geometry.</p>
+<p>Not supported on parallel geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the source positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.to_astra">
+<code class="sig-name descname">to_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/base_projection.html#ProjectionGeometry.to_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.to_astra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert geometry to astra geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An astra representation of the current geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.base_projection.ProjectionGeometry.to_vec">
+<code class="sig-name descname">to_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/base_projection.html#ProjectionGeometry.to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.base_projection.ProjectionGeometry.to_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a vector geometry of the current geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.base_projection.is_cone">
+<code class="sig-prename descclassname">tomosipo.geometry.base_projection.</code><code class="sig-name descname">is_cone</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/base_projection.html#is_cone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.base_projection.is_cone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.base_projection.is_parallel">
+<code class="sig-prename descclassname">tomosipo.geometry.base_projection.</code><code class="sig-name descname">is_parallel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/base_projection.html#is_parallel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.base_projection.is_parallel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.base_projection.is_projection">
+<code class="sig-prename descclassname">tomosipo.geometry.base_projection.</code><code class="sig-name descname">is_projection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/base_projection.html#is_projection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.base_projection.is_projection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if a geometry is a projection geometry</p>
+<p>A geometry object can be a volume geometry or a projection
+geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>g</strong> – a geometry object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>True</cite> if <cite>g</cite> is a projection geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.geometry.concatenate">
+<span id="tomosipo-geometry-concatenate-module"></span><h2>tomosipo.geometry.concatenate module<a class="headerlink" href="#module-tomosipo.geometry.concatenate" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tomosipo.geometry.concatenate.concatenate">
+<code class="sig-prename descclassname">tomosipo.geometry.concatenate.</code><code class="sig-name descname">concatenate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">items</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/concatenate.html#concatenate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.concatenate.concatenate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concatenate geometries and transformations</p>
+<p>Supports:
+- parallel geometries (vec and non-vec)
+- cone geometries (vec and non-vec)
+- oriented boxes
+- transformations</p>
+<p>Parallel and Cone geometries are converted to vector geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.geometry.cone">
+<span id="tomosipo-geometry-cone-module"></span><h2>tomosipo.geometry.cone module<a class="headerlink" href="#module-tomosipo.geometry.cone" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.geometry.cone.ConeGeometry">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.geometry.cone.</code><code class="sig-name descname">ConeGeometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">angles</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">src_obj_dist</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">src_det_dist</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone.html#ConeGeometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">tomosipo.geometry.base_projection.ProjectionGeometry</span></code></a></p>
+<p>A parametrized circular cone-beam geometry</p>
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.angles">
+<em class="property">property </em><code class="sig-name descname">angles</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The angles from which projections are acquired.</p>
+<p>This property is specific to non-vector geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A numpy array of shape with length <cite>num_angles</cite> containing
+the angles in radians.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>np.array</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.corners">
+<em class="property">property </em><code class="sig-name descname">corners</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.corners" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the corners of each detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 4, 3), describing the 4
+corners of each detector in (Z, Y, X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.det_normal">
+<em class="property">property </em><code class="sig-name descname">det_normal</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.det_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector normal vectors of the geometry.</p>
+<p>In tomosipo, the normal vector usually points “into” the
+detector and away from the source/object. It is orthogonal to
+the <cite>v</cite> and <cite>u</cite> vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the normal vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.det_pos">
+<em class="property">property </em><code class="sig-name descname">det_pos</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.det_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector positions of the geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the detector positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.det_size">
+<em class="property">property </em><code class="sig-name descname">det_size</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.det_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the detector.</p>
+<p>This property is dangerous for vector geometries, because for
+vector geometries it is not guaranteed that the detector size
+is constant through time. If the detector size is not
+constant, this property raises a ValueError. Otherwise, it
+returns the detector size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The absolute size of the detector in the <cite>v</cite> and the <cite>u</cite>
+direction.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(scalar, scalar)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.det_sizes">
+<em class="property">property </em><code class="sig-name descname">det_sizes</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.det_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of each detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 2) in v and u direction
+(height x width)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.det_u">
+<em class="property">property </em><code class="sig-name descname">det_u</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.det_u" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector u-vectors of the geometry.</p>
+<p>The ‘u’ vector is usually the “sideways” pointing vector
+describing the distance from the (0, 0) to (0, 1) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the u vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.det_v">
+<em class="property">property </em><code class="sig-name descname">det_v</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.det_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector v-vectors of the geometry.</p>
+<p>The ‘v’ vector is usually the “upward” pointing vector
+describing the distance from the (0, 0) to (1, 0) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the v vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.from_astra">
+<code class="sig-name descname">from_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone.html#ConeGeometry.from_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.from_astra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.lower_left_corner">
+<em class="property">property </em><code class="sig-name descname">lower_left_corner</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.lower_left_corner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the positions of the lower-left corner the detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 3), describing the position
+of the lower-left corner of each detector in (Z, Y,
+X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.num_angles">
+<em class="property">property </em><code class="sig-name descname">num_angles</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.num_angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of angles in the projection geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of angles in the projection geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.project_point">
+<code class="sig-name descname">project_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">point</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone.html#ConeGeometry.project_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.project_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Projects point onto detectors</p>
+<p>This function projects onto the virtual detectors described by
+the projection geometry.</p>
+<p>For each source-detector pair, this function returns</p>
+<blockquote>
+<div><p>(detector_intersection_y, detector_intersection_x)</p>
+</div></blockquote>
+<p>where the distance is from the detector origin (center) and
+the units are in detector pixels.</p>
+<p>This function returns <cite>np.nan</cite> if the source-point ray is
+parallel to the detector plane.</p>
+<p>This function projects onto the detector even if the ray is
+moving away from the detector instead of towards it, or if the
+detector is between the source and point instead of behind the
+point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>point</strong> – A three-dimensional vector (preferably np.array)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>np.array([[detector_intersection_y, detector_intersection_x],
+…..])</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array (num_angles * 2)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.ray_dir">
+<em class="property">property </em><code class="sig-name descname">ray_dir</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.ray_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ray direction of the geometry.</p>
+<p>This property is not supported on cone geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the ray direction vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.rescale_det">
+<code class="sig-name descname">rescale_det</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone.html#ConeGeometry.rescale_det"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.rescale_det" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rescale detector pixels</p>
+<p>Rescales detector pixels without changing the size of the detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> – <cite>int</cite> or <cite>(int, int)</cite>
+Indicates how many times to enlarge a detector pixel. Per
+convention, the first coordinate scales the pixels in the
+<cite>v</cite> coordinate, and the second coordinate scales the
+pixels in the <cite>u</cite> coordinate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a rescaled geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>ProjectionGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.reshape">
+<code class="sig-name descname">reshape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone.html#ConeGeometry.reshape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reshape detector pixels without changing detector size</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_shape</strong> – int or (int, int)
+The new shape of the detector in pixels in <cite>v</cite> (height)
+and <cite>u</cite> (width) direction.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>self</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.src_det_dist">
+<em class="property">property </em><code class="sig-name descname">src_det_dist</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.src_det_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>The source to detector distance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.src_obj_dist">
+<em class="property">property </em><code class="sig-name descname">src_obj_dist</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.src_obj_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>The source to object distance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.src_pos">
+<em class="property">property </em><code class="sig-name descname">src_pos</code><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.src_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The source positions of the geometry.</p>
+<p>Not supported on parallel geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the source positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.to_astra">
+<code class="sig-name descname">to_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone.html#ConeGeometry.to_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.to_astra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert geometry to astra geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An astra representation of the current geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.to_box">
+<code class="sig-name descname">to_box</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone.html#ConeGeometry.to_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.to_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an oriented box representating the detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an oriented box representating the detector</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>VolumeVectorGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone.ConeGeometry.to_vec">
+<code class="sig-name descname">to_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone.html#ConeGeometry.to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone.ConeGeometry.to_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a vector geometry of the current geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.cone.cone">
+<code class="sig-prename descclassname">tomosipo.geometry.cone.</code><code class="sig-name descname">cone</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">angles</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">1, 1</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cone_angle</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">src_obj_dist</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">src_det_dist</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone.html#cone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone.cone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a cone-beam geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angles</strong> – <p><cite>np.array</cite> or integral value
+If integral value: the number of angles in the cone-beam
+geometry. This describes a full arc (2 pi radians) with
+uniform placement and without the start and end point
+overlapping.</p>
+<p>If np.array: the values of the array are taken as
+projection angle (units are radians).</p>
+</p></li>
+<li><p><strong>shape</strong> – (<cite>int</cite>, <cite>int</cite>) or <cite>int</cite>
+The detector shape in pixels. If tuple, the order is
+(height, width). Else the pixel has the same number of
+pixels in the U and V direction.</p></li>
+<li><p><strong>size</strong> – <p>(float, float) or float
+The detector size. If a single float is provided, the
+detector is square with equal width and height.</p>
+<p>The order is (height, width), i.e. (v, u).</p>
+</p></li>
+<li><p><strong>cone_angle</strong> – <cite>scalar</cite>
+The fraction <cite>det_height / src_det_dist</cite>. If provided,
+<cite>src_obj_dist</cite> and <cite>src_det_dist</cite> need not be provided. The
+detector is placed on the origin.</p></li>
+<li><p><strong>src_obj_dist</strong> – scalar
+The source to object distance.</p></li>
+<li><p><strong>src_det_dist</strong> – The source to detector distance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a cone-beam geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.cone.ConeGeometry" title="tomosipo.geometry.cone.ConeGeometry">ConeGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.cone.random_cone">
+<code class="sig-prename descclassname">tomosipo.geometry.cone.</code><code class="sig-name descname">random_cone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone.html#random_cone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone.random_cone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a random cone-beam geometry</p>
+<dl class="simple">
+<dt><em>Note</em>: this geometry is not circular. It just samples random</dt><dd><p>points on a circular path.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a random cone geometry</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>ConeGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.geometry.cone_vec">
+<span id="tomosipo-geometry-cone-vec-module"></span><h2>tomosipo.geometry.cone_vec module<a class="headerlink" href="#module-tomosipo.geometry.cone_vec" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.geometry.cone_vec.</code><code class="sig-name descname">ConeVectorGeometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">src_pos</span></em>, <em class="sig-param"><span class="n">det_pos</span></em>, <em class="sig-param"><span class="n">det_v</span></em>, <em class="sig-param"><span class="n">det_u</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone_vec.html#ConeVectorGeometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">tomosipo.geometry.base_projection.ProjectionGeometry</span></code></a></p>
+<p>Documentation for ConeVectorGeometry</p>
+<p>A class for representing cone vector geometries.</p>
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.angles">
+<em class="property">property </em><code class="sig-name descname">angles</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The angles from which projections are acquired.</p>
+<p>This property is specific to non-vector geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A numpy array of shape with length <cite>num_angles</cite> containing
+the angles in radians.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>np.array</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.corners">
+<em class="property">property </em><code class="sig-name descname">corners</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.corners" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the corners of each detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 4, 3), describing the 4
+corners of each detector in (Z, Y, X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.det_normal">
+<em class="property">property </em><code class="sig-name descname">det_normal</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.det_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector normal vectors of the geometry.</p>
+<p>In tomosipo, the normal vector usually points “into” the
+detector and away from the source/object. It is orthogonal to
+the <cite>v</cite> and <cite>u</cite> vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the normal vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.det_pos">
+<em class="property">property </em><code class="sig-name descname">det_pos</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.det_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector positions of the geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the detector positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.det_size">
+<em class="property">property </em><code class="sig-name descname">det_size</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.det_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the detector.</p>
+<p>This property is dangerous for vector geometries, because for
+vector geometries it is not guaranteed that the detector size
+is constant through time. If the detector size is not
+constant, this property raises a ValueError. Otherwise, it
+returns the detector size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The absolute size of the detector in the <cite>v</cite> and the <cite>u</cite>
+direction.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(scalar, scalar)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.det_sizes">
+<em class="property">property </em><code class="sig-name descname">det_sizes</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.det_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of each detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 2) in v and u direction
+(height x width)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.det_u">
+<em class="property">property </em><code class="sig-name descname">det_u</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.det_u" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector u-vectors of the geometry.</p>
+<p>The ‘u’ vector is usually the “sideways” pointing vector
+describing the distance from the (0, 0) to (0, 1) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the u vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.det_v">
+<em class="property">property </em><code class="sig-name descname">det_v</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.det_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector v-vectors of the geometry.</p>
+<p>The ‘v’ vector is usually the “upward” pointing vector
+describing the distance from the (0, 0) to (1, 0) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the v vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.from_astra">
+<code class="sig-name descname">from_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone_vec.html#ConeVectorGeometry.from_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.from_astra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.lower_left_corner">
+<em class="property">property </em><code class="sig-name descname">lower_left_corner</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.lower_left_corner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the positions of the lower-left corner the detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 3), describing the position
+of the lower-left corner of each detector in (Z, Y,
+X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.num_angles">
+<em class="property">property </em><code class="sig-name descname">num_angles</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.num_angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of angles in the projection geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of angles in the projection geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.project_point">
+<code class="sig-name descname">project_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">point</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone_vec.html#ConeVectorGeometry.project_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.project_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Projects point onto detectors</p>
+<p>This function projects onto the virtual detectors described by
+the projection geometry.</p>
+<p>For each source-detector pair, this function returns</p>
+<blockquote>
+<div><p>(detector_intersection_y, detector_intersection_x)</p>
+</div></blockquote>
+<p>where the distance is from the detector origin (center) and
+the units are in detector pixels.</p>
+<p>This function returns <cite>np.nan</cite> if the source-point ray is
+parallel to the detector plane.</p>
+<p>This function projects onto the detector even if the ray is
+moving away from the detector instead of towards it, or if the
+detector is between the source and point instead of behind the
+point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>point</strong> – A three-dimensional vector (preferably np.array)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>np.array([[detector_intersection_y, detector_intersection_x],
+…..])</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array (num_angles * 2)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.ray_dir">
+<em class="property">property </em><code class="sig-name descname">ray_dir</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.ray_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ray direction of the geometry.</p>
+<p>This property is not supported on cone geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the ray direction vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.rescale_det">
+<code class="sig-name descname">rescale_det</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone_vec.html#ConeVectorGeometry.rescale_det"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.rescale_det" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rescale detector pixels</p>
+<p>Rescales detector pixels without changing the size of the detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> – <cite>int</cite> or <cite>(int, int)</cite>
+Indicates how many times to enlarge a detector pixel. Per
+convention, the first coordinate scales the pixels in the
+<cite>v</cite> coordinate, and the second coordinate scales the
+pixels in the <cite>u</cite> coordinate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a rescaled geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>ProjectionGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.reshape">
+<code class="sig-name descname">reshape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone_vec.html#ConeVectorGeometry.reshape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reshape detector pixels without changing detector size</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_shape</strong> – int or (int, int)
+The new shape of the detector in pixels in <cite>v</cite> (height)
+and <cite>u</cite> (width) direction.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>self</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.src_pos">
+<em class="property">property </em><code class="sig-name descname">src_pos</code><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.src_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The source positions of the geometry.</p>
+<p>Not supported on parallel geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the source positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.to_astra">
+<code class="sig-name descname">to_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone_vec.html#ConeVectorGeometry.to_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.to_astra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert geometry to astra geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An astra representation of the current geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.to_box">
+<code class="sig-name descname">to_box</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone_vec.html#ConeVectorGeometry.to_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.to_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an oriented box representating the detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an oriented box representating the detector</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>VolumeVectorGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.cone_vec.ConeVectorGeometry.to_vec">
+<code class="sig-name descname">to_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone_vec.html#ConeVectorGeometry.to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone_vec.ConeVectorGeometry.to_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a vector geometry of the current geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.cone_vec.cone_vec">
+<code class="sig-prename descclassname">tomosipo.geometry.cone_vec.</code><code class="sig-name descname">cone_vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">src_pos</span></em>, <em class="sig-param"><span class="n">det_pos</span></em>, <em class="sig-param"><span class="n">det_v</span></em>, <em class="sig-param"><span class="n">det_u</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone_vec.html#cone_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone_vec.cone_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a cone-beam vector geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> – (<cite>int</cite>, <cite>int</cite>) or <cite>int</cite>
+The detector shape in pixels. If tuple, the order is
+(height, width). Else the pixel has the same number of
+pixels in the U and V direction.</p></li>
+<li><p><strong>src_pos</strong> – np.array
+A numpy array of dimension (num_positions, 3) with the
+source positions in (Z, Y, X) order.</p></li>
+<li><p><strong>det_pos</strong> – A numpy array of dimension (num_positions, 3) with the
+detector center positions in (Z, Y, X) order.</p></li>
+<li><p><strong>det_v</strong> – A numpy array of dimension (num_positions, 3) with the
+vector pointing from the detector (0, 0) to (1, 0) pixel
+(up).</p></li>
+<li><p><strong>det_u</strong> – A numpy array of dimension (num_positions, 3) with the
+vector pointing from the detector (0, 0) to (0, 1) pixel
+(sideways).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.cone_vec.random_cone_vec">
+<code class="sig-prename descclassname">tomosipo.geometry.cone_vec.</code><code class="sig-name descname">random_cone_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone_vec.html#random_cone_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.cone_vec.random_cone_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random cone vector geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a random cone vector geometry</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>ConeVectorGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.geometry.conversion">
+<span id="tomosipo-geometry-conversion-module"></span><h2>tomosipo.geometry.conversion module<a class="headerlink" href="#module-tomosipo.geometry.conversion" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tomosipo.geometry.conversion.from_astra_projection_geometry">
+<code class="sig-prename descclassname">tomosipo.geometry.conversion.</code><code class="sig-name descname">from_astra_projection_geometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">astra_pg</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/conversion.html#from_astra_projection_geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.conversion.from_astra_projection_geometry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.geometry.det_vec">
+<span id="tomosipo-geometry-det-vec-module"></span><h2>tomosipo.geometry.det_vec module<a class="headerlink" href="#module-tomosipo.geometry.det_vec" title="Permalink to this headline">¶</a></h2>
+<p>Vector geometry containing just the detector</p>
+<p>The class in this file can be encapsulated by ConeVectorGeometry and
+ParallelVectorGeometry.</p>
+<dl class="py class">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.geometry.det_vec.</code><code class="sig-name descname">DetectorVectorGeometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">det_pos</span></em>, <em class="sig-param"><span class="n">det_v</span></em>, <em class="sig-param"><span class="n">det_u</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/det_vec.html#DetectorVectorGeometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">tomosipo.geometry.base_projection.ProjectionGeometry</span></code></a></p>
+<p>A class for representing detector vector geometries.</p>
+<p>This class is a helper for the ConeVectorGeometry and
+ParallelVectorGeometry. It represents the detector part of these
+geometries. It does not have any references to a source or ray
+directions.</p>
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.angles">
+<em class="property">property </em><code class="sig-name descname">angles</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The angles from which projections are acquired.</p>
+<p>This property is specific to non-vector geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A numpy array of shape with length <cite>num_angles</cite> containing
+the angles in radians.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>np.array</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.corners">
+<em class="property">property </em><code class="sig-name descname">corners</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.corners" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the corners of each detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 4, 3), describing the 4
+corners of each detector in (Z, Y, X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.det_normal">
+<em class="property">property </em><code class="sig-name descname">det_normal</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.det_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector normal vectors of the geometry.</p>
+<p>In tomosipo, the normal vector usually points “into” the
+detector and away from the source/object. It is orthogonal to
+the <cite>v</cite> and <cite>u</cite> vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the normal vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.det_pos">
+<em class="property">property </em><code class="sig-name descname">det_pos</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.det_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector positions of the geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the detector positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.det_size">
+<em class="property">property </em><code class="sig-name descname">det_size</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.det_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the detector.</p>
+<p>This property is dangerous for vector geometries, because for
+vector geometries it is not guaranteed that the detector size
+is constant through time. If the detector size is not
+constant, this property raises a ValueError. Otherwise, it
+returns the detector size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The absolute size of the detector in the <cite>v</cite> and the <cite>u</cite>
+direction.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(scalar, scalar)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.det_sizes">
+<em class="property">property </em><code class="sig-name descname">det_sizes</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.det_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of each detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 2) in v and u direction
+(height x width)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.det_u">
+<em class="property">property </em><code class="sig-name descname">det_u</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.det_u" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector u-vectors of the geometry.</p>
+<p>The ‘u’ vector is usually the “sideways” pointing vector
+describing the distance from the (0, 0) to (0, 1) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the u vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.det_v">
+<em class="property">property </em><code class="sig-name descname">det_v</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.det_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector v-vectors of the geometry.</p>
+<p>The ‘v’ vector is usually the “upward” pointing vector
+describing the distance from the (0, 0) to (1, 0) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the v vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.from_astra">
+<code class="sig-name descname">from_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/det_vec.html#DetectorVectorGeometry.from_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.from_astra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.lower_left_corner">
+<em class="property">property </em><code class="sig-name descname">lower_left_corner</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.lower_left_corner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the positions of the lower-left corner the detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 3), describing the position
+of the lower-left corner of each detector in (Z, Y,
+X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.num_angles">
+<em class="property">property </em><code class="sig-name descname">num_angles</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.num_angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of angles in the projection geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of angles in the projection geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.project_point">
+<code class="sig-name descname">project_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">point</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/det_vec.html#DetectorVectorGeometry.project_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.project_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Projects point onto detectors</p>
+<p>This function projects onto the virtual detectors described by
+the projection geometry.</p>
+<p>For each source-detector pair, this function returns</p>
+<blockquote>
+<div><p>(detector_intersection_y, detector_intersection_x)</p>
+</div></blockquote>
+<p>where the distance is from the detector origin (center) and
+the units are in detector pixels.</p>
+<p>This function returns <cite>np.nan</cite> if the source-point ray is
+parallel to the detector plane.</p>
+<p>This function projects onto the detector even if the ray is
+moving away from the detector instead of towards it, or if the
+detector is between the source and point instead of behind the
+point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>point</strong> – A three-dimensional vector (preferably np.array)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>np.array([[detector_intersection_y, detector_intersection_x],
+…..])</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array (num_angles * 2)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.ray_dir">
+<em class="property">property </em><code class="sig-name descname">ray_dir</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.ray_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ray direction of the geometry.</p>
+<p>This property is not supported on cone geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the ray direction vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.rescale_det">
+<code class="sig-name descname">rescale_det</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/det_vec.html#DetectorVectorGeometry.rescale_det"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.rescale_det" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rescale detector pixels</p>
+<p>Rescales detector pixels without changing the size of the detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> – <cite>int</cite> or <cite>(int, int)</cite>
+Indicates how many times to enlarge a detector pixel. Per
+convention, the first coordinate scales the pixels in the
+<cite>v</cite> coordinate, and the second coordinate scales the
+pixels in the <cite>u</cite> coordinate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a rescaled cone vector geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>ConeVectorGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.reshape">
+<code class="sig-name descname">reshape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/det_vec.html#DetectorVectorGeometry.reshape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reshape detector pixels without changing detector size</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_shape</strong> – int or (int, int)
+The new shape of the detector in pixels in <cite>v</cite> (height)
+and <cite>u</cite> (width) direction.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>self</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.src_pos">
+<em class="property">property </em><code class="sig-name descname">src_pos</code><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.src_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The source positions of the geometry.</p>
+<p>Not supported on parallel geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the source positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.to_astra">
+<code class="sig-name descname">to_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/det_vec.html#DetectorVectorGeometry.to_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.to_astra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert geometry to astra geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An astra representation of the current geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.to_box">
+<code class="sig-name descname">to_box</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/det_vec.html#DetectorVectorGeometry.to_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.to_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an oriented box representating the detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an oriented box representating the detector</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>VolumeVectorGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.det_vec.DetectorVectorGeometry.to_vec">
+<code class="sig-name descname">to_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/det_vec.html#DetectorVectorGeometry.to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.det_vec.DetectorVectorGeometry.to_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a vector geometry of the current geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.det_vec.det_vec">
+<code class="sig-prename descclassname">tomosipo.geometry.det_vec.</code><code class="sig-name descname">det_vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">det_pos</span></em>, <em class="sig-param"><span class="n">det_v</span></em>, <em class="sig-param"><span class="n">det_u</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/det_vec.html#det_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.det_vec.det_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a detector vector geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> – (<cite>int</cite>, <cite>int</cite>) or <cite>int</cite>
+The detector shape in pixels. If tuple, the order is
+(height, width). Otherwise, the pixel has the same number of
+pixels in the U and V direction.</p></li>
+<li><p><strong>det_pos</strong> – A numpy array of dimension (num_positions, 3) with the
+detector center positions in (Z, Y, X) order.</p></li>
+<li><p><strong>det_v</strong> – A numpy array of dimension (num_positions, 3) with the
+vector pointing from the detector (0, 0) to (1, 0) pixel
+(up).</p></li>
+<li><p><strong>det_u</strong> – A numpy array of dimension (num_positions, 3) with the
+vector pointing from the detector (0, 0) to (0, 1) pixel
+(sideways).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.det_vec.random_det_vec">
+<code class="sig-prename descclassname">tomosipo.geometry.det_vec.</code><code class="sig-name descname">random_det_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/det_vec.html#random_det_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.det_vec.random_det_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random cone vector geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a random cone vector geometry</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>ConeVectorGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.geometry.parallel">
+<span id="tomosipo-geometry-parallel-module"></span><h2>tomosipo.geometry.parallel module<a class="headerlink" href="#module-tomosipo.geometry.parallel" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.geometry.parallel.</code><code class="sig-name descname">ParallelGeometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">angles</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel.html#ParallelGeometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">tomosipo.geometry.base_projection.ProjectionGeometry</span></code></a></p>
+<p>A parametrized parallel-beam geometry</p>
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.angles">
+<em class="property">property </em><code class="sig-name descname">angles</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The angles from which projections are acquired.</p>
+<p>This property is specific to non-vector geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A numpy array of shape with length <cite>num_angles</cite> containing
+the angles in radians.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>np.array</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.corners">
+<em class="property">property </em><code class="sig-name descname">corners</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.corners" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the corners of each detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 4, 3), describing the 4
+corners of each detector in (Z, Y, X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.det_normal">
+<em class="property">property </em><code class="sig-name descname">det_normal</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.det_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector normal vectors of the geometry.</p>
+<p>In tomosipo, the normal vector usually points “into” the
+detector and away from the source/object. It is orthogonal to
+the <cite>v</cite> and <cite>u</cite> vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the normal vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.det_pos">
+<em class="property">property </em><code class="sig-name descname">det_pos</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.det_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector positions of the geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the detector positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.det_size">
+<em class="property">property </em><code class="sig-name descname">det_size</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.det_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the detector.</p>
+<p>This property is dangerous for vector geometries, because for
+vector geometries it is not guaranteed that the detector size
+is constant through time. If the detector size is not
+constant, this property raises a ValueError. Otherwise, it
+returns the detector size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The absolute size of the detector in the <cite>v</cite> and the <cite>u</cite>
+direction.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(scalar, scalar)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.det_sizes">
+<em class="property">property </em><code class="sig-name descname">det_sizes</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.det_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of each detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 2) in v and u direction
+(height x width)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.det_u">
+<em class="property">property </em><code class="sig-name descname">det_u</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.det_u" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector u-vectors of the geometry.</p>
+<p>The ‘u’ vector is usually the “sideways” pointing vector
+describing the distance from the (0, 0) to (0, 1) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the u vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.det_v">
+<em class="property">property </em><code class="sig-name descname">det_v</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.det_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector v-vectors of the geometry.</p>
+<p>The ‘v’ vector is usually the “upward” pointing vector
+describing the distance from the (0, 0) to (1, 0) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the v vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.from_astra">
+<code class="sig-name descname">from_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel.html#ParallelGeometry.from_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.from_astra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.lower_left_corner">
+<em class="property">property </em><code class="sig-name descname">lower_left_corner</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.lower_left_corner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the positions of the lower-left corner the detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 3), describing the position
+of the lower-left corner of each detector in (Z, Y,
+X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.num_angles">
+<em class="property">property </em><code class="sig-name descname">num_angles</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.num_angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of angles in the projection geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of angles in the projection geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.project_point">
+<code class="sig-name descname">project_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">point</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel.html#ParallelGeometry.project_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.project_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Projects point onto detectors</p>
+<p>This function projects onto the virtual detectors described by
+the projection geometry.</p>
+<p>For each source-detector pair, this function returns</p>
+<blockquote>
+<div><p>(detector_intersection_y, detector_intersection_x)</p>
+</div></blockquote>
+<p>where the distance is from the detector origin (center) and
+the units are in detector pixels.</p>
+<p>This function returns <cite>np.nan</cite> if the source-point ray is
+parallel to the detector plane.</p>
+<p>This function projects onto the detector even if the ray is
+moving away from the detector instead of towards it, or if the
+detector is between the source and point instead of behind the
+point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>point</strong> – A three-dimensional vector (preferably np.array)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>np.array([[detector_intersection_y, detector_intersection_x],
+…..])</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array (num_angles * 2)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.ray_dir">
+<em class="property">property </em><code class="sig-name descname">ray_dir</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.ray_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ray direction of the geometry.</p>
+<p>This property is not supported on cone geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the ray direction vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.rescale_det">
+<code class="sig-name descname">rescale_det</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel.html#ParallelGeometry.rescale_det"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.rescale_det" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rescale detector pixels</p>
+<p>Rescales detector pixels without changing the size of the detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> – <cite>int</cite> or <cite>(int, int)</cite>
+Indicates how many times to enlarge a detector pixel. Per
+convention, the first coordinate scales the pixels in the
+<cite>v</cite> coordinate, and the second coordinate scales the
+pixels in the <cite>u</cite> coordinate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a rescaled geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>ProjectionGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.reshape">
+<code class="sig-name descname">reshape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel.html#ParallelGeometry.reshape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reshape detector pixels without changing detector size</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_shape</strong> – int or (int, int)
+The new shape of the detector in pixels in <cite>v</cite> (height)
+and <cite>u</cite> (width) direction.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>self</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.src_pos">
+<em class="property">property </em><code class="sig-name descname">src_pos</code><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.src_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The source positions of the geometry.</p>
+<p>Not supported on parallel geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the source positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.to_astra">
+<code class="sig-name descname">to_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel.html#ParallelGeometry.to_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.to_astra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert geometry to astra geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An astra representation of the current geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.to_box">
+<code class="sig-name descname">to_box</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel.html#ParallelGeometry.to_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.to_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an oriented box representating the detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an oriented box representating the detector</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>VolumeVectorGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel.ParallelGeometry.to_vec">
+<code class="sig-name descname">to_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel.html#ParallelGeometry.to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel.ParallelGeometry.to_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a vector geometry of the current geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.parallel.parallel">
+<code class="sig-prename descclassname">tomosipo.geometry.parallel.</code><code class="sig-name descname">parallel</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">angles</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel.html#parallel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel.parallel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a parallel-beam geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angles</strong> – <p><cite>np.array</cite> or integral value
+If integral value: the number of angles in the parallel-beam
+geometry. This describes a full arc (2 pi radians) with
+uniform placement and without the start and end point
+overlapping.</p>
+<p>If np.array: the values of the array are taken as
+projection angle (units are radians).</p>
+</p></li>
+<li><p><strong>shape</strong> – (<cite>int</cite>, <cite>int</cite>) or <cite>int</cite>
+The detector shape in pixels. If tuple, the order is
+(height, width). Else the pixel has the same number of
+pixels in the U and V direction.</p></li>
+<li><p><strong>size</strong> – <p>(float, float) or float
+The detector size. If a single float is provided, the
+detector is square with equal width and height.</p>
+<p>The order is (height, width), i.e. (v, u).</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a parallel-beam geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.parallel.ParallelGeometry" title="tomosipo.geometry.parallel.ParallelGeometry">ParallelGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.parallel.random_parallel">
+<code class="sig-prename descclassname">tomosipo.geometry.parallel.</code><code class="sig-name descname">random_parallel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel.html#random_parallel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel.random_parallel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.geometry.parallel_vec">
+<span id="tomosipo-geometry-parallel-vec-module"></span><h2>tomosipo.geometry.parallel_vec module<a class="headerlink" href="#module-tomosipo.geometry.parallel_vec" title="Permalink to this headline">¶</a></h2>
+<p>This module implements a parallel-beam vector projection geometry</p>
+<dl class="py class">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.geometry.parallel_vec.</code><code class="sig-name descname">ParallelVectorGeometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">ray_dir</span></em>, <em class="sig-param"><span class="n">det_pos</span></em>, <em class="sig-param"><span class="n">det_v</span></em>, <em class="sig-param"><span class="n">det_u</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel_vec.html#ParallelVectorGeometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">tomosipo.geometry.base_projection.ProjectionGeometry</span></code></a></p>
+<p>Documentation for ParallelVectorGeometry</p>
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.angles">
+<em class="property">property </em><code class="sig-name descname">angles</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The angles from which projections are acquired.</p>
+<p>This property is specific to non-vector geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A numpy array of shape with length <cite>num_angles</cite> containing
+the angles in radians.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>np.array</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.corners">
+<em class="property">property </em><code class="sig-name descname">corners</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.corners" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the corners of each detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 4, 3), describing the 4
+corners of each detector in (Z, Y, X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_normal">
+<em class="property">property </em><code class="sig-name descname">det_normal</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector normal vectors of the geometry.</p>
+<p>In tomosipo, the normal vector usually points “into” the
+detector and away from the source/object. It is orthogonal to
+the <cite>v</cite> and <cite>u</cite> vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the normal vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_pos">
+<em class="property">property </em><code class="sig-name descname">det_pos</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector positions of the geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the detector positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_size">
+<em class="property">property </em><code class="sig-name descname">det_size</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the detector.</p>
+<p>This property is dangerous for vector geometries, because for
+vector geometries it is not guaranteed that the detector size
+is constant through time. If the detector size is not
+constant, this property raises a ValueError. Otherwise, it
+returns the detector size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The absolute size of the detector in the <cite>v</cite> and the <cite>u</cite>
+direction.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(scalar, scalar)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_sizes">
+<em class="property">property </em><code class="sig-name descname">det_sizes</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of each detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 2) in v and u direction
+(height x width)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_u">
+<em class="property">property </em><code class="sig-name descname">det_u</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_u" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector u-vectors of the geometry.</p>
+<p>The ‘u’ vector is usually the “sideways” pointing vector
+describing the distance from the (0, 0) to (0, 1) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the u vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_v">
+<em class="property">property </em><code class="sig-name descname">det_v</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.det_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>The detector v-vectors of the geometry.</p>
+<p>The ‘v’ vector is usually the “upward” pointing vector
+describing the distance from the (0, 0) to (1, 0) pixel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the v vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.from_astra">
+<code class="sig-name descname">from_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel_vec.html#ParallelVectorGeometry.from_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.from_astra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.lower_left_corner">
+<em class="property">property </em><code class="sig-name descname">lower_left_corner</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.lower_left_corner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the positions of the lower-left corner the detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_angles, 3), describing the position
+of the lower-left corner of each detector in (Z, Y,
+X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.num_angles">
+<em class="property">property </em><code class="sig-name descname">num_angles</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.num_angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of angles in the projection geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of angles in the projection geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.project_point">
+<code class="sig-name descname">project_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">point</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel_vec.html#ParallelVectorGeometry.project_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.project_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Projects point onto detectors</p>
+<p>This function projects onto the virtual detectors described by
+the projection geometry.</p>
+<p>For each source-detector pair, this function returns</p>
+<blockquote>
+<div><p>(detector_intersection_y, detector_intersection_x)</p>
+</div></blockquote>
+<p>where the distance is from the detector origin (center) and
+the units are in detector pixels.</p>
+<p>This function returns <cite>np.nan</cite> if the source-point ray is
+parallel to the detector plane.</p>
+<p>This function projects onto the detector even if the ray is
+moving away from the detector instead of towards it, or if the
+detector is between the source and point instead of behind the
+point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>point</strong> – A three-dimensional vector (preferably np.array)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>np.array([[detector_intersection_y, detector_intersection_x],
+…..])</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array (num_angles * 2)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.ray_dir">
+<em class="property">property </em><code class="sig-name descname">ray_dir</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.ray_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ray direction of the geometry.</p>
+<p>This property is not supported on cone geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the ray direction vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.rescale_det">
+<code class="sig-name descname">rescale_det</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel_vec.html#ParallelVectorGeometry.rescale_det"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.rescale_det" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rescale detector pixels</p>
+<p>Rescales detector pixels without changing the size of the detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> – <cite>int</cite> or <cite>(int, int)</cite>
+Indicates how many times to enlarge a detector pixel. Per
+convention, the first coordinate scales the pixels in the
+<cite>v</cite> coordinate, and the second coordinate scales the
+pixels in the <cite>u</cite> coordinate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a rescaled geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>ProjectionGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.reshape">
+<code class="sig-name descname">reshape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel_vec.html#ParallelVectorGeometry.reshape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reshape detector pixels without changing detector size</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_shape</strong> – int or (int, int)
+The new shape of the detector in pixels in <cite>v</cite> (height)
+and <cite>u</cite> (width) direction.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>self</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.src_pos">
+<em class="property">property </em><code class="sig-name descname">src_pos</code><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.src_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The source positions of the geometry.</p>
+<p>Not supported on parallel geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>np.array</cite>
+A <cite>(num_angles, 3)</cite>-shaped numpy array containing the
+(Z,Y,X)-coordinates of the source positions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.to_astra">
+<code class="sig-name descname">to_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel_vec.html#ParallelVectorGeometry.to_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.to_astra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert geometry to astra geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An astra representation of the current geometry.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.to_box">
+<code class="sig-name descname">to_box</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel_vec.html#ParallelVectorGeometry.to_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.to_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an oriented box representating the detector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an oriented box representating the detector</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>VolumeVectorGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.parallel_vec.ParallelVectorGeometry.to_vec">
+<code class="sig-name descname">to_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel_vec.html#ParallelVectorGeometry.to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel_vec.ParallelVectorGeometry.to_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a vector geometry of the current geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.parallel_vec.parallel_vec">
+<code class="sig-prename descclassname">tomosipo.geometry.parallel_vec.</code><code class="sig-name descname">parallel_vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">ray_dir</span></em>, <em class="sig-param"><span class="n">det_pos</span></em>, <em class="sig-param"><span class="n">det_v</span></em>, <em class="sig-param"><span class="n">det_u</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel_vec.html#parallel_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel_vec.parallel_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a parallel-beam vector geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> – (<cite>int</cite>, <cite>int</cite>) or <cite>int</cite>
+The detector shape in pixels. If tuple, the order is
+(height, width). Else the pixel has the same number of
+pixels in the U and V direction.</p></li>
+<li><p><strong>ray_dir</strong> – np.array
+A numpy array of dimension (num_positions, 3) with the
+ray direction in (Z, Y, X) order.</p></li>
+<li><p><strong>det_pos</strong> – A numpy array of dimension (num_positions, 3) with the
+detector center positions in (Z, Y, X) order.</p></li>
+<li><p><strong>det_v</strong> – A numpy array of dimension (num_positions, 3) with the
+vector pointing from the detector (0, 0) to (1, 0) pixel
+(up).</p></li>
+<li><p><strong>det_u</strong> – A numpy array of dimension (num_positions, 3) with the
+vector pointing from the detector (0, 0) to (0, 1) pixel
+(sideways).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.parallel_vec.random_parallel_vec">
+<code class="sig-prename descclassname">tomosipo.geometry.parallel_vec.</code><code class="sig-name descname">random_parallel_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel_vec.html#random_parallel_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.parallel_vec.random_parallel_vec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.geometry.transform">
+<span id="tomosipo-geometry-transform-module"></span><h2>tomosipo.geometry.transform module<a class="headerlink" href="#module-tomosipo.geometry.transform" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.geometry.transform.Transform">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.geometry.transform.</code><code class="sig-name descname">Transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/transform.html#Transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.transform.Transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Documentation for Transform</p>
+<dl class="py method">
+<dt id="tomosipo.geometry.transform.Transform.inv">
+<em class="property">property </em><code class="sig-name descname">inv</code><a class="headerlink" href="#tomosipo.geometry.transform.Transform.inv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.transform.Transform.norm">
+<code class="sig-name descname">norm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/transform.html#Transform.norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.transform.Transform.norm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.transform.Transform.num_steps">
+<em class="property">property </em><code class="sig-name descname">num_steps</code><a class="headerlink" href="#tomosipo.geometry.transform.Transform.num_steps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.transform.from_perspective">
+<code class="sig-prename descclassname">tomosipo.geometry.transform.</code><code class="sig-name descname">from_perspective</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">w</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">u</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">box</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/transform.html#from_perspective"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.transform.from_perspective" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform coordinate frame to another frame of reference</p>
+<p>Returns a coordinate transformation from another frame of
+reference (perspective) to the coordinate frame with origin (0, 0,
+0) and basis Z, Y, X.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> – The position of the new frame of reference.</p></li>
+<li><p><strong>w</strong> – The first coordinate of the new frame of reference.</p></li>
+<li><p><strong>v</strong> – The second coordinate of the new frame of reference.</p></li>
+<li><p><strong>u</strong> – The second coordinate of the new frame of reference.</p></li>
+<li><p><strong>box</strong> – <cite>VolumeVectorGeometry</cite> (optional)
+Retrieve <cite>pos, w, v, u</cite> arguments from a box.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.transform.identity">
+<code class="sig-prename descclassname">tomosipo.geometry.transform.</code><code class="sig-name descname">identity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/transform.html#identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.transform.identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return identity transform</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.transform.random_transform">
+<code class="sig-prename descclassname">tomosipo.geometry.transform.</code><code class="sig-name descname">random_transform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/transform.html#random_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.transform.random_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a random transformation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A random rigid transformation</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>Transform</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.transform.rotate">
+<code class="sig-prename descclassname">tomosipo.geometry.transform.</code><code class="sig-name descname">rotate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos</span></em>, <em class="sig-param"><span class="n">axis</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">rad</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">deg</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">right_handed</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/transform.html#rotate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.transform.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate around axis through position by some angle</p>
+<p>The parameters <cite>position</cite> and <cite>axis</cite> are interpreted as
+homogeneous coordinates. You may pass in both homogeneous or
+non-homogeneous coordinates. Also, you may pass in multiple rows
+for multiple timesteps. The following shapes are allowed:</p>
+<ul class="simple">
+<li><p><cite>(n_rows, 3)</cite> [non-homogeneous] or <cite>(n_rows, 4)</cite> [homogeneous]</p></li>
+<li><p><cite>(3,)</cite> [non-homogeneous] or <cite>(4,)</cite> [homogeneous]</p></li>
+</ul>
+<p><em>Note</em>: the (Z, Y, X) coordinate system is left-handed. If
+<cite>right_handed=True</cite> is set (the default), then the rotation is
+translated to a left-handed rotation matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> – <cite>np.array</cite> or <cite>scalar</cite>
+The position through which the axis moves.</p></li>
+<li><p><strong>axis</strong> – The axis of rotation.</p></li>
+<li><p><strong>rad</strong> – <cite>float</cite> or <cite>np.array</cite>
+The angle by which must be rotated. Only one of <cite>deg</cite> or <cite>rad</cite> may be passed.</p></li>
+<li><p><strong>deg</strong> – <cite>float</cite> or <cite>np.array</cite>
+The angle by which must be rotated. Only one of <cite>deg</cite> or <cite>rad</cite> may be passed.</p></li>
+<li><p><strong>right_handed</strong> – By default, the rotation performs a right-handed rotation (in
+the anti-clockwise direction). If you want to perform a left-handed rotation, you may</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.transform.scale">
+<code class="sig-prename descclassname">tomosipo.geometry.transform.</code><code class="sig-name descname">scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/transform.html#scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.transform.scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return scaling transform</p>
+<p>The scaling transform scales the coordinate frame of the object.</p>
+<p>The parameter <cite>s</cite> is interpreted as a series of homogeneous
+coordinates. You may pass in both homogeneous or non-homogeneous
+coordinates. Also, you may pass in multiple rows for multiple
+timesteps. The following shapes are allowed:</p>
+<ul class="simple">
+<li><p>scalar</p></li>
+<li><p><cite>(n_rows, 3)</cite> [non-homogeneous] or <cite>(n_rows, 4)</cite> [homogeneous]</p></li>
+<li><p><cite>(3,)</cite> [non-homogeneous] or <cite>(4,)</cite> [homogeneous]</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> – By how much to scale in each direction.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.transform.to_perspective">
+<code class="sig-prename descclassname">tomosipo.geometry.transform.</code><code class="sig-name descname">to_perspective</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">w</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">u</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">box</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/transform.html#to_perspective"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.transform.to_perspective" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform coordinate frame to another frame of reference</p>
+<p>Returns a coordinate transformation to another frame of reference
+(perspective).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> – The position of the new frame of reference.</p></li>
+<li><p><strong>w</strong> – The first coordinate of the new frame of reference.</p></li>
+<li><p><strong>v</strong> – The second coordinate of the new frame of reference.</p></li>
+<li><p><strong>u</strong> – The second coordinate of the new frame of reference.</p></li>
+<li><p><strong>box</strong> – <cite>VolumeVectorGeometry</cite> (optional)
+Retrieve <cite>pos, w, v, u</cite> arguments from a box.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.transform.translate">
+<code class="sig-prename descclassname">tomosipo.geometry.transform.</code><code class="sig-name descname">translate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/transform.html#translate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.transform.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return translation transform</p>
+<p>The parameter <cite>t</cite> is interpreted as a series homogeneous
+coordinates. You may pass in both homogeneous or non-homogeneous
+coordinates. Also, you may pass in multiple rows for multiple
+timesteps. The following shapes are allowed:</p>
+<ul class="simple">
+<li><p><cite>(n_rows, 3)</cite> [non-homogeneous] or <cite>(n_rows, 4)</cite> [homogeneous]</p></li>
+<li><p><cite>(3,)</cite> [non-homogeneous] or <cite>(4,)</cite> [homogeneous]</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> – <cite>np.array</cite>
+By how much to translate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A transform describing the translation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>Transform</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.geometry.volume">
+<span id="tomosipo-geometry-volume-module"></span><h2>tomosipo.geometry.volume module<a class="headerlink" href="#module-tomosipo.geometry.volume" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.geometry.volume.VolumeGeometry">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.geometry.volume.</code><code class="sig-name descname">VolumeGeometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">1, 1, 1</span></em>, <em class="sig-param"><span class="n">pos</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#VolumeGeometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A VolumeGeometry describes a 3D axis-aligned cuboid that is
+divided into voxels.</p>
+<p>The number of voxels in each dimension determine the object’s
+<a href="#id3"><span class="problematic" id="id4">`</span></a>shape’. The voxel size is thus determined by the size of
+the object and its shape.</p>
+<p>A VolumeGeometry cannot move in time and cannot be arbitrarily
+oriented. To obtain a moving volume geometry, convert the object
+to a vector representation using <cite>.to_vec()</cite>.</p>
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.corners">
+<em class="property">property </em><code class="sig-name descname">corners</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.corners" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the corners of the volume</p>
+<p>For consistency with the volume vector geometry, the returned
+array has leading dimension <cite>1</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (1, 8, 3), describing the 8
+corners of volume orientation in (Z, Y, X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.extent">
+<em class="property">property </em><code class="sig-name descname">extent</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.extent" title="Permalink to this definition">¶</a></dt>
+<dd><p>The extent of the volume in each dimension</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>((min_z, max_z), (min_y, max_y), (min_x, max_x))</cite></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>((scalar, scalar), (scalar, scalar), (scalar, scalar))</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.lower_left_corner">
+<em class="property">property </em><code class="sig-name descname">lower_left_corner</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.lower_left_corner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the positions of the lower-left corner the object</p>
+<p>For consistency with the volume vector geometry, the returned
+array has leading dimension <cite>1</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (1, 3), describing the position of the
+lower-left corner of the volume in (Z, Y, X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.multiply">
+<code class="sig-name descname">multiply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#VolumeGeometry.multiply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.multiply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scales the volume including its position.</p>
+<p>Does not affect the shape (voxels) of the volume. Use
+<cite>reshape</cite> to change the shape.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> – tuple or np.float
+By how much to scale the volume.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.num_steps">
+<em class="property">property </em><code class="sig-name descname">num_steps</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.num_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of orientations and positions of this volume</p>
+<p>A VolumeGeometry always has only a single step.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.pos">
+<em class="property">property </em><code class="sig-name descname">pos</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.pos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.reshape">
+<code class="sig-name descname">reshape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#VolumeGeometry.reshape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reshape the VolumeGeometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_shape</strong> – <cite>int</cite> or (<cite>int</cite>, <cite>int</cite>, <cite>int</cite>)
+The new shape that the volume must have</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A new volume with the required shape</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.volume.VolumeGeometry" title="tomosipo.geometry.volume.VolumeGeometry">VolumeGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.scale">
+<code class="sig-name descname">scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#VolumeGeometry.scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scales the volume around its center.</p>
+<p>The position of the volume does not change. This
+transformation does not affect the shape (voxels) of the
+volume. Use <cite>reshape</cite> to change the shape.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> – tuple or np.float
+By how much to scale the volume.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.size">
+<em class="property">property </em><code class="sig-name descname">size</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the absolute size of the volume</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the size in each dimension of the volume</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>(scalar, scalar, scalar)</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.sizes">
+<em class="property">property </em><code class="sig-name descname">sizes</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the absolute sizes of the volume</p>
+<p>For consistency with vector geometries, <cite>sizes</cite> is an array
+with shape <cite>(1, 3)</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a numpy array of shape <cite>(1, 3)</cite> describing the size of the object.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.to_astra">
+<code class="sig-name descname">to_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#VolumeGeometry.to_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.to_astra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an Astra volume geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.to_vec">
+<code class="sig-name descname">to_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#VolumeGeometry.to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.to_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector representation of the volume</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry" title="tomosipo.geometry.volume_vec.VolumeVectorGeometry">VolumeVectorGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.translate">
+<code class="sig-name descname">translate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#VolumeGeometry.translate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.translate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.u">
+<em class="property">property </em><code class="sig-name descname">u</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.u" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.untranslate">
+<code class="sig-name descname">untranslate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ts</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#VolumeGeometry.untranslate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.untranslate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.v">
+<em class="property">property </em><code class="sig-name descname">v</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.v" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.voxel_size">
+<em class="property">property </em><code class="sig-name descname">voxel_size</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.voxel_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The voxel size of the volume</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the size in each dimension of the volume</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>(scalar, scalar, scalar)</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.voxel_sizes">
+<em class="property">property </em><code class="sig-name descname">voxel_sizes</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.voxel_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The voxel sizes of the volume</p>
+<dl class="simple">
+<dt><em>Note</em>: For consistency with vector geometries, <cite>voxel_sizes</cite></dt><dd><p>is an array with shape <cite>(1, 3)</cite>.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a numpy array of shape <cite>(1, 3)</cite> describing the voxel size of the volume.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>np.array</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.w">
+<em class="property">property </em><code class="sig-name descname">w</code><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.w" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume.VolumeGeometry.with_voxel_size">
+<code class="sig-name descname">with_voxel_size</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">voxel_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#VolumeGeometry.with_voxel_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.VolumeGeometry.with_voxel_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new volume with the specified voxel size</p>
+<p>When the voxel_size does not cleanly divide the size of the
+volume, a volume is returned that is
+- centered on the origin;
+- fits inside the original volume;</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>voxel_size</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.volume.from_astra">
+<code class="sig-prename descclassname">tomosipo.geometry.volume.</code><code class="sig-name descname">from_astra</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">astra_vol_geom</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#from_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.from_astra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts an ASTRA 3D volume geometry to a VolumeGeometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>astra_vol_geom</strong> – <cite>dict</cite>
+A dictionary created by <cite>astra.create_vol_geom</cite> that describes
+a 3D volume geometry.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a tomosipo volume geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.volume.VolumeGeometry" title="tomosipo.geometry.volume.VolumeGeometry">VolumeGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.volume.is_volume">
+<code class="sig-prename descclassname">tomosipo.geometry.volume.</code><code class="sig-name descname">is_volume</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#is_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.is_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if a geometry is a volume geometry</p>
+<p>The object can be a fixed volume geometry or a vector volume
+geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>g</strong> – a geometry object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>True</cite> if <cite>g</cite> is a volume geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.volume.random_volume">
+<code class="sig-prename descclassname">tomosipo.geometry.volume.</code><code class="sig-name descname">random_volume</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#random_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.random_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random volume geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a random volume geometry</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>VolumeGeometry</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.volume.volume">
+<code class="sig-prename descclassname">tomosipo.geometry.volume.</code><code class="sig-name descname">volume</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">1, 1, 1</span></em>, <em class="sig-param"><span class="n">pos</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume.volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an axis-aligned volume geometry</p>
+<p>A VolumeGeometry is an axis-aligned cuboid centered on <cite>pos</cite>.</p>
+<p>You may provide a combination of arguments to create a new volume geometry:
+- shape (size will equal shape)
+- shape and pos (size will equal shape)
+- shape and size (volume will be centered on the origin)
+- shape, pos, and size.
+- shape and extent</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> – <cite>int</cite> or (<cite>int</cite>, <cite>int</cite>, <cite>int</cite>)
+Shape of the voxel grid underlying the volume.</p></li>
+<li><p><strong>extent</strong> – <cite>(scalar, scalar)</cite> or <cite>((scalar, scalar), (scalar, scalar), (scalar, scalar))</cite>
+The minimal and maximal value of the volume in the Z, Y, X
+coordinate. If only one minimal and maximal value is provided,
+then it is applied to all coordinates.</p></li>
+<li><p><strong>center</strong> – <cite>scalar</cite> or <cite>(scalar, scalar, scalar)</cite></p></li>
+<li><p><strong>size</strong> – <cite>scalar</cite> or <cite>(scalar, scalar, scalar)</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a volume geometry of the unit cube with shape as given.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.volume.VolumeGeometry" title="tomosipo.geometry.volume.VolumeGeometry">VolumeGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.geometry.volume_vec">
+<span id="tomosipo-geometry-volume-vec-module"></span><h2>tomosipo.geometry.volume_vec module<a class="headerlink" href="#module-tomosipo.geometry.volume_vec" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.geometry.volume_vec.</code><code class="sig-name descname">VolumeVectorGeometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">pos</span></em>, <em class="sig-param"><span class="n">w</span><span class="o">=</span><span class="default_value">1, 0, 0</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">0, 1, 0</span></em>, <em class="sig-param"><span class="n">u</span><span class="o">=</span><span class="default_value">0, 0, 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume_vec.html#VolumeVectorGeometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Documentation for VolumeVectorGeometry</p>
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.corners">
+<em class="property">property </em><code class="sig-name descname">corners</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.corners" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the corners of the volume</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_steps, 8, 3), describing the 8
+corners of volume orientation in (Z, Y, X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.lower_left_corner">
+<em class="property">property </em><code class="sig-name descname">lower_left_corner</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.lower_left_corner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector with the positions of the lower-left corner the object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array
+Array with shape (num_steps, 3), describing the position
+of the lower-left corner of each volume orientation in (Z, Y,
+X)-coordinates.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.num_steps">
+<em class="property">property </em><code class="sig-name descname">num_steps</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.num_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of orientations and positions of this volume</p>
+<p>A volume vector geometry can have multiple positions and
+orientations, similar to how an astra projection geometry has
+multiple angles. This property describes how many such “steps”
+are described by this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the number of steps</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>int</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.pos">
+<em class="property">property </em><code class="sig-name descname">pos</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.pos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.reshape">
+<code class="sig-name descname">reshape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume_vec.html#VolumeVectorGeometry.reshape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the number of voxels without changing volume size</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_shape</strong> – int or (int, int, int)
+The new shape of the detector in pixels in (w, v, u) direction.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>self</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry" title="tomosipo.geometry.volume_vec.VolumeVectorGeometry">VolumeVectorGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.size">
+<em class="property">property </em><code class="sig-name descname">size</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the absolute size of the volume</p>
+<dl class="simple">
+<dt><em>Note</em>: Because the local coordinate frame of the volume may</dt><dd><p>change over time, the size of the volume may also change. If
+this happens, this property throws a ValueError.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the size in each dimension of the volume (if constant)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>(scalar, scalar, scalar)</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.sizes">
+<em class="property">property </em><code class="sig-name descname">sizes</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the absolute sizes of the volume</p>
+<p>The <cite>size</cite> property is defined relative to the local
+coordinate frame of the object.  Because the vectors <cite>w, u, v</cite>
+may change over time, <cite>abs_size</cite> is a vector with shape
+<cite>(num_steps, 3)</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a numpy array of shape <cite>(num_steps, 3)</cite> describing the size of the object.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.to_vec">
+<code class="sig-name descname">to_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume_vec.html#VolumeVectorGeometry.to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.to_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a volume vector geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>self</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry" title="tomosipo.geometry.volume_vec.VolumeVectorGeometry">VolumeVectorGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.u">
+<em class="property">property </em><code class="sig-name descname">u</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.u" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.v">
+<em class="property">property </em><code class="sig-name descname">v</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.v" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.voxel_size">
+<em class="property">property </em><code class="sig-name descname">voxel_size</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.voxel_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The voxel size of the volume</p>
+<dl class="simple">
+<dt><em>Note</em>: Because the local coordinate frame of the volume may</dt><dd><p>change over time, the voxel size of the volume may also
+change. If this happens, this property throws a ValueError.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the size in each dimension of the volume (if constant)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>(scalar, scalar, scalar)</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.voxel_sizes">
+<em class="property">property </em><code class="sig-name descname">voxel_sizes</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.voxel_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The voxel sizes of the volume</p>
+<dl class="simple">
+<dt><em>Note</em>: Because the local coordinate frame of the volume may</dt><dd><p>change over time, the voxel size of the volume may also change.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a numpy array of shape <cite>(num_steps, 3)</cite> describing the voxel size of the volume.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>np.array</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.geometry.volume_vec.VolumeVectorGeometry.w">
+<em class="property">property </em><code class="sig-name descname">w</code><a class="headerlink" href="#tomosipo.geometry.volume_vec.VolumeVectorGeometry.w" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.volume_vec.random_volume_vec">
+<code class="sig-prename descclassname">tomosipo.geometry.volume_vec.</code><code class="sig-name descname">random_volume_vec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume_vec.html#random_volume_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume_vec.random_volume_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a random volume vector geometry</p>
+<p>Useful for testing.
+:returns: a volume vector geometry with random size, position and orientation.
+:rtype: VolumeVectorGeometry</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.geometry.volume_vec.volume_vec">
+<code class="sig-prename descclassname">tomosipo.geometry.volume_vec.</code><code class="sig-name descname">volume_vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">pos</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">w</span><span class="o">=</span><span class="default_value">1, 0, 0</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">0, 1, 0</span></em>, <em class="sig-param"><span class="n">u</span><span class="o">=</span><span class="default_value">0, 0, 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume_vec.html#volume_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.geometry.volume_vec.volume_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new volume vector geometry</p>
+<p>Like the parallel and cone vector geometries, the volume vector
+geometry can be arbitrarily oriented and positioned.</p>
+<p>The position describes the center of the volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> – <cite>(int, int, int)</cite> or <cite>int</cite>
+The shape of the volume as measured in basis elements w,
+v, u.</p></li>
+<li><p><strong>pos</strong> – <cite>scalar</cite>, <cite>np.array</cite>
+A numpy array of dimension (num_steps, 3)
+describing the center of the volume in world-coordinates
+<cite>(Z, Y, X)</cite>. You may also pass a 3-tuple or a scalar.</p></li>
+<li><p><strong>w</strong> – <cite>np.array</cite> (optional)
+A numpy array of dimension (num_steps, 3)
+describing the <cite>w</cite> basis element in <cite>(Z, Y, X)</cite>
+coordinates. Default is <cite>(1, 0, 0)</cite>.</p></li>
+<li><p><strong>v</strong> – <cite>np.array</cite> (optional)
+A numpy array of dimension (num_steps, 3)
+describing the <cite>v</cite> basis element in <cite>(Z, Y, X)</cite>
+coordinates. Default is <cite>(0, 1, 0)</cite>.</p></li>
+<li><p><strong>u</strong> – <cite>np.array</cite> (optional)
+A numpy array of dimension (num_steps, 3)
+describing the <cite>u</cite> basis element in <cite>(Z, Y, X)</cite>
+coordinates. Default is <cite>(0, 0, 1)</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.geometry">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tomosipo.geometry" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tomosipo.links.html" class="btn btn-neutral float-right" title="tomosipo.links package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tomosipo.html" class="btn btn-neutral float-left" title="tomosipo package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

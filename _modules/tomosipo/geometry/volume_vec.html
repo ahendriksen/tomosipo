@@ -1,0 +1,605 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.geometry.volume_vec &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tomosipo</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>tomosipo.geometry.volume_vec</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tomosipo.geometry.volume_vec</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tomosipo.utils</span> <span class="kn">import</span> <span class="n">slice_interval</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span>
+<span class="kn">import</span> <span class="nn">tomosipo</span> <span class="k">as</span> <span class="nn">ts</span>
+<span class="kn">from</span> <span class="nn">tomosipo</span> <span class="kn">import</span> <span class="n">vector_calc</span> <span class="k">as</span> <span class="n">vc</span>
+<span class="kn">from</span> <span class="nn">.transform</span> <span class="kn">import</span> <span class="n">Transform</span>
+
+
+<div class="viewcode-block" id="volume_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume_vec.volume_vec">[docs]</a><span class="k">def</span> <span class="nf">volume_vec</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;Create a new volume vector geometry</span>
+
+<span class="sd">    Like the parallel and cone vector geometries, the volume vector</span>
+<span class="sd">    geometry can be arbitrarily oriented and positioned.</span>
+
+<span class="sd">    The position describes the center of the volume.</span>
+
+<span class="sd">    :param shape: `(int, int, int)` or `int`</span>
+<span class="sd">        The shape of the volume as measured in basis elements w,</span>
+<span class="sd">        v, u.</span>
+<span class="sd">    :param pos: `scalar`, `np.array`</span>
+<span class="sd">        A numpy array of dimension (num_steps, 3)</span>
+<span class="sd">        describing the center of the volume in world-coordinates</span>
+<span class="sd">        `(Z, Y, X)`. You may also pass a 3-tuple or a scalar.</span>
+<span class="sd">    :param w: `np.array` (optional)</span>
+<span class="sd">        A numpy array of dimension (num_steps, 3)</span>
+<span class="sd">        describing the `w` basis element in `(Z, Y, X)`</span>
+<span class="sd">        coordinates. Default is `(1, 0, 0)`.</span>
+<span class="sd">    :param v: `np.array` (optional)</span>
+<span class="sd">        A numpy array of dimension (num_steps, 3)</span>
+<span class="sd">        describing the `v` basis element in `(Z, Y, X)`</span>
+<span class="sd">        coordinates. Default is `(0, 1, 0)`.</span>
+<span class="sd">    :param u: `np.array` (optional)</span>
+<span class="sd">        A numpy array of dimension (num_steps, 3)</span>
+<span class="sd">        describing the `u` basis element in `(Z, Y, X)`</span>
+<span class="sd">        coordinates. Default is `(0, 0, 1)`.</span>
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">VolumeVectorGeometry</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="random_volume_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume_vec.random_volume_vec">[docs]</a><span class="k">def</span> <span class="nf">random_volume_vec</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Create a random volume vector geometry</span>
+
+<span class="sd">    Useful for testing.</span>
+<span class="sd">    :returns: a volume vector geometry with random size, position and orientation.</span>
+<span class="sd">    :rtype: VolumeVectorGeometry</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RT</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">random_transform</span><span class="p">()</span>
+    <span class="n">vg</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">volume_vec</span><span class="p">(</span>
+        <span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span>
+        <span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">RT</span> <span class="o">*</span> <span class="n">vg</span></div>
+
+
+<div class="viewcode-block" id="VolumeVectorGeometry"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume_vec.VolumeVectorGeometry">[docs]</a><span class="k">class</span> <span class="nc">VolumeVectorGeometry</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Documentation for VolumeVectorGeometry</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new volume vector geometry</span>
+
+<span class="sd">        An arbitarily oriented volume with multiple orientations and positions.</span>
+
+<span class="sd">        The position describes the center of the volume.</span>
+
+<span class="sd">        :param shape: `(int, int, int)` or `int`</span>
+<span class="sd">            The shape of the volume as measured in basis elements w,</span>
+<span class="sd">            v, u.</span>
+<span class="sd">        :param pos: `scalar`, `np.array`</span>
+<span class="sd">            A numpy array of dimension (num_steps, 3)</span>
+<span class="sd">            describing the center of the volume in world-coordinates</span>
+<span class="sd">            `(Z, Y, X)`. You may also pass a 3-tuple or a scalar.</span>
+<span class="sd">        :param w: `np.array` (optional)</span>
+<span class="sd">            A numpy array of dimension (num_steps, 3)</span>
+<span class="sd">            describing the `w` basis element in `(Z, Y, X)`</span>
+<span class="sd">            coordinates. Default is `(1, 0, 0)`.</span>
+<span class="sd">        :param v: `np.array` (optional)</span>
+<span class="sd">            A numpy array of dimension (num_steps, 3)</span>
+<span class="sd">            describing the `v` basis element in `(Z, Y, X)`</span>
+<span class="sd">            coordinates. Default is `(0, 1, 0)`.</span>
+<span class="sd">        :param u: `np.array` (optional)</span>
+<span class="sd">            A numpy array of dimension (num_steps, 3)</span>
+<span class="sd">            describing the `u` basis element in `(Z, Y, X)`</span>
+<span class="sd">            coordinates. Default is `(0, 0, 1)`.</span>
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_shape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_pos</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+
+        <span class="n">pos</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">to_vec</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span> <span class="o">=</span> <span class="n">pos</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">u</span>
+
+        <span class="n">shapes</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pos</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">]]</span>
+
+        <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">shapes</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">max</span><span class="p">(</span><span class="n">shapes</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Not all arguments pos, w, v, u are the same shape. &quot;</span> <span class="sa">f</span><span class="s2">&quot;Got: </span><span class="si">{</span><span class="n">shapes</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">print_options</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;ts.volume_vec(</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    shape=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    pos=</span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    w=</span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">)</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    v=</span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    u=</span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">)</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;)&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">VolumeVectorGeometry</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">d_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">pos</span>
+        <span class="n">d_w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_w</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">_w</span>
+        <span class="n">d_v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">_v</span>
+        <span class="n">d_u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">_u</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">shape</span>
+            <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">d_pos</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">ts</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">d_w</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">ts</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">d_v</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">ts</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">d_u</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">ts</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Slice the volume geometry</span>
+
+<span class="sd">        The first index indexes into the number of steps. The next</span>
+<span class="sd">        three indices index into space.</span>
+
+<span class="sd">        To get the lower left voxel of the volume in the first time</span>
+<span class="sd">        step, execute:</span>
+
+<span class="sd">        &gt;&gt;&gt; ts.volume().to_vec()[0, 0, 0, 0]</span>
+
+<span class="sd">        :param key:</span>
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">full_slice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;VolumeVectorGeometry supports indexing in 4 dimensions. Got </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">full_slice</span><span class="p">,</span> <span class="n">full_slice</span><span class="p">,</span> <span class="n">full_slice</span><span class="p">)</span>
+        <span class="k">while</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="n">full_slice</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">w0</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">lenW</span><span class="p">,</span> <span class="n">stepW</span> <span class="o">=</span> <span class="n">slice_interval</span><span class="p">(</span>
+                <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">lenV</span><span class="p">,</span> <span class="n">stepV</span> <span class="o">=</span> <span class="n">slice_interval</span><span class="p">(</span>
+                <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">key</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">u0</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">lenU</span><span class="p">,</span> <span class="n">stepU</span> <span class="o">=</span> <span class="n">slice_interval</span><span class="p">(</span>
+                <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">key</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="c1">#</span>
+            <span class="n">new_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">lenW</span><span class="p">,</span> <span class="n">lenV</span><span class="p">,</span> <span class="n">lenU</span><span class="p">)</span>
+            <span class="c1"># Calculate new lower-left corner, top-right corner, and center.</span>
+            <span class="n">new_llc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_left_corner</span> <span class="o">+</span> <span class="n">w0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">+</span> <span class="n">v0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">u0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span>
+            <span class="n">new_trc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_left_corner</span> <span class="o">+</span> <span class="n">w1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">+</span> <span class="n">v1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">u1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span>
+            <span class="n">new_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_llc</span> <span class="o">+</span> <span class="n">new_trc</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">new_pos</span> <span class="o">=</span> <span class="n">new_pos</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="c1">#</span>
+            <span class="n">new_w</span> <span class="o">=</span> <span class="n">stepW</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">new_v</span> <span class="o">=</span> <span class="n">stepV</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">new_u</span> <span class="o">=</span> <span class="n">stepU</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+            <span class="k">return</span> <span class="n">VolumeVectorGeometry</span><span class="p">(</span><span class="n">new_shape</span><span class="p">,</span> <span class="n">new_pos</span><span class="p">,</span> <span class="n">new_w</span><span class="p">,</span> <span class="n">new_v</span><span class="p">,</span> <span class="n">new_u</span><span class="p">)</span>
+
+        <span class="c1"># If key is a boolean array, we may index like this:</span>
+        <span class="k">return</span> <span class="n">VolumeVectorGeometry</span><span class="p">(</span>
+            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+            <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
+            <span class="n">w</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
+            <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
+            <span class="n">u</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="VolumeVectorGeometry.to_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume_vec.VolumeVectorGeometry.to_vec">[docs]</a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a volume vector geometry</span>
+
+<span class="sd">        :returns: self</span>
+<span class="sd">        :rtype: VolumeVectorGeometry</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                Properties                               #</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The number of orientations and positions of this volume</span>
+
+<span class="sd">        A volume vector geometry can have multiple positions and</span>
+<span class="sd">        orientations, similar to how an astra projection geometry has</span>
+<span class="sd">        multiple angles. This property describes how many such &quot;steps&quot;</span>
+<span class="sd">        are described by this object.</span>
+
+<span class="sd">        :returns: the number of steps</span>
+<span class="sd">        :rtype: `int`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">w</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">v</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sizes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the absolute sizes of the volume</span>
+
+<span class="sd">        The `size` property is defined relative to the local</span>
+<span class="sd">        coordinate frame of the object.  Because the vectors `w, u, v`</span>
+<span class="sd">        may change over time, `abs_size` is a vector with shape</span>
+<span class="sd">        `(num_steps, 3)`.</span>
+
+<span class="sd">        :returns: a numpy array of shape `(num_steps, 3)` describing the size of the object.</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">vc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="p">)</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">vc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">)</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">vc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">W</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">U</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the absolute size of the volume</span>
+
+<span class="sd">        *Note*: Because the local coordinate frame of the volume may</span>
+<span class="sd">         change over time, the size of the volume may also change. If</span>
+<span class="sd">         this happens, this property throws a ValueError.</span>
+
+<span class="sd">        :returns: the size in each dimension of the volume (if constant)</span>
+<span class="sd">        :rtype: `(scalar, scalar, scalar)`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">W</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="n">w_constant</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">W</span><span class="p">)</span> <span class="o">-</span> <span class="nb">max</span><span class="p">(</span><span class="n">W</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">ts</span><span class="o">.</span><span class="n">epsilon</span>
+        <span class="n">v_constant</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">V</span><span class="p">)</span> <span class="o">-</span> <span class="nb">max</span><span class="p">(</span><span class="n">V</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">ts</span><span class="o">.</span><span class="n">epsilon</span>
+        <span class="n">u_constant</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">U</span><span class="p">)</span> <span class="o">-</span> <span class="nb">max</span><span class="p">(</span><span class="n">U</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">ts</span><span class="o">.</span><span class="n">epsilon</span>
+
+        <span class="k">if</span> <span class="n">w_constant</span> <span class="ow">and</span> <span class="n">v_constant</span> <span class="ow">and</span> <span class="n">u_constant</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">V</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">U</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The size of the volume is not constant. &quot;</span>
+                <span class="s2">&quot;To prevent this error, use `vg.sizes&#39;. &quot;</span>
+            <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">voxel_sizes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The voxel sizes of the volume</span>
+
+<span class="sd">        *Note*: Because the local coordinate frame of the volume may</span>
+<span class="sd">         change over time, the voxel size of the volume may also change.</span>
+
+<span class="sd">        :returns: a numpy array of shape `(num_steps, 3)` describing the voxel size of the volume.</span>
+<span class="sd">        :rtype: `np.array`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">voxel_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The voxel size of the volume</span>
+
+<span class="sd">        *Note*: Because the local coordinate frame of the volume may</span>
+<span class="sd">         change over time, the voxel size of the volume may also</span>
+<span class="sd">         change. If this happens, this property throws a ValueError.</span>
+
+<span class="sd">        :returns: the size in each dimension of the volume (if constant)</span>
+<span class="sd">        :rtype: `(scalar, scalar, scalar)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">size</span> <span class="o">/</span> <span class="n">shape</span> <span class="k">for</span> <span class="n">size</span><span class="p">,</span> <span class="n">shape</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">corners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a vector with the corners of the volume</span>
+
+<span class="sd">        :returns: np.array</span>
+<span class="sd">            Array with shape (num_steps, 8, 3), describing the 8</span>
+<span class="sd">            corners of volume orientation in (Z, Y, X)-coordinates.</span>
+<span class="sd">        :rtype: np.array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="mf">0.5</span>
+
+        <span class="n">shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
+        <span class="n">c_w</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_w</span> <span class="o">*</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">c_v</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v</span> <span class="o">*</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">c_u</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span> <span class="o">*</span> <span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">+</span> <span class="n">c_w</span> <span class="o">+</span> <span class="n">c_v</span> <span class="o">+</span> <span class="n">c_u</span>
+
+        <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lower_left_corner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a vector with the positions of the lower-left corner the object</span>
+
+<span class="sd">        :returns: np.array</span>
+<span class="sd">            Array with shape (num_steps, 3), describing the position</span>
+<span class="sd">            of the lower-left corner of each volume orientation in (Z, Y,</span>
+<span class="sd">            X)-coordinates.</span>
+<span class="sd">        :rtype: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">llc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">vec</span><span class="p">,</span> <span class="n">num_voxels</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
+            <span class="n">llc</span> <span class="o">-=</span> <span class="n">vec</span> <span class="o">*</span> <span class="n">num_voxels</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">llc</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                          Transformation methods                         #</span>
+    <span class="c1">###########################################################################</span>
+<div class="viewcode-block" id="VolumeVectorGeometry.reshape"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume_vec.VolumeVectorGeometry.reshape">[docs]</a>    <span class="k">def</span> <span class="nf">reshape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_shape</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change the number of voxels without changing volume size</span>
+
+<span class="sd">        :param new_shape: int or (int, int, int)</span>
+<span class="sd">            The new shape of the detector in pixels in (w, v, u) direction.</span>
+<span class="sd">        :returns: `self`</span>
+<span class="sd">        :rtype: VolumeVectorGeometry</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_shape</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_shape</span><span class="p">(</span><span class="n">new_shape</span><span class="p">)</span>
+        <span class="n">new_w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">new_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">new_v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">new_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">new_u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">new_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">VolumeVectorGeometry</span><span class="p">(</span><span class="n">new_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">new_w</span><span class="p">,</span> <span class="n">new_v</span><span class="p">,</span> <span class="n">new_u</span><span class="p">,)</span></div>
+
+    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies a projective matrix transformation to geometry</span>
+
+<span class="sd">        :param other: `np.array`</span>
+<span class="sd">            A transformation matrix</span>
+<span class="sd">        :returns: A transformed geometry</span>
+<span class="sd">        :rtype: `VolumeVectorGeometry`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Transform</span><span class="p">):</span>
+            <span class="n">matrix</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">matrix</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">to_homogeneous_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">)</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">to_homogeneous_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">to_homogeneous_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">)</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">to_homogeneous_vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+
+            <span class="n">new_pos</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">to_vec</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">matrix_transform</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">pos</span><span class="p">))</span>
+            <span class="n">new_w</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">to_vec</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">matrix_transform</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
+            <span class="n">new_v</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">to_vec</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">matrix_transform</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+            <span class="n">new_u</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">to_vec</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">matrix_transform</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">VolumeVectorGeometry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">new_pos</span><span class="p">,</span> <span class="n">new_w</span><span class="p">,</span> <span class="n">new_v</span><span class="p">,</span> <span class="n">new_u</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

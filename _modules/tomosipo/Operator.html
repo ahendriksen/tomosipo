@@ -1,0 +1,822 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.Operator &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">tomosipo</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>tomosipo.Operator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tomosipo.Operator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">astra</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tomosipo</span> <span class="k">as</span> <span class="nn">ts</span>
+<span class="kn">from</span> <span class="nn">tomosipo.Data</span> <span class="kn">import</span> <span class="n">Data</span>
+
+
+<div class="viewcode-block" id="to_astra_compatible_operator_geometry"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.to_astra_compatible_operator_geometry">[docs]</a><span class="k">def</span> <span class="nf">to_astra_compatible_operator_geometry</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">pg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert volume vector geometry to volume geometry (if necessary)</span>
+
+<span class="sd">    ASTRA does not support arbitrarily oriented volume geometries. If</span>
+<span class="sd">    `vg` is a VolumeVectorGeometry, we rotate and translate both `vg`</span>
+<span class="sd">    and `pg` such that `vg` is axis-aligned, and positioned on the</span>
+<span class="sd">    origin, which renders it ASTRA-compatible.</span>
+
+<span class="sd">    :param vg: volume geometry</span>
+<span class="sd">    :param pg: projection geometry</span>
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype: (VolumeGeometry, ProjectionGeometry)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">VolumeGeometry</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">pg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">VolumeVectorGeometry</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected volume geometry. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">vg</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span><span class="p">)</span>
+
+    <span class="n">vg</span> <span class="o">=</span> <span class="n">vg</span><span class="o">.</span><span class="n">to_vec</span><span class="p">()</span>
+    <span class="c1"># Change perspective *without* changing the voxel volume.</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">from_perspective</span><span class="p">(</span>
+        <span class="n">pos</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
+        <span class="n">w</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">w</span> <span class="o">/</span> <span class="n">ts</span><span class="o">.</span><span class="n">vector_calc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">w</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">v</span> <span class="o">/</span> <span class="n">ts</span><span class="o">.</span><span class="n">vector_calc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">v</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">u</span> <span class="o">/</span> <span class="n">ts</span><span class="o">.</span><span class="n">vector_calc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">u</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span>
+    <span class="p">)</span>
+    <span class="c1"># Move vg to perspective:</span>
+    <span class="n">vg</span> <span class="o">=</span> <span class="n">P</span> <span class="o">*</span> <span class="n">vg</span>
+    <span class="n">pg</span> <span class="o">=</span> <span class="n">P</span> <span class="o">*</span> <span class="n">pg</span>
+
+    <span class="c1"># Assert that vg is now axis-aligned and positioned on the origin:</span>
+    <span class="n">voxel_size</span> <span class="o">=</span> <span class="n">vg</span><span class="o">.</span><span class="n">voxel_size</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+    <span class="n">axis_aligned_vg</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">volume</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">axis_aligned_vg</span><span class="p">,</span> <span class="n">pg</span></div>
+
+
+<div class="viewcode-block" id="astra_projector"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.astra_projector">[docs]</a><span class="k">def</span> <span class="nf">astra_projector</span><span class="p">(</span>
+    <span class="n">volume_geometry</span><span class="p">,</span>
+    <span class="n">projection_geometry</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">voxel_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">detector_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">vg</span><span class="p">,</span> <span class="n">pg</span> <span class="o">=</span> <span class="n">volume_geometry</span><span class="p">,</span> <span class="n">projection_geometry</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">VolumeVectorGeometry</span><span class="p">):</span>
+        <span class="c1"># volume vector geometries are not native to ASTRA. We have to</span>
+        <span class="c1"># rotate geometry so that it is axis-aligned:</span>
+        <span class="n">vg</span><span class="p">,</span> <span class="n">pg</span> <span class="o">=</span> <span class="n">to_astra_compatible_operator_geometry</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">pg</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">astra</span><span class="o">.</span><span class="n">create_projector</span><span class="p">(</span>
+        <span class="s2">&quot;cuda3d&quot;</span><span class="p">,</span>
+        <span class="n">pg</span><span class="o">.</span><span class="n">to_astra</span><span class="p">(),</span>
+        <span class="n">vg</span><span class="o">.</span><span class="n">to_astra</span><span class="p">(),</span>
+        <span class="n">options</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;VoxelSuperSampling&quot;</span><span class="p">:</span> <span class="n">voxel_supersampling</span><span class="p">,</span>
+            <span class="s2">&quot;DetectorSuperSampling&quot;</span><span class="p">:</span> <span class="n">detector_supersampling</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="project"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.project">[docs]</a><span class="k">def</span> <span class="nf">project</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">data</span><span class="p">,</span>
+    <span class="n">voxel_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">detector_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">forward</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">additive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">projector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Project forward or backward</span>
+
+<span class="sd">    Projects all volumes on all projection datasets.</span>
+
+<span class="sd">    :param *data: `Data` objects</span>
+<span class="sd">        Data to use for forward and back projection. At least one</span>
+<span class="sd">        data object relating to a VolumeGeometry and at least one</span>
+<span class="sd">        data object relating to a projection geometry is required.</span>
+<span class="sd">    :param detector_supersampling: `int`</span>
+<span class="sd">        For the forward projection, DetectorSuperSampling^2 rays</span>
+<span class="sd">        will be used.  This should only be used if your detector</span>
+<span class="sd">        pixels are larger than the voxels in the reconstruction</span>
+<span class="sd">        volume.  (default: 1)</span>
+<span class="sd">    :param voxel_supersampling: `int`</span>
+<span class="sd">        For the backward projection, VoxelSuperSampling^3 rays</span>
+<span class="sd">        will be used.  This should only be used if your voxels in</span>
+<span class="sd">        the reconstruction volume are larger than the detector</span>
+<span class="sd">        pixels.  (default: 1)</span>
+<span class="sd">    :param forward: bool</span>
+<span class="sd">        True for forward project, False for backproject.</span>
+<span class="sd">    :param additive: bool</span>
+<span class="sd">        If True, add projection data to existing data. Otherwise</span>
+<span class="sd">        overwrite data.</span>
+<span class="sd">    :param projector: ??</span>
+<span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
+<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">vol_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">is_volume</span><span class="p">()]</span>
+    <span class="n">proj_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">is_projection</span><span class="p">()]</span>
+
+    <span class="k">if</span> <span class="n">forward</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;project must be given a forward argument (True/False).&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vol_data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">proj_data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Expected at least one projection dataset and one volume dataset&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">projector</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">projector</span> <span class="o">=</span> <span class="n">astra_projector</span><span class="p">(</span>
+            <span class="n">vol_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+            <span class="n">proj_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+            <span class="n">voxel_supersampling</span><span class="o">=</span><span class="n">voxel_supersampling</span><span class="p">,</span>
+            <span class="n">detector_supersampling</span><span class="o">=</span><span class="n">detector_supersampling</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="c1"># These constants have become the default. See:</span>
+    <span class="c1"># https://github.com/astra-toolbox/astra-toolbox/commit/4d673b3cdb6d27d430087758a8081e4a10267595</span>
+    <span class="n">MODE_SET</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">MODE_ADD</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">astra</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">do_composite</span><span class="p">(</span>
+        <span class="n">projector</span><span class="p">,</span>
+        <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">to_astra</span><span class="p">()</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">vol_data</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">to_astra</span><span class="p">()</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">proj_data</span><span class="p">],</span>
+        <span class="n">MODE_ADD</span> <span class="k">if</span> <span class="n">additive</span> <span class="k">else</span> <span class="n">MODE_SET</span><span class="p">,</span>
+        <span class="s2">&quot;FP&quot;</span> <span class="k">if</span> <span class="n">forward</span> <span class="k">else</span> <span class="s2">&quot;BP&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="forward"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.forward">[docs]</a><span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">data</span><span class="p">,</span>
+    <span class="n">voxel_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">detector_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">additive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">projector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Forward project</span>
+
+<span class="sd">    Projects all volumes on all projection datasets.</span>
+
+<span class="sd">    :param *data: `Data` objects</span>
+<span class="sd">        Data to use for forward and back projection. At least one</span>
+<span class="sd">        data object relating to a VolumeGeometry and at least one</span>
+<span class="sd">        data object relating to a projection geometry is required.</span>
+<span class="sd">    :param detector_supersampling: `int`</span>
+<span class="sd">        For the forward projection, DetectorSuperSampling^2 rays</span>
+<span class="sd">        will be used.  This should only be used if your detector</span>
+<span class="sd">        pixels are larger than the voxels in the reconstruction</span>
+<span class="sd">        volume.  (default: 1)</span>
+<span class="sd">    :param voxel_supersampling: `int`</span>
+<span class="sd">        For the backward projection, VoxelSuperSampling^3 rays</span>
+<span class="sd">        will be used.  This should only be used if your voxels in</span>
+<span class="sd">        the reconstruction volume are larger than the detector</span>
+<span class="sd">        pixels.  (default: 1)</span>
+<span class="sd">    :param projector: ??</span>
+<span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
+<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">project</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">data</span><span class="p">,</span>
+        <span class="n">voxel_supersampling</span><span class="o">=</span><span class="n">voxel_supersampling</span><span class="p">,</span>
+        <span class="n">detector_supersampling</span><span class="o">=</span><span class="n">detector_supersampling</span><span class="p">,</span>
+        <span class="n">additive</span><span class="o">=</span><span class="n">additive</span><span class="p">,</span>
+        <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">projector</span><span class="o">=</span><span class="n">projector</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="backward"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.backward">[docs]</a><span class="k">def</span> <span class="nf">backward</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">data</span><span class="p">,</span>
+    <span class="n">voxel_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">detector_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">additive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">projector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Backproject</span>
+
+<span class="sd">    Backprojects all projection datasets on all volumes.</span>
+
+<span class="sd">    :param *data: `Data` objects</span>
+<span class="sd">        Data to use for forward and back projection. At least one</span>
+<span class="sd">        data object relating to a VolumeGeometry and at least one</span>
+<span class="sd">        data object relating to a projection geometry is required.</span>
+<span class="sd">    :param detector_supersampling: `int`</span>
+<span class="sd">        For the forward projection, DetectorSuperSampling^2 rays</span>
+<span class="sd">        will be used.  This should only be used if your detector</span>
+<span class="sd">        pixels are larger than the voxels in the reconstruction</span>
+<span class="sd">        volume.  (default: 1)</span>
+<span class="sd">    :param voxel_supersampling: `int`</span>
+<span class="sd">        For the backward projection, VoxelSuperSampling^3 rays</span>
+<span class="sd">        will be used.  This should only be used if your voxels in</span>
+<span class="sd">        the reconstruction volume are larger than the detector</span>
+<span class="sd">        pixels.  (default: 1)</span>
+<span class="sd">    :param projector: ??</span>
+<span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
+<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">project</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">data</span><span class="p">,</span>
+        <span class="n">voxel_supersampling</span><span class="o">=</span><span class="n">voxel_supersampling</span><span class="p">,</span>
+        <span class="n">detector_supersampling</span><span class="o">=</span><span class="n">detector_supersampling</span><span class="p">,</span>
+        <span class="n">additive</span><span class="o">=</span><span class="n">additive</span><span class="p">,</span>
+        <span class="n">forward</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">projector</span><span class="o">=</span><span class="n">projector</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="fdk"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.fdk">[docs]</a><span class="k">def</span> <span class="nf">fdk</span><span class="p">(</span><span class="n">vol_data</span><span class="p">,</span> <span class="n">proj_data</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">voxel_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">detector_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Do an FDK reconstruction of the given geometry.</span>
+
+<span class="sd">    Expects a single volume dataset and a single projection dataset to</span>
+<span class="sd">    be associated with the geometry.</span>
+
+<span class="sd">    :param vol_data: Volume dataset to use.</span>
+<span class="sd">    :param proj_data: Projection dataset to use.</span>
+<span class="sd">    :param detector_supersampling: `int`</span>
+<span class="sd">        For the forward projection, DetectorSuperSampling^2 rays</span>
+<span class="sd">        will be used.  This should only be used if your detector</span>
+<span class="sd">        pixels are larger than the voxels in the reconstruction</span>
+<span class="sd">        volume.  (default: 1)</span>
+<span class="sd">    :param voxel_supersampling: `int`</span>
+<span class="sd">        For the backward projection, VoxelSuperSampling^3 rays</span>
+<span class="sd">        will be used.  This should only be used if your voxels in</span>
+<span class="sd">        the reconstruction volume are larger than the detector</span>
+<span class="sd">        pixels.  (default: 1)</span>
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">projector</span> <span class="o">=</span> <span class="n">astra_projector</span><span class="p">(</span>
+        <span class="n">vol_data</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+        <span class="n">proj_data</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+        <span class="n">voxel_supersampling</span><span class="o">=</span><span class="n">voxel_supersampling</span><span class="p">,</span>
+        <span class="n">detector_supersampling</span><span class="o">=</span><span class="n">detector_supersampling</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">astra</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">accumulate_FDK</span><span class="p">(</span>
+        <span class="n">projector</span><span class="p">,</span> <span class="n">vol_data</span><span class="o">.</span><span class="n">to_astra</span><span class="p">(),</span> <span class="n">proj_data</span><span class="o">.</span><span class="n">to_astra</span><span class="p">()</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="operator"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.operator">[docs]</a><span class="k">def</span> <span class="nf">operator</span><span class="p">(</span>
+    <span class="n">volume_geometry</span><span class="p">,</span>
+    <span class="n">projection_geometry</span><span class="p">,</span>
+    <span class="n">voxel_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">detector_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">additive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a new tomographic operator</span>
+
+<span class="sd">    :param volume_geometry: `VolumeGeometry`</span>
+<span class="sd">        The domain of the operator.</span>
+<span class="sd">    :param projection_geometry:  `ProjectionGeometry`</span>
+<span class="sd">        The range of the operator.</span>
+<span class="sd">    :param voxel_supersampling: `int` (optional)</span>
+<span class="sd">        Specifies the amount of voxel supersampling, i.e., how</span>
+<span class="sd">        many (one dimension) subvoxels are generated from a single</span>
+<span class="sd">        parent voxel. The default is 1.</span>
+<span class="sd">    :param detector_supersampling: `int` (optional)</span>
+<span class="sd">        Specifies the amount of detector supersampling, i.e., how</span>
+<span class="sd">        many rays are cast per detector. The default is 1.</span>
+<span class="sd">    :param additive: `bool` (optional)</span>
+<span class="sd">        Specifies whether the operator should overwrite its range</span>
+<span class="sd">        (forward) and domain (transpose). When `additive=True`,</span>
+<span class="sd">        the operator adds instead of overwrites. The default is</span>
+<span class="sd">        `additive=False`.</span>
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Operator</span><span class="p">(</span>
+        <span class="n">volume_geometry</span><span class="p">,</span>
+        <span class="n">projection_geometry</span><span class="p">,</span>
+        <span class="n">voxel_supersampling</span><span class="o">=</span><span class="n">voxel_supersampling</span><span class="p">,</span>
+        <span class="n">detector_supersampling</span><span class="o">=</span><span class="n">detector_supersampling</span><span class="p">,</span>
+        <span class="n">additive</span><span class="o">=</span><span class="n">additive</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="direct_project"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.direct_project">[docs]</a><span class="k">def</span> <span class="nf">direct_project</span><span class="p">(</span>
+    <span class="n">projector</span><span class="p">,</span> <span class="n">vol_link</span><span class="p">,</span> <span class="n">proj_link</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">additive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Project forward or backward</span>
+
+<span class="sd">    Forward/back projects a volume onto a projection dataset.</span>
+
+<span class="sd">    # TODO: Describe vol_data and proj_data</span>
+<span class="sd">    :param projector: ??</span>
+<span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
+<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
+
+<span class="sd">    :param forward: bool</span>
+<span class="sd">        True for forward project, False for backproject.</span>
+<span class="sd">    :param additive: bool</span>
+<span class="sd">        If True, add projection data to existing data. Otherwise</span>
+<span class="sd">        overwrite data.</span>
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">forward</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;project must be given a forward argument (True/False).&quot;</span><span class="p">)</span>
+
+    <span class="c1"># These constants have become the default. See:</span>
+    <span class="c1"># https://github.com/astra-toolbox/astra-toolbox/commit/4d673b3cdb6d27d430087758a8081e4a10267595</span>
+    <span class="n">MODE_SET</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">MODE_ADD</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ts</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">are_compatible</span><span class="p">(</span><span class="n">vol_link</span><span class="p">,</span> <span class="n">proj_link</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Cannot perform ASTRA projection on volume and projection data, because they are not compatible. &quot;</span>
+            <span class="s2">&quot;Usually, this indicates that the data are located on different computing devices. &quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># If necessary, the link may adjust the current state of the</span>
+    <span class="c1"># program temporarily to ensure ASTRA runs correctly. For torch</span>
+    <span class="c1"># tensors, this may entail changing the currently active GPU.</span>
+    <span class="k">with</span> <span class="n">vol_link</span><span class="o">.</span><span class="n">context</span><span class="p">():</span>
+        <span class="n">astra</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">direct_FPBP3D</span><span class="p">(</span>
+            <span class="n">projector</span><span class="p">,</span>
+            <span class="n">vol_link</span><span class="o">.</span><span class="n">linked_data</span><span class="p">,</span>
+            <span class="n">proj_link</span><span class="o">.</span><span class="n">linked_data</span><span class="p">,</span>
+            <span class="n">MODE_ADD</span> <span class="k">if</span> <span class="n">additive</span> <span class="k">else</span> <span class="n">MODE_SET</span><span class="p">,</span>
+            <span class="s2">&quot;FP&quot;</span> <span class="k">if</span> <span class="n">forward</span> <span class="k">else</span> <span class="s2">&quot;BP&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="direct_fp"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.direct_fp">[docs]</a><span class="k">def</span> <span class="nf">direct_fp</span><span class="p">(</span>
+    <span class="n">projector</span><span class="p">,</span> <span class="n">vol_data</span><span class="p">,</span> <span class="n">proj_data</span><span class="p">,</span> <span class="n">additive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Project forward or backward</span>
+
+<span class="sd">    Forward/back projects a volume onto a projection dataset.</span>
+
+<span class="sd">    # TODO: Describe vol_data and proj_data</span>
+<span class="sd">    :param projector: ??</span>
+<span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
+<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
+<span class="sd">    :param additive: bool</span>
+<span class="sd">        If True, add projection data to existing data. Otherwise</span>
+<span class="sd">        overwrite data.</span>
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">direct_project</span><span class="p">(</span>
+        <span class="n">projector</span><span class="p">,</span> <span class="n">vol_data</span><span class="p">,</span> <span class="n">proj_data</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">additive</span><span class="o">=</span><span class="n">additive</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="direct_bp"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.direct_bp">[docs]</a><span class="k">def</span> <span class="nf">direct_bp</span><span class="p">(</span>
+    <span class="n">projector</span><span class="p">,</span> <span class="n">vol_data</span><span class="p">,</span> <span class="n">proj_data</span><span class="p">,</span> <span class="n">additive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Project forward or backward</span>
+
+<span class="sd">    Forward/back projects a volume onto a projection dataset.</span>
+
+<span class="sd">    # TODO: Describe vol_data and proj_data</span>
+<span class="sd">    :param projector: ??</span>
+<span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
+<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
+<span class="sd">    :param additive: bool</span>
+<span class="sd">        If True, add projection data to existing data. Otherwise</span>
+<span class="sd">        overwrite data.</span>
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">direct_project</span><span class="p">(</span>
+        <span class="n">projector</span><span class="p">,</span> <span class="n">vol_data</span><span class="p">,</span> <span class="n">proj_data</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">additive</span><span class="o">=</span><span class="n">additive</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_to_link</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">link</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Operator"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.Operator">[docs]</a><span class="k">class</span> <span class="nc">Operator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Documentation for Operator</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">volume_geometry</span><span class="p">,</span>
+        <span class="n">projection_geometry</span><span class="p">,</span>
+        <span class="n">voxel_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">detector_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">additive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new tomographic operator</span>
+
+<span class="sd">        :param volume_geometry: `VolumeGeometry`</span>
+<span class="sd">            The domain of the operator.</span>
+<span class="sd">        :param projection_geometry:  `ProjectionGeometry`</span>
+<span class="sd">            The range of the operator.</span>
+<span class="sd">        :param voxel_supersampling: `int` (optional)</span>
+<span class="sd">            Specifies the amount of voxel supersampling, i.e., how</span>
+<span class="sd">            many (one dimension) subvoxels are generated from a single</span>
+<span class="sd">            parent voxel. The default is 1.</span>
+<span class="sd">        :param detector_supersampling: `int` (optional)</span>
+<span class="sd">            Specifies the amount of detector supersampling, i.e., how</span>
+<span class="sd">            many rays are cast per detector. The default is 1.</span>
+<span class="sd">        :param additive: `bool` (optional)</span>
+<span class="sd">            Specifies whether the operator should overwrite its range</span>
+<span class="sd">            (forward) and domain (transpose). When `additive=True`,</span>
+<span class="sd">            the operator adds instead of overwrites. The default is</span>
+<span class="sd">            `additive=False`.</span>
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Operator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume_geometry</span> <span class="o">=</span> <span class="n">volume_geometry</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">projection_geometry</span> <span class="o">=</span> <span class="n">projection_geometry</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">astra_projector</span> <span class="o">=</span> <span class="n">astra_projector</span><span class="p">(</span>
+            <span class="n">volume_geometry</span><span class="p">,</span>
+            <span class="n">projection_geometry</span><span class="p">,</span>
+            <span class="n">voxel_supersampling</span><span class="o">=</span><span class="n">voxel_supersampling</span><span class="p">,</span>
+            <span class="n">detector_supersampling</span><span class="o">=</span><span class="n">detector_supersampling</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">additive</span> <span class="o">=</span> <span class="n">additive</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transpose</span> <span class="o">=</span> <span class="n">BackprojectionOperator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_fp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">vlink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">volume_geometry</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection_geometry</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">additive</span><span class="p">:</span>
+                <span class="n">plink</span> <span class="o">=</span> <span class="n">vlink</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">range_shape</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">plink</span> <span class="o">=</span> <span class="n">vlink</span><span class="o">.</span><span class="n">new_empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">range_shape</span><span class="p">)</span>
+
+        <span class="n">direct_fp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">astra_projector</span><span class="p">,</span> <span class="n">vlink</span><span class="p">,</span> <span class="n">plink</span><span class="p">,</span> <span class="n">additive</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">additive</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">Data</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection_geometry</span><span class="p">,</span> <span class="n">plink</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">plink</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projection</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply backprojection</span>
+
+<span class="sd">        :param projection: `np.array` or `Data`</span>
+<span class="sd">            An input projection dataset. If a numpy array, the shape</span>
+<span class="sd">            must match the operator geometry. If the projection dataset is</span>
+<span class="sd">            an instance of `Data`, its geometry must match the</span>
+<span class="sd">            operator geometry.</span>
+<span class="sd">        :param out: `np.array` or `Data` (optional)</span>
+<span class="sd">            An optional output value. If a numpy array, the shape must</span>
+<span class="sd">            match the operator geometry. If the out parameter is an</span>
+<span class="sd">            instance of of `Data`, its geometry must match the</span>
+<span class="sd">            operator geometry.</span>
+<span class="sd">        :returns:</span>
+<span class="sd">            A volume dataset on which the projection dataset has been</span>
+<span class="sd">            backprojected.</span>
+<span class="sd">        :rtype: `Data`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection_geometry</span><span class="p">,</span> <span class="n">projection</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">vlink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">volume_geometry</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">additive</span><span class="p">:</span>
+                <span class="n">vlink</span> <span class="o">=</span> <span class="n">plink</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain_shape</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">vlink</span> <span class="o">=</span> <span class="n">plink</span><span class="o">.</span><span class="n">new_empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain_shape</span><span class="p">)</span>
+
+        <span class="n">direct_bp</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">astra_projector</span><span class="p">,</span> <span class="n">vlink</span><span class="p">,</span> <span class="n">plink</span><span class="p">,</span> <span class="n">additive</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">additive</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projection</span><span class="p">,</span> <span class="n">Data</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">volume_geometry</span><span class="p">,</span> <span class="n">vlink</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vlink</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply operator</span>
+
+<span class="sd">        :param volume: `np.array` or `Data`</span>
+<span class="sd">            An input volume. If a numpy array, the shape must match</span>
+<span class="sd">            the operator geometry. If the input volume is an instance</span>
+<span class="sd">            of `Data`, its geometry must match the operator geometry.</span>
+<span class="sd">        :param out: `np.array` or `Data` (optional)</span>
+<span class="sd">            An optional output value. If a numpy array, the shape must</span>
+<span class="sd">            match the operator geometry. If the out parameter is an</span>
+<span class="sd">            instance of of `Data`, its geometry must match the</span>
+<span class="sd">            operator geometry.</span>
+<span class="sd">        :returns:</span>
+<span class="sd">            A projection dataset on which the volume has been forward</span>
+<span class="sd">            projected.</span>
+<span class="sd">        :rtype: `Data`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fp</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Operator.transpose"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.Operator.transpose">[docs]</a>    <span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return backprojection operator&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transpose</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">T</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume_geometry</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection_geometry</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">domain_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">geometry_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">range_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">geometry_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackprojectionOperator"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.BackprojectionOperator">[docs]</a><span class="k">class</span> <span class="nc">BackprojectionOperator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transpose of the Forward operator</span>
+
+<span class="sd">    The idea of having a dedicated class for the backprojection</span>
+<span class="sd">    operator, which just saves a link to the &quot;real&quot; operator has</span>
+<span class="sd">    been shamelessly ripped from OpTomo.</span>
+
+<span class="sd">    We have the following property:</span>
+
+<span class="sd">    &gt;&gt;&gt; op = ts.operator(vg, pg)</span>
+<span class="sd">    &gt;&gt;&gt; op.T == op.T.T.T</span>
+
+<span class="sd">    It is nice that we do not allocate a new object every time we use</span>
+<span class="sd">    `op.T&#39;. If we did, users might save the transpose in a separate</span>
+<span class="sd">    variable for &#39;performance reasons&#39;, writing</span>
+
+<span class="sd">    &gt;&gt;&gt; op = ts.operator(vg, pg)</span>
+<span class="sd">    &gt;&gt;&gt; op_T = op.T</span>
+
+<span class="sd">    This is a waste of time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new tomographic operator</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BackprojectionOperator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projection</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply operator</span>
+
+<span class="sd">        :param projection: `np.array` or `Data`</span>
+<span class="sd">            An input projection. If a numpy array, the shape must match</span>
+<span class="sd">            the operator geometry. If the input volume is an instance</span>
+<span class="sd">            of `Data`, its geometry must match the operator geometry.</span>
+<span class="sd">        :param out: `np.array` or `Data` (optional)</span>
+<span class="sd">            An optional output value. If a numpy array, the shape must</span>
+<span class="sd">            match the operator geometry. If the out parameter is an</span>
+<span class="sd">            instance of of `Data`, its geometry must match the</span>
+<span class="sd">            operator geometry.</span>
+<span class="sd">        :returns:</span>
+<span class="sd">            A projection dataset on which the volume has been forward</span>
+<span class="sd">            projected.</span>
+<span class="sd">        :rtype: `Data`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_bp</span><span class="p">(</span><span class="n">projection</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BackprojectionOperator.transpose"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.BackprojectionOperator.transpose">[docs]</a>    <span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return forward projection operator&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">T</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">range</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">domain</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">domain_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">range_shape</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">range_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">domain_shape</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,594 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.links package &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tomosipo.qt package" href="tomosipo.qt.html" />
+    <link rel="prev" title="tomosipo.geometry package" href="tomosipo.geometry.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Tomosipo</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">tomosipo</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="tomosipo.html">tomosipo package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="tomosipo.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tomosipo.geometry.html">tomosipo.geometry package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">tomosipo.links package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tomosipo.qt.html">tomosipo.qt package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.Data">tomosipo.Data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.Operator">tomosipo.Operator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.astra">tomosipo.astra module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.cupy">tomosipo.cupy module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.odl">tomosipo.odl module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.phantom">tomosipo.phantom module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.torch_support">tomosipo.torch_support module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.utils">tomosipo.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.vector_calc">tomosipo.vector_calc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">tomosipo</a> &raquo;</li>
+        
+          <li><a href="tomosipo.html">tomosipo package</a> &raquo;</li>
+        
+      <li>tomosipo.links package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/tomosipo.links.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tomosipo-links-package">
+<h1>tomosipo.links package<a class="headerlink" href="#tomosipo-links-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-tomosipo.links.base">
+<span id="tomosipo-links-base-module"></span><h2>tomosipo.links.base module<a class="headerlink" href="#module-tomosipo.links.base" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.links.base.Link">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.links.base.</code><code class="sig-name descname">Link</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">initial_value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/base.html#Link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.base.Link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A General base class for link types</p>
+<dl class="py method">
+<dt id="tomosipo.links.base.Link.clone">
+<code class="sig-name descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/base.html#Link.clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.base.Link.clone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.base.Link.context">
+<code class="sig-name descname">context</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/base.html#Link.context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.base.Link.context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context-manager to manage ASTRA interactions</p>
+<p>This is a no-op for numpy data.</p>
+<p>This context-manager used, for example, for pytorch data on
+GPU to make sure the current CUDA stream is set to the device
+of the input data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.base.Link.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#tomosipo.links.base.Link.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the underlying data.</p>
+<p>Changes to the return value will be reflected in the astra
+data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.base.Link.linked_data">
+<em class="property">property </em><code class="sig-name descname">linked_data</code><a class="headerlink" href="#tomosipo.links.base.Link.linked_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a numpy array or GPULink object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.base.Link.new_empty">
+<code class="sig-name descname">new_empty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/base.html#Link.new_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.base.Link.new_empty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.base.Link.new_full">
+<code class="sig-name descname">new_full</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/base.html#Link.new_full"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.base.Link.new_full" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.base.Link.new_zeros">
+<code class="sig-name descname">new_zeros</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/base.html#Link.new_zeros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.base.Link.new_zeros" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.base.Link.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#tomosipo.links.base.Link.shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.links.base.are_compatible">
+<code class="sig-prename descclassname">tomosipo.links.base.</code><code class="sig-name descname">are_compatible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">link_a</span></em>, <em class="sig-param"><span class="n">link_b</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/base.html#are_compatible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.base.are_compatible" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.links.base.geometry_shape">
+<code class="sig-prename descclassname">tomosipo.links.base.</code><code class="sig-name descname">geometry_shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">geometry</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/base.html#geometry_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.base.geometry_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.links.base.link">
+<code class="sig-prename descclassname">tomosipo.links.base.</code><code class="sig-name descname">link</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">geometry</span></em>, <em class="sig-param"><span class="n">arr</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/base.html#link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.base.link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.links.cupy">
+<span id="tomosipo-links-cupy-module"></span><h2>tomosipo.links.cupy module<a class="headerlink" href="#module-tomosipo.links.cupy" title="Permalink to this headline">¶</a></h2>
+<p>This module adds support for cupy arrays as astra.data3d backends</p>
+<p>This module is not automatically imported by tomosipo, you must import
+it manually as follows:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tomosipo.cupy</span>
+</pre></div>
+</div>
+<p>Now, you may use cupy arrays as you would numpy arrays:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vg</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">volume</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vd</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">cupy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt id="tomosipo.links.cupy.CupyLink">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.links.cupy.</code><code class="sig-name descname">CupyLink</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">initial_value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/cupy.html#CupyLink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.cupy.CupyLink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tomosipo.links.base.Link" title="tomosipo.links.base.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">tomosipo.links.base.Link</span></code></a></p>
+<p>Link implementation for cupy arrays</p>
+<dl class="py method">
+<dt id="tomosipo.links.cupy.CupyLink.clone">
+<code class="sig-name descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/cupy.html#CupyLink.clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.cupy.CupyLink.clone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.cupy.CupyLink.context">
+<code class="sig-name descname">context</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/cupy.html#CupyLink.context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.cupy.CupyLink.context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context-manager to manage ASTRA interactions</p>
+<p>This context-manager makes sure that the current CUDA
+stream is set to the CUDA device of the current linked data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.cupy.CupyLink.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#tomosipo.links.cupy.CupyLink.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a shared array with the underlying data.</p>
+<p>Changes to the return value will be reflected in the astra
+data.</p>
+<p>If you want to avoid this, consider copying the data
+immediately, using <cite>x.data.copy()</cite> for instance.</p>
+<p>NOTE: if the underlying object is an Astra projection data
+type, the order of the axes will be in (Y, num_angles, X)
+order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>cupy.ndarray</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>cupy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.cupy.CupyLink.linked_data">
+<em class="property">property </em><code class="sig-name descname">linked_data</code><a class="headerlink" href="#tomosipo.links.cupy.CupyLink.linked_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a numpy array or GPULink object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.cupy.CupyLink.new_empty">
+<code class="sig-name descname">new_empty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/cupy.html#CupyLink.new_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.cupy.CupyLink.new_empty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.cupy.CupyLink.new_full">
+<code class="sig-name descname">new_full</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/cupy.html#CupyLink.new_full"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.cupy.CupyLink.new_full" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.cupy.CupyLink.new_zeros">
+<code class="sig-name descname">new_zeros</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/cupy.html#CupyLink.new_zeros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.cupy.CupyLink.new_zeros" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.links.numpy">
+<span id="tomosipo-links-numpy-module"></span><h2>tomosipo.links.numpy module<a class="headerlink" href="#module-tomosipo.links.numpy" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.links.numpy.NumpyLink">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.links.numpy.</code><code class="sig-name descname">NumpyLink</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">initial_value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/numpy.html#NumpyLink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.numpy.NumpyLink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tomosipo.links.base.Link" title="tomosipo.links.base.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">tomosipo.links.base.Link</span></code></a></p>
+<p>Link implementation for numpy arrays</p>
+<dl class="py method">
+<dt id="tomosipo.links.numpy.NumpyLink.clone">
+<code class="sig-name descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/numpy.html#NumpyLink.clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.numpy.NumpyLink.clone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.numpy.NumpyLink.context">
+<code class="sig-name descname">context</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/numpy.html#NumpyLink.context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.numpy.NumpyLink.context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context-manager to manage ASTRA interactions</p>
+<p>This is a no-op for numpy data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.numpy.NumpyLink.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#tomosipo.links.numpy.NumpyLink.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a shared numpy array with the underlying data.</p>
+<p>Changes to the return value will be reflected in the astra
+data.</p>
+<p>If you want to avoid this, consider copying the data
+immediately, using <cite>np.copy</cite> for instance.</p>
+<p>NOTE: if the underlying object is an Astra projection data
+type, the order of the axes will be in (Y, num_angles, X)
+order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.numpy.NumpyLink.linked_data">
+<em class="property">property </em><code class="sig-name descname">linked_data</code><a class="headerlink" href="#tomosipo.links.numpy.NumpyLink.linked_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a numpy array or GPULink object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.numpy.NumpyLink.new_empty">
+<code class="sig-name descname">new_empty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/numpy.html#NumpyLink.new_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.numpy.NumpyLink.new_empty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.numpy.NumpyLink.new_full">
+<code class="sig-name descname">new_full</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/numpy.html#NumpyLink.new_full"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.numpy.NumpyLink.new_full" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.numpy.NumpyLink.new_zeros">
+<code class="sig-name descname">new_zeros</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/numpy.html#NumpyLink.new_zeros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.numpy.NumpyLink.new_zeros" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.links.torch">
+<span id="tomosipo-links-torch-module"></span><h2>tomosipo.links.torch module<a class="headerlink" href="#module-tomosipo.links.torch" title="Permalink to this headline">¶</a></h2>
+<p>This module adds support for torch arrays as astra.data3d backends</p>
+<p>This module is not automatically imported by tomosipo, you must import
+it manually as follows:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tomosipo.torch_support</span>
+</pre></div>
+</div>
+<p>Now, you may use torch tensors as you would numpy arrays:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vg</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">volume</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vd</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Or directly on gpu:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vd</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">cuda</span><span class="p">())</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt id="tomosipo.links.torch.TorchLink">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.links.torch.</code><code class="sig-name descname">TorchLink</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">initial_value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/torch.html#TorchLink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.torch.TorchLink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tomosipo.links.base.Link" title="tomosipo.links.base.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">tomosipo.links.base.Link</span></code></a></p>
+<p>Link implementation for torch arrays</p>
+<dl class="py method">
+<dt id="tomosipo.links.torch.TorchLink.clone">
+<code class="sig-name descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/torch.html#TorchLink.clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.torch.TorchLink.clone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.torch.TorchLink.context">
+<code class="sig-name descname">context</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/torch.html#TorchLink.context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.torch.TorchLink.context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context-manager to manage ASTRA interactions</p>
+<p>This context-manager makes sure that the current CUDA
+stream is set to the CUDA device of the current linked data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.torch.TorchLink.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#tomosipo.links.torch.TorchLink.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a shared array with the underlying data.</p>
+<p>Changes to the return value will be reflected in the astra
+data.</p>
+<p>If you want to avoid this, consider copying the data
+immediately, using <cite>x.data.clone()</cite> for instance.</p>
+<p>NOTE: if the underlying object is an Astra projection data
+type, the order of the axes will be in (Y, num_angles, X)
+order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.torch.TorchLink.linked_data">
+<em class="property">property </em><code class="sig-name descname">linked_data</code><a class="headerlink" href="#tomosipo.links.torch.TorchLink.linked_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a numpy array or GPULink object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.torch.TorchLink.new_empty">
+<code class="sig-name descname">new_empty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/torch.html#TorchLink.new_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.torch.TorchLink.new_empty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.torch.TorchLink.new_full">
+<code class="sig-name descname">new_full</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/torch.html#TorchLink.new_full"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.torch.TorchLink.new_full" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.links.torch.TorchLink.new_zeros">
+<code class="sig-name descname">new_zeros</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/links/torch.html#TorchLink.new_zeros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.links.torch.TorchLink.new_zeros" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.links">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tomosipo.links" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tomosipo.qt.html" class="btn btn-neutral float-right" title="tomosipo.qt package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tomosipo.geometry.html" class="btn btn-neutral float-left" title="tomosipo.geometry package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

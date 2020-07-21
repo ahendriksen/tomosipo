@@ -1,0 +1,488 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.odl &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">tomosipo</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>tomosipo.odl</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tomosipo.odl</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">packaging</span> <span class="kn">import</span> <span class="n">version</span>
+<span class="kn">import</span> <span class="nn">astra</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">odl</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------------------------------------------------------------</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Cannot import ODL. </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Please make sure to install ODL. </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;You can install ODL using: </span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot; &gt; conda install -c odlgroup odl </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Or: </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot; &gt; pip install git+https://github.com/odlgroup/odl </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------------------------------------------------------------</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="k">raise</span>
+
+<span class="kn">import</span> <span class="nn">tomosipo</span> <span class="k">as</span> <span class="nn">ts</span>
+<span class="kn">from</span> <span class="nn">odl.tomo.backends.astra_setup</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">astra_projection_geometry</span><span class="p">,</span>
+    <span class="n">astra_volume_geometry</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="from_odl"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.odl.from_odl">[docs]</a><span class="k">def</span> <span class="nf">from_odl</span><span class="p">(</span><span class="n">geom_or_op</span><span class="p">):</span>
+    <span class="n">is_geometry</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geom_or_op</span><span class="p">,</span> <span class="n">odl</span><span class="o">.</span><span class="n">tomo</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">Geometry</span><span class="p">)</span>
+    <span class="n">is_volume</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geom_or_op</span><span class="p">,</span> <span class="n">odl</span><span class="o">.</span><span class="n">discr</span><span class="o">.</span><span class="n">DiscretizedSpace</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">is_geometry</span><span class="p">:</span>
+        <span class="c1"># convert fan beam and 2D parallel beam geometries to 3D geometries</span>
+        <span class="n">fan_geometry_cls</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">odl</span><span class="o">.</span><span class="n">tomo</span><span class="o">.</span><span class="n">FanBeamGeometry</span>
+            <span class="k">if</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">odl</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;0.7.0&quot;</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">odl</span><span class="o">.</span><span class="n">tomo</span><span class="o">.</span><span class="n">FanFlatGeometry</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geom_or_op</span><span class="p">,</span> <span class="n">fan_geometry_cls</span><span class="p">):</span>
+            <span class="n">geom_or_op</span> <span class="o">=</span> <span class="n">fan_to_cone_beam_geometry</span><span class="p">(</span><span class="n">geom_or_op</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geom_or_op</span><span class="p">,</span> <span class="n">odl</span><span class="o">.</span><span class="n">tomo</span><span class="o">.</span><span class="n">Parallel2dGeometry</span><span class="p">):</span>
+            <span class="n">geom_or_op</span> <span class="o">=</span> <span class="n">parallel_2d_to_3d_geometry</span><span class="p">(</span><span class="n">geom_or_op</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">from_astra</span><span class="p">(</span><span class="n">astra_projection_geometry</span><span class="p">(</span><span class="n">geom_or_op</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">is_volume</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">geom_or_op</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">geom_or_op</span> <span class="o">=</span> <span class="n">discretized_space_2d_to_3d</span><span class="p">(</span><span class="n">geom_or_op</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">from_astra</span><span class="p">(</span><span class="n">astra_volume_geometry</span><span class="p">(</span><span class="n">geom_or_op</span><span class="p">))</span>
+
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;The object of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">geom_or_op</span><span class="p">)</span><span class="si">}</span><span class="s2"> cannot be imported from ODL. &quot;</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="fan_to_cone_beam_geometry"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.odl.fan_to_cone_beam_geometry">[docs]</a><span class="k">def</span> <span class="nf">fan_to_cone_beam_geometry</span><span class="p">(</span><span class="n">fb_geometry</span><span class="p">,</span> <span class="n">det_z_span</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert 2D `odl.tomo.FanBeamGeometry` to 3D `odl.tomo.ConeBeamGeometry`,</span>
+<span class="sd">    by adding a trivial 0-th axis.</span>
+
+<span class="sd">    For odl&lt;=&#39;0.7.0&#39; the classes are `odl.tomo.FanFlatGeometry` and</span>
+<span class="sd">    `odl.tomo.ConeFlatGeometry`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fb_geometry : `odl.tomo.FanBeamGeometry`</span>
+<span class="sd">        The fan beam geometry to be converted.</span>
+<span class="sd">    det_z_span : float, optional</span>
+<span class="sd">        Size of the detector in the trivial 0-th dimension.</span>
+<span class="sd">        The default is ``1.``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    cb_geometry : `odl.tomo.ConeBeamGeometry`</span>
+<span class="sd">        The cone beam geometry that coincides with the given fan beam geometry</span>
+<span class="sd">        at the central slice (0-th coordinate equals zero).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">odl</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;0.7.0&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fb_geometry</span><span class="p">,</span> <span class="n">odl</span><span class="o">.</span><span class="n">tomo</span><span class="o">.</span><span class="n">FanFlatGeometry</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expected a `FanFlatGeometry`&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fb_geometry</span><span class="p">,</span> <span class="n">odl</span><span class="o">.</span><span class="n">tomo</span><span class="o">.</span><span class="n">FanBeamGeometry</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expected a `FanBeamGeometry`&quot;</span><span class="p">)</span>
+    <span class="n">apart</span> <span class="o">=</span> <span class="n">fb_geometry</span><span class="o">.</span><span class="n">motion_partition</span>
+    <span class="n">det_min_pt</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">det_z_span</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">fb_geometry</span><span class="o">.</span><span class="n">det_partition</span><span class="o">.</span><span class="n">min_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">det_max_pt</span> <span class="o">=</span> <span class="p">[</span><span class="o">+</span><span class="n">det_z_span</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">fb_geometry</span><span class="o">.</span><span class="n">det_partition</span><span class="o">.</span><span class="n">max_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">dpart</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">discr</span><span class="o">.</span><span class="n">RectPartition</span><span class="p">(</span>
+        <span class="n">odl</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">IntervalProd</span><span class="p">(</span><span class="n">det_min_pt</span><span class="p">,</span> <span class="n">det_max_pt</span><span class="p">),</span>
+        <span class="n">odl</span><span class="o">.</span><span class="n">discr</span><span class="o">.</span><span class="n">RectGrid</span><span class="p">([</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">fb_geometry</span><span class="o">.</span><span class="n">det_partition</span><span class="o">.</span><span class="n">coord_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+    <span class="p">)</span>
+    <span class="n">src_radius</span> <span class="o">=</span> <span class="n">fb_geometry</span><span class="o">.</span><span class="n">src_radius</span>
+    <span class="n">det_radius</span> <span class="o">=</span> <span class="n">fb_geometry</span><span class="o">.</span><span class="n">det_radius</span>
+    <span class="k">if</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">odl</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;0.7.0&quot;</span><span class="p">):</span>
+        <span class="n">det_curvature_radius</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">fb_geometry</span><span class="o">.</span><span class="n">det_curvature_radius</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="p">(</span><span class="n">fb_geometry</span><span class="o">.</span><span class="n">det_curvature_radius</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="n">src_to_det_init</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">fb_geometry</span><span class="o">.</span><span class="n">src_to_det_init</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">fb_geometry</span><span class="o">.</span><span class="n">src_to_det_init</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">]</span>
+    <span class="n">det_axes_init</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fb_geometry</span><span class="o">.</span><span class="n">det_axis_init</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fb_geometry</span><span class="o">.</span><span class="n">det_axis_init</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+    <span class="p">)</span>
+    <span class="n">translation</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fb_geometry</span><span class="o">.</span><span class="n">translation</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fb_geometry</span><span class="o">.</span><span class="n">translation</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">odl</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;0.7.0&quot;</span><span class="p">):</span>
+        <span class="n">cb_geometry</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">tomo</span><span class="o">.</span><span class="n">ConeFlatGeometry</span><span class="p">(</span>
+            <span class="n">apart</span><span class="p">,</span>
+            <span class="n">dpart</span><span class="p">,</span>
+            <span class="n">src_radius</span><span class="p">,</span>
+            <span class="n">det_radius</span><span class="p">,</span>
+            <span class="n">pitch</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+            <span class="n">src_to_det_init</span><span class="o">=</span><span class="n">src_to_det_init</span><span class="p">,</span>
+            <span class="n">det_axes_init</span><span class="o">=</span><span class="n">det_axes_init</span><span class="p">,</span>
+            <span class="n">translation</span><span class="o">=</span><span class="n">translation</span><span class="p">,</span>
+            <span class="n">check_bounds</span><span class="o">=</span><span class="n">fb_geometry</span><span class="o">.</span><span class="n">check_bounds</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">cb_geometry</span>
+    <span class="n">cb_geometry</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">tomo</span><span class="o">.</span><span class="n">ConeBeamGeometry</span><span class="p">(</span>
+        <span class="n">apart</span><span class="p">,</span>
+        <span class="n">dpart</span><span class="p">,</span>
+        <span class="n">src_radius</span><span class="p">,</span>
+        <span class="n">det_radius</span><span class="p">,</span>
+        <span class="n">det_curvature_radius</span><span class="o">=</span><span class="n">det_curvature_radius</span><span class="p">,</span>
+        <span class="n">pitch</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="n">src_to_det_init</span><span class="o">=</span><span class="n">src_to_det_init</span><span class="p">,</span>
+        <span class="n">det_axes_init</span><span class="o">=</span><span class="n">det_axes_init</span><span class="p">,</span>
+        <span class="n">translation</span><span class="o">=</span><span class="n">translation</span><span class="p">,</span>
+        <span class="n">check_bounds</span><span class="o">=</span><span class="n">fb_geometry</span><span class="o">.</span><span class="n">check_bounds</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">cb_geometry</span></div>
+
+
+<div class="viewcode-block" id="parallel_2d_to_3d_geometry"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.odl.parallel_2d_to_3d_geometry">[docs]</a><span class="k">def</span> <span class="nf">parallel_2d_to_3d_geometry</span><span class="p">(</span><span class="n">pb2d_geometry</span><span class="p">,</span> <span class="n">det_z_shape</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">det_z_span</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert `odl.tomo.Parallel2dGeometry` to `odl.tomo.Parallel3dAxisGeometry`,</span>
+<span class="sd">    by adding a trivial 0-th axis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pb2d_geometry : `odl.tomo.Parallel2dGeometry`</span>
+<span class="sd">        The 2d parallel beam geometry to be converted.</span>
+<span class="sd">    det_z_shape : int, optional</span>
+<span class="sd">        Number of detector pixels in the 0-th dimension.</span>
+<span class="sd">        Can be used to batch multiple 2d projections into one 3d projection.</span>
+<span class="sd">    det_z_span : float or 2-tuple of float, optional</span>
+<span class="sd">        Minimum and maximum point of the 0-th axis (like passed to</span>
+<span class="sd">        `uniform_partition`).</span>
+<span class="sd">        If a single float is passed, ``(-det_z_span/2., det_z_span/2.)`` is</span>
+<span class="sd">        used.</span>
+<span class="sd">        If `None` (the default), ``(-det_z_shape/2., det_z_shape/2.)`` is used,</span>
+<span class="sd">        resulting in a partition with cell side ``1.``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pb3d_geometry : `odl.tomo.Parallel3dAxisGeometry`</span>
+<span class="sd">        A 3d parallel beam geometry that coincides with the given 2d geometry</span>
+<span class="sd">        in every slice (0-th coordinate fixed).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pb2d_geometry</span><span class="p">,</span> <span class="n">odl</span><span class="o">.</span><span class="n">tomo</span><span class="o">.</span><span class="n">Parallel2dGeometry</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expected a `Parallel2dGeometry`&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">odl</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;0.7.0&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+        <span class="n">astra</span><span class="o">.</span><span class="n">__version__</span>
+    <span class="p">)</span> <span class="o">&gt;</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;1.9.0.dev&quot;</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;versions of odl and astra are incompatible, the &quot;</span>
+            <span class="s2">&quot;RayTransform for the 3d geometry will scale correctly in &quot;</span>
+            <span class="s2">&quot;contrast to the 2d geometry, which is multiplied by the factor &quot;</span>
+            <span class="s2">&quot;``1. / pb2d_geometry.det_partition.cell_volume``.&quot;</span>
+        <span class="p">)</span>
+    <span class="n">apart</span> <span class="o">=</span> <span class="n">pb2d_geometry</span><span class="o">.</span><span class="n">motion_partition</span>
+    <span class="k">if</span> <span class="n">det_z_span</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">det_z_span</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">det_z_shape</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">det_z_shape</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">det_z_span</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">det_z_span</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">det_z_span</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">det_z_span</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">det_z_partition</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">uniform_partition</span><span class="p">(</span>
+        <span class="n">min_pt</span><span class="o">=</span><span class="n">det_z_span</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_pt</span><span class="o">=</span><span class="n">det_z_span</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="n">det_z_shape</span>
+    <span class="p">)</span>
+    <span class="n">det_min_pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">det_z_partition</span><span class="o">.</span><span class="n">min_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pb2d_geometry</span><span class="o">.</span><span class="n">det_partition</span><span class="o">.</span><span class="n">min_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">det_max_pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">det_z_partition</span><span class="o">.</span><span class="n">max_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pb2d_geometry</span><span class="o">.</span><span class="n">det_partition</span><span class="o">.</span><span class="n">max_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">dpart</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">discr</span><span class="o">.</span><span class="n">RectPartition</span><span class="p">(</span>
+        <span class="n">odl</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">IntervalProd</span><span class="p">(</span><span class="n">det_min_pt</span><span class="p">,</span> <span class="n">det_max_pt</span><span class="p">),</span>
+        <span class="n">odl</span><span class="o">.</span><span class="n">discr</span><span class="o">.</span><span class="n">RectGrid</span><span class="p">(</span>
+            <span class="n">det_z_partition</span><span class="o">.</span><span class="n">coord_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">pb2d_geometry</span><span class="o">.</span><span class="n">det_partition</span><span class="o">.</span><span class="n">coord_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="c1"># The RayTransform in 2d seems to act agnostic of the parameters</span>
+    <span class="c1"># `det_pos_init`, `det_axes_init` and `translation`.</span>
+    <span class="c1"># Seems to me like a bug, could be related to</span>
+    <span class="c1"># https://github.com/odlgroup/odl/issues/359),</span>
+    <span class="c1"># The 3d transform would handle them, so the results will be inconsistent.</span>
+    <span class="c1"># Therefore i also did not test the following definitions.</span>
+    <span class="n">det_pos_init</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pb2d_geometry</span><span class="o">.</span><span class="n">det_pos_init</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pb2d_geometry</span><span class="o">.</span><span class="n">det_pos_init</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">det_axes_init</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pb2d_geometry</span><span class="o">.</span><span class="n">det_axis_init</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pb2d_geometry</span><span class="o">.</span><span class="n">det_axis_init</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+    <span class="p">)</span>
+    <span class="n">translation</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pb2d_geometry</span><span class="o">.</span><span class="n">translation</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pb2d_geometry</span><span class="o">.</span><span class="n">translation</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">pb3d_geometry</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">tomo</span><span class="o">.</span><span class="n">Parallel3dAxisGeometry</span><span class="p">(</span>
+        <span class="n">apart</span><span class="p">,</span>
+        <span class="n">dpart</span><span class="p">,</span>
+        <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="n">det_pos_init</span><span class="o">=</span><span class="n">det_pos_init</span><span class="p">,</span>
+        <span class="n">det_axes_init</span><span class="o">=</span><span class="n">det_axes_init</span><span class="p">,</span>
+        <span class="n">translation</span><span class="o">=</span><span class="n">translation</span><span class="p">,</span>
+        <span class="n">check_bounds</span><span class="o">=</span><span class="n">pb2d_geometry</span><span class="o">.</span><span class="n">check_bounds</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">pb3d_geometry</span></div>
+
+
+<div class="viewcode-block" id="discretized_space_2d_to_3d"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.odl.discretized_space_2d_to_3d">[docs]</a><span class="k">def</span> <span class="nf">discretized_space_2d_to_3d</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">z_shape</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">z_span</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert 2D `odl.discr.DiscretizedSpace` to 3D by adding a 0-th axis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    space : `odl.discr.DiscretizedSpace`</span>
+<span class="sd">        2D space to be converted.</span>
+<span class="sd">    z_shape : int, optional</span>
+<span class="sd">        Number of points in the 0-th axis.</span>
+<span class="sd">    z_span : float, optional</span>
+<span class="sd">        Minimum and maximum point of the 0-th axis (like passed to</span>
+<span class="sd">        `uniform_partition`).</span>
+<span class="sd">        If a single float is passed, ``(-z_span/2., z_span/2.)`` is</span>
+<span class="sd">        used.</span>
+<span class="sd">        If `None` (the default), ``(-z_shape/2., z_shape/2.)`` is used,</span>
+<span class="sd">        resulting in a partition with cell side ``1.``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    space3d : `odl.discr.DiscretizedSpace`</span>
+<span class="sd">        The 3D space that contains the given 2D space as a single</span>
+<span class="sd">        0-th-axis-slice.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">z_span</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">z_span</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">z_shape</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">z_shape</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">z_span</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">z_span</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">z_span</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">z_span</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">z_partition</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">uniform_partition</span><span class="p">(</span>
+        <span class="n">min_pt</span><span class="o">=</span><span class="n">z_span</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_pt</span><span class="o">=</span><span class="n">z_span</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="n">z_shape</span>
+    <span class="p">)</span>
+    <span class="n">rect_partition</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">discr</span><span class="o">.</span><span class="n">RectPartition</span><span class="p">(</span>
+        <span class="n">odl</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">IntervalProd</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">z_partition</span><span class="o">.</span><span class="n">min_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">space</span><span class="o">.</span><span class="n">min_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">space</span><span class="o">.</span><span class="n">min_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="p">[</span><span class="n">z_partition</span><span class="o">.</span><span class="n">max_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">space</span><span class="o">.</span><span class="n">max_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">space</span><span class="o">.</span><span class="n">max_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+        <span class="p">),</span>
+        <span class="n">odl</span><span class="o">.</span><span class="n">discr</span><span class="o">.</span><span class="n">RectGrid</span><span class="p">(</span>
+            <span class="n">z_partition</span><span class="o">.</span><span class="n">coord_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">space</span><span class="o">.</span><span class="n">partition</span><span class="o">.</span><span class="n">coord_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">space</span><span class="o">.</span><span class="n">partition</span><span class="o">.</span><span class="n">coord_vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">tensor_space</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">space_utils</span><span class="o">.</span><span class="n">tensor_space</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">z_shape</span><span class="p">,</span> <span class="n">space</span><span class="o">.</span><span class="n">tspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">space</span><span class="o">.</span><span class="n">tspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">space</span><span class="o">.</span><span class="n">tspace</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="n">impl</span><span class="o">=</span><span class="n">space</span><span class="o">.</span><span class="n">tspace</span><span class="o">.</span><span class="n">impl</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">odl</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;0.7.0&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">odl</span><span class="o">.</span><span class="n">discr</span><span class="o">.</span><span class="n">DiscreteLp</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">fspace</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">odl</span><span class="o">.</span><span class="n">IntervalProd</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s2">&quot;for odl &lt;= 0.7.0 only `DiscreteLp` spaces on `IntervalProd` &quot;</span>
+                <span class="s2">&quot;sets are supported&quot;</span>
+            <span class="p">)</span>
+        <span class="n">function_space</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">FunctionSpace</span><span class="p">(</span>
+            <span class="n">odl</span><span class="o">.</span><span class="n">IntervalProd</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">z_partition</span><span class="o">.</span><span class="n">min_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">space</span><span class="o">.</span><span class="n">fspace</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">min_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">space</span><span class="o">.</span><span class="n">fspace</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">min_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">],</span>
+                <span class="p">[</span>
+                    <span class="n">z_partition</span><span class="o">.</span><span class="n">max_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">space</span><span class="o">.</span><span class="n">fspace</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">max_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">space</span><span class="o">.</span><span class="n">fspace</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">max_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">out_dtype</span><span class="o">=</span><span class="n">space</span><span class="o">.</span><span class="n">fspace</span><span class="o">.</span><span class="n">out_dtype</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">space3d</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">discr</span><span class="o">.</span><span class="n">DiscreteLp</span><span class="p">(</span><span class="n">function_space</span><span class="p">,</span> <span class="n">rect_partition</span><span class="p">,</span> <span class="n">tensor_space</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">space3d</span>
+    <span class="n">space3d</span> <span class="o">=</span> <span class="n">odl</span><span class="o">.</span><span class="n">discr</span><span class="o">.</span><span class="n">DiscretizedSpace</span><span class="p">(</span><span class="n">rect_partition</span><span class="p">,</span> <span class="n">tensor_space</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">space3d</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

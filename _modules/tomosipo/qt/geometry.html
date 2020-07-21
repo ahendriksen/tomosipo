@@ -1,0 +1,311 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.qt.geometry &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tomosipo</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>tomosipo.qt.geometry</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tomosipo.qt.geometry</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph.Qt</span> <span class="kn">import</span> <span class="n">QtCore</span>
+<span class="kn">import</span> <span class="nn">pyqtgraph.opengl</span> <span class="k">as</span> <span class="nn">gl</span>
+<span class="kn">from</span> <span class="nn">.display</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_app</span><span class="p">,</span>
+    <span class="n">rainbow_colormap</span><span class="p">,</span>
+    <span class="n">display_backends</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">tomosipo.geometry.base_projection</span> <span class="kn">import</span> <span class="n">ProjectionGeometry</span><span class="p">,</span> <span class="n">is_projection</span>
+<span class="kn">from</span> <span class="nn">tomosipo.geometry.volume</span> <span class="kn">import</span> <span class="n">VolumeGeometry</span><span class="p">,</span> <span class="n">is_volume</span>
+<span class="kn">from</span> <span class="nn">tomosipo.geometry.volume_vec</span> <span class="kn">import</span> <span class="n">VolumeVectorGeometry</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
+
+
+<div class="viewcode-block" id="to_mesh_items"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.geometry.to_mesh_items">[docs]</a><span class="nd">@singledispatch</span>
+<span class="k">def</span> <span class="nf">to_mesh_items</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="num_colors"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.geometry.num_colors">[docs]</a><span class="nd">@singledispatch</span>
+<span class="k">def</span> <span class="nf">num_colors</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="vg_num_colors"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.geometry.vg_num_colors">[docs]</a><span class="nd">@num_colors</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">VolumeGeometry</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">vg_num_colors</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="vg_vec_num_colors"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.geometry.vg_vec_num_colors">[docs]</a><span class="nd">@num_colors</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">VolumeVectorGeometry</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">vg_vec_num_colors</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="pg_num_colors"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.geometry.pg_num_colors">[docs]</a><span class="nd">@num_colors</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ProjectionGeometry</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pg_num_colors</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="pg_to_mesh_items"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.geometry.pg_to_mesh_items">[docs]</a><span class="nd">@to_mesh_items</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ProjectionGeometry</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pg_to_mesh_items</span><span class="p">(</span><span class="n">pg</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="n">pg</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">to_vec</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="n">pg</span><span class="o">.</span><span class="n">num_angles</span>
+    <span class="n">src_curve_color</span><span class="p">,</span> <span class="n">det_color</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">colors</span>
+
+    <span class="c1"># Drawing options:</span>
+    <span class="n">curve_opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;line_strip&quot;</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">det_curve_opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="n">curve_opts</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">det_color</span><span class="p">)</span>
+    <span class="n">src_curve_opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="n">curve_opts</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">src_curve_color</span><span class="p">)</span>
+    <span class="n">ray_opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="n">curve_opts</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
+    <span class="n">det_opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drawEdges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">det_color</span><span class="p">)</span>
+
+    <span class="c1"># Detector Curve</span>
+    <span class="n">det_curve</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">GLLinePlotItem</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">det_pos</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">**</span><span class="n">det_curve_opts</span><span class="p">)</span>
+
+    <span class="c1"># Detector</span>
+    <span class="c1"># Get corners in XYZ coordinates:</span>
+    <span class="n">corners</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">corners</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">meshdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">corners</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">3</span><span class="p">)))</span>
+    <span class="n">det_item</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">GLMeshItem</span><span class="p">(</span><span class="n">vertexes</span><span class="o">=</span><span class="n">meshdata</span><span class="p">,</span> <span class="o">**</span><span class="n">det_opts</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pg</span><span class="o">.</span><span class="n">is_cone</span><span class="p">:</span>
+        <span class="c1"># Source curve</span>
+        <span class="n">src_item</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">GLLinePlotItem</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">src_pos</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">**</span><span class="n">src_curve_opts</span><span class="p">)</span>
+        <span class="c1"># Rays</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">src_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">ray_items</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">gl</span><span class="o">.</span><span class="n">GLLinePlotItem</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">source</span><span class="p">,</span> <span class="n">corner</span><span class="p">]),</span> <span class="o">**</span><span class="n">ray_opts</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">corner</span> <span class="ow">in</span> <span class="n">corners</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">src_item</span><span class="p">,</span> <span class="o">*</span><span class="n">ray_items</span><span class="p">,</span> <span class="n">det_curve</span><span class="p">,</span> <span class="n">det_item</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">pg</span><span class="o">.</span><span class="n">is_parallel</span><span class="p">:</span>
+        <span class="c1"># Rays</span>
+        <span class="n">ray</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ray_dir</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># XYZ order</span>
+        <span class="n">ray</span> <span class="o">*=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">det_sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">ray_items</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">gl</span><span class="o">.</span><span class="n">GLLinePlotItem</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">corner</span> <span class="o">-</span> <span class="n">ray</span><span class="p">,</span> <span class="n">corner</span> <span class="o">+</span> <span class="n">ray</span><span class="p">]),</span> <span class="o">**</span><span class="n">ray_opts</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">corner</span> <span class="ow">in</span> <span class="n">corners</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">ray_items</span><span class="p">,</span> <span class="n">det_curve</span><span class="p">,</span> <span class="n">det_item</span><span class="p">)</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected cone or parallel geometry&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="vg_to_mesh_items"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.geometry.vg_to_mesh_items">[docs]</a><span class="nd">@to_mesh_items</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">VolumeGeometry</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">vg_to_mesh_items</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">vg_vec_to_mesh_items</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">to_vec</span><span class="p">(),</span> <span class="n">colors</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="vg_vec_to_mesh_items"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.geometry.vg_vec_to_mesh_items">[docs]</a><span class="nd">@to_mesh_items</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">VolumeVectorGeometry</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">vg_vec_to_mesh_items</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="n">vg</span><span class="o">.</span><span class="n">num_steps</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">vg</span><span class="o">.</span><span class="n">corners</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">volume_mesh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">GLMeshItem</span><span class="p">(</span>
+            <span class="n">vertexes</span><span class="o">=</span><span class="n">volume_mesh</span><span class="p">,</span>
+            <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+            <span class="n">drawEdges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">drawFaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">_take</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">xs</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

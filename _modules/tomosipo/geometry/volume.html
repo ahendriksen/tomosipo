@@ -1,0 +1,717 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.geometry.volume &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tomosipo</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>tomosipo.geometry.volume</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tomosipo.geometry.volume</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">astra</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">tomosipo</span> <span class="k">as</span> <span class="nn">ts</span>
+<span class="kn">from</span> <span class="nn">.transform</span> <span class="kn">import</span> <span class="n">Transform</span>
+<span class="kn">from</span> <span class="nn">.volume_vec</span> <span class="kn">import</span> <span class="n">VolumeVectorGeometry</span>
+
+
+<div class="viewcode-block" id="is_volume"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.is_volume">[docs]</a><span class="k">def</span> <span class="nf">is_volume</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determine if a geometry is a volume geometry</span>
+
+<span class="sd">    The object can be a fixed volume geometry or a vector volume</span>
+<span class="sd">    geometry.</span>
+
+<span class="sd">    :param g: a geometry object</span>
+<span class="sd">    :returns: `True` if `g` is a volume geometry</span>
+<span class="sd">    :rtype: bool</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">VolumeGeometry</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">VolumeVectorGeometry</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="volume"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.volume">[docs]</a><span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create an axis-aligned volume geometry</span>
+
+<span class="sd">    A VolumeGeometry is an axis-aligned cuboid centered on `pos`.</span>
+
+<span class="sd">    You may provide a combination of arguments to create a new volume geometry:</span>
+<span class="sd">    - shape (size will equal shape)</span>
+<span class="sd">    - shape and pos (size will equal shape)</span>
+<span class="sd">    - shape and size (volume will be centered on the origin)</span>
+<span class="sd">    - shape, pos, and size.</span>
+<span class="sd">    - shape and extent</span>
+
+<span class="sd">    :param shape: `int` or (`int`, `int`, `int`)</span>
+<span class="sd">        Shape of the voxel grid underlying the volume.</span>
+<span class="sd">    :param extent: `(scalar, scalar)` or `((scalar, scalar), (scalar, scalar), (scalar, scalar))`</span>
+<span class="sd">        The minimal and maximal value of the volume in the Z, Y, X</span>
+<span class="sd">        coordinate. If only one minimal and maximal value is provided,</span>
+<span class="sd">        then it is applied to all coordinates.</span>
+<span class="sd">    :param center: `scalar` or `(scalar, scalar, scalar)`</span>
+<span class="sd">    :param size: `scalar` or `(scalar, scalar, scalar)`</span>
+<span class="sd">    :returns: a volume geometry of the unit cube with shape as given.</span>
+<span class="sd">    :rtype: VolumeGeometry</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_shape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="n">pos_present</span> <span class="o">=</span> <span class="n">pos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="n">size_present</span> <span class="o">=</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="n">extent_present</span> <span class="o">=</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">extent_present</span> <span class="ow">and</span> <span class="n">pos_present</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;ts.volume does not accept both `extent` and `pos` arguments. &quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">extent_present</span> <span class="ow">and</span> <span class="n">size_present</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;ts.volume does not accept both `extent` and `size` arguments. &quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">extent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># shape only</span>
+        <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">extent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># shape and pos</span>
+        <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">pos</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">extent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># shape and size</span>
+        <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">extent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># shape, pos, and size</span>
+        <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">extent_present</span><span class="p">:</span>
+        <span class="n">pos</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">_extent_to_pos_size</span><span class="p">(</span><span class="n">extent</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="kc">False</span>
+    <span class="p">),</span> <span class="s2">&quot;Dead code path. Please report error. Perhaps you passed `shape=None`?&quot;</span></div>
+
+
+<div class="viewcode-block" id="random_volume"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.random_volume">[docs]</a><span class="k">def</span> <span class="nf">random_volume</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Generates a random volume geometry</span>
+
+<span class="sd">    :returns: a random volume geometry</span>
+<span class="sd">    :rtype: `VolumeGeometry`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">volume</span><span class="p">(</span>
+        <span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span>
+        <span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+        <span class="n">size</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_pos_size_to_extent</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_pos</span><span class="p">(</span><span class="n">pos</span><span class="p">))</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_size</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
+
+    <span class="n">min_extent</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">size</span>
+    <span class="n">max_extent</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">size</span>
+
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">min_extent</span><span class="p">,</span> <span class="n">max_extent</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_extent_to_pos_size</span><span class="p">(</span><span class="n">extent</span><span class="p">):</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_size</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">extent</span><span class="p">))</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_pos</span><span class="p">(</span><span class="nb">tuple</span><span class="p">((</span><span class="n">r</span> <span class="o">+</span> <span class="n">l</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">extent</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="VolumeGeometry"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry">[docs]</a><span class="k">class</span> <span class="nc">VolumeGeometry</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;VolumeGeometry</span>
+
+<span class="sd">    A VolumeGeometry describes a 3D axis-aligned cuboid that is</span>
+<span class="sd">    divided into voxels.</span>
+
+<span class="sd">    The number of voxels in each dimension determine the object&#39;s</span>
+<span class="sd">    `shape&#39;. The voxel size is thus determined by the size of</span>
+<span class="sd">    the object and its shape.</span>
+
+<span class="sd">    A VolumeGeometry cannot move in time and cannot be arbitrarily</span>
+<span class="sd">    oriented. To obtain a moving volume geometry, convert the object</span>
+<span class="sd">    to a vector representation using `.to_vec()`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new volume geometry</span>
+
+<span class="sd">        A VolumeGeometry is an axis-aligned cuboid centered on</span>
+<span class="sd">        `pos`.</span>
+
+<span class="sd">        If not `size&#39; is not given, then the voxel size defaults to 1</span>
+<span class="sd">        in each dimension.</span>
+
+<span class="sd">        VolumeGeometry is indexed(Z, Y, X) just like numpy. The</span>
+<span class="sd">        conversion to and from an astra_vol_geom depends on this.</span>
+
+<span class="sd">        :param shape: `(int, int, int)` or `int`</span>
+<span class="sd">            The shape of the volume as measured in voxels.</span>
+<span class="sd">        :param pos: `0.0`, or `(scalar, scalar, scalar)`</span>
+<span class="sd">            The center of the object. To center on the origin, pass</span>
+<span class="sd">            `0` (the default).</span>
+<span class="sd">        :param size: `scalar` or `(scalar, scalar, scalar)`</span>
+<span class="sd">            The size of the object (must be non-negative). If `size`</span>
+<span class="sd">            is a sing value, the volume equally sized in each</span>
+<span class="sd">            dimension.</span>
+<span class="sd">        :returns: a new volume geometry</span>
+<span class="sd">        :rtype: `VolumeGeometry`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_shape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_pos</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Make geometry where voxel size equals (1, 1, 1)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">volume_vec</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_size</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+            <span class="c1"># voxel size per dimension</span>
+            <span class="n">vs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sz</span> <span class="o">/</span> <span class="n">sh</span> <span class="k">for</span> <span class="n">sz</span><span class="p">,</span> <span class="n">sh</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">shape</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">volume_vec</span><span class="p">(</span>
+                <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="p">(</span><span class="n">vs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">vs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vs</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+            <span class="p">)</span>
+
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;ts.volume(</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;    shape=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;    pos=</span><span class="si">{</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;    size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;)&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">VolumeGeometry</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_inner</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Slice the volume geometry</span>
+
+<span class="sd">        The key may be up to three-dimensional. Both examples below</span>
+<span class="sd">        yield the same geometry describing the axial central slice:</span>
+
+<span class="sd">        &gt;&gt;&gt; ts.volume(128)[64, :, :]</span>
+<span class="sd">        &gt;&gt;&gt; ts.volume(128)[64]</span>
+
+<span class="sd">        :param key:</span>
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">new_inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">key</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">new_inner</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">new_inner</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">new_inner</span><span class="o">.</span><span class="n">size</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if other volume is contained in current volume</span>
+
+<span class="sd">        :param other: VolumeGeometry</span>
+<span class="sd">            Another volumegeometry.</span>
+<span class="sd">        :returns: True if other Volume is contained in this one.</span>
+<span class="sd">        :rtype: Boolean</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Find the left and right boundary in each dimension</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">o</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">extent</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="c1"># def __abs__(self):</span>
+    <span class="c1">#     return np.prod(self.size)</span>
+
+    <span class="c1"># def __sub__(self, other):</span>
+    <span class="c1">#     vg = self.copy()</span>
+    <span class="c1">#     vg.extent = tuple(</span>
+    <span class="c1">#         (ls - lo, rs - ro)</span>
+    <span class="c1">#         for ((ls, rs), (lo, ro)) in zip(self.extent, other.extent)</span>
+    <span class="c1">#     )</span>
+    <span class="c1">#     return vg</span>
+
+<div class="viewcode-block" id="VolumeGeometry.to_astra"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry.to_astra">[docs]</a>    <span class="k">def</span> <span class="nf">to_astra</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return an Astra volume geometry.</span>
+
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># astra.create_vol_geom(Y, X, Z, minx, maxx, miny, maxy, minz, maxz):</span>
+        <span class="c1">#</span>
+        <span class="c1"># :returns: A 3D volume geometry of size :math:`Y \times X \times</span>
+        <span class="c1"># Z`, windowed as :math:`minx \leq x \leq maxx` and :math:`miny</span>
+        <span class="c1"># \leq y \leq maxy` and :math:`minz \leq z \leq maxz` .</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span>
+        <span class="k">return</span> <span class="n">astra</span><span class="o">.</span><span class="n">create_vol_geom</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">*</span><span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="o">*</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">*</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="VolumeGeometry.to_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry.to_vec">[docs]</a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a vector representation of the volume</span>
+
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype: VolumeVectorGeometry</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span></div>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                Properties                               #</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The number of orientations and positions of this volume</span>
+
+<span class="sd">        A VolumeGeometry always has only a single step.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">pos</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">w</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">w</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">v</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">v</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">u</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sizes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the absolute sizes of the volume</span>
+
+<span class="sd">        For consistency with vector geometries, `sizes` is an array</span>
+<span class="sd">        with shape `(1, 3)`.</span>
+
+<span class="sd">        :returns: a numpy array of shape `(1, 3)` describing the size of the object.</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">sizes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the absolute size of the volume</span>
+
+<span class="sd">        :returns: the size in each dimension of the volume</span>
+<span class="sd">        :rtype: `(scalar, scalar, scalar)`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">voxel_sizes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The voxel sizes of the volume</span>
+
+<span class="sd">        *Note*: For consistency with vector geometries, `voxel_sizes`</span>
+<span class="sd">         is an array with shape `(1, 3)`.</span>
+
+<span class="sd">        :returns: a numpy array of shape `(1, 3)` describing the voxel size of the volume.</span>
+<span class="sd">        :rtype: `np.array`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">voxel_sizes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">voxel_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The voxel size of the volume</span>
+
+<span class="sd">        :returns: the size in each dimension of the volume</span>
+<span class="sd">        :rtype: `(scalar, scalar, scalar)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">voxel_size</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">extent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The extent of the volume in each dimension</span>
+
+<span class="sd">        :returns: `((min_z, max_z), (min_y, max_y), (min_x, max_x))`</span>
+<span class="sd">        :rtype: `((scalar, scalar), (scalar, scalar), (scalar, scalar))`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_pos_size_to_extent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">corners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a vector with the corners of the volume</span>
+
+<span class="sd">        For consistency with the volume vector geometry, the returned</span>
+<span class="sd">        array has leading dimension `1`.</span>
+
+<span class="sd">        :returns: np.array</span>
+<span class="sd">            Array with shape (1, 8, 3), describing the 8</span>
+<span class="sd">            corners of volume orientation in (Z, Y, X)-coordinates.</span>
+<span class="sd">        :rtype: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">corners</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lower_left_corner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a vector with the positions of the lower-left corner the object</span>
+
+<span class="sd">        For consistency with the volume vector geometry, the returned</span>
+<span class="sd">        array has leading dimension `1`.</span>
+
+<span class="sd">        :returns: np.array</span>
+<span class="sd">            Array with shape (1, 3), describing the position of the</span>
+<span class="sd">            lower-left corner of the volume in (Z, Y, X)-coordinates.</span>
+<span class="sd">        :rtype: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner</span><span class="o">.</span><span class="n">lower_left_corner</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                          Transformation methods                         #</span>
+    <span class="c1">###########################################################################</span>
+
+<div class="viewcode-block" id="VolumeGeometry.with_voxel_size"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry.with_voxel_size">[docs]</a>    <span class="k">def</span> <span class="nf">with_voxel_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a new volume with the specified voxel size</span>
+
+<span class="sd">        When the voxel_size does not cleanly divide the size of the</span>
+<span class="sd">        volume, a volume is returned that is</span>
+<span class="sd">        - centered on the origin;</span>
+<span class="sd">        - fits inside the original volume;</span>
+
+<span class="sd">        :param voxel_size:</span>
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">voxel_size</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_size</span><span class="p">(</span><span class="n">voxel_size</span><span class="p">)</span>
+        <span class="n">new_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">/</span> <span class="n">voxel_size</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">new_shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">new_shape</span> <span class="o">*</span> <span class="n">voxel_size</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VolumeGeometry.reshape"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry.reshape">[docs]</a>    <span class="k">def</span> <span class="nf">reshape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_shape</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reshape the VolumeGeometry</span>
+
+<span class="sd">        :param new_shape: `int` or (`int`, `int`, `int`)</span>
+<span class="sd">            The new shape that the volume must have</span>
+<span class="sd">        :returns:</span>
+<span class="sd">            A new volume with the required shape</span>
+<span class="sd">        :rtype: VolumeGeometry</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">new_shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,)</span></div>
+
+<div class="viewcode-block" id="VolumeGeometry.translate"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry.translate">[docs]</a>    <span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_pos</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="n">new_pos</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">t</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">new_pos</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,)</span></div>
+
+<div class="viewcode-block" id="VolumeGeometry.untranslate"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry.untranslate">[docs]</a>    <span class="k">def</span> <span class="nf">untranslate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ts</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="VolumeGeometry.scale"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Scales the volume around its center.</span>
+
+<span class="sd">        The position of the volume does not change. This</span>
+<span class="sd">        transformation does not affect the shape (voxels) of the</span>
+<span class="sd">        volume. Use `reshape` to change the shape.</span>
+
+<span class="sd">        :param scale: tuple or np.float</span>
+<span class="sd">            By how much to scale the volume.</span>
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_size</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+        <span class="n">new_size</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">new_size</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VolumeGeometry.multiply"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry.multiply">[docs]</a>    <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Scales the volume including its position.</span>
+
+<span class="sd">        Does not affect the shape (voxels) of the volume. Use</span>
+<span class="sd">        `reshape` to change the shape.</span>
+
+<span class="sd">        :param scale: tuple or np.float</span>
+<span class="sd">            By how much to scale the volume.</span>
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_size</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+        <span class="n">new_size</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="n">new_pos</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">new_pos</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">new_size</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies a projective matrix transformation to geometry</span>
+
+<span class="sd">        If the transformation does not rotate, but only translates and</span>
+<span class="sd">        scale, a VolumeGeometry is returned. Otherwise, a</span>
+<span class="sd">        VolumeVectorGeometry is returned.</span>
+
+<span class="sd">        :param other: `ts.geometry.Transform`</span>
+<span class="sd">            A transformation matrix</span>
+<span class="sd">        :returns: A transformed geometry</span>
+<span class="sd">        :rtype: `VolumeGeometry` or `VolumeVectorGeometry`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Transform</span><span class="p">):</span>
+            <span class="c1"># Check if it is possible to apply transformation and</span>
+            <span class="c1"># remain a VolumeGeometry.</span>
+            <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">num_steps</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">translation</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+                <span class="c1"># NOTE: scale must be non-negative, otherwise ts.scale</span>
+                <span class="c1"># throws an error. This should only be a problem when</span>
+                <span class="c1"># `T != other`. That is why we wrap in `abs` below.</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">diagonal</span><span class="p">()[:</span><span class="mi">3</span><span class="p">])</span>
+                <span class="n">T</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">translation</span><span class="p">)</span> <span class="o">*</span> <span class="n">ts</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">T</span> <span class="o">==</span> <span class="n">other</span><span class="p">:</span>
+                    <span class="c1"># implement scaling and translation ourselves</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">translation</span><span class="p">)</span>
+
+            <span class="c1"># Convert to vector geometry and apply transformation</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Converting VolumeGeometry to VolumeVectorGeometry. &quot;</span>
+                <span class="s2">&quot;Use `T * vg.to_vec()` to inhibit this warning. &quot;</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_vec</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="from_astra"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume.from_astra">[docs]</a><span class="k">def</span> <span class="nf">from_astra</span><span class="p">(</span><span class="n">astra_vol_geom</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts an ASTRA 3D volume geometry to a VolumeGeometry</span>
+
+<span class="sd">    :param astra_vol_geom: `dict`</span>
+<span class="sd">        A dictionary created by `astra.create_vol_geom` that describes</span>
+<span class="sd">        a 3D volume geometry.</span>
+<span class="sd">    :returns: a tomosipo volume geometry</span>
+<span class="sd">    :rtype: VolumeGeometry</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">avg</span> <span class="o">=</span> <span class="n">astra_vol_geom</span>
+    <span class="n">WindowMinX</span> <span class="o">=</span> <span class="n">avg</span><span class="p">[</span><span class="s2">&quot;option&quot;</span><span class="p">][</span><span class="s2">&quot;WindowMinX&quot;</span><span class="p">]</span>
+    <span class="n">WindowMaxX</span> <span class="o">=</span> <span class="n">avg</span><span class="p">[</span><span class="s2">&quot;option&quot;</span><span class="p">][</span><span class="s2">&quot;WindowMaxX&quot;</span><span class="p">]</span>
+    <span class="n">WindowMinY</span> <span class="o">=</span> <span class="n">avg</span><span class="p">[</span><span class="s2">&quot;option&quot;</span><span class="p">][</span><span class="s2">&quot;WindowMinY&quot;</span><span class="p">]</span>
+    <span class="n">WindowMaxY</span> <span class="o">=</span> <span class="n">avg</span><span class="p">[</span><span class="s2">&quot;option&quot;</span><span class="p">][</span><span class="s2">&quot;WindowMaxY&quot;</span><span class="p">]</span>
+    <span class="n">WindowMinZ</span> <span class="o">=</span> <span class="n">avg</span><span class="p">[</span><span class="s2">&quot;option&quot;</span><span class="p">][</span><span class="s2">&quot;WindowMinZ&quot;</span><span class="p">]</span>
+    <span class="n">WindowMaxZ</span> <span class="o">=</span> <span class="n">avg</span><span class="p">[</span><span class="s2">&quot;option&quot;</span><span class="p">][</span><span class="s2">&quot;WindowMaxZ&quot;</span><span class="p">]</span>
+
+    <span class="n">voxZ</span> <span class="o">=</span> <span class="n">avg</span><span class="p">[</span><span class="s2">&quot;GridSliceCount&quot;</span><span class="p">]</span>
+    <span class="n">voxY</span> <span class="o">=</span> <span class="n">avg</span><span class="p">[</span><span class="s2">&quot;GridRowCount&quot;</span><span class="p">]</span>
+    <span class="n">voxX</span> <span class="o">=</span> <span class="n">avg</span><span class="p">[</span><span class="s2">&quot;GridColCount&quot;</span><span class="p">]</span>
+
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">voxZ</span><span class="p">,</span> <span class="n">voxY</span><span class="p">,</span> <span class="n">voxX</span><span class="p">)</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">WindowMinZ</span><span class="p">,</span> <span class="n">WindowMaxZ</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">WindowMinY</span><span class="p">,</span> <span class="n">WindowMaxY</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">WindowMinX</span><span class="p">,</span> <span class="n">WindowMaxX</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">pos</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">_extent_to_pos_size</span><span class="p">(</span><span class="n">extent</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">VolumeGeometry</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

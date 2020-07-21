@@ -1,0 +1,492 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tomosipo &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tomosipo" href="modules.html" />
+    <link rel="prev" title="Welcome to tomosipo’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tomosipo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-and-visualize-geometries">Create and visualize geometries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#express-algorithms-succinctly">Express algorithms succinctly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#more-examples">More examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#conventions">Conventions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#axes-and-indexing">Axes and indexing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conventions-in-naming-and-ordering">Conventions in naming and ordering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geometry">Geometry</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#transformations">Transformations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#warnings">Warnings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#building-conda-packages">Building conda packages</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">tomosipo</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Tomosipo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/readme.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tomosipo">
+<h1>Tomosipo<a class="headerlink" href="#tomosipo" title="Permalink to this headline">¶</a></h1>
+<p>Tomosipo is a pythonic wrapper for the ASTRA-toolbox of
+high-performance GPU primitives for 3D tomography.</p>
+<p>The aim of this library is as to:</p>
+<ul class="simple">
+<li><p>Expose a user-friendly API for high-performance 3D tomography, while
+allowing strict control over resource usage</p></li>
+<li><p>Enable easy manipulation of 3D geometries</p></li>
+<li><p>Provide easy integration with</p>
+<ul>
+<li><p>Deep learning toolkits, such as <a class="reference external" href="https://pytorch.org">PyTorch</a></p></li>
+<li><p><a class="reference external" href="https://github.com/odlgroup/odl">The operator discretization library (ODL)</a> for optimization in
+inverse problems</p></li>
+<li><p><a class="reference external" href="http://pyqtgraph.org/">PyQtGraph</a> for interactive visualization of geometries and data</p></li>
+</ul>
+</li>
+</ul>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>A minimal installation requires:</p>
+<ul class="simple">
+<li><p>python &gt;= 3.6</p></li>
+<li><p>ASTRA-toolbox (the latest 1.9.x development version is <strong>required</strong>)</p></li>
+<li><p>CUDA</p></li>
+</ul>
+<p>These requirements can be installed using conda (replace <code class="docutils literal notranslate"><span class="pre">&lt;X.X&gt;</span></code> by your
+CUDA version)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">y</span> <span class="o">-</span><span class="n">n</span> <span class="n">tomosipo</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.6</span> <span class="n">astra</span><span class="o">-</span><span class="n">toolbox</span> <span class="n">cudatoolkit</span><span class="o">=&lt;</span><span class="n">X</span><span class="o">.</span><span class="n">X</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">c</span> <span class="n">astra</span><span class="o">-</span><span class="n">toolbox</span><span class="o">/</span><span class="n">label</span><span class="o">/</span><span class="n">dev</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ahendriksen</span><span class="o">/</span><span class="n">tomosipo</span><span class="nd">@develop</span>
+<span class="n">source</span> <span class="n">activate</span> <span class="n">tomosipo</span>
+</pre></div>
+</div>
+<p>To use tomosipo with PyTorch, QT, ODL, and cupy, install:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">y</span> <span class="o">-</span><span class="n">n</span> <span class="n">tomosipo</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.6</span> <span class="n">astra</span><span class="o">-</span><span class="n">toolbox</span> <span class="n">cudatoolkit</span><span class="o">=&lt;</span><span class="n">X</span><span class="o">.</span><span class="n">X</span><span class="o">&gt;</span> <span class="n">pytorch</span> <span class="n">cupy</span> <span class="n">pyqtgraph</span> <span class="n">pyqt</span> <span class="n">pyopengl</span> <span class="n">cupy</span> \
+      <span class="o">-</span><span class="n">c</span> <span class="n">defaults</span> <span class="o">-</span><span class="n">c</span> <span class="n">astra</span><span class="o">-</span><span class="n">toolbox</span><span class="o">/</span><span class="n">label</span><span class="o">/</span><span class="n">dev</span> <span class="o">-</span><span class="n">c</span> <span class="n">pytorch</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
+<span class="n">source</span> <span class="n">activate</span> <span class="n">tomosipo</span>
+<span class="c1"># Install latest version of ODL:</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">odlgroup</span><span class="o">/</span><span class="n">odl</span>
+<span class="c1"># Install development version of tomosipo:</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ahendriksen</span><span class="o">/</span><span class="n">tomosipo</span><span class="nd">@develop</span>
+</pre></div>
+</div>
+<p><a id="orgf6c18c3"></a></p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Simple examples:</p>
+<p><a id="orga4c64f9"></a></p>
+<div class="section" id="create-and-visualize-geometries">
+<h3>Create and visualize geometries<a class="headerlink" href="#create-and-visualize-geometries" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">astra</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tomosipo</span> <span class="k">as</span> <span class="nn">ts</span>
+<span class="kn">from</span> <span class="nn">tomosipo.qt</span> <span class="kn">import</span> <span class="n">display</span>
+
+<span class="c1"># Create &#39;unit&#39; cone geometry</span>
+<span class="n">pg</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cone</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">cone_angle</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pg</span><span class="p">)</span>
+
+<span class="c1"># Create volume geometry of a unit cube on the origin</span>
+<span class="n">vg</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">volume</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">vg</span><span class="p">)</span>
+
+<span class="c1"># Display an animation of the acquisition geometry</span>
+<span class="n">display</span><span class="p">(</span><span class="n">pg</span><span class="p">,</span> <span class="n">vg</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a id="org2ba119a"></a></p>
+</div>
+<div class="section" id="express-algorithms-succinctly">
+<h3>Express algorithms succinctly<a class="headerlink" href="#express-algorithms-succinctly" title="Permalink to this headline">¶</a></h3>
+<p>In the following example, we implement the simultaneous iterative
+reconstruction algorithm (SIRT) in a couple of lines. This examples
+demonstrates the use of the forward and backward projection.</p>
+<p>First, the SIRT algorithm is implemented using numpy arrays, which
+reside in system RAM. Then, we move all data onto the GPU, and compute
+the same algorithm using PyTorch. This is faster, because no transfers
+between system RAM and GPU are necessary.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">astra</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tomosipo</span> <span class="k">as</span> <span class="nn">ts</span>
+<span class="kn">from</span> <span class="nn">timeit</span> <span class="kn">import</span> <span class="n">default_timer</span> <span class="k">as</span> <span class="n">timer</span>
+
+<span class="c1"># Create &#39;unit&#39; cone geometry, and a</span>
+<span class="n">pg</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cone</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">cone_angle</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">angles</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">192</span><span class="p">))</span>
+<span class="c1"># Create volume geometry of a unit cube on the origin</span>
+<span class="n">vg</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">volume</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+<span class="c1"># Create projection operator</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">operator</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">pg</span><span class="p">)</span>
+
+<span class="c1"># Create a phantom containing a small cube:</span>
+<span class="n">phantom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">domain_shape</span><span class="p">)</span>
+<span class="n">phantom</span><span class="p">[</span><span class="mi">20</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span><span class="mi">50</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="c1"># Prepare preconditioning matrices R and C</span>
+<span class="n">R</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">A</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">domain_shape</span><span class="p">))</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">ts</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
+<span class="n">C</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">range_shape</span><span class="p">))</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">ts</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
+
+<span class="c1"># Reconstruct from sinogram y into x_rec in 100 iterations</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="n">phantom</span><span class="p">)</span>
+<span class="n">x_rec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">domain_shape</span><span class="p">)</span>
+<span class="n">num_iters</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_iters</span><span class="p">):</span>
+    <span class="n">x_rec</span> <span class="o">+=</span> <span class="n">C</span> <span class="o">*</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">R</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">A</span><span class="p">(</span><span class="n">x_rec</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SIRT finished in </span><span class="si">{</span><span class="n">timer</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="si">:</span><span class="s2">0.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+
+<span class="c1"># Perform the same computation on the GPU using PyTorch.</span>
+<span class="c1"># First, import support for pytorch tensors</span>
+<span class="kn">import</span> <span class="nn">tomosipo.torch_support</span>
+
+<span class="c1"># Move all data to GPU:</span>
+<span class="n">dev</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">R</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+<span class="n">x_rec</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">domain_shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">dev</span><span class="p">)</span>
+
+<span class="c1"># Perform algorithm</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_iters</span><span class="p">):</span>
+    <span class="n">x_rec</span> <span class="o">+=</span> <span class="n">C</span> <span class="o">*</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">R</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">A</span><span class="p">(</span><span class="n">x_rec</span><span class="p">)))</span>
+
+<span class="c1"># Convert reconstruction back to numpy array:</span>
+<span class="n">x_rec</span> <span class="o">=</span> <span class="n">x_rec</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SIRT finished in </span><span class="si">{</span><span class="n">timer</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="si">:</span><span class="s2">0.2f</span><span class="si">}</span><span class="s2"> seconds using PyTorch&quot;</span><span class="p">)</span>
+
+<span class="n">SIRT</span> <span class="n">finished</span> <span class="ow">in</span> <span class="mf">2.07</span> <span class="n">seconds</span>
+<span class="n">SIRT</span> <span class="n">finished</span> <span class="ow">in</span> <span class="mf">0.94</span> <span class="n">seconds</span> <span class="n">using</span> <span class="n">PyTorch</span>
+</pre></div>
+</div>
+<p><a id="org1ec6504"></a></p>
+</div>
+<div class="section" id="more-examples">
+<h3>More examples<a class="headerlink" href="#more-examples" title="Permalink to this headline">¶</a></h3>
+<p>Please checkout the <code class="docutils literal notranslate"><span class="pre">examples</span></code> and <code class="docutils literal notranslate"><span class="pre">notebooks</span></code> directory for more examples.</p>
+<p><a id="org85969d8"></a></p>
+</div>
+</div>
+<div class="section" id="conventions">
+<h2>Conventions<a class="headerlink" href="#conventions" title="Permalink to this headline">¶</a></h2>
+<p><a id="org7b9880e"></a></p>
+<div class="section" id="axes-and-indexing">
+<h3>Axes and indexing<a class="headerlink" href="#axes-and-indexing" title="Permalink to this headline">¶</a></h3>
+<p>Tomosipo follows numpy’s indexing convention. In the image below, we
+display the coordinate axes and indexing into a volume cube.
+The z-axis points upward.</p>
+<p><img alt="img" src="./doc/img/volume_geometry.png" /></p>
+<p>We display an example for a parallel geometry with its associated
+sinogram indexing below. The detector coordinate frame is defined by
+two vectors</p>
+<ul class="simple">
+<li><p><strong>u:</strong> Usually points sideways and to the “right” from the perspective
+of the source. The length of u defines the width of a detector
+pixel.</p></li>
+<li><p><strong>v:</strong> Usually points upwards. The length of v defines the height of a
+detector pixel.</p></li>
+</ul>
+<p><img alt="img" src="doc/img/projection_geometry.png" /></p>
+<p>In short,</p>
+<ul class="simple">
+<li><p>volume geometry and data are indexed  in (Z, Y, X) order</p></li>
+<li><p>projection geometries are indexed in (angle, v, u) order</p></li>
+<li><p>projection data is stored as a stack of sinograms, indexed in (V,
+angle, U) order.</p></li>
+</ul>
+<p>The coordinate system (z, y, x) is <strong>left-handed</strong> rather than
+right-handed.</p>
+<p><a id="orgeec4fc5"></a></p>
+</div>
+<div class="section" id="conventions-in-naming-and-ordering">
+<h3>Conventions in naming and ordering<a class="headerlink" href="#conventions-in-naming-and-ordering" title="Permalink to this headline">¶</a></h3>
+<p>Whenever a function takes as parameters a volume geometry,
+projection geometry, or operator, there is a fixed ordering:</p>
+<ol class="simple">
+<li><p>operator</p></li>
+<li><p>volume (data or geometry)</p></li>
+<li><p>projection (data or geometry)</p></li>
+</ol>
+<p>As parameters, properties, and in function names, we use:</p>
+<ul class="simple">
+<li><p><strong>shape:</strong> The number of voxels / pixels in each dimension</p></li>
+<li><p><strong>size:</strong> The physical size of the object in each dimension</p></li>
+<li><p><strong>dist:</strong> Short for distance</p></li>
+<li><p><strong>vec:</strong> Short for vector</p></li>
+<li><p><strong>obj:</strong> Short for object</p></li>
+<li><p><strong>vol:</strong> Short for volume</p></li>
+<li><p><strong>pos:</strong> Short for position: this is alway the <strong>center</strong> of an object</p></li>
+<li><p><strong>src:</strong> Short for source</p></li>
+<li><p><strong>det:</strong> Short for detector</p></li>
+<li><p><strong>pos:</strong> Short for position</p></li>
+<li><p><strong>len:</strong> Short for length</p></li>
+<li><p><strong>rel:</strong> Short for relative</p></li>
+<li><p><strong>abs:</strong> Short for absolute</p></li>
+<li><p><strong>num<sub>*</sub>:</strong> Number of * (angles for instance)</p></li>
+</ul>
+<p>In examples and code we use:</p>
+<ul class="simple">
+<li><p><strong>pg:</strong> projection geometry</p></li>
+<li><p><strong>vg:</strong> volume geometry</p></li>
+<li><p><strong>pd:</strong> projection data</p></li>
+<li><p><strong>vd:</strong> volume data</p></li>
+</ul>
+<p><a id="org9433a27"></a></p>
+</div>
+<div class="section" id="geometry">
+<h3>Geometry<a class="headerlink" href="#geometry" title="Permalink to this headline">¶</a></h3>
+<p>There are several helper functions to create a geometry:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ts.parallel</span></code>: creates a 3D circular parallel beam geometry</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ts.cone</span></code>: creates a 3D circular cone beam geometry</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ts.parallel_vec</span></code>: creates a 3D parallel beam geometry where the
+beam and detector can be arbitrarily oriented</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ts.cone_vec</span></code>: creates a 3D cone beam geometry where the
+source and detector can be arbitrarily oriented</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ts.volume</span></code>: creates an axis-aligned volume geometry</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ts.volume_vec</span></code>: creates an arbitrarily oriented volume. This object cannot be
+converted to ASTRA directly, but can be used in geometric computations.</p></li>
+</ul>
+<p><a id="org1657167"></a></p>
+<div class="section" id="transformations">
+<h4>Transformations<a class="headerlink" href="#transformations" title="Permalink to this headline">¶</a></h4>
+<p>TODO</p>
+<ul class="simple">
+<li><p>Translation</p></li>
+<li><p>Rotation</p></li>
+<li><p>Scaling</p></li>
+<li><p>Perspective</p></li>
+</ul>
+<p><a id="orgb0ea6e9"></a></p>
+</div>
+</div>
+<div class="section" id="warnings">
+<h3>Warnings<a class="headerlink" href="#warnings" title="Permalink to this headline">¶</a></h3>
+<p>All warnings should</p>
+<ol class="simple">
+<li><p>Explain what is wrong</p></li>
+<li><p>Explain how the warning can be prevented</p></li>
+</ol>
+<p><a id="org38e3701"></a></p>
+</div>
+</div>
+<div class="section" id="contributions">
+<h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline">¶</a></h2>
+<p><a id="org29a796e"></a></p>
+<div class="section" id="building-conda-packages">
+<h3>Building conda packages<a class="headerlink" href="#building-conda-packages" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">conda</span><span class="o">-</span><span class="n">build</span> <span class="n">anaconda</span><span class="o">-</span><span class="n">client</span>
+<span class="n">conda</span> <span class="n">build</span> <span class="n">conda</span><span class="o">/</span> <span class="o">-</span><span class="n">c</span> <span class="n">astra</span><span class="o">-</span><span class="n">toolbox</span><span class="o">/</span><span class="n">label</span><span class="o">/</span><span class="n">dev</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="modules.html" class="btn btn-neutral float-right" title="tomosipo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to tomosipo’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

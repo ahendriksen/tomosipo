@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.utils &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">tomosipo</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>tomosipo.utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tomosipo.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="print_options"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.utils.print_options">[docs]</a><span class="k">def</span> <span class="nf">print_options</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;This context manager set numpy print options temporarily</span>
+
+<span class="sd">    ODL sets the numpy printoptions globally, which makes it difficult</span>
+<span class="sd">    to ensure that the representation of geometries is consistent over</span>
+<span class="sd">    different installations. Specifically, we want to ensure that</span>
+<span class="sd">    testing succeeds regardless of the specific version of ODL.</span>
+
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set printing line width to 71 to allow method docstrings to not extend</span>
+    <span class="c1"># beyond 79 characters (2 times indent of 4)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">printoptions</span><span class="p">(</span>
+        <span class="n">edgeitems</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">floatmode</span><span class="o">=</span><span class="s2">&quot;maxprec&quot;</span><span class="p">,</span>
+        <span class="n">precision</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">suppress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mi">71</span><span class="p">,</span>
+        <span class="n">nanstr</span><span class="o">=</span><span class="s2">&quot;nan&quot;</span><span class="p">,</span>
+        <span class="n">infstr</span><span class="o">=</span><span class="s2">&quot;inf&quot;</span><span class="p">,</span>
+        <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="n">formatter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">legacy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="up_tuple"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.utils.up_tuple">[docs]</a><span class="k">def</span> <span class="nf">up_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterator</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],)</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected tuple with </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> elements.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="c1"># Make tuple</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,)</span> <span class="o">*</span> <span class="n">n</span></div>
+
+
+<div class="viewcode-block" id="to_shape"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.utils.to_shape">[docs]</a><span class="k">def</span> <span class="nf">to_shape</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">allow_zeros</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">up_tuple</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Shape must contain only integers. Got </span><span class="si">{</span><span class="n">shape</span><span class="si">}</span><span class="s2"> with type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="p">)</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">shape</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">allow_zeros</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape must be non-negative. Got </span><span class="si">{</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape must be positive. Got </span><span class="si">{</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">shape</span></div>
+
+
+<div class="viewcode-block" id="to_pos"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.utils.to_pos">[docs]</a><span class="k">def</span> <span class="nf">to_pos</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="ow">and</span> <span class="n">pos</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">up_tuple</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">pos</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Position </span><span class="si">{</span><span class="n">pos</span><span class="si">}</span><span class="s2"> is not automatically converted to </span><span class="si">{</span><span class="n">up_tuple</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Provide a tuple instead. &quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># TODO: Check if pos is a vector and nicely shaped.</span>
+    <span class="k">return</span> <span class="n">pos</span></div>
+
+
+<div class="viewcode-block" id="to_size"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.utils.to_size">[docs]</a><span class="k">def</span> <span class="nf">to_size</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">up_tuple</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">s</span> <span class="o">&gt;=</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">size</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Size must be non-negative. Got </span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># TODO: Check if size is a vector and nicely shaped.</span>
+    <span class="k">return</span> <span class="n">size</span></div>
+
+
+<div class="viewcode-block" id="up_slice"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.utils.up_slice">[docs]</a><span class="k">def</span> <span class="nf">up_slice</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">key</span></div>
+
+
+<div class="viewcode-block" id="slice_interval"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.utils.slice_interval">[docs]</a><span class="k">def</span> <span class="nf">slice_interval</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Slice a one-dimensional interval</span>
+
+<span class="sd">    The line extends from `left` to `right` and is divided into</span>
+<span class="sd">    `length` parts. It is indexed by a `key` which can be an `int` or</span>
+<span class="sd">    a `slice`.</span>
+
+<span class="sd">    If the step size of `key` equals one, then `slice_interval` should</span>
+<span class="sd">    works exactly as expected.</span>
+
+<span class="sd">    When the step size is greater than one, there are two equally</span>
+<span class="sd">    valid approaches to slicing:</span>
+
+<span class="sd">    1) Take the left-most and right-most pixel of the slice and set</span>
+<span class="sd">       the size of the resulting interval to be equal to the</span>
+<span class="sd">       difference between their left- and right-most edge,</span>
+<span class="sd">       respectively.</span>
+
+<span class="sd">    2) Multiply the pixel size by the step size and ensure the size of</span>
+<span class="sd">       the new interval equals new_len * new_pixel_size.</span>
+
+<span class="sd">    This function implements the second approach.</span>
+
+<span class="sd">    The first approach has the disadvantage that the new pixel size is</span>
+<span class="sd">    not an integer multiple of the original pixel size. Moreover, it</span>
+<span class="sd">    is not compatible with the way that we want to use this function</span>
+<span class="sd">    as a way to bin detector pixels.</span>
+
+<span class="sd">    The second approach has the disadvantage that the new values for</span>
+<span class="sd">    `left` and `right` might fall outside the original interval, which</span>
+<span class="sd">    is counter-intuitive. Nonetheless, it is compatible with detector</span>
+<span class="sd">    and volume binning.</span>
+
+<span class="sd">    Example. Suppose we have the interval [0, 4] divided into four</span>
+<span class="sd">    pixels. An illustration of the interval is shown below, with `|`</span>
+<span class="sd">    denoting the edges of the pixels. As you can see, with a step size</span>
+<span class="sd">    of two, the pixels become twice as large, and depending on the</span>
+<span class="sd">    start of the slice, the interval is shifted to the left or</span>
+<span class="sd">    right. With a step size of 3, the resulting interval is larger</span>
+<span class="sd">    than the original interval.</span>
+
+<span class="sd">       |x|x|x|x|   [0:4:1]</span>
+<span class="sd">      | x | x |    [0:4:2]</span>
+<span class="sd">        | x | x |  [1:4:2]</span>
+<span class="sd">     |  x  |  x  | [0:4:3]</span>
+
+<span class="sd">    :param left: `scalar` or `np.array`</span>
+<span class="sd">    :param right: `scalar` or `np.array`</span>
+<span class="sd">    :param length: `int`</span>
+<span class="sd">    :param key: `slice` or `int`</span>
+<span class="sd">    :returns:</span>
+<span class="sd">        A tuple containing the new left and right extent of the line,</span>
+<span class="sd">        the number of &quot;pixels&quot;, and the new &quot;pixel&quot; size.</span>
+<span class="sd">    :rtype: `(scalar, scalar, int, scalar)`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Prevent division by zero</span>
+    <span class="n">pixel_size</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="n">length</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">up_slice</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">indices</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+    <span class="c1"># `(stop - start)` is not necessarily divisible by `step`. We have</span>
+    <span class="c1"># to calculate new_len in this convoluted way:</span>
+    <span class="n">new_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">step</span><span class="p">)</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">new_len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">new_pixel_size</span> <span class="o">=</span> <span class="n">pixel_size</span> <span class="o">*</span> <span class="n">step</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="n">start</span> <span class="o">*</span> <span class="n">pixel_size</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">pixel_size</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">step</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="n">stop</span> <span class="o">*</span> <span class="n">pixel_size</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">pixel_size</span> <span class="o">*</span> <span class="p">(</span><span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Prevent division by zero</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">new_len</span><span class="p">,</span> <span class="n">new_pixel_size</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

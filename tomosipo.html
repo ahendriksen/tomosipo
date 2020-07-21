@@ -1,0 +1,1296 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo package &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tomosipo.geometry package" href="tomosipo.geometry.html" />
+    <link rel="prev" title="tomosipo" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Tomosipo</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">tomosipo</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">tomosipo package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tomosipo.geometry.html">tomosipo.geometry package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tomosipo.links.html">tomosipo.links package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tomosipo.qt.html">tomosipo.qt package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tomosipo.Data">tomosipo.Data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tomosipo.Operator">tomosipo.Operator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tomosipo.astra">tomosipo.astra module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tomosipo.cupy">tomosipo.cupy module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tomosipo.odl">tomosipo.odl module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tomosipo.phantom">tomosipo.phantom module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tomosipo.torch_support">tomosipo.torch_support module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tomosipo.utils">tomosipo.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tomosipo.vector_calc">tomosipo.vector_calc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tomosipo">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">tomosipo</a> &raquo;</li>
+        
+      <li>tomosipo package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/tomosipo.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tomosipo-package">
+<h1>tomosipo package<a class="headerlink" href="#tomosipo-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tomosipo.geometry.html">tomosipo.geometry package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry.base_projection">tomosipo.geometry.base_projection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry.concatenate">tomosipo.geometry.concatenate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry.cone">tomosipo.geometry.cone module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry.cone_vec">tomosipo.geometry.cone_vec module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry.conversion">tomosipo.geometry.conversion module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry.det_vec">tomosipo.geometry.det_vec module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry.parallel">tomosipo.geometry.parallel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry.parallel_vec">tomosipo.geometry.parallel_vec module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry.transform">tomosipo.geometry.transform module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry.volume">tomosipo.geometry.volume module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry.volume_vec">tomosipo.geometry.volume_vec module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.geometry.html#module-tomosipo.geometry">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tomosipo.links.html">tomosipo.links package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.links.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.links.html#module-tomosipo.links.base">tomosipo.links.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.links.html#module-tomosipo.links.cupy">tomosipo.links.cupy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.links.html#module-tomosipo.links.numpy">tomosipo.links.numpy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.links.html#module-tomosipo.links.torch">tomosipo.links.torch module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.links.html#module-tomosipo.links">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tomosipo.qt.html">tomosipo.qt package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.qt.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.qt.html#module-tomosipo.qt.animation">tomosipo.qt.animation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.qt.html#module-tomosipo.qt.data">tomosipo.qt.data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.qt.html#module-tomosipo.qt.display">tomosipo.qt.display module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.qt.html#module-tomosipo.qt.geometry">tomosipo.qt.geometry module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.qt.html#module-tomosipo.qt.view_widget_hack">tomosipo.qt.view_widget_hack module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomosipo.qt.html#module-tomosipo.qt">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-tomosipo.Data">
+<span id="tomosipo-data-module"></span><h2>tomosipo.Data module<a class="headerlink" href="#module-tomosipo.Data" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.Data.Data">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.Data.</code><code class="sig-name descname">Data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">geometry</span></em>, <em class="sig-param"><span class="n">initial_value</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Data.html#Data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Data.Data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data: a data manager for Astra</p>
+<dl class="py method">
+<dt id="tomosipo.Data.Data.clone">
+<code class="sig-name descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Data.html#Data.clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Data.Data.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clone Data object</p>
+<p>Creates a new data object with the same (but copied) data and
+new associated astra geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a fresh Data object</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#tomosipo.Data.Data" title="tomosipo.Data.Data">Data</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Data.Data.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#tomosipo.Data.Data.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the underlying data.</p>
+<p>Changes to the return value will be reflected in the astra
+data.</p>
+<p>If you want to avoid this, consider copying the data
+immediately, using <cite>np.copy</cite> for instance.</p>
+<p>NOTE: if this data encapsulates projection data, the order of
+the axes is (V, num_angles, U).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The underlying data object. This can be a numpy</p>
+</dd>
+</dl>
+<p>array or some other type of data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Data.Data.is_projection">
+<code class="sig-name descname">is_projection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Data.html#Data.is_projection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Data.Data.is_projection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Data.Data.is_volume">
+<code class="sig-name descname">is_volume</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Data.html#Data.is_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Data.Data.is_volume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Data.Data.link">
+<em class="property">property </em><code class="sig-name descname">link</code><a class="headerlink" href="#tomosipo.Data.Data.link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Data.Data.to_astra">
+<code class="sig-name descname">to_astra</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Data.html#Data.to_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Data.Data.to_astra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns astra data id associated with current object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.Data.data">
+<code class="sig-prename descclassname">tomosipo.Data.</code><code class="sig-name descname">data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">geometry</span></em>, <em class="sig-param"><span class="n">initial_value</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Data.html#data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Data.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a managed Astra Data3d object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geometry</strong> – <cite>VolumeGeometry</cite> or <cite>ProjectionGeometry</cite>
+A geometry associated with this dataset.</p></li>
+<li><p><strong>initial_value</strong> – <p><cite>float</cite> or <cite>np.array</cite> or <cite>ts.Data.Data</cite> (optional)
+An initial value for the data. The default is zero. If a
+numpy array is provided, the array is linked to the astra
+toolbox, i.e. they share the same underlying memory.</p>
+<p>If a <a href="#id1"><span class="problematic" id="id2">`</span></a>Data’ object is passed, it is checked to have</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An initialized dataset.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.Data.Data" title="tomosipo.Data.Data">Data</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.Operator">
+<span id="tomosipo-operator-module"></span><h2>tomosipo.Operator module<a class="headerlink" href="#module-tomosipo.Operator" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.Operator.BackprojectionOperator">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">BackprojectionOperator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#BackprojectionOperator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.BackprojectionOperator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Transpose of the Forward operator</p>
+<p>The idea of having a dedicated class for the backprojection
+operator, which just saves a link to the “real” operator has
+been shamelessly ripped from OpTomo.</p>
+<p>We have the following property:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">op</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">operator</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">pg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">op</span><span class="o">.</span><span class="n">T</span> <span class="o">==</span> <span class="n">op</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<p>It is nice that we do not allocate a new object every time we use
+<a href="#id3"><span class="problematic" id="id4">`</span></a>op.T’. If we did, users might save the transpose in a separate
+variable for ‘performance reasons’, writing</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">op</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">operator</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">pg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">op_T</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<p>This is a waste of time.</p>
+<dl class="py method">
+<dt id="tomosipo.Operator.BackprojectionOperator.T">
+<em class="property">property </em><code class="sig-name descname">T</code><a class="headerlink" href="#tomosipo.Operator.BackprojectionOperator.T" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Operator.BackprojectionOperator.domain">
+<em class="property">property </em><code class="sig-name descname">domain</code><a class="headerlink" href="#tomosipo.Operator.BackprojectionOperator.domain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Operator.BackprojectionOperator.domain_shape">
+<em class="property">property </em><code class="sig-name descname">domain_shape</code><a class="headerlink" href="#tomosipo.Operator.BackprojectionOperator.domain_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Operator.BackprojectionOperator.range">
+<em class="property">property </em><code class="sig-name descname">range</code><a class="headerlink" href="#tomosipo.Operator.BackprojectionOperator.range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Operator.BackprojectionOperator.range_shape">
+<em class="property">property </em><code class="sig-name descname">range_shape</code><a class="headerlink" href="#tomosipo.Operator.BackprojectionOperator.range_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Operator.BackprojectionOperator.transpose">
+<code class="sig-name descname">transpose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#BackprojectionOperator.transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.BackprojectionOperator.transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return forward projection operator</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="tomosipo.Operator.Operator">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">Operator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">volume_geometry</span></em>, <em class="sig-param"><span class="n">projection_geometry</span></em>, <em class="sig-param"><span class="n">voxel_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">detector_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">additive</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#Operator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.Operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Documentation for Operator</p>
+<dl class="py method">
+<dt id="tomosipo.Operator.Operator.T">
+<em class="property">property </em><code class="sig-name descname">T</code><a class="headerlink" href="#tomosipo.Operator.Operator.T" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Operator.Operator.domain">
+<em class="property">property </em><code class="sig-name descname">domain</code><a class="headerlink" href="#tomosipo.Operator.Operator.domain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Operator.Operator.domain_shape">
+<em class="property">property </em><code class="sig-name descname">domain_shape</code><a class="headerlink" href="#tomosipo.Operator.Operator.domain_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Operator.Operator.range">
+<em class="property">property </em><code class="sig-name descname">range</code><a class="headerlink" href="#tomosipo.Operator.Operator.range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Operator.Operator.range_shape">
+<em class="property">property </em><code class="sig-name descname">range_shape</code><a class="headerlink" href="#tomosipo.Operator.Operator.range_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.Operator.Operator.transpose">
+<code class="sig-name descname">transpose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#Operator.transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.Operator.transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return backprojection operator</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.Operator.astra_projector">
+<code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">astra_projector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">volume_geometry</span></em>, <em class="sig-param"><span class="n">projection_geometry</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">voxel_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">detector_supersampling</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#astra_projector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.astra_projector" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.Operator.backward">
+<code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">backward</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">data</span></em>, <em class="sig-param"><span class="n">voxel_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">detector_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">additive</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">projector</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Backproject</p>
+<p>Backprojects all projection datasets on all volumes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*data</strong> – <p><cite>Data</cite> objects
+Data to use for forward and back projection. At least one
+data object relating to a VolumeGeometry and at least one
+data object relating to a projection geometry is required.</p>
+</p></li>
+<li><p><strong>detector_supersampling</strong> – <cite>int</cite>
+For the forward projection, DetectorSuperSampling^2 rays
+will be used.  This should only be used if your detector
+pixels are larger than the voxels in the reconstruction
+volume.  (default: 1)</p></li>
+<li><p><strong>voxel_supersampling</strong> – <cite>int</cite>
+For the backward projection, VoxelSuperSampling^3 rays
+will be used.  This should only be used if your voxels in
+the reconstruction volume are larger than the detector
+pixels.  (default: 1)</p></li>
+<li><p><strong>projector</strong> – <p>??
+It is possible to provide a pre-generated ASTRA projector. Use
+<a href="#id7"><span class="problematic" id="id8">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.Operator.direct_bp">
+<code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">direct_bp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projector</span></em>, <em class="sig-param"><span class="n">vol_data</span></em>, <em class="sig-param"><span class="n">proj_data</span></em>, <em class="sig-param"><span class="n">additive</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#direct_bp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.direct_bp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project forward or backward</p>
+<p>Forward/back projects a volume onto a projection dataset.</p>
+<p># TODO: Describe vol_data and proj_data
+:param projector: ??</p>
+<blockquote>
+<div><p>It is possible to provide a pre-generated ASTRA projector. Use
+<a href="#id9"><span class="problematic" id="id10">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>additive</strong> – bool
+If True, add projection data to existing data. Otherwise
+overwrite data.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.Operator.direct_fp">
+<code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">direct_fp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projector</span></em>, <em class="sig-param"><span class="n">vol_data</span></em>, <em class="sig-param"><span class="n">proj_data</span></em>, <em class="sig-param"><span class="n">additive</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#direct_fp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.direct_fp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project forward or backward</p>
+<p>Forward/back projects a volume onto a projection dataset.</p>
+<p># TODO: Describe vol_data and proj_data
+:param projector: ??</p>
+<blockquote>
+<div><p>It is possible to provide a pre-generated ASTRA projector. Use
+<a href="#id11"><span class="problematic" id="id12">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>additive</strong> – bool
+If True, add projection data to existing data. Otherwise
+overwrite data.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.Operator.direct_project">
+<code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">direct_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projector</span></em>, <em class="sig-param"><span class="n">vol_link</span></em>, <em class="sig-param"><span class="n">proj_link</span></em>, <em class="sig-param"><span class="n">forward</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">additive</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#direct_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.direct_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project forward or backward</p>
+<p>Forward/back projects a volume onto a projection dataset.</p>
+<p># TODO: Describe vol_data and proj_data
+:param projector: ??</p>
+<blockquote>
+<div><p>It is possible to provide a pre-generated ASTRA projector. Use
+<a href="#id13"><span class="problematic" id="id14">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>forward</strong> – bool
+True for forward project, False for backproject.</p></li>
+<li><p><strong>additive</strong> – bool
+If True, add projection data to existing data. Otherwise
+overwrite data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.Operator.fdk">
+<code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">fdk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vol_data</span></em>, <em class="sig-param"><span class="n">proj_data</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">voxel_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">detector_supersampling</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#fdk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.fdk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do an FDK reconstruction of the given geometry.</p>
+<p>Expects a single volume dataset and a single projection dataset to
+be associated with the geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vol_data</strong> – Volume dataset to use.</p></li>
+<li><p><strong>proj_data</strong> – Projection dataset to use.</p></li>
+<li><p><strong>detector_supersampling</strong> – <cite>int</cite>
+For the forward projection, DetectorSuperSampling^2 rays
+will be used.  This should only be used if your detector
+pixels are larger than the voxels in the reconstruction
+volume.  (default: 1)</p></li>
+<li><p><strong>voxel_supersampling</strong> – <cite>int</cite>
+For the backward projection, VoxelSuperSampling^3 rays
+will be used.  This should only be used if your voxels in
+the reconstruction volume are larger than the detector
+pixels.  (default: 1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.Operator.forward">
+<code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">data</span></em>, <em class="sig-param"><span class="n">voxel_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">detector_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">additive</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">projector</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forward project</p>
+<p>Projects all volumes on all projection datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*data</strong> – <p><cite>Data</cite> objects
+Data to use for forward and back projection. At least one
+data object relating to a VolumeGeometry and at least one
+data object relating to a projection geometry is required.</p>
+</p></li>
+<li><p><strong>detector_supersampling</strong> – <cite>int</cite>
+For the forward projection, DetectorSuperSampling^2 rays
+will be used.  This should only be used if your detector
+pixels are larger than the voxels in the reconstruction
+volume.  (default: 1)</p></li>
+<li><p><strong>voxel_supersampling</strong> – <cite>int</cite>
+For the backward projection, VoxelSuperSampling^3 rays
+will be used.  This should only be used if your voxels in
+the reconstruction volume are larger than the detector
+pixels.  (default: 1)</p></li>
+<li><p><strong>projector</strong> – <p>??
+It is possible to provide a pre-generated ASTRA projector. Use
+<a href="#id17"><span class="problematic" id="id18">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.Operator.operator">
+<code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">operator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">volume_geometry</span></em>, <em class="sig-param"><span class="n">projection_geometry</span></em>, <em class="sig-param"><span class="n">voxel_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">detector_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">additive</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#operator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new tomographic operator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>volume_geometry</strong> – <cite>VolumeGeometry</cite>
+The domain of the operator.</p></li>
+<li><p><strong>projection_geometry</strong> – <cite>ProjectionGeometry</cite>
+The range of the operator.</p></li>
+<li><p><strong>voxel_supersampling</strong> – <cite>int</cite> (optional)
+Specifies the amount of voxel supersampling, i.e., how
+many (one dimension) subvoxels are generated from a single
+parent voxel. The default is 1.</p></li>
+<li><p><strong>detector_supersampling</strong> – <cite>int</cite> (optional)
+Specifies the amount of detector supersampling, i.e., how
+many rays are cast per detector. The default is 1.</p></li>
+<li><p><strong>additive</strong> – <cite>bool</cite> (optional)
+Specifies whether the operator should overwrite its range
+(forward) and domain (transpose). When <cite>additive=True</cite>,
+the operator adds instead of overwrites. The default is
+<cite>additive=False</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.Operator.project">
+<code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">project</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">data</span></em>, <em class="sig-param"><span class="n">voxel_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">detector_supersampling</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">forward</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">additive</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">projector</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project forward or backward</p>
+<p>Projects all volumes on all projection datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*data</strong> – <p><cite>Data</cite> objects
+Data to use for forward and back projection. At least one
+data object relating to a VolumeGeometry and at least one
+data object relating to a projection geometry is required.</p>
+</p></li>
+<li><p><strong>detector_supersampling</strong> – <cite>int</cite>
+For the forward projection, DetectorSuperSampling^2 rays
+will be used.  This should only be used if your detector
+pixels are larger than the voxels in the reconstruction
+volume.  (default: 1)</p></li>
+<li><p><strong>voxel_supersampling</strong> – <cite>int</cite>
+For the backward projection, VoxelSuperSampling^3 rays
+will be used.  This should only be used if your voxels in
+the reconstruction volume are larger than the detector
+pixels.  (default: 1)</p></li>
+<li><p><strong>forward</strong> – bool
+True for forward project, False for backproject.</p></li>
+<li><p><strong>additive</strong> – bool
+If True, add projection data to existing data. Otherwise
+overwrite data.</p></li>
+<li><p><strong>projector</strong> – <p>??
+It is possible to provide a pre-generated ASTRA projector. Use
+<a href="#id21"><span class="problematic" id="id22">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.Operator.to_astra_compatible_operator_geometry">
+<code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">to_astra_compatible_operator_geometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vg</span></em>, <em class="sig-param"><span class="n">pg</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#to_astra_compatible_operator_geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.to_astra_compatible_operator_geometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert volume vector geometry to volume geometry (if necessary)</p>
+<p>ASTRA does not support arbitrarily oriented volume geometries. If
+<cite>vg</cite> is a VolumeVectorGeometry, we rotate and translate both <cite>vg</cite>
+and <cite>pg</cite> such that <cite>vg</cite> is axis-aligned, and positioned on the
+origin, which renders it ASTRA-compatible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vg</strong> – volume geometry</p></li>
+<li><p><strong>pg</strong> – projection geometry</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry" title="tomosipo.geometry.volume.VolumeGeometry">VolumeGeometry</a>, <a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">ProjectionGeometry</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.astra">
+<span id="tomosipo-astra-module"></span><h2>tomosipo.astra module<a class="headerlink" href="#module-tomosipo.astra" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tomosipo.astra.from_astra">
+<code class="sig-prename descclassname">tomosipo.astra.</code><code class="sig-name descname">from_astra</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">astra_geom</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/astra.html#from_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.astra.from_astra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import ASTRA geometry to tomosipo</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>astra_geom</strong> – an ASTRA 3D volume or projection geometry</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a tomosipo 3D volume or projection geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.astra.to_astra">
+<code class="sig-prename descclassname">tomosipo.astra.</code><code class="sig-name descname">to_astra</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/astra.html#to_astra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.astra.to_astra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.cupy">
+<span id="tomosipo-cupy-module"></span><h2>tomosipo.cupy module<a class="headerlink" href="#module-tomosipo.cupy" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a short-hand to add cupy support to tomosipo</p>
+<p>To enable support for torch tensors in tomosipo, use:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tomosipo.cupy</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-tomosipo.odl">
+<span id="tomosipo-odl-module"></span><h2>tomosipo.odl module<a class="headerlink" href="#module-tomosipo.odl" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tomosipo.odl.discretized_space_2d_to_3d">
+<code class="sig-prename descclassname">tomosipo.odl.</code><code class="sig-name descname">discretized_space_2d_to_3d</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">space</span></em>, <em class="sig-param"><span class="n">z_shape</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">z_span</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/odl.html#discretized_space_2d_to_3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.odl.discretized_space_2d_to_3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert 2D <cite>odl.discr.DiscretizedSpace</cite> to 3D by adding a 0-th axis.</p>
+<dl>
+<dt>space<span class="classifier"><cite>odl.discr.DiscretizedSpace</cite></span></dt><dd><p>2D space to be converted.</p>
+</dd>
+<dt>z_shape<span class="classifier">int, optional</span></dt><dd><p>Number of points in the 0-th axis.</p>
+</dd>
+<dt>z_span<span class="classifier">float, optional</span></dt><dd><p>Minimum and maximum point of the 0-th axis (like passed to
+<cite>uniform_partition</cite>).
+If a single float is passed, <code class="docutils literal notranslate"><span class="pre">(-z_span/2.,</span> <span class="pre">z_span/2.)</span></code> is
+used.
+If <cite>None</cite> (the default), <code class="docutils literal notranslate"><span class="pre">(-z_shape/2.,</span> <span class="pre">z_shape/2.)</span></code> is used,
+resulting in a partition with cell side <code class="docutils literal notranslate"><span class="pre">1.</span></code>.</p>
+</dd>
+</dl>
+<dl>
+<dt>space3d<span class="classifier"><cite>odl.discr.DiscretizedSpace</cite></span></dt><dd><p>The 3D space that contains the given 2D space as a single
+0-th-axis-slice.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.odl.fan_to_cone_beam_geometry">
+<code class="sig-prename descclassname">tomosipo.odl.</code><code class="sig-name descname">fan_to_cone_beam_geometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fb_geometry</span></em>, <em class="sig-param"><span class="n">det_z_span</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/odl.html#fan_to_cone_beam_geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.odl.fan_to_cone_beam_geometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert 2D <cite>odl.tomo.FanBeamGeometry</cite> to 3D <cite>odl.tomo.ConeBeamGeometry</cite>,
+by adding a trivial 0-th axis.</p>
+<p>For odl&lt;=’0.7.0’ the classes are <cite>odl.tomo.FanFlatGeometry</cite> and
+<cite>odl.tomo.ConeFlatGeometry</cite>.</p>
+<dl>
+<dt>fb_geometry<span class="classifier"><cite>odl.tomo.FanBeamGeometry</cite></span></dt><dd><p>The fan beam geometry to be converted.</p>
+</dd>
+<dt>det_z_span<span class="classifier">float, optional</span></dt><dd><p>Size of the detector in the trivial 0-th dimension.
+The default is <code class="docutils literal notranslate"><span class="pre">1.</span></code>.</p>
+</dd>
+</dl>
+<dl>
+<dt>cb_geometry<span class="classifier"><cite>odl.tomo.ConeBeamGeometry</cite></span></dt><dd><p>The cone beam geometry that coincides with the given fan beam geometry
+at the central slice (0-th coordinate equals zero).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.odl.from_odl">
+<code class="sig-prename descclassname">tomosipo.odl.</code><code class="sig-name descname">from_odl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">geom_or_op</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/odl.html#from_odl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.odl.from_odl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.odl.parallel_2d_to_3d_geometry">
+<code class="sig-prename descclassname">tomosipo.odl.</code><code class="sig-name descname">parallel_2d_to_3d_geometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pb2d_geometry</span></em>, <em class="sig-param"><span class="n">det_z_shape</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">det_z_span</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/odl.html#parallel_2d_to_3d_geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.odl.parallel_2d_to_3d_geometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert <cite>odl.tomo.Parallel2dGeometry</cite> to <cite>odl.tomo.Parallel3dAxisGeometry</cite>,
+by adding a trivial 0-th axis.</p>
+<dl>
+<dt>pb2d_geometry<span class="classifier"><cite>odl.tomo.Parallel2dGeometry</cite></span></dt><dd><p>The 2d parallel beam geometry to be converted.</p>
+</dd>
+<dt>det_z_shape<span class="classifier">int, optional</span></dt><dd><p>Number of detector pixels in the 0-th dimension.
+Can be used to batch multiple 2d projections into one 3d projection.</p>
+</dd>
+<dt>det_z_span<span class="classifier">float or 2-tuple of float, optional</span></dt><dd><p>Minimum and maximum point of the 0-th axis (like passed to
+<cite>uniform_partition</cite>).
+If a single float is passed, <code class="docutils literal notranslate"><span class="pre">(-det_z_span/2.,</span> <span class="pre">det_z_span/2.)</span></code> is
+used.
+If <cite>None</cite> (the default), <code class="docutils literal notranslate"><span class="pre">(-det_z_shape/2.,</span> <span class="pre">det_z_shape/2.)</span></code> is used,
+resulting in a partition with cell side <code class="docutils literal notranslate"><span class="pre">1.</span></code>.</p>
+</dd>
+</dl>
+<dl>
+<dt>pb3d_geometry<span class="classifier"><cite>odl.tomo.Parallel3dAxisGeometry</cite></span></dt><dd><p>A 3d parallel beam geometry that coincides with the given 2d geometry
+in every slice (0-th coordinate fixed).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.phantom">
+<span id="tomosipo-phantom-module"></span><h2>tomosipo.phantom module<a class="headerlink" href="#module-tomosipo.phantom" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tomosipo.phantom.hollow_box">
+<code class="sig-prename descclassname">tomosipo.phantom.</code><code class="sig-name descname">hollow_box</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vd</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/phantom.html#hollow_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.phantom.hollow_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills a volume dataset with a hollow box phantom</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vd</strong> – <cite>ts.Data</cite>
+A volume dataset.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ts.Data</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.torch_support">
+<span id="tomosipo-torch-support-module"></span><h2>tomosipo.torch_support module<a class="headerlink" href="#module-tomosipo.torch_support" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a short-hand to add torch support to tomosipo</p>
+<p>To enable support for torch tensors in tomosipo, use:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tomosipo.torch_support</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt id="tomosipo.torch_support.Backward">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.torch_support.</code><code class="sig-name descname">Backward</code><a class="reference internal" href="_modules/tomosipo/torch_support.html#Backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.Backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
+<dl class="py method">
+<dt id="tomosipo.torch_support.Backward.backward">
+<em class="property">static </em><code class="sig-name descname">backward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">grad_output</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/torch_support.html#Backward.backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.Backward.backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a formula for differentiating the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
+as many outputs did <a class="reference internal" href="#tomosipo.torch_support.forward" title="tomosipo.torch_support.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> return, and it should return as many
+tensors, as there were inputs to <a class="reference internal" href="#tomosipo.torch_support.forward" title="tomosipo.torch_support.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>. Each argument is the
+gradient w.r.t the given output, and each returned value should be the
+gradient w.r.t. the corresponding input.</p>
+<p>The context can be used to retrieve tensors saved during the forward
+pass. It also has an attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx.needs_input_grad</span></code> as a tuple
+of booleans representing whether each input needs gradient. E.g.,
+<a class="reference internal" href="#tomosipo.torch_support.backward" title="tomosipo.torch_support.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> will have <code class="docutils literal notranslate"><span class="pre">ctx.needs_input_grad[0]</span> <span class="pre">=</span> <span class="pre">True</span></code> if the
+first input to <a class="reference internal" href="#tomosipo.torch_support.forward" title="tomosipo.torch_support.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> needs gradient computated w.r.t. the
+output.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.torch_support.Backward.forward">
+<em class="property">static </em><code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">vg</span></em>, <em class="sig-param"><span class="n">pg</span></em>, <em class="sig-param"><span class="n">projector</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/torch_support.html#Backward.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.Backward.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context ctx as the first argument, followed by any
+number of arguments (tensors or other types).</p>
+<p>The context can be used to store tensors that can be then retrieved
+during the backward pass.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="tomosipo.torch_support.Forward">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.torch_support.</code><code class="sig-name descname">Forward</code><a class="reference internal" href="_modules/tomosipo/torch_support.html#Forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.Forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
+<dl class="py method">
+<dt id="tomosipo.torch_support.Forward.backward">
+<em class="property">static </em><code class="sig-name descname">backward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">grad_output</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/torch_support.html#Forward.backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.Forward.backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a formula for differentiating the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
+as many outputs did <a class="reference internal" href="#tomosipo.torch_support.forward" title="tomosipo.torch_support.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> return, and it should return as many
+tensors, as there were inputs to <a class="reference internal" href="#tomosipo.torch_support.forward" title="tomosipo.torch_support.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>. Each argument is the
+gradient w.r.t the given output, and each returned value should be the
+gradient w.r.t. the corresponding input.</p>
+<p>The context can be used to retrieve tensors saved during the forward
+pass. It also has an attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx.needs_input_grad</span></code> as a tuple
+of booleans representing whether each input needs gradient. E.g.,
+<a class="reference internal" href="#tomosipo.torch_support.backward" title="tomosipo.torch_support.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> will have <code class="docutils literal notranslate"><span class="pre">ctx.needs_input_grad[0]</span> <span class="pre">=</span> <span class="pre">True</span></code> if the
+first input to <a class="reference internal" href="#tomosipo.torch_support.forward" title="tomosipo.torch_support.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> needs gradient computated w.r.t. the
+output.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.torch_support.Forward.forward">
+<em class="property">static </em><code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">vg</span></em>, <em class="sig-param"><span class="n">pg</span></em>, <em class="sig-param"><span class="n">projector</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/torch_support.html#Forward.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.Forward.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context ctx as the first argument, followed by any
+number of arguments (tensors or other types).</p>
+<p>The context can be used to store tensors that can be then retrieved
+during the backward pass.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="tomosipo.torch_support.OperatorFunction">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.torch_support.</code><code class="sig-name descname">OperatorFunction</code><a class="reference internal" href="_modules/tomosipo/torch_support.html#OperatorFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.OperatorFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
+<dl class="py method">
+<dt id="tomosipo.torch_support.OperatorFunction.backward">
+<em class="property">static </em><code class="sig-name descname">backward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">grad_output</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/torch_support.html#OperatorFunction.backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.OperatorFunction.backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a formula for differentiating the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
+as many outputs did <a class="reference internal" href="#tomosipo.torch_support.forward" title="tomosipo.torch_support.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> return, and it should return as many
+tensors, as there were inputs to <a class="reference internal" href="#tomosipo.torch_support.forward" title="tomosipo.torch_support.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>. Each argument is the
+gradient w.r.t the given output, and each returned value should be the
+gradient w.r.t. the corresponding input.</p>
+<p>The context can be used to retrieve tensors saved during the forward
+pass. It also has an attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx.needs_input_grad</span></code> as a tuple
+of booleans representing whether each input needs gradient. E.g.,
+<a class="reference internal" href="#tomosipo.torch_support.backward" title="tomosipo.torch_support.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> will have <code class="docutils literal notranslate"><span class="pre">ctx.needs_input_grad[0]</span> <span class="pre">=</span> <span class="pre">True</span></code> if the
+first input to <a class="reference internal" href="#tomosipo.torch_support.forward" title="tomosipo.torch_support.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> needs gradient computated w.r.t. the
+output.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.torch_support.OperatorFunction.forward">
+<em class="property">static </em><code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">operator</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/torch_support.html#OperatorFunction.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.OperatorFunction.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context ctx as the first argument, followed by any
+number of arguments (tensors or other types).</p>
+<p>The context can be used to store tensors that can be then retrieved
+during the backward pass.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.torch_support.backward">
+<code class="sig-prename descclassname">tomosipo.torch_support.</code><code class="sig-name descname">backward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">vg</span></em>, <em class="sig-param"><span class="n">pg</span></em>, <em class="sig-param"><span class="n">projector</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/torch_support.html#backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.backward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.torch_support.forward">
+<code class="sig-prename descclassname">tomosipo.torch_support.</code><code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">vg</span></em>, <em class="sig-param"><span class="n">pg</span></em>, <em class="sig-param"><span class="n">projector</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/torch_support.html#forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.forward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.torch_support.to_autograd">
+<code class="sig-prename descclassname">tomosipo.torch_support.</code><code class="sig-name descname">to_autograd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">operator</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/torch_support.html#to_autograd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.torch_support.to_autograd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts an operator to an autograd function</p>
+<p>Example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># batch dimension</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">operator</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">pg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">to_autograd</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vd</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="o">*</span><span class="n">A</span><span class="o">.</span><span class="n">domain_shape</span><span class="p">),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="n">vd</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">vd</span><span class="o">.</span><span class="n">grad</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Likewise, you may use the transpose:
+&gt;&gt;&gt; g = to_autograd(A.T)
+&gt;&gt;&gt; pd = torch.randn((B, <a href="#id23"><span class="problematic" id="id24">*</span></a>A.T.domain_shape), requires_grad=True)
+&gt;&gt;&gt; g(pd).sum().backward()
+&gt;&gt;&gt; print(vd.grad)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>operator</strong> – a <a href="#id25"><span class="problematic" id="id26">`</span></a>ts.Operator’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an autograd function</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.utils">
+<span id="tomosipo-utils-module"></span><h2>tomosipo.utils module<a class="headerlink" href="#module-tomosipo.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tomosipo.utils.print_options">
+<code class="sig-prename descclassname">tomosipo.utils.</code><code class="sig-name descname">print_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/utils.html#print_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.utils.print_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>This context manager set numpy print options temporarily</p>
+<p>ODL sets the numpy printoptions globally, which makes it difficult
+to ensure that the representation of geometries is consistent over
+different installations. Specifically, we want to ensure that
+testing succeeds regardless of the specific version of ODL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.utils.slice_interval">
+<code class="sig-prename descclassname">tomosipo.utils.</code><code class="sig-name descname">slice_interval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">left</span></em>, <em class="sig-param"><span class="n">right</span></em>, <em class="sig-param"><span class="n">length</span></em>, <em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/utils.html#slice_interval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.utils.slice_interval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slice a one-dimensional interval</p>
+<p>The line extends from <cite>left</cite> to <cite>right</cite> and is divided into
+<cite>length</cite> parts. It is indexed by a <cite>key</cite> which can be an <cite>int</cite> or
+a <cite>slice</cite>.</p>
+<p>If the step size of <cite>key</cite> equals one, then <cite>slice_interval</cite> should
+works exactly as expected.</p>
+<p>When the step size is greater than one, there are two equally
+valid approaches to slicing:</p>
+<ol class="arabic simple">
+<li><p>Take the left-most and right-most pixel of the slice and set
+the size of the resulting interval to be equal to the
+difference between their left- and right-most edge,
+respectively.</p></li>
+<li><p>Multiply the pixel size by the step size and ensure the size of
+the new interval equals new_len * new_pixel_size.</p></li>
+</ol>
+<p>This function implements the second approach.</p>
+<p>The first approach has the disadvantage that the new pixel size is
+not an integer multiple of the original pixel size. Moreover, it
+is not compatible with the way that we want to use this function
+as a way to bin detector pixels.</p>
+<p>The second approach has the disadvantage that the new values for
+<cite>left</cite> and <cite>right</cite> might fall outside the original interval, which
+is counter-intuitive. Nonetheless, it is compatible with detector
+and volume binning.</p>
+<p>Example. Suppose we have the interval [0, 4] divided into four
+pixels. An illustration of the interval is shown below, with <cite>|</cite>
+denoting the edges of the pixels. As you can see, with a step size
+of two, the pixels become twice as large, and depending on the
+start of the slice, the interval is shifted to the left or
+right. With a step size of 3, the resulting interval is larger
+than the original interval.</p>
+<blockquote>
+<div><blockquote>
+<div><blockquote>
+<div><p><a href="#id27"><span class="problematic" id="id28">|x|x|x|x|</span></a>   [0:4:1]</p>
+</div></blockquote>
+<div class="line-block">
+<div class="line">x | x |    [0:4:2]
+| x | x |  [1:4:2]</div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">x  |  x  | [0:4:3]</div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> – <cite>scalar</cite> or <cite>np.array</cite></p></li>
+<li><p><strong>right</strong> – <cite>scalar</cite> or <cite>np.array</cite></p></li>
+<li><p><strong>length</strong> – <cite>int</cite></p></li>
+<li><p><strong>key</strong> – <cite>slice</cite> or <cite>int</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple containing the new left and right extent of the line,
+the number of “pixels”, and the new “pixel” size.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>(scalar, scalar, int, scalar)</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.utils.to_pos">
+<code class="sig-prename descclassname">tomosipo.utils.</code><code class="sig-name descname">to_pos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos</span></em>, <em class="sig-param"><span class="n">dim</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/utils.html#to_pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.utils.to_pos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.utils.to_shape">
+<code class="sig-prename descclassname">tomosipo.utils.</code><code class="sig-name descname">to_shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">dim</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">allow_zeros</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/utils.html#to_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.utils.to_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.utils.to_size">
+<code class="sig-prename descclassname">tomosipo.utils.</code><code class="sig-name descname">to_size</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">size</span></em>, <em class="sig-param"><span class="n">dim</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/utils.html#to_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.utils.to_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.utils.up_slice">
+<code class="sig-prename descclassname">tomosipo.utils.</code><code class="sig-name descname">up_slice</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/utils.html#up_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.utils.up_slice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.utils.up_tuple">
+<code class="sig-prename descclassname">tomosipo.utils.</code><code class="sig-name descname">up_tuple</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">n</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/utils.html#up_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.utils.up_tuple" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.vector_calc">
+<span id="tomosipo-vector-calc-module"></span><h2>tomosipo.vector_calc module<a class="headerlink" href="#module-tomosipo.vector_calc" title="Permalink to this headline">¶</a></h2>
+<p>This module provides functionality for vector calculus.</p>
+<p>Many objects in tomosipo contain vectors that change over time. Think
+of a <cite>ts.ConeVectorGeometry</cite>, for wich the source and detector
+positions change with each angle. The same is true for a
+<cite>VolumeVectorGeometry</cite>.</p>
+<p>Therefore, it makes to sense to force these vectors into a common
+format and provide some basic common functionality. In tomosipo, the
+standard shape for these vector is <cite>(num_steps, 3)</cite>. The functionality
+for creating and manipulating these vector can be found here.</p>
+<p>This module provides a convenience function, <cite>to_vec</cite>, that converts
+any vector that it deems compatible into the common vector format. For
+scalars that change over time, such angles in a projection geometry or
+angles in a rotation, it provides <cite>to_scalar</cite>, which converts a scalar
+or array of scalars to a numpy array with shape <cite>(num_steps, 1)</cite>.</p>
+<dl class="py function">
+<dt id="tomosipo.vector_calc.check_same_shapes">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">check_same_shapes</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#check_same_shapes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.check_same_shapes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.cross_product">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">cross_product</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#cross_product"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.cross_product" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.dot">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">dot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#dot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.dot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.ignore_divide_by_zero">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">ignore_divide_by_zero</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#ignore_divide_by_zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.ignore_divide_by_zero" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.intersect">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">intersect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">v_origin</span></em>, <em class="sig-param"><span class="n">v_direction</span></em>, <em class="sig-param"><span class="n">plane_origin</span></em>, <em class="sig-param"><span class="n">plane_normal</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#intersect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.intersect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.invert_transformation_matrix">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">invert_transformation_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">M</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#invert_transformation_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.invert_transformation_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.matrix_matrix_transform">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">matrix_matrix_transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">M1</span></em>, <em class="sig-param"><span class="n">M2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#matrix_matrix_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.matrix_matrix_transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.matrix_transform">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">matrix_transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">M</span></em>, <em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#matrix_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.matrix_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a projective matrix transformation to x</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>M</strong> – A transformation matrix</p></li>
+<li><p><strong>x</strong> – <cite>np.array</cite>
+A homogeneous coordinate vector</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.norm">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">norm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.norm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.orthogonal_basis_from_axis">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">orthogonal_basis_from_axis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">axis</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#orthogonal_basis_from_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.orthogonal_basis_from_axis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.squared_norm">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">squared_norm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#squared_norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.squared_norm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.to_homogeneous">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">to_homogeneous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#to_homogeneous"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.to_homogeneous" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.to_homogeneous_point">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">to_homogeneous_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#to_homogeneous_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.to_homogeneous_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.to_homogeneous_vec">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">to_homogeneous_vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#to_homogeneous_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.to_homogeneous_vec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.to_scalar">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">to_scalar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#to_scalar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.to_scalar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.vector_calc.to_vec">
+<code class="sig-prename descclassname">tomosipo.vector_calc.</code><code class="sig-name descname">to_vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/vector_calc.html#to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.vector_calc.to_vec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tomosipo" title="Permalink to this headline">¶</a></h2>
+<p>Top-level package for tomosipo.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tomosipo.geometry.html" class="btn btn-neutral float-right" title="tomosipo.geometry package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="tomosipo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,452 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.qt package &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="tomosipo.links package" href="tomosipo.links.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Tomosipo</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">tomosipo</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="tomosipo.html">tomosipo package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="tomosipo.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tomosipo.geometry.html">tomosipo.geometry package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tomosipo.links.html">tomosipo.links package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">tomosipo.qt package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.Data">tomosipo.Data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.Operator">tomosipo.Operator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.astra">tomosipo.astra module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.cupy">tomosipo.cupy module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.odl">tomosipo.odl module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.phantom">tomosipo.phantom module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.torch_support">tomosipo.torch_support module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.utils">tomosipo.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo.vector_calc">tomosipo.vector_calc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tomosipo.html#module-tomosipo">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">tomosipo</a> &raquo;</li>
+        
+          <li><a href="tomosipo.html">tomosipo package</a> &raquo;</li>
+        
+      <li>tomosipo.qt package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/tomosipo.qt.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tomosipo-qt-package">
+<h1>tomosipo.qt package<a class="headerlink" href="#tomosipo-qt-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-tomosipo.qt.animation">
+<span id="tomosipo-qt-animation-module"></span><h2>tomosipo.qt.animation module<a class="headerlink" href="#module-tomosipo.qt.animation" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tomosipo.qt.animation.Animation">
+<em class="property">class </em><code class="sig-prename descclassname">tomosipo.qt.animation.</code><code class="sig-name descname">Animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">geometries</span></em>, <em class="sig-param"><span class="n">total_duration_seconds</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/animation.html#Animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.animation.Animation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Documentation for Animation</p>
+<dl class="py method">
+<dt id="tomosipo.qt.animation.Animation.iter_video_frames">
+<code class="sig-name descname">iter_video_frames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/animation.html#Animation.iter_video_frames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.animation.Animation.iter_video_frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over the frames the video</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.qt.animation.Animation.new_gl_view_widget">
+<code class="sig-name descname">new_gl_view_widget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/animation.html#Animation.new_gl_view_widget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.animation.Animation.new_gl_view_widget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.qt.animation.Animation.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'geometry_video.mp4'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/animation.html#Animation.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.animation.Animation.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.qt.animation.Animation.total_steps">
+<em class="property">property </em><code class="sig-name descname">total_steps</code><a class="headerlink" href="#tomosipo.qt.animation.Animation.total_steps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.qt.animation.Animation.video_as_array">
+<code class="sig-name descname">video_as_array</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/animation.html#Animation.video_as_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.animation.Animation.video_as_array" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tomosipo.qt.animation.Animation.window">
+<code class="sig-name descname">window</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/animation.html#Animation.window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.animation.Animation.window" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.animation.animate">
+<code class="sig-prename descclassname">tomosipo.qt.animation.</code><code class="sig-name descname">animate</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">geometries</span></em>, <em class="sig-param"><span class="n">total_duration_seconds</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/animation.html#animate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.animation.animate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an animation of the geometries</p>
+<p>The return type is an object that can be saved:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;geometry.mp4&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It can also be opened in a window:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span><span class="o">.</span><span class="n">window</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In a Jupyter notebook, the animation is automatically converted to
+a video and shown if it is the final value in a cell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>total_duration_seconds</strong> – the total duration of the animation in seconds.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an animation object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>Animation</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.animation.display_geometry">
+<code class="sig-prename descclassname">tomosipo.qt.animation.</code><code class="sig-name descname">display_geometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">geometries</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/animation.html#display_geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.animation.display_geometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display interactive 3D animation of the acquisition geometry</p>
+<p>Note: requires the installation of pyopengl.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>geometries</strong> – Any combination of volume and projection geometries.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Nothing</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.animation.update_widget">
+<code class="sig-prename descclassname">tomosipo.qt.animation.</code><code class="sig-name descname">update_widget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span></em>, <em class="sig-param"><span class="n">geometries</span></em>, <em class="sig-param"><span class="n">colors</span></em>, <em class="sig-param"><span class="n">step</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/animation.html#update_widget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.animation.update_widget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.qt.data">
+<span id="tomosipo-qt-data-module"></span><h2>tomosipo.qt.data module<a class="headerlink" href="#module-tomosipo.qt.data" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tomosipo.qt.data.display_data">
+<code class="sig-prename descclassname">tomosipo.qt.data.</code><code class="sig-name descname">display_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/data.html#display_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.data.display_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a projection or volume data set.</p>
+<p>Shows the slices or projection images depending on the argument.</p>
+<p>For projection datasets, the “first” pixel (0, 0) is located
+in the lower-left corner and the “last” pixel (N, N) is located in
+the top-right corner.</p>
+<p>For volume datasets, the voxel (0, 0, 0) is located in the
+lower-left corner of the first (left-most) slice and the voxel (N,
+N, N) is located in the top-right corner of the last slice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>d</strong> – <cite>Data</cite>
+A tomosipo dataset of either a volume or projection set.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.qt.display">
+<span id="tomosipo-qt-display-module"></span><h2>tomosipo.qt.display module<a class="headerlink" href="#module-tomosipo.qt.display" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tomosipo.qt.display.display">
+<code class="sig-prename descclassname">tomosipo.qt.display.</code><code class="sig-name descname">display</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">arg</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">items</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/display.html#display"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.display.display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.display.get_app">
+<code class="sig-prename descclassname">tomosipo.qt.display.</code><code class="sig-name descname">get_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/display.html#get_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.display.get_app" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.display.get_color_cycle">
+<code class="sig-prename descclassname">tomosipo.qt.display.</code><code class="sig-name descname">get_color_cycle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/display.html#get_color_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.display.get_color_cycle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.display.run_app">
+<code class="sig-prename descclassname">tomosipo.qt.display.</code><code class="sig-name descname">run_app</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/display.html#run_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.display.run_app" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.qt.geometry">
+<span id="tomosipo-qt-geometry-module"></span><h2>tomosipo.qt.geometry module<a class="headerlink" href="#module-tomosipo.qt.geometry" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tomosipo.qt.geometry.num_colors">
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">num_colors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/geometry.html#num_colors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.geometry.num_colors" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">num_colors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span><span class="p">:</span> <span class="n"><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry" title="tomosipo.geometry.volume.VolumeGeometry">tomosipo.geometry.volume.VolumeGeometry</a></span></em><span class="sig-paren">)</span></dt>
+<dt>
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">num_colors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span><span class="p">:</span> <span class="n"><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.volume_vec.VolumeVectorGeometry" title="tomosipo.geometry.volume_vec.VolumeVectorGeometry">tomosipo.geometry.volume_vec.VolumeVectorGeometry</a></span></em><span class="sig-paren">)</span></dt>
+<dt>
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">num_colors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span><span class="p">:</span> <span class="n"><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">tomosipo.geometry.base_projection.ProjectionGeometry</a></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.geometry.pg_num_colors">
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">pg_num_colors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span><span class="p">:</span> <span class="n"><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">tomosipo.geometry.base_projection.ProjectionGeometry</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/geometry.html#pg_num_colors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.geometry.pg_num_colors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.geometry.pg_to_mesh_items">
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">pg_to_mesh_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pg</span></em>, <em class="sig-param"><span class="n">colors</span></em>, <em class="sig-param"><span class="n">i</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/geometry.html#pg_to_mesh_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.geometry.pg_to_mesh_items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.geometry.to_mesh_items">
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">to_mesh_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span></em>, <em class="sig-param"><span class="n">colors</span></em>, <em class="sig-param"><span class="n">i</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/geometry.html#to_mesh_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.geometry.to_mesh_items" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">to_mesh_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pg</span><span class="p">:</span> <span class="n"><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.base_projection.ProjectionGeometry" title="tomosipo.geometry.base_projection.ProjectionGeometry">tomosipo.geometry.base_projection.ProjectionGeometry</a></span></em>, <em class="sig-param"><span class="n">colors</span></em>, <em class="sig-param"><span class="n">i</span></em><span class="sig-paren">)</span></dt>
+<dt>
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">to_mesh_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vg</span><span class="p">:</span> <span class="n"><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry" title="tomosipo.geometry.volume.VolumeGeometry">tomosipo.geometry.volume.VolumeGeometry</a></span></em>, <em class="sig-param"><span class="n">colors</span></em>, <em class="sig-param"><span class="n">i</span></em><span class="sig-paren">)</span></dt>
+<dt>
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">to_mesh_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vg</span><span class="p">:</span> <span class="n"><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.volume_vec.VolumeVectorGeometry" title="tomosipo.geometry.volume_vec.VolumeVectorGeometry">tomosipo.geometry.volume_vec.VolumeVectorGeometry</a></span></em>, <em class="sig-param"><span class="n">colors</span></em>, <em class="sig-param"><span class="n">i</span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.geometry.vg_num_colors">
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">vg_num_colors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span><span class="p">:</span> <span class="n"><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry" title="tomosipo.geometry.volume.VolumeGeometry">tomosipo.geometry.volume.VolumeGeometry</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/geometry.html#vg_num_colors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.geometry.vg_num_colors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.geometry.vg_to_mesh_items">
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">vg_to_mesh_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vg</span><span class="p">:</span> <span class="n"><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry" title="tomosipo.geometry.volume.VolumeGeometry">tomosipo.geometry.volume.VolumeGeometry</a></span></em>, <em class="sig-param"><span class="n">colors</span></em>, <em class="sig-param"><span class="n">i</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/geometry.html#vg_to_mesh_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.geometry.vg_to_mesh_items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.geometry.vg_vec_num_colors">
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">vg_vec_num_colors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">g</span><span class="p">:</span> <span class="n"><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.volume_vec.VolumeVectorGeometry" title="tomosipo.geometry.volume_vec.VolumeVectorGeometry">tomosipo.geometry.volume_vec.VolumeVectorGeometry</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/geometry.html#vg_vec_num_colors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.geometry.vg_vec_num_colors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.qt.geometry.vg_vec_to_mesh_items">
+<code class="sig-prename descclassname">tomosipo.qt.geometry.</code><code class="sig-name descname">vg_vec_to_mesh_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vg</span><span class="p">:</span> <span class="n"><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.volume_vec.VolumeVectorGeometry" title="tomosipo.geometry.volume_vec.VolumeVectorGeometry">tomosipo.geometry.volume_vec.VolumeVectorGeometry</a></span></em>, <em class="sig-param"><span class="n">colors</span></em>, <em class="sig-param"><span class="n">i</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/geometry.html#vg_vec_to_mesh_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.geometry.vg_vec_to_mesh_items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.qt.view_widget_hack">
+<span id="tomosipo-qt-view-widget-hack-module"></span><h2>tomosipo.qt.view_widget_hack module<a class="headerlink" href="#module-tomosipo.qt.view_widget_hack" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a modified version of GLViewWidget.renderToArray().</p>
+<p>The modification is described in this pull request:</p>
+<p><a class="reference external" href="https://github.com/pyqtgraph/pyqtgraph/pull/1306">https://github.com/pyqtgraph/pyqtgraph/pull/1306</a></p>
+<p>At some point, we should consider removing this function.</p>
+<dl class="py function">
+<dt id="tomosipo.qt.view_widget_hack.render_to_array">
+<code class="sig-prename descclassname">tomosipo.qt.view_widget_hack.</code><code class="sig-name descname">render_to_array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gl_view_widget</span></em>, <em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">textureSize</span><span class="o">=</span><span class="default_value">1024</span></em>, <em class="sig-param"><span class="n">padding</span><span class="o">=</span><span class="default_value">256</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/qt/view_widget_hack.html#render_to_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.qt.view_widget_hack.render_to_array" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tomosipo.qt">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tomosipo.qt" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="tomosipo.links.html" class="btn btn-neutral float-left" title="tomosipo.links package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

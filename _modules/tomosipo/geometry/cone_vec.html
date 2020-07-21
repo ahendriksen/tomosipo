@@ -1,0 +1,517 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.geometry.cone_vec &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tomosipo</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>tomosipo.geometry.cone_vec</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tomosipo.geometry.cone_vec</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tomosipo</span> <span class="k">as</span> <span class="nn">ts</span>
+<span class="kn">import</span> <span class="nn">tomosipo.vector_calc</span> <span class="k">as</span> <span class="nn">vc</span>
+<span class="kn">from</span> <span class="nn">tomosipo.utils</span> <span class="kn">import</span> <span class="n">up_tuple</span><span class="p">,</span> <span class="n">up_slice</span>
+<span class="kn">from</span> <span class="nn">.base_projection</span> <span class="kn">import</span> <span class="n">ProjectionGeometry</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">det_vec</span> <span class="k">as</span> <span class="n">dv</span>
+<span class="kn">from</span> <span class="nn">.transform</span> <span class="kn">import</span> <span class="n">Transform</span>
+
+
+<div class="viewcode-block" id="cone_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.cone_vec.cone_vec">[docs]</a><span class="k">def</span> <span class="nf">cone_vec</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">src_pos</span><span class="p">,</span> <span class="n">det_pos</span><span class="p">,</span> <span class="n">det_v</span><span class="p">,</span> <span class="n">det_u</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a cone-beam vector geometry</span>
+
+<span class="sd">    :param shape: (`int`, `int`) or `int`</span>
+<span class="sd">        The detector shape in pixels. If tuple, the order is</span>
+<span class="sd">        (height, width). Else the pixel has the same number of</span>
+<span class="sd">        pixels in the U and V direction.</span>
+<span class="sd">    :param src_pos: np.array</span>
+<span class="sd">        A numpy array of dimension (num_positions, 3) with the</span>
+<span class="sd">        source positions in (Z, Y, X) order.</span>
+<span class="sd">    :param det_pos:</span>
+<span class="sd">        A numpy array of dimension (num_positions, 3) with the</span>
+<span class="sd">        detector center positions in (Z, Y, X) order.</span>
+<span class="sd">    :param det_v:</span>
+<span class="sd">        A numpy array of dimension (num_positions, 3) with the</span>
+<span class="sd">        vector pointing from the detector (0, 0) to (1, 0) pixel</span>
+<span class="sd">        (up).</span>
+<span class="sd">    :param det_u:</span>
+<span class="sd">        A numpy array of dimension (num_positions, 3) with the</span>
+<span class="sd">        vector pointing from the detector (0, 0) to (0, 1) pixel</span>
+<span class="sd">        (sideways).</span>
+<span class="sd">    :returns:</span>
+<span class="sd">    :rtype:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ConeVectorGeometry</span><span class="p">(</span>
+        <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">src_pos</span><span class="o">=</span><span class="n">src_pos</span><span class="p">,</span> <span class="n">det_pos</span><span class="o">=</span><span class="n">det_pos</span><span class="p">,</span> <span class="n">det_v</span><span class="o">=</span><span class="n">det_v</span><span class="p">,</span> <span class="n">det_u</span><span class="o">=</span><span class="n">det_u</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="random_cone_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.cone_vec.random_cone_vec">[docs]</a><span class="k">def</span> <span class="nf">random_cone_vec</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Generates a random cone vector geometry</span>
+
+<span class="sd">    :returns: a random cone vector geometry</span>
+<span class="sd">    :rtype: `ConeVectorGeometry`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">random_transform</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">T</span> <span class="o">*</span> <span class="n">ts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">random_cone</span><span class="p">()</span><span class="o">.</span><span class="n">to_vec</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ConeVectorGeometry"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.cone_vec.ConeVectorGeometry">[docs]</a><span class="k">class</span> <span class="nc">ConeVectorGeometry</span><span class="p">(</span><span class="n">ProjectionGeometry</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Documentation for ConeVectorGeometry</span>
+
+<span class="sd">    A class for representing cone vector geometries.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">src_pos</span><span class="p">,</span> <span class="n">det_pos</span><span class="p">,</span> <span class="n">det_v</span><span class="p">,</span> <span class="n">det_u</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a cone-beam vector geometry</span>
+
+<span class="sd">        :param shape: (`int`, `int`) or `int`</span>
+<span class="sd">            The detector shape in pixels. If tuple, the order is</span>
+<span class="sd">            (height, width). Else the pixel has the same number of</span>
+<span class="sd">            pixels in the U and V direction.</span>
+<span class="sd">        :param src_pos: np.array</span>
+<span class="sd">            A numpy array of dimension (num_positions, 3) with the</span>
+<span class="sd">            source positions in (Z, Y, X) order.</span>
+<span class="sd">        :param det_pos:</span>
+<span class="sd">            A numpy array of dimension (num_positions, 3) with the</span>
+<span class="sd">            detector center positions in (Z, Y, X) order.</span>
+<span class="sd">        :param det_v:</span>
+<span class="sd">            A numpy array of dimension (num_positions, 3) with the</span>
+<span class="sd">            vector pointing from the detector (0, 0) to (1, 0) pixel</span>
+<span class="sd">            (up).</span>
+<span class="sd">        :param det_u:</span>
+<span class="sd">            A numpy array of dimension (num_positions, 3) with the</span>
+<span class="sd">            vector pointing from the detector (0, 0) to (0, 1) pixel</span>
+<span class="sd">            (sideways).</span>
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ConeVectorGeometry</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="n">src_pos</span><span class="p">,</span> <span class="n">det_pos</span><span class="p">,</span> <span class="n">det_v</span><span class="p">,</span> <span class="n">det_u</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">vc</span><span class="o">.</span><span class="n">to_vec</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="n">src_pos</span><span class="p">,</span> <span class="n">det_pos</span><span class="p">,</span> <span class="n">det_v</span><span class="p">,</span> <span class="n">det_u</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">src_pos</span><span class="p">,</span> <span class="n">det_pos</span><span class="p">,</span> <span class="n">det_v</span><span class="p">,</span> <span class="n">det_u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
+            <span class="n">src_pos</span><span class="p">,</span> <span class="n">det_pos</span><span class="p">,</span> <span class="n">det_v</span><span class="p">,</span> <span class="n">det_u</span>
+        <span class="p">)</span>
+
+        <span class="n">vc</span><span class="o">.</span><span class="n">check_same_shapes</span><span class="p">(</span><span class="n">src_pos</span><span class="p">,</span> <span class="n">det_pos</span><span class="p">,</span> <span class="n">det_v</span><span class="p">,</span> <span class="n">det_u</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_src_pos</span> <span class="o">=</span> <span class="n">src_pos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span> <span class="o">=</span> <span class="n">dv</span><span class="o">.</span><span class="n">det_vec</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">det_pos</span><span class="p">,</span> <span class="n">det_v</span><span class="p">,</span> <span class="n">det_u</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_cone</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_parallel</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_vector</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">print_options</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;ts.cone_vec(</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    shape=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">det_shape</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    src_pos=</span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_src_pos</span><span class="p">)</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    det_pos=</span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_pos</span><span class="p">)</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    det_v=</span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_v</span><span class="p">)</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    det_u=</span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_u</span><span class="p">)</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;)&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">ConeVectorGeometry</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">spos_diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_src_pos</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">src_pos</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_det_vec</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">spos_diff</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">ts</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Slice the geometry to create a sub-geometry</span>
+
+<span class="sd">        This geometry can be sliced by angle. The following obtains a</span>
+<span class="sd">        sub-geometry containing every second projection:</span>
+
+<span class="sd">        &gt;&gt;&gt; ts.cone(angles=10, cone_angle=1/2).to_vec()[0::2]</span>
+
+<span class="sd">        This geometry can also be sliced in the detector plane:</span>
+
+<span class="sd">        &gt;&gt;&gt; ts.cone(shape=10, cone_angle=1/2).to_vec()[:, ::2, ::2]</span>
+
+<span class="sd">        :param key:</span>
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">det_vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">key</span>
+
+        <span class="n">new_src_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_src_pos</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">ConeVectorGeometry</span><span class="p">(</span>
+            <span class="n">shape</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_shape</span><span class="p">,</span>
+            <span class="n">src_pos</span><span class="o">=</span><span class="n">new_src_pos</span><span class="p">,</span>
+            <span class="n">det_pos</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_pos</span><span class="p">,</span>
+            <span class="n">det_v</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_v</span><span class="p">,</span>
+            <span class="n">det_u</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_u</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="ConeVectorGeometry.to_astra"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.cone_vec.ConeVectorGeometry.to_astra">[docs]</a>    <span class="k">def</span> <span class="nf">to_astra</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">row_count</span><span class="p">,</span> <span class="n">col_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_shape</span>
+        <span class="n">vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_src_pos</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_pos</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_u</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_v</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">],</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;cone_vec&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;DetectorRowCount&quot;</span><span class="p">:</span> <span class="n">row_count</span><span class="p">,</span>
+            <span class="s2">&quot;DetectorColCount&quot;</span><span class="p">:</span> <span class="n">col_count</span><span class="p">,</span>
+            <span class="s2">&quot;Vectors&quot;</span><span class="p">:</span> <span class="n">vectors</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="ConeVectorGeometry.from_astra"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.cone_vec.ConeVectorGeometry.from_astra">[docs]</a>    <span class="k">def</span> <span class="nf">from_astra</span><span class="p">(</span><span class="n">astra_pg</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">astra_pg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;cone_vec&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;ConeVectorGeometry.from_astra only supports &#39;cone_vec&#39; type astra geometries.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">vecs</span> <span class="o">=</span> <span class="n">astra_pg</span><span class="p">[</span><span class="s2">&quot;Vectors&quot;</span><span class="p">]</span>
+        <span class="c1"># ray direction (parallel) / source_position (cone)</span>
+        <span class="n">src_pos</span> <span class="o">=</span> <span class="n">vecs</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="c1"># detector pos:</span>
+        <span class="n">det_pos</span> <span class="o">=</span> <span class="n">vecs</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span>
+        <span class="c1"># Detector u and v direction</span>
+        <span class="n">det_u</span> <span class="o">=</span> <span class="n">vecs</span><span class="p">[:,</span> <span class="mi">6</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span>
+        <span class="n">det_v</span> <span class="o">=</span> <span class="n">vecs</span><span class="p">[:,</span> <span class="mi">9</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span>
+
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">astra_pg</span><span class="p">[</span><span class="s2">&quot;DetectorRowCount&quot;</span><span class="p">],</span> <span class="n">astra_pg</span><span class="p">[</span><span class="s2">&quot;DetectorColCount&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">ConeVectorGeometry</span><span class="p">(</span>
+            <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span>
+            <span class="n">src_pos</span><span class="o">=</span><span class="n">src_pos</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">det_pos</span><span class="o">=</span><span class="n">det_pos</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">det_v</span><span class="o">=</span><span class="n">det_v</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">det_u</span><span class="o">=</span><span class="n">det_u</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConeVectorGeometry.to_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.cone_vec.ConeVectorGeometry.to_vec">[docs]</a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ConeVectorGeometry.to_box"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.cone_vec.ConeVectorGeometry.to_box">[docs]</a>    <span class="k">def</span> <span class="nf">to_box</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns an oriented box representating the detector</span>
+
+<span class="sd">        :returns: an oriented box representating the detector</span>
+<span class="sd">        :rtype:  `VolumeVectorGeometry`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">to_box</span><span class="p">()</span></div>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                Properties                               #</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">num_angles</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">num_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">num_angles</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">angles</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">angles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">src_pos</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">src_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_src_pos</span><span class="p">)</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">det_pos</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">det_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_pos</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">det_v</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">det_v</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_v</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">det_u</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">det_u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_u</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">det_normal</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">det_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_normal</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">ray_dir</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">ray_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">det_size</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">det_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_size</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">det_sizes</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">det_sizes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_sizes</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">corners</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">corners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">corners</span>
+
+    <span class="nd">@ProjectionGeometry</span><span class="o">.</span><span class="n">lower_left_corner</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">lower_left_corner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">lower_left_corner</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                 Methods                                 #</span>
+    <span class="c1">###########################################################################</span>
+
+<div class="viewcode-block" id="ConeVectorGeometry.rescale_det"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.cone_vec.ConeVectorGeometry.rescale_det">[docs]</a>    <span class="k">def</span> <span class="nf">rescale_det</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="n">det_vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">rescale_det</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ConeVectorGeometry</span><span class="p">(</span>
+            <span class="n">shape</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_shape</span><span class="p">,</span>
+            <span class="n">src_pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">src_pos</span><span class="p">,</span>
+            <span class="n">det_pos</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_pos</span><span class="p">,</span>
+            <span class="n">det_v</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_v</span><span class="p">,</span>
+            <span class="n">det_u</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_u</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConeVectorGeometry.reshape"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.cone_vec.ConeVectorGeometry.reshape">[docs]</a>    <span class="k">def</span> <span class="nf">reshape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_shape</span><span class="p">):</span>
+        <span class="n">det_vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">new_shape</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ConeVectorGeometry</span><span class="p">(</span>
+            <span class="n">shape</span><span class="o">=</span><span class="n">new_shape</span><span class="p">,</span>
+            <span class="n">src_pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">src_pos</span><span class="p">,</span>
+            <span class="n">det_pos</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_pos</span><span class="p">,</span>
+            <span class="n">det_v</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_v</span><span class="p">,</span>
+            <span class="n">det_u</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_u</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConeVectorGeometry.project_point"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.cone_vec.ConeVectorGeometry.project_point">[docs]</a>    <span class="k">def</span> <span class="nf">project_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">point</span><span class="p">):</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="n">up_tuple</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="n">v_origin</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">to_vec</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+
+        <span class="c1"># TODO: Check v_origin shape (should be 3)</span>
+
+        <span class="n">det_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span><span class="o">.</span><span class="n">det_pos</span>
+        <span class="n">det_v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_v</span>
+        <span class="n">det_u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_u</span>
+        <span class="n">det_normal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_normal</span>
+
+        <span class="n">v_direction</span> <span class="o">=</span> <span class="n">v_origin</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_src_pos</span>
+
+        <span class="n">intersection</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">v_origin</span><span class="p">,</span> <span class="n">v_direction</span><span class="p">,</span> <span class="n">det_pos</span><span class="p">,</span> <span class="n">det_normal</span><span class="p">)</span>
+
+        <span class="n">det_i_u</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">intersection</span> <span class="o">-</span> <span class="n">det_pos</span><span class="p">,</span> <span class="n">det_u</span><span class="p">)</span> <span class="o">/</span> <span class="n">vc</span><span class="o">.</span><span class="n">squared_norm</span><span class="p">(</span><span class="n">det_u</span><span class="p">)</span>
+        <span class="n">det_i_v</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">intersection</span> <span class="o">-</span> <span class="n">det_pos</span><span class="p">,</span> <span class="n">det_v</span><span class="p">)</span> <span class="o">/</span> <span class="n">vc</span><span class="o">.</span><span class="n">squared_norm</span><span class="p">(</span><span class="n">det_v</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">det_i_v</span><span class="p">,</span> <span class="n">det_i_u</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Transform</span><span class="p">):</span>
+            <span class="n">matrix</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">matrix</span>
+            <span class="n">src_pos</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">to_homogeneous_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_src_pos</span><span class="p">)</span>
+            <span class="n">src_pos</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">to_vec</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">matrix_transform</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">src_pos</span><span class="p">))</span>
+
+            <span class="n">det_vec</span> <span class="o">=</span> <span class="n">other</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_vec</span>
+            <span class="k">return</span> <span class="n">ConeVectorGeometry</span><span class="p">(</span>
+                <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">det_shape</span><span class="p">,</span>
+                <span class="n">src_pos</span><span class="o">=</span><span class="n">src_pos</span><span class="p">,</span>
+                <span class="n">det_pos</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_pos</span><span class="p">,</span>
+                <span class="n">det_v</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_v</span><span class="p">,</span>
+                <span class="n">det_u</span><span class="o">=</span><span class="n">det_vec</span><span class="o">.</span><span class="n">det_u</span><span class="p">,</span>
+            <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

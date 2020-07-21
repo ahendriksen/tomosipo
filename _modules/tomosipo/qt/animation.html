@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.qt.animation &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tomosipo</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>tomosipo.qt.animation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tomosipo.qt.animation</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">TemporaryDirectory</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">ffmpeg</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pyqtgraph.opengl</span> <span class="k">as</span> <span class="nn">gl</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph.Qt</span> <span class="kn">import</span> <span class="n">QtCore</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">.view_widget_hack</span> <span class="kn">import</span> <span class="n">render_to_array</span>
+<span class="kn">from</span> <span class="nn">tomosipo.qt.geometry</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">to_mesh_items</span><span class="p">,</span>
+    <span class="n">num_colors</span><span class="p">,</span>
+    <span class="n">_take</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">tomosipo.qt.display</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_app</span><span class="p">,</span>
+    <span class="n">get_color_cycle</span><span class="p">,</span>
+    <span class="n">display_backends</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">tomosipo.geometry</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ProjectionGeometry</span><span class="p">,</span>
+    <span class="n">VolumeGeometry</span><span class="p">,</span>
+    <span class="n">VolumeVectorGeometry</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="animate"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.animation.animate">[docs]</a><span class="k">def</span> <span class="nf">animate</span><span class="p">(</span><span class="o">*</span><span class="n">geometries</span><span class="p">,</span> <span class="n">total_duration_seconds</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns an animation of the geometries</span>
+
+<span class="sd">    The return type is an object that can be saved:</span>
+
+<span class="sd">    &gt;&gt;&gt; ts.animate(ts.parallel(angles=10)).save(&#39;geometry.mp4&#39;)</span>
+
+<span class="sd">    It can also be opened in a window:</span>
+
+<span class="sd">    &gt;&gt;&gt; ts.animate(ts.parallel(angles=10)).window()</span>
+
+<span class="sd">    In a Jupyter notebook, the animation is automatically converted to</span>
+<span class="sd">    a video and shown if it is the final value in a cell.</span>
+
+<span class="sd">    :param total_duration_seconds:</span>
+<span class="sd">        the total duration of the animation in seconds.</span>
+<span class="sd">    :returns: an animation object</span>
+<span class="sd">    :rtype: `Animation`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Animation</span><span class="p">(</span><span class="o">*</span><span class="n">geometries</span><span class="p">,</span> <span class="n">total_duration_seconds</span><span class="o">=</span><span class="n">total_duration_seconds</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Animation"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.animation.Animation">[docs]</a><span class="k">class</span> <span class="nc">Animation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Documentation for Animation</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">geometries</span><span class="p">,</span> <span class="n">total_duration_seconds</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">VIDEO_SHAPE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">480</span><span class="p">,</span> <span class="mi">640</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_duration_seconds</span> <span class="o">=</span> <span class="n">total_duration_seconds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometries</span> <span class="o">=</span> <span class="n">geometries</span>
+
+<div class="viewcode-block" id="Animation.new_gl_view_widget"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.animation.Animation.new_gl_view_widget">[docs]</a>    <span class="k">def</span> <span class="nf">new_gl_view_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># We get the current active instance of the QT app. We do not have</span>
+        <span class="c1"># to close it.</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">GLViewWidget</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">setBackgroundColor</span><span class="p">(</span><span class="mf">0.95</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">view</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">total_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">num_steps</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometries</span><span class="p">)])</span>
+
+<div class="viewcode-block" id="Animation.iter_video_frames"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.animation.Animation.iter_video_frames">[docs]</a>    <span class="k">def</span> <span class="nf">iter_video_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return an iterator over the frames the video</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">color_cycle</span> <span class="o">=</span> <span class="n">get_color_cycle</span><span class="p">()</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">_take</span><span class="p">(</span><span class="n">color_cycle</span><span class="p">,</span> <span class="n">num_colors</span><span class="p">(</span><span class="n">g</span><span class="p">))</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometries</span><span class="p">]</span>
+
+        <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_gl_view_widget</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_steps</span><span class="p">):</span>
+            <span class="n">update_widget</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometries</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+            <span class="n">video_frame</span> <span class="o">=</span> <span class="n">render_to_array</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">VIDEO_SHAPE</span><span class="p">)</span>
+            <span class="c1"># Flip x, y</span>
+            <span class="n">video_frame</span> <span class="o">=</span> <span class="n">video_frame</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">video_frame</span>
+
+        <span class="c1"># Close view widget</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Animation.video_as_array"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.animation.Animation.video_as_array">[docs]</a>    <span class="k">def</span> <span class="nf">video_as_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out_video</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">total_steps</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">VIDEO_SHAPE</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iter_video_frames</span><span class="p">()):</span>
+            <span class="n">out_video</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="k">return</span> <span class="n">out_video</span></div>
+
+<div class="viewcode-block" id="Animation.window"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.animation.Animation.window">[docs]</a>    <span class="k">def</span> <span class="nf">window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span>
+        <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_gl_view_widget</span><span class="p">()</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="n">color_cycle</span> <span class="o">=</span> <span class="n">get_color_cycle</span><span class="p">()</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">_take</span><span class="p">(</span><span class="n">color_cycle</span><span class="p">,</span> <span class="n">num_colors</span><span class="p">(</span><span class="n">g</span><span class="p">))</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometries</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">def</span> <span class="nf">on_timer</span><span class="p">():</span>
+            <span class="k">nonlocal</span> <span class="n">i</span>
+            <span class="n">update_widget</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometries</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">timer</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QTimer</span><span class="p">()</span>
+        <span class="n">timer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">on_timer</span><span class="p">)</span>
+        <span class="c1"># The timer interval is in milliseconds</span>
+        <span class="n">timer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_duration_seconds</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_steps</span><span class="p">)</span>
+        <span class="n">on_timer</span><span class="p">()</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Animation.save"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.animation.Animation.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;geometry_video.mp4&quot;</span><span class="p">):</span>
+        <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">VIDEO_SHAPE</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">ffmpeg</span><span class="o">.</span><span class="n">input</span><span class="p">(</span>
+                <span class="s2">&quot;pipe:&quot;</span><span class="p">,</span>
+                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;rawvideo&quot;</span><span class="p">,</span>
+                <span class="n">pix_fmt</span><span class="o">=</span><span class="s2">&quot;rgb24&quot;</span><span class="p">,</span>
+                <span class="n">s</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">x</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">vcodec</span><span class="o">=</span><span class="s2">&quot;h264&quot;</span><span class="p">,</span> <span class="n">pix_fmt</span><span class="o">=</span><span class="s2">&quot;yuv420p&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">overwrite_output</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_video_frames</span><span class="p">():</span>
+                <span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># Remove alpha channel</span>
+                <span class="n">process</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">process</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">process</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;base64_video&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">base64_video</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s2">&quot;geometry_video.m4v&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+                <span class="c1"># Now open and base64 encode.</span>
+                <span class="n">vid64</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">encodebytes</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+
+                <span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;controls&quot;</span><span class="p">,</span> <span class="s2">&quot;autoplay&quot;</span><span class="p">,</span> <span class="s2">&quot;loop&quot;</span><span class="p">]</span>
+                <span class="n">VIDEO_TAG</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;&lt;video width=&quot;320&quot; height=&quot;240&quot; </span><span class="si">{options}</span><span class="s2">&gt;</span>
+<span class="s2">              &lt;source type=&quot;video/mp4&quot; src=&quot;data:video/mp4;base64,</span><span class="si">{video}</span><span class="s2">&quot;&gt;</span>
+<span class="s2">              Your browser does not support the video tag.</span>
+<span class="s2">            &lt;/video&gt;&quot;&quot;&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base64_video</span> <span class="o">=</span> <span class="n">VIDEO_TAG</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">video</span><span class="o">=</span><span class="n">vid64</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+                <span class="p">)</span>
+
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">base64_video</span></div>
+
+
+<div class="viewcode-block" id="update_widget"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.animation.update_widget">[docs]</a><span class="k">def</span> <span class="nf">update_widget</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="n">geometries</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+    <span class="c1"># Clear widget</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">widget</span><span class="o">.</span><span class="n">items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">removeItem</span><span class="p">(</span><span class="n">widget</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c1"># Add items for current step:</span>
+    <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">geometries</span><span class="p">,</span> <span class="n">colors</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">to_mesh_items</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="display_geometry"><a class="viewcode-back" href="../../../tomosipo.qt.html#tomosipo.qt.animation.display_geometry">[docs]</a><span class="k">def</span> <span class="nf">display_geometry</span><span class="p">(</span><span class="o">*</span><span class="n">geometries</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display interactive 3D animation of the acquisition geometry</span>
+
+<span class="sd">    Note: requires the installation of pyopengl.</span>
+
+<span class="sd">    :param geometries:</span>
+<span class="sd">        Any combination of volume and projection geometries.</span>
+<span class="sd">    :returns: Nothing</span>
+<span class="sd">    :rtype: None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">animation</span> <span class="o">=</span> <span class="n">Animation</span><span class="p">(</span><span class="o">*</span><span class="n">geometries</span><span class="p">)</span>
+    <span class="n">animation</span><span class="o">.</span><span class="n">window</span><span class="p">()</span></div>
+
+
+<span class="n">display_backends</span><span class="p">[</span><span class="n">ProjectionGeometry</span><span class="p">]</span> <span class="o">=</span> <span class="n">display_geometry</span>
+<span class="n">display_backends</span><span class="p">[</span><span class="n">VolumeGeometry</span><span class="p">]</span> <span class="o">=</span> <span class="n">display_geometry</span>
+<span class="n">display_backends</span><span class="p">[</span><span class="n">VolumeVectorGeometry</span><span class="p">]</span> <span class="o">=</span> <span class="n">display_geometry</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

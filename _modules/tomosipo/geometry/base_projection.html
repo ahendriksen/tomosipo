@@ -1,0 +1,578 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.geometry.base_projection &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tomosipo</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>tomosipo.geometry.base_projection</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tomosipo.geometry.base_projection</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.transform</span> <span class="kn">import</span> <span class="n">Transform</span>
+<span class="kn">import</span> <span class="nn">tomosipo</span> <span class="k">as</span> <span class="nn">ts</span>
+
+
+<div class="viewcode-block" id="is_projection"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.base_projection.is_projection">[docs]</a><span class="k">def</span> <span class="nf">is_projection</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determine if a geometry is a projection geometry</span>
+
+<span class="sd">    A geometry object can be a volume geometry or a projection</span>
+<span class="sd">    geometry.</span>
+
+<span class="sd">    :param g: a geometry object</span>
+<span class="sd">    :returns: `True` if `g` is a projection geometry</span>
+<span class="sd">    :rtype: bool</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">ProjectionGeometry</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="is_cone"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.base_projection.is_cone">[docs]</a><span class="k">def</span> <span class="nf">is_cone</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">is_projection</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="ow">and</span> <span class="n">g</span><span class="o">.</span><span class="n">is_cone</span></div>
+
+
+<div class="viewcode-block" id="is_parallel"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.base_projection.is_parallel">[docs]</a><span class="k">def</span> <span class="nf">is_parallel</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">is_projection</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="ow">and</span> <span class="n">g</span><span class="o">.</span><span class="n">is_parallel</span></div>
+
+
+<div class="viewcode-block" id="ProjectionGeometry"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.base_projection.ProjectionGeometry">[docs]</a><span class="k">class</span> <span class="nc">ProjectionGeometry</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A general base class for projection geometries</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a projection geometry</span>
+
+<span class="sd">        :param shape:</span>
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_shape</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">allow_zeros</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                               __dunders__                               #</span>
+    <span class="c1">###########################################################################</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                               to_* methods                              #</span>
+    <span class="c1">###########################################################################</span>
+<div class="viewcode-block" id="ProjectionGeometry.to_astra"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.base_projection.ProjectionGeometry.to_astra">[docs]</a>    <span class="k">def</span> <span class="nf">to_astra</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert geometry to astra geometry</span>
+
+<span class="sd">        :returns: An astra representation of the current geometry.</span>
+<span class="sd">        :rtype: dict</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ProjectionGeometry.to_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.base_projection.ProjectionGeometry.to_vec">[docs]</a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a vector geometry of the current geometry</span>
+
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype: ProjectionGeometry</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                Properties                               #</span>
+    <span class="c1">###########################################################################</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_cone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Is this geometry a cone-beam geometry?</span>
+
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_cone</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Is this geometry a parallel-beam geometry?</span>
+
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_parallel</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Is this a vector geometry?</span>
+
+<span class="sd">        A geometry can either be a vector geometry, like</span>
+<span class="sd">        ``ConeVectorGeometry``, or ``ParallelVectorGeometry``, or it</span>
+<span class="sd">        can be a parametrized geometry like ``ConeGeometry`` or</span>
+<span class="sd">        ``ParallelGeometry``.</span>
+
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_vector</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">det_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The shape of the detector.</span>
+
+<span class="sd">        :returns: `(int, int)`</span>
+<span class="sd">            A tuple describing the height and width of the detector in</span>
+<span class="sd">            pixels.</span>
+<span class="sd">        :rtype: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The number of angles in the projection geometry</span>
+
+<span class="sd">        :returns:</span>
+<span class="sd">            The number of angles in the projection geometry.</span>
+<span class="sd">        :rtype: integer</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The number of orientations in the geometry</span>
+
+<span class="sd">        This property equals `num_angles&#39; and is provided so</span>
+<span class="sd">        projection geometries and volume geometries share the same</span>
+<span class="sd">        interface.</span>
+
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_angles</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">angles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The angles from which projections are acquired.</span>
+
+<span class="sd">        This property is specific to non-vector geometries.</span>
+
+<span class="sd">        :returns:</span>
+<span class="sd">            A numpy array of shape with length `num_angles` containing</span>
+<span class="sd">            the angles in radians.</span>
+<span class="sd">        :rtype: `np.array`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">src_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The source positions of the geometry.</span>
+
+<span class="sd">        Not supported on parallel geometries.</span>
+
+<span class="sd">        :returns: `np.array`</span>
+<span class="sd">            A `(num_angles, 3)`-shaped numpy array containing the</span>
+<span class="sd">            (Z,Y,X)-coordinates of the source positions.</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">det_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The detector positions of the geometry.</span>
+
+<span class="sd">        :returns: `np.array`</span>
+<span class="sd">            A `(num_angles, 3)`-shaped numpy array containing the</span>
+<span class="sd">            (Z,Y,X)-coordinates of the detector positions.</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">det_v</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The detector v-vectors of the geometry.</span>
+
+<span class="sd">        The &#39;v&#39; vector is usually the &quot;upward&quot; pointing vector</span>
+<span class="sd">        describing the distance from the (0, 0) to (1, 0) pixel.</span>
+
+<span class="sd">        :returns: `np.array`</span>
+<span class="sd">            A `(num_angles, 3)`-shaped numpy array containing the</span>
+<span class="sd">            (Z,Y,X)-coordinates of the v vectors.</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">det_u</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The detector u-vectors of the geometry.</span>
+
+<span class="sd">        The &#39;u&#39; vector is usually the &quot;sideways&quot; pointing vector</span>
+<span class="sd">        describing the distance from the (0, 0) to (0, 1) pixel.</span>
+
+<span class="sd">        :returns: `np.array`</span>
+<span class="sd">            A `(num_angles, 3)`-shaped numpy array containing the</span>
+<span class="sd">            (Z,Y,X)-coordinates of the u vectors.</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">det_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The detector normal vectors of the geometry.</span>
+
+<span class="sd">        In tomosipo, the normal vector usually points &quot;into&quot; the</span>
+<span class="sd">        detector and away from the source/object. It is orthogonal to</span>
+<span class="sd">        the `v` and `u` vectors.</span>
+
+<span class="sd">        :returns: `np.array`</span>
+<span class="sd">            A `(num_angles, 3)`-shaped numpy array containing the</span>
+<span class="sd">            (Z,Y,X)-coordinates of the normal vectors.</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ray_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The ray direction of the geometry.</span>
+
+<span class="sd">        This property is not supported on cone geometries.</span>
+
+<span class="sd">        :returns: `np.array`</span>
+<span class="sd">            A `(num_angles, 3)`-shaped numpy array containing the</span>
+<span class="sd">            (Z,Y,X)-coordinates of the ray direction vectors.</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">det_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The size of the detector.</span>
+
+<span class="sd">        This property is dangerous for vector geometries, because for</span>
+<span class="sd">        vector geometries it is not guaranteed that the detector size</span>
+<span class="sd">        is constant through time. If the detector size is not</span>
+<span class="sd">        constant, this property raises a ValueError. Otherwise, it</span>
+<span class="sd">        returns the detector size.</span>
+
+<span class="sd">        :returns:</span>
+<span class="sd">            The absolute size of the detector in the `v` and the `u`</span>
+<span class="sd">            direction.</span>
+<span class="sd">        :rtype: (scalar, scalar)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">det_sizes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The size of each detector.</span>
+
+<span class="sd">        :returns: np.array</span>
+<span class="sd">            Array with shape (num_angles, 2) in v and u direction</span>
+<span class="sd">            (height x width)</span>
+<span class="sd">        :rtype: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">corners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a vector with the corners of each detector</span>
+
+<span class="sd">        :returns: np.array</span>
+<span class="sd">            Array with shape (num_angles, 4, 3), describing the 4</span>
+<span class="sd">            corners of each detector in (Z, Y, X)-coordinates.</span>
+<span class="sd">        :rtype: np.array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lower_left_corner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a vector with the positions of the lower-left corner the detector</span>
+
+<span class="sd">        :returns: np.array</span>
+<span class="sd">            Array with shape (num_angles, 3), describing the position</span>
+<span class="sd">            of the lower-left corner of each detector in (Z, Y,</span>
+<span class="sd">            X)-coordinates.</span>
+<span class="sd">        :rtype: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                          Transformation methods                         #</span>
+    <span class="c1">###########################################################################</span>
+<div class="viewcode-block" id="ProjectionGeometry.rescale_det"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.base_projection.ProjectionGeometry.rescale_det">[docs]</a>    <span class="k">def</span> <span class="nf">rescale_det</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Rescale detector pixels</span>
+
+<span class="sd">        Rescales detector pixels without changing the size of the detector.</span>
+
+<span class="sd">        :param scale: `int` or `(int, int)`</span>
+<span class="sd">            Indicates how many times to enlarge a detector pixel. Per</span>
+<span class="sd">            convention, the first coordinate scales the pixels in the</span>
+<span class="sd">            `v` coordinate, and the second coordinate scales the</span>
+<span class="sd">            pixels in the `u` coordinate.</span>
+<span class="sd">        :returns: a rescaled geometry</span>
+<span class="sd">        :rtype: `ProjectionGeometry`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ProjectionGeometry.reshape"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.base_projection.ProjectionGeometry.reshape">[docs]</a>    <span class="k">def</span> <span class="nf">reshape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_shape</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reshape detector pixels without changing detector size</span>
+
+<span class="sd">        :param new_shape: int or (int, int)</span>
+<span class="sd">            The new shape of the detector in pixels in `v` (height)</span>
+<span class="sd">            and `u` (width) direction.</span>
+<span class="sd">        :returns: `self`</span>
+<span class="sd">        :rtype: ProjectionGeometry</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ProjectionGeometry.project_point"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.base_projection.ProjectionGeometry.project_point">[docs]</a>    <span class="k">def</span> <span class="nf">project_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Projects point onto detectors</span>
+
+<span class="sd">        This function projects onto the virtual detectors described by</span>
+<span class="sd">        the projection geometry.</span>
+
+<span class="sd">        For each source-detector pair, this function returns</span>
+
+<span class="sd">            (detector_intersection_y, detector_intersection_x)</span>
+
+<span class="sd">        where the distance is from the detector origin (center) and</span>
+<span class="sd">        the units are in detector pixels.</span>
+
+<span class="sd">        This function returns `np.nan` if the source-point ray is</span>
+<span class="sd">        parallel to the detector plane.</span>
+
+<span class="sd">        This function projects onto the detector even if the ray is</span>
+<span class="sd">        moving away from the detector instead of towards it, or if the</span>
+<span class="sd">        detector is between the source and point instead of behind the</span>
+<span class="sd">        point.</span>
+
+<span class="sd">        :param point: A three-dimensional vector (preferably np.array)</span>
+<span class="sd">        :returns: np.array([[detector_intersection_y, detector_intersection_x],</span>
+<span class="sd">                            .....])</span>
+<span class="sd">        :rtype: np.array (num_angles * 2)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies a projective matrix transformation to geometry</span>
+
+<span class="sd">        :param other: `np.array`</span>
+<span class="sd">            A transformation matrix</span>
+<span class="sd">        :returns: A transformed geometry</span>
+<span class="sd">        :rtype: `ProjectionGeometry`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Transform</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">NotImplemented</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tomosipo.links.numpy &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tomosipo</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>tomosipo.links.numpy</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tomosipo.links.numpy</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Link</span><span class="p">,</span> <span class="n">backends</span>
+
+
+<div class="viewcode-block" id="NumpyLink"><a class="viewcode-back" href="../../../tomosipo.links.html#tomosipo.links.numpy.NumpyLink">[docs]</a><span class="k">class</span> <span class="nc">NumpyLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Link implementation for numpy arrays</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">initial_value</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">NumpyLink</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">initial_value</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">initial_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">initial_value</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">initial_value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">initial_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial_value</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="c1"># Make contiguous:</span>
+            <span class="k">if</span> <span class="n">initial_value</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;The parameter initial_value is of type </span><span class="si">{</span><span class="n">initial_value</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">; expected `np.float32`. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;The type has been Automatically converted. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Use `ts.link(x.astype(np.float32))&#39; to inhibit this warning. &quot;</span>
+                <span class="p">)</span>
+                <span class="n">initial_value</span> <span class="o">=</span> <span class="n">initial_value</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+                <span class="n">initial_value</span><span class="o">.</span><span class="n">flags</span><span class="p">[</span><span class="s2">&quot;C_CONTIGUOUS&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">initial_value</span><span class="o">.</span><span class="n">flags</span><span class="p">[</span><span class="s2">&quot;ALIGNED&quot;</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;The parameter initial_value should be C_CONTIGUOUS and ALIGNED. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;It has been automatically made contiguous and aligned. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Use `ts.link(np.ascontiguousarray(x))&#39; to inhibit this warning. &quot;</span>
+                <span class="p">)</span>
+                <span class="n">initial_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">initial_value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">initial_value</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                      &quot;Protocol&quot; functions / methods                     #</span>
+    <span class="c1">###########################################################################</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__accepts__</span><span class="p">(</span><span class="n">initial_value</span><span class="p">):</span>
+        <span class="c1"># `NumpyLink&#39; is the default backend, so it should accept</span>
+        <span class="c1"># an initial_value of `None&#39;.</span>
+        <span class="k">if</span> <span class="n">initial_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">initial_value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">initial_value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">__compatible_with__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">NumpyLink</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                Properties                               #</span>
+    <span class="c1">###########################################################################</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">linked_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a numpy array or GPULink object</span>
+
+<span class="sd">        :returns:</span>
+<span class="sd">        :rtype:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a shared numpy array with the underlying data.</span>
+
+<span class="sd">        Changes to the return value will be reflected in the astra</span>
+<span class="sd">        data.</span>
+
+<span class="sd">        If you want to avoid this, consider copying the data</span>
+<span class="sd">        immediately, using `np.copy` for instance.</span>
+
+<span class="sd">        NOTE: if the underlying object is an Astra projection data</span>
+<span class="sd">        type, the order of the axes will be in (Y, num_angles, X)</span>
+<span class="sd">        order.</span>
+
+<span class="sd">        :returns: np.array</span>
+<span class="sd">        :rtype: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+    <span class="nd">@data</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+            <span class="s2">&quot;You cannot change which array backs a dataset.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;To change the underlying data instead, use: </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot; &gt;&gt;&gt; x.data[:] = new_data</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                             Context manager                             #</span>
+    <span class="c1">###########################################################################</span>
+<div class="viewcode-block" id="NumpyLink.context"><a class="viewcode-back" href="../../../tomosipo.links.html#tomosipo.links.numpy.NumpyLink.context">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Context-manager to manage ASTRA interactions</span>
+
+<span class="sd">        This is a no-op for numpy data.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">yield</span></div>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                            New data creation                            #</span>
+    <span class="c1">###########################################################################</span>
+<div class="viewcode-block" id="NumpyLink.new_zeros"><a class="viewcode-back" href="../../../tomosipo.links.html#tomosipo.links.numpy.NumpyLink.new_zeros">[docs]</a>    <span class="k">def</span> <span class="nf">new_zeros</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">NumpyLink</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">dtype</span><span class="p">),)</span></div>
+
+<div class="viewcode-block" id="NumpyLink.new_full"><a class="viewcode-back" href="../../../tomosipo.links.html#tomosipo.links.numpy.NumpyLink.new_full">[docs]</a>    <span class="k">def</span> <span class="nf">new_full</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">NumpyLink</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">dtype</span><span class="p">),)</span></div>
+
+<div class="viewcode-block" id="NumpyLink.new_empty"><a class="viewcode-back" href="../../../tomosipo.links.html#tomosipo.links.numpy.NumpyLink.new_empty">[docs]</a>    <span class="k">def</span> <span class="nf">new_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">NumpyLink</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">dtype</span><span class="p">),)</span></div>
+
+<div class="viewcode-block" id="NumpyLink.clone"><a class="viewcode-back" href="../../../tomosipo.links.html#tomosipo.links.numpy.NumpyLink.clone">[docs]</a>    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">NumpyLink</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">))</span></div></div>
+
+
+<span class="n">backends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NumpyLink</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

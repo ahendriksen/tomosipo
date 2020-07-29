@@ -69,7 +69,7 @@ ConeGeometry(
     angles=100,
     shape=(1, 1),
     size=(1.4142135623730951, 1.4142135623730951),
-    src_obj_dist=4.242640687119286,
+    src_orig_dist=4.242640687119286,
     src_det_dist=4.242640687119286
 )
 VolumeGeometry(

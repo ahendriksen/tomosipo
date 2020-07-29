@@ -149,7 +149,7 @@ def test_project_point_detector_spacing():
     size = (30, 80)
 
     pg = ts.cone(
-        angles=1, shape=shape, size=size, src_obj_dist=10, src_det_dist=10
+        angles=1, shape=shape, size=size, src_orig_dist=10, src_det_dist=10
     ).to_vec()
     assert round(abs(np.abs(pg.project_point((0, 0, 0))).sum() - 0), 7) == 0
 
@@ -162,7 +162,7 @@ def test_project_point_detector_spacing():
 
     shape = (100, 400)
     pg = ts.cone(
-        angles=1, shape=shape, size=size, src_obj_dist=10, src_det_dist=10
+        angles=1, shape=shape, size=size, src_orig_dist=10, src_det_dist=10
     ).to_vec()
     assert round(abs(np.abs(pg.project_point((0, 0, 0))).sum() - 0), 7) == 0
     assert (
@@ -194,8 +194,8 @@ def test_corners():
 
 
 def test_src_pos():
-    pg1 = ts.cone(size=np.sqrt(2), src_obj_dist=1, src_det_dist=1).to_vec()
-    pg2 = ts.cone(size=np.sqrt(2), src_obj_dist=2, src_det_dist=2).to_vec()
+    pg1 = ts.cone(size=np.sqrt(2), src_orig_dist=1, src_det_dist=1).to_vec()
+    pg2 = ts.cone(size=np.sqrt(2), src_orig_dist=2, src_det_dist=2).to_vec()
 
     source_diff = pg1.src_pos * 2 - pg2.src_pos
     assert np.all(abs(source_diff) < ts.epsilon)
@@ -215,7 +215,7 @@ def test_transform():
 def test_to_box():
 
     pg = ts.cone(
-        angles=10, shape=(5, 3), size=np.sqrt(2), src_obj_dist=11, src_det_dist=21
+        angles=10, shape=(5, 3), size=np.sqrt(2), src_orig_dist=11, src_det_dist=21
     ).to_vec()
 
     assert np.allclose(pg.det_pos, pg.to_box().pos)

@@ -26,21 +26,21 @@ def test_init(interactive):
     with pytest.raises(TypeError):
         assert ts.cone(angles=None, shape=1, cone_angle=1).num_angles == 1
 
-    # Check combinations of cone_angle, src_obj_dist, and src_det_dist.
+    # Check combinations of cone_angle, src_orig_dist, and src_det_dist.
     ass_kws = dict(angles=1, shape=1, size=1)
     with pytest.raises(ValueError):
-        ts.cone(**ass_kws, cone_angle=1, src_obj_dist=1, src_det_dist=1)
+        ts.cone(**ass_kws, cone_angle=1, src_orig_dist=1, src_det_dist=1)
     with pytest.raises(ValueError):
-        ts.cone(**ass_kws, cone_angle=1, src_obj_dist=1, src_det_dist=None)
+        ts.cone(**ass_kws, cone_angle=1, src_orig_dist=1, src_det_dist=None)
     with pytest.raises(ValueError):
-        ts.cone(**ass_kws, cone_angle=1, src_obj_dist=None, src_det_dist=1)
+        ts.cone(**ass_kws, cone_angle=1, src_orig_dist=None, src_det_dist=1)
     with pytest.raises(ValueError):
-        ts.cone(**ass_kws, cone_angle=None, src_obj_dist=None, src_det_dist=None)
+        ts.cone(**ass_kws, cone_angle=None, src_orig_dist=None, src_det_dist=None)
     # These should all be fine:
-    ts.cone(**ass_kws, cone_angle=1, src_obj_dist=None, src_det_dist=None)
-    ts.cone(**ass_kws, cone_angle=None, src_obj_dist=1, src_det_dist=1)
-    ts.cone(**ass_kws, cone_angle=None, src_obj_dist=1, src_det_dist=None)
-    ts.cone(**ass_kws, cone_angle=None, src_obj_dist=None, src_det_dist=1)
+    ts.cone(**ass_kws, cone_angle=1, src_orig_dist=None, src_det_dist=None)
+    ts.cone(**ass_kws, cone_angle=None, src_orig_dist=1, src_det_dist=1)
+    ts.cone(**ass_kws, cone_angle=None, src_orig_dist=1, src_det_dist=None)
+    ts.cone(**ass_kws, cone_angle=None, src_orig_dist=None, src_det_dist=1)
 
     # Check that size equals shape if not given:
     assert ts.cone(shape=2, cone_angle=1).det_size == (2, 2)
@@ -60,12 +60,12 @@ def test_init(interactive):
 
 
 def test_repr():
-    pg = ts.cone(angles=10, shape=11, size=1, src_obj_dist=5, src_det_dist=6)
+    pg = ts.cone(angles=10, shape=11, size=1, src_orig_dist=5, src_det_dist=6)
     r = """ts.cone(
     angles=10,
     shape=(11, 11),
     size=(1, 1),
-    src_obj_dist=5.0,
+    src_orig_dist=5.0,
     src_det_dist=6.0,
 )"""
 
@@ -88,7 +88,7 @@ def test_equal():
         ts.cone(size=5, cone_angle=1 / 2),
         ts.cone(angles=2, size=np.sqrt(2), cone_angle=1 / 2),
         ts.cone(shape=2, size=np.sqrt(2), cone_angle=1 / 2),
-        ts.cone(size=np.sqrt(2), src_obj_dist=50),
+        ts.cone(size=np.sqrt(2), src_orig_dist=50),
         ts.cone(size=np.sqrt(2), src_det_dist=50),
         ts.volume(),
     ]
@@ -145,7 +145,7 @@ def test_to_vec():
             angles=angles,
             shape=shape,
             size=size,
-            src_obj_dist=np.random.uniform(10, 100),
+            src_orig_dist=np.random.uniform(10, 100),
             src_det_dist=np.random.uniform(0, 100),
         )
         assert pg.det_shape == pg.to_vec().det_shape
@@ -196,7 +196,7 @@ def test_det_sizes():
 
 
 def test_src_obj_det_dist():
-    assert ts.cone(size=np.sqrt(2), src_obj_dist=5.0).src_obj_dist == 5.0
+    assert ts.cone(size=np.sqrt(2), src_orig_dist=5.0).src_orig_dist == 5.0
     assert ts.cone(size=np.sqrt(2), src_det_dist=3.0).src_det_dist == 3.0
 
 
@@ -224,6 +224,6 @@ def test_transform():
 
 def test_to_box():
     pg = ts.cone(
-        angles=10, shape=(5, 3), size=np.sqrt(2), src_obj_dist=11, src_det_dist=21
+        angles=10, shape=(5, 3), size=np.sqrt(2), src_orig_dist=11, src_det_dist=21
     )
     assert pg.det_pos == approx(pg.to_box().pos)

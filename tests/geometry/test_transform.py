@@ -148,6 +148,20 @@ def test_scale():
         assert S1 * S2 == S
 
 
+def test_scale_pos():
+    """Test that the `pos` parameter for `ts.scale` works correctly
+    """
+    for _ in range(10):
+        vg = random_volume_vec()
+        T = ts.translate(np.random.normal(size=3))
+        vg = T * vg
+        S = ts.scale(3, pos=vg.pos)
+
+        # Scaling a volume around its center should not move its
+        # center.
+        assert np.allclose((S * vg).pos, vg.pos)
+
+
 def test_rotate_inversion_of_angle_axis_handedness():
     N = 10
     for p, axis in np.random.normal(size=(N, 2, 3)):

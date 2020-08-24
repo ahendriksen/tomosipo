@@ -85,7 +85,7 @@ def translate(t):
     return Transform(np.stack((w, v, u, t), axis=2))
 
 
-def scale(s):
+def scale(s, pos=None):
     """Return scaling transform
 
     The scaling transform scales the coordinate frame of the object.
@@ -102,6 +102,9 @@ def scale(s):
 
     :param s:
         By how much to scale in each direction.
+    :param pos:  (optional)
+        If not `None`, scale around a custom position instead of the
+        origin.
     :returns:
     :rtype:
 
@@ -120,7 +123,12 @@ def scale(s):
     S3 = np.stack([zero, zero, zero, one], axis=1)
 
     S = np.concatenate([S0, S1, S2, S3], axis=2)
-    return Transform(S)
+
+    if pos is not None:
+        T = ts.translate(pos)
+        return T * Transform(S) * T.inv
+    else:
+        return Transform(S)
 
 
 def rotate(pos, axis, *, rad=None, deg=None, right_handed=True):

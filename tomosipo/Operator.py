@@ -28,9 +28,9 @@ def to_astra_compatible_operator_geometry(vg, pg):
     # Change perspective *without* changing the voxel volume.
     P = ts.from_perspective(
         pos=vg.pos,
-        w=vg.w / ts.vector_calc.norm(vg.w)[None, :],
-        v=vg.v / ts.vector_calc.norm(vg.v)[None, :],
-        u=vg.u / ts.vector_calc.norm(vg.u)[None, :],
+        w=vg.w / ts.vector_calc.norm(vg.w)[:, None],
+        v=vg.v / ts.vector_calc.norm(vg.v)[:, None],
+        u=vg.u / ts.vector_calc.norm(vg.u)[:, None],
     )
     # Move vg to perspective:
     vg = P * vg
@@ -56,10 +56,7 @@ def astra_projector(
     detector_supersampling=1,
 ):
     vg, pg = volume_geometry, projection_geometry
-    if isinstance(vg, ts.geometry.VolumeVectorGeometry):
-        # volume vector geometries are not native to ASTRA. We have to
-        # rotate geometry so that it is axis-aligned:
-        vg, pg = to_astra_compatible_operator_geometry(vg, pg)
+    assert isinstance(vg, ts.geometry.VolumeGeometry)
 
     return astra.create_projector(
         "cuda3d",
@@ -438,9 +435,15 @@ class Operator(object):
         self.volume_geometry = volume_geometry
         self.projection_geometry = projection_geometry
 
+        vg, pg = to_astra_compatible_operator_geometry(
+            volume_geometry, projection_geometry
+        )
+        self.astra_compat_vg = vg
+        self.astra_compat_pg = pg
+
         self.astra_projector = astra_projector(
-            volume_geometry,
-            projection_geometry,
+            self.astra_compat_vg,
+            self.astra_compat_pg,
             voxel_supersampling=voxel_supersampling,
             detector_supersampling=detector_supersampling,
         )
@@ -448,10 +451,10 @@ class Operator(object):
         self._transpose = BackprojectionOperator(self)
 
     def _fp(self, volume, out=None):
-        vlink = _to_link(self.volume_geometry, volume)
+        vlink = _to_link(self.astra_compat_vg, volume)
 
         if out is not None:
-            plink = _to_link(self.projection_geometry, out)
+            plink = _to_link(self.astra_compat_pg, out)
         else:
             if self.additive:
                 plink = vlink.new_zeros(self.range_shape)
@@ -484,10 +487,10 @@ class Operator(object):
         :rtype: `Data`
 
         """
-        plink = _to_link(self.projection_geometry, projection)
+        plink = _to_link(self.astra_compat_pg, projection)
 
         if out is not None:
-            vlink = _to_link(self.volume_geometry, out)
+            vlink = _to_link(self.astra_compat_vg, out)
         else:
             if self.additive:
                 vlink = plink.new_zeros(self.domain_shape)
@@ -541,11 +544,11 @@ class Operator(object):
 
     @property
     def domain_shape(self):
-        return ts.links.geometry_shape(self.domain)
+        return ts.links.geometry_shape(self.astra_compat_vg)
 
     @property
     def range_shape(self):
-        return ts.links.geometry_shape(self.range)
+        return ts.links.geometry_shape(self.astra_compat_pg)
 
 
 class BackprojectionOperator(object):

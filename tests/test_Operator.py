@@ -115,3 +115,31 @@ def test_operator_volume_vector(S, T, R):
     # We should get the same forward and backprojection
     assert np.allclose(A_v(x), A_p(x))
     assert np.allclose(A_v.T(A_v(x)), A_p.T(A_p(x)))
+
+
+def test_volume_vector():
+    """Test volume vector with multiple steps
+
+    Initial support for volume_vec in ts.operator did not handle
+    volume vector objects with multiple steps properly. This test
+    checks that the current implementation does handle volume vector
+    geometries with multiple steps properly.
+
+    :returns:
+    :rtype:
+
+    """
+
+    pg = ts.parallel(angles=1, shape=48).to_vec()
+    vg = ts.volume(shape=32)
+
+    angles = np.linspace(0, np.pi, 48, endpoint=False)
+    R = ts.rotate(pos=0, axis=(1, 0, 0), rad=angles)
+
+    A_v = ts.operator(R * vg.to_vec(), pg)
+    A_p = ts.operator(vg, R.inv * pg)
+
+    x = np.random.normal(size=A_v.domain_shape).astype(np.float32)
+
+    assert np.allclose(A_v(x), A_p(x))
+    assert np.allclose(A_v.T(A_v(x)), A_p.T(A_p(x)))

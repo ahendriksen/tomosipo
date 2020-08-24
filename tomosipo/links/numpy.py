@@ -19,6 +19,11 @@ class NumpyLink(Link):
             self._data[:] = initial_value
         else:
             initial_value = np.array(initial_value, copy=False)
+            if initial_value.shape != shape:
+                raise ValueError(
+                    "Cannot link array. "
+                    f"Expected array of shape {shape}. Got {initial_value.shape}"
+                )
             # Make contiguous:
             if initial_value.dtype != np.float32:
                 warnings.warn(

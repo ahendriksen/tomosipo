@@ -13,7 +13,7 @@ def parallel(*, angles=1, shape=1, size=None):
 
     :param angles: `np.array` or integral value
         If integral value: the number of angles in the parallel-beam
-        geometry. This describes a full arc (2 pi radians) with
+        geometry. This describes a half arc (pi radians) with
         uniform placement and without the start and end point
         overlapping.
 
@@ -54,7 +54,7 @@ class ParallelGeometry(ProjectionGeometry):
 
             :param angles: `np.array` or integral value
                 If integral value: the number of angles in the parallel-beam
-                geometry. This describes a full arc (2 pi radians) with
+                geometry. This describes a half arc (pi radians) with
                 uniform placement and without the start and end point
                 overlapping.
 

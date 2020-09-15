@@ -27,7 +27,7 @@ These requirements can be installed using conda (replace =<X.X>= by your
 CUDA version)
 #+BEGIN_SRC sh
 conda create -y -n tomosipo python=3.6 astra-toolbox cudatoolkit=<X.X> -c astra-toolbox/label/dev
-pip install https://github.com/ahendriksen/tomosipo@develop
+pip install git+https://github.com/ahendriksen/tomosipo@develop
 source activate tomosipo
 #+END_SRC
 
@@ -39,7 +39,7 @@ To use tomosipo with PyTorch, QT, ODL, and cupy, install:
   # Install latest version of ODL:
   pip install git+https://github.com/odlgroup/odl
   # Install development version of tomosipo:
-  pip install https://github.com/ahendriksen/tomosipo@develop
+  pip install git+https://github.com/ahendriksen/tomosipo@develop
 #+END_SRC
 
 * Usage

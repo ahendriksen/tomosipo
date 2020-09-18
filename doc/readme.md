@@ -158,7 +158,7 @@ Tomosipo follows numpy's indexing convention. In the image below, we
 display the coordinate axes and indexing into a volume cube.
 The z-axis points upward.
 
-![img](./doc/img/volume_geometry.png)
+![img](./img/volume_geometry.png)
 
 We display an example for a parallel geometry with its associated
 sinogram indexing below. The detector coordinate frame is defined by
@@ -170,7 +170,7 @@ two vectors
 -   **v:** Usually points upwards. The length of v defines the height of a
     detector pixel.
 
-![img](doc/img/projection_geometry.png)
+![img](./img/projection_geometry.png)
 
 In short,
 

@@ -28,8 +28,8 @@ def cone_vec(*, shape, src_pos, det_pos, det_v, det_u):
         A numpy array of dimension (num_positions, 3) with the
         vector pointing from the detector (0, 0) to (0, 1) pixel
         (sideways).
-    :returns:
-    :rtype:
+    :returns: An arbitrarily oriented cone beam geometry
+    :rtype: ConeVectorGeometry
 
     """
     return ConeVectorGeometry(
@@ -75,8 +75,8 @@ class ConeVectorGeometry(ProjectionGeometry):
             A numpy array of dimension (num_positions, 3) with the
             vector pointing from the detector (0, 0) to (0, 1) pixel
             (sideways).
-        :returns:
-        :rtype:
+        :returns: An arbitrarily oriented cone beam geometry
+        :rtype: `ConeVectorGeometry`
 
         """
         super(ConeVectorGeometry, self).__init__(shape=shape)

@@ -12,12 +12,13 @@ def parallel(*, angles=1, shape=1, size=None):
     """Create a parallel-beam geometry
 
     :param angles: `np.array` or integral value
+
         If integral value: the number of angles in the parallel-beam
         geometry. This describes a half arc (pi radians) with
         uniform placement and without the start and end point
         overlapping.
 
-        If np.array: the values of the array are taken as
+        If `np.array`: the values of the array are taken as
         projection angle (units are radians).
 
     :param shape: (`int`, `int`) or `int`
@@ -30,7 +31,7 @@ def parallel(*, angles=1, shape=1, size=None):
 
         The order is (height, width), i.e. (v, u).
 
-    :returns: a parallel-beam geometry
+    :returns: A circular parallel-beam geometry
     :rtype: ParallelGeometry
 
     """

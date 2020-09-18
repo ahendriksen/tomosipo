@@ -5,18 +5,14 @@ import tomosipo as ts
 def data(geometry, initial_value=None):
     """Create a managed Astra Data3d object
 
-
     :param geometry: `VolumeGeometry` or `ProjectionGeometry`
         A geometry associated with this dataset.
-    :param initial_value: `float` or `np.array` or `ts.Data.Data` (optional)
+    :param initial_value: `float` or `np.array`
         An initial value for the data. The default is zero. If a
         numpy array is provided, the array is linked to the astra
         toolbox, i.e. they share the same underlying memory.
-
-        If a `Data' object is passed, it is checked to have
-    :returns:
-        An initialized dataset.
-    :rtype: Data
+    :returns: An initialized dataset.
+    :rtype: `Data`
 
     """
     # If an instance of Data is passed as initial_value, return it
@@ -49,7 +45,7 @@ class Data(object):
             toolbox, i.e. they share the same underlying memory.
         :returns:
             An initialized dataset.
-        :rtype: Data
+        :rtype: `Data`
 
         """
         super(Data, self).__init__()
@@ -107,10 +103,10 @@ class Data(object):
         NOTE: if this data encapsulates projection data, the order of
         the axes is (V, num_angles, U).
 
-        :returns: The underlying data object. This can be a numpy
-        array or some other type of data.
-
-        :rtype: np.array
+        :returns:
+            The underlying data object. This can be a numpy array or
+            some other type of data.
+        :rtype: `np.array`
 
         """
         return self._link.data

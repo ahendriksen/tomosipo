@@ -81,7 +81,7 @@ def project(
 
     Projects all volumes on all projection datasets.
 
-    :param *data: `Data` objects
+    :param \\*data: `Data` objects
         Data to use for forward and back projection. At least one
         data object relating to a VolumeGeometry and at least one
         data object relating to a projection geometry is required.
@@ -102,7 +102,7 @@ def project(
         overwrite data.
     :param projector: ??
         It is possible to provide a pre-generated ASTRA projector. Use
-        `ts.Operator.astra_projector' to generate an astra projector.
+        `ts.Operator.astra_projector` to generate an astra projector.
     :returns:
     :rtype:
 
@@ -149,7 +149,7 @@ def forward(
 
     Projects all volumes on all projection datasets.
 
-    :param *data: `Data` objects
+    :param \\*data: `Data` objects
         Data to use for forward and back projection. At least one
         data object relating to a VolumeGeometry and at least one
         data object relating to a projection geometry is required.
@@ -165,7 +165,7 @@ def forward(
         pixels.  (default: 1)
     :param projector: ??
         It is possible to provide a pre-generated ASTRA projector. Use
-        `ts.Operator.astra_projector' to generate an astra projector.
+        `ts.Operator.astra_projector` to generate an astra projector.
     :returns:
     :rtype:
     """
@@ -191,7 +191,7 @@ def backward(
 
     Backprojects all projection datasets on all volumes.
 
-    :param *data: `Data` objects
+    :param \\*data: `Data` objects
         Data to use for forward and back projection. At least one
         data object relating to a VolumeGeometry and at least one
         data object relating to a projection geometry is required.
@@ -207,7 +207,7 @@ def backward(
         pixels.  (default: 1)
     :param projector: ??
         It is possible to provide a pre-generated ASTRA projector. Use
-        `ts.Operator.astra_projector' to generate an astra projector.
+        `ts.Operator.astra_projector` to generate an astra projector.
     :returns:
     :rtype:
 
@@ -302,11 +302,11 @@ def direct_project(
 
     Forward/back projects a volume onto a projection dataset.
 
-    # TODO: Describe vol_data and proj_data
     :param projector: ??
         It is possible to provide a pre-generated ASTRA projector. Use
-        `ts.Operator.astra_projector' to generate an astra projector.
-
+        `ts.Operator.astra_projector` to generate an astra projector.
+    :param vol_link: TODO
+    :param proj_link: TODO
     :param forward: bool
         True for forward project, False for backproject.
     :param additive: bool
@@ -350,10 +350,11 @@ def direct_fp(
 
     Forward/back projects a volume onto a projection dataset.
 
-    # TODO: Describe vol_data and proj_data
     :param projector: ??
         It is possible to provide a pre-generated ASTRA projector. Use
-        `ts.Operator.astra_projector' to generate an astra projector.
+        `ts.Operator.astra_projector` to generate an astra projector.
+    :param vol_data: TODO
+    :param proj_data: TODO
     :param additive: bool
         If True, add projection data to existing data. Otherwise
         overwrite data.
@@ -373,10 +374,11 @@ def direct_bp(
 
     Forward/back projects a volume onto a projection dataset.
 
-    # TODO: Describe vol_data and proj_data
     :param projector: ??
         It is possible to provide a pre-generated ASTRA projector. Use
-        `ts.Operator.astra_projector' to generate an astra projector.
+        `ts.Operator.astra_projector` to generate an astra projector.
+    :param vol_data: TODO
+    :param proj_data: TODO
     :param additive: bool
         If True, add projection data to existing data. Otherwise
         overwrite data.
@@ -564,7 +566,7 @@ class BackprojectionOperator(object):
     >>> op.T == op.T.T.T
 
     It is nice that we do not allocate a new object every time we use
-    `op.T'. If we did, users might save the transpose in a separate
+    `op.T`. If we did, users might save the transpose in a separate
     variable for 'performance reasons', writing
 
     >>> op = ts.operator(vg, pg)

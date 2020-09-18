@@ -32,8 +32,9 @@ def parallel_vec(*, shape, ray_dir, det_pos, det_v, det_u):
         A numpy array of dimension (num_positions, 3) with the
         vector pointing from the detector (0, 0) to (0, 1) pixel
         (sideways).
-    :returns:
-    :rtype:
+
+    :returns: An arbitrarily oriented parallel-beam geometry
+    :rtype: ParallelVectorGeometry
     """
     return ParallelVectorGeometry(shape, ray_dir, det_pos, det_v, det_u)
 
@@ -75,8 +76,8 @@ class ParallelVectorGeometry(ProjectionGeometry):
             A numpy array of dimension (num_positions, 3) with the
             vector pointing from the detector (0, 0) to (0, 1) pixel
             (sideways).
-        :returns:
-        :rtype:
+        :returns: An arbitrarily oriented parallel-beam geometry
+        :rtype: ParallelVectorGeometry
         """
 
         super(ParallelVectorGeometry, self).__init__(shape=shape)

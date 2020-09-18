@@ -80,10 +80,11 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../readme.html">Tomosipo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Conventions.html">Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Geometries.html">Volume and Projection Geometries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
 </ul>
 
             
@@ -155,18 +156,14 @@
 <div class="viewcode-block" id="data"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Data.data">[docs]</a><span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="n">initial_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a managed Astra Data3d object</span>
 
-
 <span class="sd">    :param geometry: `VolumeGeometry` or `ProjectionGeometry`</span>
 <span class="sd">        A geometry associated with this dataset.</span>
-<span class="sd">    :param initial_value: `float` or `np.array` or `ts.Data.Data` (optional)</span>
+<span class="sd">    :param initial_value: `float` or `np.array`</span>
 <span class="sd">        An initial value for the data. The default is zero. If a</span>
 <span class="sd">        numpy array is provided, the array is linked to the astra</span>
 <span class="sd">        toolbox, i.e. they share the same underlying memory.</span>
-
-<span class="sd">        If a `Data&#39; object is passed, it is checked to have</span>
-<span class="sd">    :returns:</span>
-<span class="sd">        An initialized dataset.</span>
-<span class="sd">    :rtype: Data</span>
+<span class="sd">    :returns: An initialized dataset.</span>
+<span class="sd">    :rtype: `Data`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># If an instance of Data is passed as initial_value, return it</span>
@@ -199,7 +196,7 @@
 <span class="sd">            toolbox, i.e. they share the same underlying memory.</span>
 <span class="sd">        :returns:</span>
 <span class="sd">            An initialized dataset.</span>
-<span class="sd">        :rtype: Data</span>
+<span class="sd">        :rtype: `Data`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Data</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -257,10 +254,10 @@
 <span class="sd">        NOTE: if this data encapsulates projection data, the order of</span>
 <span class="sd">        the axes is (V, num_angles, U).</span>
 
-<span class="sd">        :returns: The underlying data object. This can be a numpy</span>
-<span class="sd">        array or some other type of data.</span>
-
-<span class="sd">        :rtype: np.array</span>
+<span class="sd">        :returns:</span>
+<span class="sd">            The underlying data object. This can be a numpy array or</span>
+<span class="sd">            some other type of data.</span>
+<span class="sd">        :rtype: `np.array`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_link</span><span class="o">.</span><span class="n">data</span>

@@ -80,10 +80,11 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../readme.html">Tomosipo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Conventions.html">Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Geometries.html">Volume and Projection Geometries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
 </ul>
 
             
@@ -178,9 +179,9 @@
     <span class="c1"># Change perspective *without* changing the voxel volume.</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">from_perspective</span><span class="p">(</span>
         <span class="n">pos</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
-        <span class="n">w</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">w</span> <span class="o">/</span> <span class="n">ts</span><span class="o">.</span><span class="n">vector_calc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">w</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span>
-        <span class="n">v</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">v</span> <span class="o">/</span> <span class="n">ts</span><span class="o">.</span><span class="n">vector_calc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">v</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span>
-        <span class="n">u</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">u</span> <span class="o">/</span> <span class="n">ts</span><span class="o">.</span><span class="n">vector_calc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">u</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span>
+        <span class="n">w</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">w</span> <span class="o">/</span> <span class="n">ts</span><span class="o">.</span><span class="n">vector_calc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">w</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">],</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">v</span> <span class="o">/</span> <span class="n">ts</span><span class="o">.</span><span class="n">vector_calc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">v</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">],</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">vg</span><span class="o">.</span><span class="n">u</span> <span class="o">/</span> <span class="n">ts</span><span class="o">.</span><span class="n">vector_calc</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vg</span><span class="o">.</span><span class="n">u</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="c1"># Move vg to perspective:</span>
     <span class="n">vg</span> <span class="o">=</span> <span class="n">P</span> <span class="o">*</span> <span class="n">vg</span>
@@ -206,10 +207,7 @@
     <span class="n">detector_supersampling</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="n">vg</span><span class="p">,</span> <span class="n">pg</span> <span class="o">=</span> <span class="n">volume_geometry</span><span class="p">,</span> <span class="n">projection_geometry</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">VolumeVectorGeometry</span><span class="p">):</span>
-        <span class="c1"># volume vector geometries are not native to ASTRA. We have to</span>
-        <span class="c1"># rotate geometry so that it is axis-aligned:</span>
-        <span class="n">vg</span><span class="p">,</span> <span class="n">pg</span> <span class="o">=</span> <span class="n">to_astra_compatible_operator_geometry</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">pg</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">VolumeGeometry</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">astra</span><span class="o">.</span><span class="n">create_projector</span><span class="p">(</span>
         <span class="s2">&quot;cuda3d&quot;</span><span class="p">,</span>
@@ -234,7 +232,7 @@
 
 <span class="sd">    Projects all volumes on all projection datasets.</span>
 
-<span class="sd">    :param *data: `Data` objects</span>
+<span class="sd">    :param \\*data: `Data` objects</span>
 <span class="sd">        Data to use for forward and back projection. At least one</span>
 <span class="sd">        data object relating to a VolumeGeometry and at least one</span>
 <span class="sd">        data object relating to a projection geometry is required.</span>
@@ -255,7 +253,7 @@
 <span class="sd">        overwrite data.</span>
 <span class="sd">    :param projector: ??</span>
 <span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
-<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
+<span class="sd">        `ts.Operator.astra_projector` to generate an astra projector.</span>
 <span class="sd">    :returns:</span>
 <span class="sd">    :rtype:</span>
 
@@ -302,7 +300,7 @@
 
 <span class="sd">    Projects all volumes on all projection datasets.</span>
 
-<span class="sd">    :param *data: `Data` objects</span>
+<span class="sd">    :param \\*data: `Data` objects</span>
 <span class="sd">        Data to use for forward and back projection. At least one</span>
 <span class="sd">        data object relating to a VolumeGeometry and at least one</span>
 <span class="sd">        data object relating to a projection geometry is required.</span>
@@ -318,7 +316,7 @@
 <span class="sd">        pixels.  (default: 1)</span>
 <span class="sd">    :param projector: ??</span>
 <span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
-<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
+<span class="sd">        `ts.Operator.astra_projector` to generate an astra projector.</span>
 <span class="sd">    :returns:</span>
 <span class="sd">    :rtype:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -344,7 +342,7 @@
 
 <span class="sd">    Backprojects all projection datasets on all volumes.</span>
 
-<span class="sd">    :param *data: `Data` objects</span>
+<span class="sd">    :param \\*data: `Data` objects</span>
 <span class="sd">        Data to use for forward and back projection. At least one</span>
 <span class="sd">        data object relating to a VolumeGeometry and at least one</span>
 <span class="sd">        data object relating to a projection geometry is required.</span>
@@ -360,7 +358,7 @@
 <span class="sd">        pixels.  (default: 1)</span>
 <span class="sd">    :param projector: ??</span>
 <span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
-<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
+<span class="sd">        `ts.Operator.astra_projector` to generate an astra projector.</span>
 <span class="sd">    :returns:</span>
 <span class="sd">    :rtype:</span>
 
@@ -455,11 +453,11 @@
 
 <span class="sd">    Forward/back projects a volume onto a projection dataset.</span>
 
-<span class="sd">    # TODO: Describe vol_data and proj_data</span>
 <span class="sd">    :param projector: ??</span>
 <span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
-<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
-
+<span class="sd">        `ts.Operator.astra_projector` to generate an astra projector.</span>
+<span class="sd">    :param vol_link: TODO</span>
+<span class="sd">    :param proj_link: TODO</span>
 <span class="sd">    :param forward: bool</span>
 <span class="sd">        True for forward project, False for backproject.</span>
 <span class="sd">    :param additive: bool</span>
@@ -503,10 +501,11 @@
 
 <span class="sd">    Forward/back projects a volume onto a projection dataset.</span>
 
-<span class="sd">    # TODO: Describe vol_data and proj_data</span>
 <span class="sd">    :param projector: ??</span>
 <span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
-<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
+<span class="sd">        `ts.Operator.astra_projector` to generate an astra projector.</span>
+<span class="sd">    :param vol_data: TODO</span>
+<span class="sd">    :param proj_data: TODO</span>
 <span class="sd">    :param additive: bool</span>
 <span class="sd">        If True, add projection data to existing data. Otherwise</span>
 <span class="sd">        overwrite data.</span>
@@ -526,10 +525,11 @@
 
 <span class="sd">    Forward/back projects a volume onto a projection dataset.</span>
 
-<span class="sd">    # TODO: Describe vol_data and proj_data</span>
 <span class="sd">    :param projector: ??</span>
 <span class="sd">        It is possible to provide a pre-generated ASTRA projector. Use</span>
-<span class="sd">        `ts.Operator.astra_projector&#39; to generate an astra projector.</span>
+<span class="sd">        `ts.Operator.astra_projector` to generate an astra projector.</span>
+<span class="sd">    :param vol_data: TODO</span>
+<span class="sd">    :param proj_data: TODO</span>
 <span class="sd">    :param additive: bool</span>
 <span class="sd">        If True, add projection data to existing data. Otherwise</span>
 <span class="sd">        overwrite data.</span>
@@ -588,9 +588,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">volume_geometry</span> <span class="o">=</span> <span class="n">volume_geometry</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">projection_geometry</span> <span class="o">=</span> <span class="n">projection_geometry</span>
 
+        <span class="n">vg</span><span class="p">,</span> <span class="n">pg</span> <span class="o">=</span> <span class="n">to_astra_compatible_operator_geometry</span><span class="p">(</span>
+            <span class="n">volume_geometry</span><span class="p">,</span> <span class="n">projection_geometry</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">astra_compat_vg</span> <span class="o">=</span> <span class="n">vg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">astra_compat_pg</span> <span class="o">=</span> <span class="n">pg</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">astra_projector</span> <span class="o">=</span> <span class="n">astra_projector</span><span class="p">(</span>
-            <span class="n">volume_geometry</span><span class="p">,</span>
-            <span class="n">projection_geometry</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">astra_compat_vg</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">astra_compat_pg</span><span class="p">,</span>
             <span class="n">voxel_supersampling</span><span class="o">=</span><span class="n">voxel_supersampling</span><span class="p">,</span>
             <span class="n">detector_supersampling</span><span class="o">=</span><span class="n">detector_supersampling</span><span class="p">,</span>
         <span class="p">)</span>
@@ -598,10 +604,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_transpose</span> <span class="o">=</span> <span class="n">BackprojectionOperator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_fp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">vlink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">volume_geometry</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span>
+        <span class="n">vlink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">astra_compat_vg</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">plink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection_geometry</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="n">plink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">astra_compat_pg</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">additive</span><span class="p">:</span>
                 <span class="n">plink</span> <span class="o">=</span> <span class="n">vlink</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">range_shape</span><span class="p">)</span>
@@ -634,10 +640,10 @@
 <span class="sd">        :rtype: `Data`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">plink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection_geometry</span><span class="p">,</span> <span class="n">projection</span><span class="p">)</span>
+        <span class="n">plink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">astra_compat_pg</span><span class="p">,</span> <span class="n">projection</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">vlink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">volume_geometry</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="n">vlink</span> <span class="o">=</span> <span class="n">_to_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">astra_compat_vg</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">additive</span><span class="p">:</span>
                 <span class="n">vlink</span> <span class="o">=</span> <span class="n">plink</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain_shape</span><span class="p">)</span>
@@ -691,11 +697,11 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">domain_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">geometry_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">geometry_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">astra_compat_vg</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">range_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">geometry_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">ts</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">geometry_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">astra_compat_pg</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BackprojectionOperator"><a class="viewcode-back" href="../../tomosipo.html#tomosipo.Operator.BackprojectionOperator">[docs]</a><span class="k">class</span> <span class="nc">BackprojectionOperator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -711,7 +717,7 @@
 <span class="sd">    &gt;&gt;&gt; op.T == op.T.T.T</span>
 
 <span class="sd">    It is nice that we do not allocate a new object every time we use</span>
-<span class="sd">    `op.T&#39;. If we did, users might save the transpose in a separate</span>
+<span class="sd">    `op.T`. If we did, users might save the transpose in a separate</span>
 <span class="sd">    variable for &#39;performance reasons&#39;, writing</span>
 
 <span class="sd">    &gt;&gt;&gt; op = ts.operator(vg, pg)</span>

@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="tomosipo.geometry package" href="tomosipo.geometry.html" />
-    <link rel="prev" title="tomosipo" href="modules.html" /> 
+    <link rel="prev" title="API Reference" href="modules.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,10 +82,11 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Tomosipo</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">tomosipo</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Conventions.html">Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Geometries.html">Volume and Projection Geometries</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">tomosipo package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="tomosipo.geometry.html">tomosipo.geometry package</a></li>
@@ -154,7 +155,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="modules.html">tomosipo</a> &raquo;</li>
+          <li><a href="modules.html">API Reference</a> &raquo;</li>
         
       <li>tomosipo package</li>
     
@@ -257,13 +258,11 @@ immediately, using <cite>np.copy</cite> for instance.</p>
 the axes is (V, num_angles, U).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The underlying data object. This can be a numpy</p>
+<dd class="field-odd"><p>The underlying data object. This can be a numpy array or
+some other type of data.</p>
 </dd>
-</dl>
-<p>array or some other type of data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>np.array</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -308,19 +307,17 @@ the axes is (V, num_angles, U).</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>geometry</strong> – <cite>VolumeGeometry</cite> or <cite>ProjectionGeometry</cite>
 A geometry associated with this dataset.</p></li>
-<li><p><strong>initial_value</strong> – <p><cite>float</cite> or <cite>np.array</cite> or <cite>ts.Data.Data</cite> (optional)
+<li><p><strong>initial_value</strong> – <cite>float</cite> or <cite>np.array</cite>
 An initial value for the data. The default is zero. If a
 numpy array is provided, the array is linked to the astra
-toolbox, i.e. they share the same underlying memory.</p>
-<p>If a <a href="#id1"><span class="problematic" id="id2">`</span></a>Data’ object is passed, it is checked to have</p>
-</p></li>
+toolbox, i.e. they share the same underlying memory.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>An initialized dataset.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#tomosipo.Data.Data" title="tomosipo.Data.Data">Data</a></p>
+<dd class="field-odd"><p><cite>Data</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -342,7 +339,7 @@ been shamelessly ripped from OpTomo.</p>
 </pre></div>
 </div>
 <p>It is nice that we do not allocate a new object every time we use
-<a href="#id3"><span class="problematic" id="id4">`</span></a>op.T’. If we did, users might save the transpose in a separate
+<cite>op.T</cite>. If we did, users might save the transpose in a separate
 variable for ‘performance reasons’, writing</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">op</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">operator</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">pg</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">op_T</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">T</span>
@@ -433,11 +430,10 @@ variable for ‘performance reasons’, writing</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>*data</strong> – <p><cite>Data</cite> objects
+<li><p><strong>*data</strong> – <cite>Data</cite> objects
 Data to use for forward and back projection. At least one
 data object relating to a VolumeGeometry and at least one
-data object relating to a projection geometry is required.</p>
-</p></li>
+data object relating to a projection geometry is required.</p></li>
 <li><p><strong>detector_supersampling</strong> – <cite>int</cite>
 For the forward projection, DetectorSuperSampling^2 rays
 will be used.  This should only be used if your detector
@@ -450,7 +446,7 @@ the reconstruction volume are larger than the detector
 pixels.  (default: 1)</p></li>
 <li><p><strong>projector</strong> – <p>??
 It is possible to provide a pre-generated ASTRA projector. Use
-<a href="#id7"><span class="problematic" id="id8">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
+<cite>ts.Operator.astra_projector</cite> to generate an astra projector.</p>
 </p></li>
 </ul>
 </dd>
@@ -468,17 +464,19 @@ It is possible to provide a pre-generated ASTRA projector. Use
 <code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">direct_bp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projector</span></em>, <em class="sig-param"><span class="n">vol_data</span></em>, <em class="sig-param"><span class="n">proj_data</span></em>, <em class="sig-param"><span class="n">additive</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#direct_bp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.direct_bp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project forward or backward</p>
 <p>Forward/back projects a volume onto a projection dataset.</p>
-<p># TODO: Describe vol_data and proj_data
-:param projector: ??</p>
-<blockquote>
-<div><p>It is possible to provide a pre-generated ASTRA projector. Use
-<a href="#id9"><span class="problematic" id="id10">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>additive</strong> – bool
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>projector</strong> – <p>??
+It is possible to provide a pre-generated ASTRA projector. Use
+<cite>ts.Operator.astra_projector</cite> to generate an astra projector.</p>
+</p></li>
+<li><p><strong>vol_data</strong> – TODO</p></li>
+<li><p><strong>proj_data</strong> – TODO</p></li>
+<li><p><strong>additive</strong> – bool
 If True, add projection data to existing data. Otherwise
-overwrite data.</p>
+overwrite data.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p></p>
@@ -494,17 +492,19 @@ overwrite data.</p>
 <code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">direct_fp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projector</span></em>, <em class="sig-param"><span class="n">vol_data</span></em>, <em class="sig-param"><span class="n">proj_data</span></em>, <em class="sig-param"><span class="n">additive</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#direct_fp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.direct_fp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project forward or backward</p>
 <p>Forward/back projects a volume onto a projection dataset.</p>
-<p># TODO: Describe vol_data and proj_data
-:param projector: ??</p>
-<blockquote>
-<div><p>It is possible to provide a pre-generated ASTRA projector. Use
-<a href="#id11"><span class="problematic" id="id12">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>additive</strong> – bool
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>projector</strong> – <p>??
+It is possible to provide a pre-generated ASTRA projector. Use
+<cite>ts.Operator.astra_projector</cite> to generate an astra projector.</p>
+</p></li>
+<li><p><strong>vol_data</strong> – TODO</p></li>
+<li><p><strong>proj_data</strong> – TODO</p></li>
+<li><p><strong>additive</strong> – bool
 If True, add projection data to existing data. Otherwise
-overwrite data.</p>
+overwrite data.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p></p>
@@ -520,15 +520,15 @@ overwrite data.</p>
 <code class="sig-prename descclassname">tomosipo.Operator.</code><code class="sig-name descname">direct_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projector</span></em>, <em class="sig-param"><span class="n">vol_link</span></em>, <em class="sig-param"><span class="n">proj_link</span></em>, <em class="sig-param"><span class="n">forward</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">additive</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/Operator.html#direct_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.Operator.direct_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project forward or backward</p>
 <p>Forward/back projects a volume onto a projection dataset.</p>
-<p># TODO: Describe vol_data and proj_data
-:param projector: ??</p>
-<blockquote>
-<div><p>It is possible to provide a pre-generated ASTRA projector. Use
-<a href="#id13"><span class="problematic" id="id14">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>projector</strong> – <p>??
+It is possible to provide a pre-generated ASTRA projector. Use
+<cite>ts.Operator.astra_projector</cite> to generate an astra projector.</p>
+</p></li>
+<li><p><strong>vol_link</strong> – TODO</p></li>
+<li><p><strong>proj_link</strong> – TODO</p></li>
 <li><p><strong>forward</strong> – bool
 True for forward project, False for backproject.</p></li>
 <li><p><strong>additive</strong> – bool
@@ -585,11 +585,10 @@ pixels.  (default: 1)</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>*data</strong> – <p><cite>Data</cite> objects
+<li><p><strong>*data</strong> – <cite>Data</cite> objects
 Data to use for forward and back projection. At least one
 data object relating to a VolumeGeometry and at least one
-data object relating to a projection geometry is required.</p>
-</p></li>
+data object relating to a projection geometry is required.</p></li>
 <li><p><strong>detector_supersampling</strong> – <cite>int</cite>
 For the forward projection, DetectorSuperSampling^2 rays
 will be used.  This should only be used if your detector
@@ -602,7 +601,7 @@ the reconstruction volume are larger than the detector
 pixels.  (default: 1)</p></li>
 <li><p><strong>projector</strong> – <p>??
 It is possible to provide a pre-generated ASTRA projector. Use
-<a href="#id17"><span class="problematic" id="id18">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
+<cite>ts.Operator.astra_projector</cite> to generate an astra projector.</p>
 </p></li>
 </ul>
 </dd>
@@ -657,11 +656,10 @@ the operator adds instead of overwrites. The default is
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>*data</strong> – <p><cite>Data</cite> objects
+<li><p><strong>*data</strong> – <cite>Data</cite> objects
 Data to use for forward and back projection. At least one
 data object relating to a VolumeGeometry and at least one
-data object relating to a projection geometry is required.</p>
-</p></li>
+data object relating to a projection geometry is required.</p></li>
 <li><p><strong>detector_supersampling</strong> – <cite>int</cite>
 For the forward projection, DetectorSuperSampling^2 rays
 will be used.  This should only be used if your detector
@@ -679,7 +677,7 @@ If True, add projection data to existing data. Otherwise
 overwrite data.</p></li>
 <li><p><strong>projector</strong> – <p>??
 It is possible to provide a pre-generated ASTRA projector. Use
-<a href="#id21"><span class="problematic" id="id22">`</span></a>ts.Operator.astra_projector’ to generate an astra projector.</p>
+<cite>ts.Operator.astra_projector</cite> to generate an astra projector.</p>
 </p></li>
 </ul>
 </dd>
@@ -987,12 +985,12 @@ during the backward pass.</p>
 </div>
 <p>Likewise, you may use the transpose:
 &gt;&gt;&gt; g = to_autograd(A.T)
-&gt;&gt;&gt; pd = torch.randn((B, <a href="#id23"><span class="problematic" id="id24">*</span></a>A.T.domain_shape), requires_grad=True)
+&gt;&gt;&gt; pd = torch.randn((B, <a href="#id1"><span class="problematic" id="id2">*</span></a>A.T.domain_shape), requires_grad=True)
 &gt;&gt;&gt; g(pd).sum().backward()
 &gt;&gt;&gt; print(vd.grad)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>operator</strong> – a <a href="#id25"><span class="problematic" id="id26">`</span></a>ts.Operator’</p>
+<dd class="field-odd"><p><strong>operator</strong> – a <a href="#id3"><span class="problematic" id="id4">`</span></a>ts.Operator’</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>an autograd function</p>
@@ -1062,7 +1060,7 @@ than the original interval.</p>
 <blockquote>
 <div><blockquote>
 <div><blockquote>
-<div><p><a href="#id27"><span class="problematic" id="id28">|x|x|x|x|</span></a>   [0:4:1]</p>
+<div><p><a href="#id5"><span class="problematic" id="id6">|x|x|x|x|</span></a>   [0:4:1]</p>
 </div></blockquote>
 <div class="line-block">
 <div class="line">x | x |    [0:4:2]
@@ -1248,7 +1246,7 @@ A homogeneous coordinate vector</p></li>
         <a href="tomosipo.geometry.html" class="btn btn-neutral float-right" title="tomosipo.geometry package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="modules.html" class="btn btn-neutral float-left" title="tomosipo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

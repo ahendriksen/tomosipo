@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to tomosipo’s documentation! &mdash; tomosipo  documentation</title>
+  <title>Tomosipo: High-performance 3D tomography with flexible geometries in Python &mdash; tomosipo  documentation</title>
   
 
   
@@ -81,10 +81,11 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Tomosipo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conventions.html">Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Geometries.html">Volume and Projection Geometries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
 </ul>
 
             
@@ -131,7 +132,7 @@
     
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Welcome to tomosipo’s documentation!</li>
+      <li>Tomosipo: High-performance 3D tomography with flexible geometries in Python</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -150,10 +151,42 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-tomosipo-s-documentation">
-<h1>Welcome to tomosipo’s documentation!<a class="headerlink" href="#welcome-to-tomosipo-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="tomosipo-high-performance-3d-tomography-with-flexible-geometries-in-python">
+<h1>Tomosipo: High-performance 3D tomography with flexible geometries in Python<a class="headerlink" href="#tomosipo-high-performance-3d-tomography-with-flexible-geometries-in-python" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">   ...: </span><span class="kn">import</span> <span class="nn">tomosipo</span> <span class="k">as</span> <span class="nn">ts</span>
+<span class="gp">   ...: </span><span class="c1"># Create a 3D  parallel-beam geometry collecting 180 projection images over a half-circle.</span>
+<span class="gp">   ...: </span><span class="c1"># The projection images are 128 pixels high and 192 pixels wide.</span>
+<span class="gp">   ...: </span><span class="n">pg</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">192</span><span class="p">))</span>
+<span class="gp">   ...: </span><span class="c1"># Create a 3D volume geometry on the origin</span>
+<span class="gp">   ...: </span><span class="n">vg</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">volume</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+<span class="gp">   ...: </span><span class="c1"># Create a projection operator</span>
+<span class="gp">   ...: </span><span class="n">A</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">operator</span><span class="p">(</span><span class="n">vg</span><span class="p">,</span> <span class="n">pg</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [2]: </span><span class="c1"># Create volume data</span>
+<span class="gp">   ...: </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">domain_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [3]: </span><span class="c1"># Forward project</span>
+<span class="gp">   ...: </span><span class="n">y</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [4]: </span><span class="c1"># And backproject the obtained projection data</span>
+<span class="gp">   ...: </span><span class="n">bp</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<p>Tomosipo is a pythonic wrapper for the ASTRA-toolbox of
+high-performance GPU primitives for 3D tomography.</p>
+<p>This library aims to expose a user-friendly API for high-performance
+3D tomography, while allowing strict control over resource usage.
+In addition, this library enables easy manipulation and visualisation
+of 3D geometries.
+Finally, the library ingtegrates with deep learning toolkits, such as
+PyTorch, and the operator discretization library (ODL) for
+optimization in inverse problems.</p>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Tomosipo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#installation">Installation</a></li>
@@ -162,7 +195,17 @@
 <li class="toctree-l2"><a class="reference internal" href="readme.html#contributions">Contributions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">tomosipo</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="Conventions.html">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Conventions.html#axes-and-indexing">Axes and indexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Conventions.html#naming-and-ordering">Naming and ordering</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Geometries.html">Volume and Projection Geometries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Geometries.html#useful-properties">Useful properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Geometries.html#geometry-creation">Geometry creation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tomosipo.html">tomosipo package</a></li>
 </ul>
 </li>

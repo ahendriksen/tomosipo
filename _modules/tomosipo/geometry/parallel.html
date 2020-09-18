@@ -80,10 +80,11 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Tomosipo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Conventions.html">Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Geometries.html">Volume and Projection Geometries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API Reference</a></li>
 </ul>
 
             
@@ -158,16 +159,17 @@
 <span class="kn">from</span> <span class="nn">.transform</span> <span class="kn">import</span> <span class="n">Transform</span>
 
 
-<div class="viewcode-block" id="parallel"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.parallel.parallel">[docs]</a><span class="k">def</span> <span class="nf">parallel</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">angles</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="parallel"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.parallel">[docs]</a><span class="k">def</span> <span class="nf">parallel</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">angles</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a parallel-beam geometry</span>
 
 <span class="sd">    :param angles: `np.array` or integral value</span>
+
 <span class="sd">        If integral value: the number of angles in the parallel-beam</span>
-<span class="sd">        geometry. This describes a full arc (2 pi radians) with</span>
+<span class="sd">        geometry. This describes a half arc (pi radians) with</span>
 <span class="sd">        uniform placement and without the start and end point</span>
 <span class="sd">        overlapping.</span>
 
-<span class="sd">        If np.array: the values of the array are taken as</span>
+<span class="sd">        If `np.array`: the values of the array are taken as</span>
 <span class="sd">        projection angle (units are radians).</span>
 
 <span class="sd">    :param shape: (`int`, `int`) or `int`</span>
@@ -180,21 +182,21 @@
 
 <span class="sd">        The order is (height, width), i.e. (v, u).</span>
 
-<span class="sd">    :returns: a parallel-beam geometry</span>
+<span class="sd">    :returns: A circular parallel-beam geometry</span>
 <span class="sd">    :rtype: ParallelGeometry</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ParallelGeometry</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="random_parallel"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.parallel.random_parallel">[docs]</a><span class="k">def</span> <span class="nf">random_parallel</span><span class="p">():</span>
+<div class="viewcode-block" id="random_parallel"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.random_parallel">[docs]</a><span class="k">def</span> <span class="nf">random_parallel</span><span class="p">():</span>
     <span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">parallel</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="n">angles</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ParallelGeometry"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.parallel.ParallelGeometry">[docs]</a><span class="k">class</span> <span class="nc">ParallelGeometry</span><span class="p">(</span><span class="n">ProjectionGeometry</span><span class="p">):</span>
+<div class="viewcode-block" id="ParallelGeometry"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.ParallelGeometry">[docs]</a><span class="k">class</span> <span class="nc">ParallelGeometry</span><span class="p">(</span><span class="n">ProjectionGeometry</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A parametrized parallel-beam geometry</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -204,7 +206,7 @@
 
 <span class="sd">            :param angles: `np.array` or integral value</span>
 <span class="sd">                If integral value: the number of angles in the parallel-beam</span>
-<span class="sd">                geometry. This describes a full arc (2 pi radians) with</span>
+<span class="sd">                geometry. This describes a half arc (pi radians) with</span>
 <span class="sd">                uniform placement and without the start and end point</span>
 <span class="sd">                overlapping.</span>
 
@@ -305,7 +307,7 @@
 
         <span class="k">return</span> <span class="n">parallel</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="n">new_angles</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">det_shape</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ParallelGeometry.to_astra"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.parallel.ParallelGeometry.to_astra">[docs]</a>    <span class="k">def</span> <span class="nf">to_astra</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ParallelGeometry.to_astra"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.ParallelGeometry.to_astra">[docs]</a>    <span class="k">def</span> <span class="nf">to_astra</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">row_count</span><span class="p">,</span> <span class="n">col_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_shape</span>
         <span class="n">det_spacing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">det_shape</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -317,7 +319,7 @@
             <span class="s2">&quot;ProjectionAngles&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_angles</span><span class="p">),</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="ParallelGeometry.from_astra"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.parallel.ParallelGeometry.from_astra">[docs]</a>    <span class="k">def</span> <span class="nf">from_astra</span><span class="p">(</span><span class="n">astra_pg</span><span class="p">):</span>
+<div class="viewcode-block" id="ParallelGeometry.from_astra"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.ParallelGeometry.from_astra">[docs]</a>    <span class="k">def</span> <span class="nf">from_astra</span><span class="p">(</span><span class="n">astra_pg</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">astra_pg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;parallel3d&quot;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;ParallelGeometry.from_astra only supports &#39;parallel3d&#39; type astra geometries.&quot;</span>
@@ -331,7 +333,7 @@
 
         <span class="k">return</span> <span class="n">parallel</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">angles</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ParallelGeometry.to_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.parallel.ParallelGeometry.to_vec">[docs]</a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ParallelGeometry.to_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.ParallelGeometry.to_vec">[docs]</a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a vector geometry of the current geometry</span>
 
 <span class="sd">        :returns:</span>
@@ -340,7 +342,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ParallelVectorGeometry</span><span class="o">.</span><span class="n">from_astra</span><span class="p">(</span><span class="n">astra</span><span class="o">.</span><span class="n">geom_2vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_astra</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="ParallelGeometry.to_box"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.parallel.ParallelGeometry.to_box">[docs]</a>    <span class="k">def</span> <span class="nf">to_box</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ParallelGeometry.to_box"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.ParallelGeometry.to_box">[docs]</a>    <span class="k">def</span> <span class="nf">to_box</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns an oriented box representating the detector</span>
 
 <span class="sd">        :returns: an oriented box representating the detector</span>
@@ -405,17 +407,17 @@
     <span class="c1">#                                 Methods                                 #</span>
     <span class="c1">###########################################################################</span>
 
-<div class="viewcode-block" id="ParallelGeometry.rescale_det"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.parallel.ParallelGeometry.rescale_det">[docs]</a>    <span class="k">def</span> <span class="nf">rescale_det</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+<div class="viewcode-block" id="ParallelGeometry.rescale_det"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.ParallelGeometry.rescale_det">[docs]</a>    <span class="k">def</span> <span class="nf">rescale_det</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
         <span class="n">scaleV</span><span class="p">,</span> <span class="n">scaleU</span> <span class="o">=</span> <span class="n">up_tuple</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">scaleV</span><span class="p">,</span> <span class="n">scaleU</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">scaleV</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">scaleU</span><span class="p">)</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">det_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">scaleV</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">scaleU</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">parallel</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ParallelGeometry.reshape"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.parallel.ParallelGeometry.reshape">[docs]</a>    <span class="k">def</span> <span class="nf">reshape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_shape</span><span class="p">):</span>
+<div class="viewcode-block" id="ParallelGeometry.reshape"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.ParallelGeometry.reshape">[docs]</a>    <span class="k">def</span> <span class="nf">reshape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_shape</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">parallel</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_angles</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="n">new_shape</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ParallelGeometry.project_point"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.parallel.ParallelGeometry.project_point">[docs]</a>    <span class="k">def</span> <span class="nf">project_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+<div class="viewcode-block" id="ParallelGeometry.project_point"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.ParallelGeometry.project_point">[docs]</a>    <span class="k">def</span> <span class="nf">project_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_vec</span><span class="p">()</span><span class="o">.</span><span class="n">project_point</span><span class="p">(</span><span class="n">point</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>

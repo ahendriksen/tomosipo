@@ -80,10 +80,11 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Tomosipo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Conventions.html">Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Geometries.html">Volume and Projection Geometries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API Reference</a></li>
 </ul>
 
             
@@ -169,6 +170,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">initial_value</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">initial_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial_value</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">initial_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Cannot link array. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Expected array of shape </span><span class="si">{</span><span class="n">shape</span><span class="si">}</span><span class="s2">. Got </span><span class="si">{</span><span class="n">initial_value</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
             <span class="c1"># Make contiguous:</span>
             <span class="k">if</span> <span class="n">initial_value</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>

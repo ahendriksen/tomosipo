@@ -80,10 +80,11 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Tomosipo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Conventions.html">Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Geometries.html">Volume and Projection Geometries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API Reference</a></li>
 </ul>
 
             
@@ -156,7 +157,7 @@
 <span class="kn">from</span> <span class="nn">.transform</span> <span class="kn">import</span> <span class="n">Transform</span>
 
 
-<div class="viewcode-block" id="volume_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume_vec.volume_vec">[docs]</a><span class="k">def</span> <span class="nf">volume_vec</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+<div class="viewcode-block" id="volume_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.volume_vec">[docs]</a><span class="k">def</span> <span class="nf">volume_vec</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
     <span class="sd">&quot;&quot;&quot;Create a new volume vector geometry</span>
 
 <span class="sd">    Like the parallel and cone vector geometries, the volume vector</span>
@@ -190,7 +191,7 @@
     <span class="k">return</span> <span class="n">VolumeVectorGeometry</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="random_volume_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume_vec.random_volume_vec">[docs]</a><span class="k">def</span> <span class="nf">random_volume_vec</span><span class="p">():</span>
+<div class="viewcode-block" id="random_volume_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.random_volume_vec">[docs]</a><span class="k">def</span> <span class="nf">random_volume_vec</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Create a random volume vector geometry</span>
 
 <span class="sd">    Useful for testing.</span>
@@ -207,7 +208,7 @@
     <span class="k">return</span> <span class="n">RT</span> <span class="o">*</span> <span class="n">vg</span></div>
 
 
-<div class="viewcode-block" id="VolumeVectorGeometry"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume_vec.VolumeVectorGeometry">[docs]</a><span class="k">class</span> <span class="nc">VolumeVectorGeometry</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="VolumeVectorGeometry"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.VolumeVectorGeometry">[docs]</a><span class="k">class</span> <span class="nc">VolumeVectorGeometry</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Documentation for VolumeVectorGeometry</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -347,7 +348,7 @@
             <span class="n">u</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="VolumeVectorGeometry.to_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume_vec.VolumeVectorGeometry.to_vec">[docs]</a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="VolumeVectorGeometry.to_vec"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.VolumeVectorGeometry.to_vec">[docs]</a>    <span class="k">def</span> <span class="nf">to_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns a volume vector geometry</span>
 
 <span class="sd">        :returns: self</span>
@@ -516,7 +517,7 @@
     <span class="c1">###########################################################################</span>
     <span class="c1">#                          Transformation methods                         #</span>
     <span class="c1">###########################################################################</span>
-<div class="viewcode-block" id="VolumeVectorGeometry.reshape"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.volume_vec.VolumeVectorGeometry.reshape">[docs]</a>    <span class="k">def</span> <span class="nf">reshape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_shape</span><span class="p">):</span>
+<div class="viewcode-block" id="VolumeVectorGeometry.reshape"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.VolumeVectorGeometry.reshape">[docs]</a>    <span class="k">def</span> <span class="nf">reshape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_shape</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change the number of voxels without changing volume size</span>
 
 <span class="sd">        :param new_shape: int or (int, int, int)</span>

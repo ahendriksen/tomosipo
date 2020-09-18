@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Conventions &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Volume and Projection Geometries" href="Geometries.html" />
+    <link rel="prev" title="Tomosipo" href="readme.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Tomosipo</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#axes-and-indexing">Axes and indexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#naming-and-ordering">Naming and ordering</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Geometries.html">Volume and Projection Geometries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Conventions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Conventions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="conventions">
+<h1>Conventions<a class="headerlink" href="#conventions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="axes-and-indexing">
+<h2>Axes and indexing<a class="headerlink" href="#axes-and-indexing" title="Permalink to this headline">¶</a></h2>
+<p>Tomosipo follows numpy’s indexing convention. In the image below, we
+display the coordinate axes and indexing into a volume cube.
+The z-axis points upward.</p>
+<a class="reference internal image-reference" href="_images/volume_geometry.svg"><img alt="Volume geometry" src="_images/volume_geometry.svg" width="400" /></a>
+<p>We display an example for a parallel geometry with its associated
+sinogram indexing below. The detector coordinate frame is defined by
+two vectors</p>
+<ul class="simple">
+<li><p><strong>u:</strong> Usually points sideways and to the “right” from the perspective
+of the source. The length of u defines the width of a detector
+pixel.</p></li>
+<li><p><strong>v:</strong> Usually points upwards. The length of v defines the height of a
+detector pixel.</p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/projection_geometry.svg"><img alt="Projection geometry" src="_images/projection_geometry.svg" width="400" /></a>
+<p>In short,</p>
+<ul class="simple">
+<li><p>volume geometry and data are indexed  in (Z, Y, X) order</p></li>
+<li><p>projection geometries are indexed in (angle, v, u) order</p></li>
+<li><p>projection data is stored as a stack of sinograms, indexed in (V,
+angle, U) order.</p></li>
+</ul>
+<p>The coordinate system (z, y, x) is <strong>left-handed</strong> rather than
+right-handed.</p>
+</div>
+<div class="section" id="naming-and-ordering">
+<h2>Naming and ordering<a class="headerlink" href="#naming-and-ordering" title="Permalink to this headline">¶</a></h2>
+<p>The following terms are used as parameters, properties, and in
+function names:</p>
+<ul class="simple">
+<li><p><strong>shape:</strong> The number of voxels / pixels in each dimension</p></li>
+<li><p><strong>size:</strong> The physical size of the object in each dimension</p></li>
+<li><p><strong>dist:</strong> Short for distance</p></li>
+<li><p><strong>vec:</strong> Short for vector</p></li>
+<li><p><strong>obj:</strong> Short for object</p></li>
+<li><p><strong>vol:</strong> Short for volume</p></li>
+<li><p><strong>pos:</strong> Short for position: this is alway the <strong>center</strong> of an object</p></li>
+<li><p><strong>src:</strong> Short for source</p></li>
+<li><p><strong>det:</strong> Short for detector</p></li>
+<li><p><strong>pos:</strong> Short for position</p></li>
+<li><p><strong>len:</strong> Short for length</p></li>
+<li><p><strong>rel:</strong> Short for relative</p></li>
+<li><p><strong>abs:</strong> Short for absolute</p></li>
+<li><p><strong>num_*:</strong> Number of * (angles for instance)</p></li>
+</ul>
+<p>In examples and code, projection and volume geometries are often
+abbreviated as:</p>
+<ul class="simple">
+<li><p><strong>pg:</strong> projection geometry</p></li>
+<li><p><strong>vg:</strong> volume geometry</p></li>
+</ul>
+<p>Whenever a function takes as parameters a volume geometry,
+projection geometry, or operator, there is a fixed ordering:</p>
+<ol class="arabic simple">
+<li><p>operator</p></li>
+<li><p>volume (data or geometry)</p></li>
+<li><p>projection (data or geometry)</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Geometries.html" class="btn btn-neutral float-right" title="Volume and Projection Geometries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="readme.html" class="btn btn-neutral float-left" title="Tomosipo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

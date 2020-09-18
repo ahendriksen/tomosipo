@@ -1,0 +1,614 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Volume and Projection Geometries &mdash; tomosipo  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="modules.html" />
+    <link rel="prev" title="Conventions" href="Conventions.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> tomosipo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conventions.html">Conventions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Volume and Projection Geometries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#useful-properties">Useful properties</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#printed-representation">Printed representation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#angles-shape-and-size">Angles, shape, and size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cone-parallel-vec">Cone, parallel, vec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coordinates-for-geometric-calculations">Coordinates for geometric calculations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#geometry-creation">Geometry creation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#circular-projection-geometries">Circular projection geometries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#arbitrary-projection-geometries">Arbitrary projection geometries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#volume-geometries">Volume geometries</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">tomosipo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Volume and Projection Geometries</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Geometries.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="volume-and-projection-geometries">
+<h1>Volume and Projection Geometries<a class="headerlink" href="#volume-and-projection-geometries" title="Permalink to this headline">¶</a></h1>
+<p>Tomosipo has six types of geometries with varying degrees of flexibility.</p>
+<table class="colwidths-given docutils align-default" id="id1" style="width: 50">
+<caption><span class="caption-text">Geometries</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Creation function</p></th>
+<th class="head"><p>Geometry</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#tomosipo.parallel" title="tomosipo.parallel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tomosipo.parallel()</span></code></a></p></td>
+<td><p>3D circular parallel beam geometry</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tomosipo.parallel_vec" title="tomosipo.parallel_vec"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tomosipo.parallel_vec()</span></code></a></p></td>
+<td><p>3D arbitrarily-oriented parallel beam geometry</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tomosipo.cone" title="tomosipo.cone"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tomosipo.cone()</span></code></a></p></td>
+<td><p>3D circular cone beam geometry</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tomosipo.cone_vec" title="tomosipo.cone_vec"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tomosipo.cone_vec()</span></code></a></p></td>
+<td><p>3D arbitrarily-oriented cone beam geometry</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tomosipo.volume" title="tomosipo.volume"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tomosipo.volume()</span></code></a></p></td>
+<td><p>3D axis-aligned volume geometry</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tomosipo.cone_vec" title="tomosipo.cone_vec"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tomosipo.cone_vec()</span></code></a></p></td>
+<td><p>3D arbitrarily-oriented volume geometry. This object cannot be converted to ASTRA directly, but can be used in geometric computations.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="useful-properties">
+<h2>Useful properties<a class="headerlink" href="#useful-properties" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="printed-representation">
+<h3>Printed representation<a class="headerlink" href="#printed-representation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">tomosipo</span> <span class="k">as</span> <span class="nn">ts</span>
+<span class="gp">   ...: </span><span class="n">pg</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">))</span>
+<span class="gp">   ...: </span><span class="n">pg</span> <span class="c1"># geometries have a useful representation when printed</span>
+<span class="gp">   ...: </span>
+<span class="gh">Out[1]: </span><span class="go">ts.parallel(</span>
+<span class="go">    angles=3,</span>
+<span class="go">    shape=(10, 15),</span>
+<span class="go">    size=(1, 1.5),</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="angles-shape-and-size">
+<h3>Angles, shape, and size<a class="headerlink" href="#angles-shape-and-size" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="n">pg</span><span class="o">.</span><span class="n">num_angles</span> <span class="c1"># number of angles</span>
+<span class="gh">Out[2]: </span><span class="go">3</span>
+
+<span class="gp">In [3]: </span><span class="n">pg</span><span class="o">.</span><span class="n">angles</span> <span class="c1"># Supported for ts.parallel and ts.cone</span>
+<span class="gh">Out[3]: </span><span class="go">array([0.        , 1.04719755, 2.0943951 ])</span>
+
+<span class="gp">In [4]: </span><span class="n">pg</span><span class="o">.</span><span class="n">det_shape</span> <span class="c1"># detector shape</span>
+<span class="gh">Out[4]: </span><span class="go">(10, 15)</span>
+
+<span class="gp">In [5]: </span><span class="n">pg</span><span class="o">.</span><span class="n">det_size</span> <span class="c1"># detector size (in real-world metrics)</span>
+<span class="gh">Out[5]: </span><span class="go">(1, 1.5)</span>
+
+<span class="gp">In [6]: </span><span class="c1"># In a vector geometry, not all pixels have to be the same size..</span>
+<span class="gp">   ...: </span><span class="c1"># In that case, detector_sizes can be used to determine the detector size at each angle.</span>
+<span class="gp">   ...: </span><span class="n">pg</span><span class="o">.</span><span class="n">det_sizes</span>
+<span class="gp">   ...: </span>
+<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="go">array([[1. , 1.5],</span>
+<span class="go">       [1. , 1.5],</span>
+<span class="go">       [1. , 1.5]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cone-parallel-vec">
+<h3>Cone, parallel, vec<a class="headerlink" href="#cone-parallel-vec" title="Permalink to this headline">¶</a></h3>
+<p>Determine whether the geometry is a cone beam or parallel beam
+geometry and whether or not it is a vector geometry.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">pg</span><span class="o">.</span><span class="n">is_parallel</span><span class="p">,</span> <span class="n">pg</span><span class="o">.</span><span class="n">is_cone</span><span class="p">,</span> <span class="n">pg</span><span class="o">.</span><span class="n">is_vec</span>
+<span class="gh">Out[7]: </span><span class="go">(True, False, False)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="coordinates-for-geometric-calculations">
+<h3>Coordinates for geometric calculations<a class="headerlink" href="#coordinates-for-geometric-calculations" title="Permalink to this headline">¶</a></h3>
+<p>Specific coordinates, such as position (center of detector), <cite>u</cite>, <cite>v</cite>,
+corners, detector normal, the lower left corner, etc.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">pg</span><span class="o">.</span><span class="n">corners</span>
+<span class="gh">Out[8]: </span><span class="go"></span>
+<span class="go">array([[[-0.5       ,  0.        , -0.75      ],</span>
+<span class="go">        [ 0.5       ,  0.        , -0.75      ],</span>
+<span class="go">        [-0.5       ,  0.        ,  0.75      ],</span>
+<span class="go">        [ 0.5       ,  0.        ,  0.75      ]],</span>
+<span class="go">       [[-0.5       , -0.64951905, -0.375     ],</span>
+<span class="go">        [ 0.5       , -0.64951905, -0.375     ],</span>
+<span class="go">        [-0.5       ,  0.64951905,  0.375     ],</span>
+<span class="go">        [ 0.5       ,  0.64951905,  0.375     ]],</span>
+<span class="go">       [[-0.5       , -0.64951905,  0.375     ],</span>
+<span class="go">        [ 0.5       , -0.64951905,  0.375     ],</span>
+<span class="go">        [-0.5       ,  0.64951905, -0.375     ],</span>
+<span class="go">        [ 0.5       ,  0.64951905, -0.375     ]]])</span>
+
+<span class="gp">In [9]: </span><span class="n">pg</span><span class="o">.</span><span class="n">det_normal</span>
+<span class="gh">Out[9]: </span><span class="go"></span>
+<span class="go">array([[ 0.        ,  0.01      ,  0.        ],</span>
+<span class="go">       [ 0.        ,  0.005     , -0.00866025],</span>
+<span class="go">       [ 0.        , -0.005     , -0.00866025]])</span>
+
+<span class="gp">In [10]: </span><span class="n">pg</span><span class="o">.</span><span class="n">det_pos</span>
+<span class="gh">Out[10]: </span><span class="go"></span>
+<span class="go">array([[0., 0., 0.],</span>
+<span class="go">       [0., 0., 0.],</span>
+<span class="go">       [0., 0., 0.]])</span>
+
+<span class="gp">In [11]: </span><span class="n">pg</span><span class="o">.</span><span class="n">det_u</span>
+<span class="gh">Out[11]: </span><span class="go"></span>
+<span class="go">array([[ 0.        ,  0.        ,  0.1       ],</span>
+<span class="go">       [ 0.        ,  0.08660254,  0.05      ],</span>
+<span class="go">       [ 0.        ,  0.08660254, -0.05      ]])</span>
+
+<span class="gp">In [12]: </span><span class="n">pg</span><span class="o">.</span><span class="n">det_v</span>
+<span class="gh">Out[12]: </span><span class="go"></span>
+<span class="go">array([[0.1, 0. , 0. ],</span>
+<span class="go">       [0.1, 0. , 0. ],</span>
+<span class="go">       [0.1, 0. , 0. ]])</span>
+
+<span class="gp">In [13]: </span><span class="n">pg</span><span class="o">.</span><span class="n">lower_left_corner</span>
+<span class="gh">Out[13]: </span><span class="go"></span>
+<span class="go">array([[-0.5       ,  0.        , -0.75      ],</span>
+<span class="go">       [-0.5       , -0.64951905, -0.375     ],</span>
+<span class="go">       [-0.5       , -0.64951905,  0.375     ]])</span>
+
+<span class="gp">In [14]: </span><span class="n">pg</span><span class="o">.</span><span class="n">ray_dir</span>
+<span class="gh">Out[14]: </span><span class="go"></span>
+<span class="go">array([[ 0.       , -1.       ,  0.       ],</span>
+<span class="go">       [ 0.       , -0.5      ,  0.8660254],</span>
+<span class="go">       [ 0.       ,  0.5      ,  0.8660254]])</span>
+
+<span class="gp">In [15]: </span><span class="n">pg</span><span class="o">.</span><span class="n">src_pos</span> <span class="c1"># Only supported on cone and cone_vec geometries</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="geometry-creation">
+<h2>Geometry creation<a class="headerlink" href="#geometry-creation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="circular-projection-geometries">
+<h3>Circular projection geometries<a class="headerlink" href="#circular-projection-geometries" title="Permalink to this headline">¶</a></h3>
+<p>The following conventions are used:</p>
+<ol class="arabic simple">
+<li><p>When <cite>size</cite> is not provided, it is taken to be equal to the shape,
+i.e., the detector pixel size is equal to one in each dimension by
+default.</p></li>
+<li><p>The <cite>angles</cite> be provided as a single integer. This is automatically
+expanded to a half circle arc (<code class="xref py py-meth docutils literal notranslate"><span class="pre">ts.parallel()</span></code>) or full circle
+arc (<code class="xref py py-meth docutils literal notranslate"><span class="pre">ts.cone()</span></code>).</p></li>
+<li><p>An array of <cite>angles</cite> can also be provided, in units of <strong>radians</strong>.</p></li>
+<li><p>The <cite>size</cite> and <cite>shape</cite> parameters can be provided as a single
+float, resulting in a square detector, or as a tuple containing the
+<cite>height</cite> and <cite>width</cite> of the detector.</p></li>
+</ol>
+<dl class="py function">
+<dt id="tomosipo.parallel">
+<code class="sig-prename descclassname">tomosipo.</code><code class="sig-name descname">parallel</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">angles</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel.html#parallel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.parallel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a parallel-beam geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angles</strong> – <p><cite>np.array</cite> or integral value</p>
+<p>If integral value: the number of angles in the parallel-beam
+geometry. This describes a half arc (pi radians) with
+uniform placement and without the start and end point
+overlapping.</p>
+<p>If <cite>np.array</cite>: the values of the array are taken as
+projection angle (units are radians).</p>
+</p></li>
+<li><p><strong>shape</strong> – (<cite>int</cite>, <cite>int</cite>) or <cite>int</cite>
+The detector shape in pixels. If tuple, the order is
+(height, width). Else the pixel has the same number of
+pixels in the U and V direction.</p></li>
+<li><p><strong>size</strong> – <p>(float, float) or float
+The detector size. If a single float is provided, the
+detector is square with equal width and height.</p>
+<p>The order is (height, width), i.e. (v, u).</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A circular parallel-beam geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.parallel.ParallelGeometry" title="tomosipo.geometry.parallel.ParallelGeometry">ParallelGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.cone">
+<code class="sig-prename descclassname">tomosipo.</code><code class="sig-name descname">cone</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">angles</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">1, 1</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cone_angle</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">src_orig_dist</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">src_det_dist</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone.html#cone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.cone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a cone-beam geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angles</strong> – <p><cite>np.array</cite> or integral value
+If integral value: the number of angles in the cone-beam
+geometry. This describes a full arc (2 pi radians) with
+uniform placement and without the start and end point
+overlapping.</p>
+<p>If np.array: the values of the array are taken as
+projection angle (units are radians).</p>
+</p></li>
+<li><p><strong>shape</strong> – (<cite>int</cite>, <cite>int</cite>) or <cite>int</cite>
+The detector shape in pixels. If tuple, the order is
+(height, width). Else the pixel has the same number of
+pixels in the U and V direction.</p></li>
+<li><p><strong>size</strong> – <p>(float, float) or float
+The detector size. If a single float is provided, the
+detector is square with equal width and height.</p>
+<p>The order is (height, width), i.e. (v, u).</p>
+</p></li>
+<li><p><strong>cone_angle</strong> – <cite>scalar</cite>
+The fraction <cite>det_height / src_det_dist</cite>. If provided,
+<cite>src_orig_dist</cite> and <cite>src_det_dist</cite> need not be provided. The
+detector is placed on the origin.</p></li>
+<li><p><strong>src_orig_dist</strong> – scalar
+The source to origin distance.</p></li>
+<li><p><strong>src_det_dist</strong> – The source to detector distance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a cone-beam geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.cone.ConeGeometry" title="tomosipo.geometry.cone.ConeGeometry">ConeGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="arbitrary-projection-geometries">
+<h3>Arbitrary projection geometries<a class="headerlink" href="#arbitrary-projection-geometries" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="tomosipo.parallel_vec">
+<code class="sig-prename descclassname">tomosipo.</code><code class="sig-name descname">parallel_vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">ray_dir</span></em>, <em class="sig-param"><span class="n">det_pos</span></em>, <em class="sig-param"><span class="n">det_v</span></em>, <em class="sig-param"><span class="n">det_u</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/parallel_vec.html#parallel_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.parallel_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a parallel-beam vector geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> – (<cite>int</cite>, <cite>int</cite>) or <cite>int</cite>
+The detector shape in pixels. If tuple, the order is
+(height, width). Else the pixel has the same number of
+pixels in the U and V direction.</p></li>
+<li><p><strong>ray_dir</strong> – np.array
+A numpy array of dimension (num_positions, 3) with the
+ray direction in (Z, Y, X) order.</p></li>
+<li><p><strong>det_pos</strong> – A numpy array of dimension (num_positions, 3) with the
+detector center positions in (Z, Y, X) order.</p></li>
+<li><p><strong>det_v</strong> – A numpy array of dimension (num_positions, 3) with the
+vector pointing from the detector (0, 0) to (1, 0) pixel
+(up).</p></li>
+<li><p><strong>det_u</strong> – A numpy array of dimension (num_positions, 3) with the
+vector pointing from the detector (0, 0) to (0, 1) pixel
+(sideways).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An arbitrarily oriented parallel-beam geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.parallel_vec.ParallelVectorGeometry" title="tomosipo.geometry.parallel_vec.ParallelVectorGeometry">ParallelVectorGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.cone_vec">
+<code class="sig-prename descclassname">tomosipo.</code><code class="sig-name descname">cone_vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">src_pos</span></em>, <em class="sig-param"><span class="n">det_pos</span></em>, <em class="sig-param"><span class="n">det_v</span></em>, <em class="sig-param"><span class="n">det_u</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/cone_vec.html#cone_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.cone_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a cone-beam vector geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> – (<cite>int</cite>, <cite>int</cite>) or <cite>int</cite>
+The detector shape in pixels. If tuple, the order is
+(height, width). Else the pixel has the same number of
+pixels in the U and V direction.</p></li>
+<li><p><strong>src_pos</strong> – np.array
+A numpy array of dimension (num_positions, 3) with the
+source positions in (Z, Y, X) order.</p></li>
+<li><p><strong>det_pos</strong> – A numpy array of dimension (num_positions, 3) with the
+detector center positions in (Z, Y, X) order.</p></li>
+<li><p><strong>det_v</strong> – A numpy array of dimension (num_positions, 3) with the
+vector pointing from the detector (0, 0) to (1, 0) pixel
+(up).</p></li>
+<li><p><strong>det_u</strong> – A numpy array of dimension (num_positions, 3) with the
+vector pointing from the detector (0, 0) to (0, 1) pixel
+(sideways).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An arbitrarily oriented cone beam geometry</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.cone_vec.ConeVectorGeometry" title="tomosipo.geometry.cone_vec.ConeVectorGeometry">ConeVectorGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="volume-geometries">
+<h3>Volume geometries<a class="headerlink" href="#volume-geometries" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="tomosipo.volume">
+<code class="sig-prename descclassname">tomosipo.</code><code class="sig-name descname">volume</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">1, 1, 1</span></em>, <em class="sig-param"><span class="n">pos</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume.html#volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an axis-aligned volume geometry</p>
+<p>A VolumeGeometry is an axis-aligned cuboid centered on <cite>pos</cite>.</p>
+<p>You may provide a combination of arguments to create a new volume geometry:
+- shape (size will equal shape)
+- shape and pos (size will equal shape)
+- shape and size (volume will be centered on the origin)
+- shape, pos, and size.
+- shape and extent</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> – <cite>int</cite> or (<cite>int</cite>, <cite>int</cite>, <cite>int</cite>)
+Shape of the voxel grid underlying the volume.</p></li>
+<li><p><strong>extent</strong> – <cite>(scalar, scalar)</cite> or <cite>((scalar, scalar), (scalar, scalar), (scalar, scalar))</cite>
+The minimal and maximal value of the volume in the Z, Y, X
+coordinate. If only one minimal and maximal value is provided,
+then it is applied to all coordinates.</p></li>
+<li><p><strong>center</strong> – <cite>scalar</cite> or <cite>(scalar, scalar, scalar)</cite></p></li>
+<li><p><strong>size</strong> – <cite>scalar</cite> or <cite>(scalar, scalar, scalar)</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a volume geometry of the unit cube with shape as given.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="tomosipo.geometry.html#tomosipo.geometry.volume.VolumeGeometry" title="tomosipo.geometry.volume.VolumeGeometry">VolumeGeometry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tomosipo.volume_vec">
+<code class="sig-prename descclassname">tomosipo.</code><code class="sig-name descname">volume_vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">pos</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">w</span><span class="o">=</span><span class="default_value">1, 0, 0</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">0, 1, 0</span></em>, <em class="sig-param"><span class="n">u</span><span class="o">=</span><span class="default_value">0, 0, 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tomosipo/geometry/volume_vec.html#volume_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tomosipo.volume_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new volume vector geometry</p>
+<p>Like the parallel and cone vector geometries, the volume vector
+geometry can be arbitrarily oriented and positioned.</p>
+<p>The position describes the center of the volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> – <cite>(int, int, int)</cite> or <cite>int</cite>
+The shape of the volume as measured in basis elements w,
+v, u.</p></li>
+<li><p><strong>pos</strong> – <cite>scalar</cite>, <cite>np.array</cite>
+A numpy array of dimension (num_steps, 3)
+describing the center of the volume in world-coordinates
+<cite>(Z, Y, X)</cite>. You may also pass a 3-tuple or a scalar.</p></li>
+<li><p><strong>w</strong> – <cite>np.array</cite> (optional)
+A numpy array of dimension (num_steps, 3)
+describing the <cite>w</cite> basis element in <cite>(Z, Y, X)</cite>
+coordinates. Default is <cite>(1, 0, 0)</cite>.</p></li>
+<li><p><strong>v</strong> – <cite>np.array</cite> (optional)
+A numpy array of dimension (num_steps, 3)
+describing the <cite>v</cite> basis element in <cite>(Z, Y, X)</cite>
+coordinates. Default is <cite>(0, 1, 0)</cite>.</p></li>
+<li><p><strong>u</strong> – <cite>np.array</cite> (optional)
+A numpy array of dimension (num_steps, 3)
+describing the <cite>u</cite> basis element in <cite>(Z, Y, X)</cite>
+coordinates. Default is <cite>(0, 0, 1)</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="modules.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Conventions.html" class="btn btn-neutral float-left" title="Conventions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Allard Hendriksen
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

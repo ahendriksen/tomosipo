@@ -36,8 +36,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="tomosipo" href="modules.html" />
-    <link rel="prev" title="Welcome to tomosipo’s documentation!" href="index.html" /> 
+    <link rel="next" title="Conventions" href="Conventions.html" />
+    <link rel="prev" title="Tomosipo: High-performance 3D tomography with flexible geometries in Python" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,8 +82,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+              <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tomosipo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
@@ -108,7 +107,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conventions.html">Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Geometries.html">Volume and Projection Geometries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
 </ul>
 
             
@@ -325,7 +326,7 @@ between system RAM and GPU are necessary.</p>
 <p>Tomosipo follows numpy’s indexing convention. In the image below, we
 display the coordinate axes and indexing into a volume cube.
 The z-axis points upward.</p>
-<p><img alt="img" src="./doc/img/volume_geometry.png" /></p>
+<p><img alt="img" src="_images/volume_geometry.png" /></p>
 <p>We display an example for a parallel geometry with its associated
 sinogram indexing below. The detector coordinate frame is defined by
 two vectors</p>
@@ -336,7 +337,7 @@ pixel.</p></li>
 <li><p><strong>v:</strong> Usually points upwards. The length of v defines the height of a
 detector pixel.</p></li>
 </ul>
-<p><img alt="img" src="doc/img/projection_geometry.png" /></p>
+<p><img alt="img" src="_images/projection_geometry.png" /></p>
 <p>In short,</p>
 <ul class="simple">
 <li><p>volume geometry and data are indexed  in (Z, Y, X) order</p></li>
@@ -441,10 +442,10 @@ converted to ASTRA directly, but can be used in geometric computations.</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="modules.html" class="btn btn-neutral float-right" title="tomosipo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Conventions.html" class="btn btn-neutral float-right" title="Conventions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to tomosipo’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Tomosipo: High-performance 3D tomography with flexible geometries in Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

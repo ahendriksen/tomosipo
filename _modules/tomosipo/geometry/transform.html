@@ -80,10 +80,11 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Tomosipo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tomosipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Conventions.html">Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Geometries.html">Volume and Projection Geometries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API Reference</a></li>
 </ul>
 
             
@@ -235,7 +236,7 @@
     <span class="k">return</span> <span class="n">Transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">w</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">t</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="scale"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.transform.scale">[docs]</a><span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<div class="viewcode-block" id="scale"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.transform.scale">[docs]</a><span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return scaling transform</span>
 
 <span class="sd">    The scaling transform scales the coordinate frame of the object.</span>
@@ -252,6 +253,9 @@
 
 <span class="sd">    :param s:</span>
 <span class="sd">        By how much to scale in each direction.</span>
+<span class="sd">    :param pos:  (optional)</span>
+<span class="sd">        If not `None`, scale around a custom position instead of the</span>
+<span class="sd">        origin.</span>
 <span class="sd">    :returns:</span>
 <span class="sd">    :rtype:</span>
 
@@ -270,7 +274,12 @@
     <span class="n">S3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">,</span> <span class="n">one</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">S0</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S2</span><span class="p">,</span> <span class="n">S3</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Transform</span><span class="p">(</span><span class="n">S</span><span class="p">)</span></div>
+
+    <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">T</span> <span class="o">*</span> <span class="n">Transform</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">*</span> <span class="n">T</span><span class="o">.</span><span class="n">inv</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Transform</span><span class="p">(</span><span class="n">S</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="rotate"><a class="viewcode-back" href="../../../tomosipo.geometry.html#tomosipo.geometry.transform.rotate">[docs]</a><span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rad</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">right_handed</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>

@@ -1,0 +1,48 @@
+stages:
+  - build
+  - publish
+
+build:
+  stage: build
+  image: continuumio/miniconda3
+  variables:
+  script:
+    - conda install -yq conda-build conda-verify
+    - conda build conda/ -c defaults -c astra-toolbox/label/dev
+    - mkdir -p artifacts
+    - mv /opt/conda/conda-bld/noarch/tomosipo*.tar.bz2 artifacts/
+  artifacts:
+    paths:
+    - artifacts/
+    expire_in: 7 days
+
+
+publish-dev:
+  stage: publish
+  image: continuumio/miniconda3
+  only:
+  - develop
+  variables:
+    ANACONDA_USERNAME: $ANACONDA_USERNAME
+    ANACONDA_PASSWORD: $ANACONDA_PASSWORD
+  script:
+    - conda install -yq anaconda-client
+    - set +x
+    - anaconda login --username "$ANACONDA_USERNAME" --password "$ANACONDA_PASSWORD"
+    - set -x
+    - anaconda upload --label dev artifacts/*.bz2
+
+publish-release:
+  stage: publish
+  image: continuumio/miniconda3
+  only:
+  - tags
+  variables:
+    ANACONDA_USERNAME: $ANACONDA_USERNAME
+    ANACONDA_PASSWORD: $ANACONDA_PASSWORD
+  script:
+    - conda install -yq anaconda-client
+    - set +x
+    - anaconda login --username "$ANACONDA_USERNAME" --password "$ANACONDA_PASSWORD"
+    - set -x
+    - anaconda upload artifacts/*.bz2

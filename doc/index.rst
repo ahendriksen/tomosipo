@@ -49,6 +49,7 @@ optimization in inverse problems.
    Geometries
 
    modules
+   changelog
 
 
 Indices and tables

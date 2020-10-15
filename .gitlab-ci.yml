@@ -23,15 +23,19 @@ publish-dev:
   image: continuumio/miniconda3
   only:
   - develop
+  # Only publish when this has been manually requested. We want to be a good
+  # anaconda citizen, and not publish each and every commit of the package.
+  when: manual
   variables:
     ANACONDA_USERNAME: $ANACONDA_USERNAME
     ANACONDA_PASSWORD: $ANACONDA_PASSWORD
   script:
     - conda install -yq anaconda-client
     - set +x
-    - anaconda login --username "$ANACONDA_USERNAME" --password "$ANACONDA_PASSWORD"
+    - anaconda login --username "$ANACONDA_USERNAME" --password "$ANACONDA_PASSWORD" --hostname $(cat /dev/urandom | base32 | head -c 32)
     - set -x
     - anaconda upload --label dev artifacts/*.bz2
+    - anaconda logout
 
 publish-release:
   stage: publish
@@ -44,9 +48,10 @@ publish-release:
   script:
     - conda install -yq anaconda-client
     - set +x
-    - anaconda login --username "$ANACONDA_USERNAME" --password "$ANACONDA_PASSWORD"
+    - anaconda login --username "$ANACONDA_USERNAME" --password "$ANACONDA_PASSWORD" --hostname $(cat /dev/urandom | base32 | head -c 32)
     - set -x
     - anaconda upload artifacts/*.bz2
+    - anaconda logout
 
 pages:
   stage: deploy

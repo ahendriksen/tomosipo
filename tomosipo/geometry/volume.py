@@ -218,16 +218,8 @@ class VolumeGeometry:
             s[0] <= o[0] and o[1] <= s[1] for s, o in zip(self.extent, other.extent)
         )
 
-    # def __abs__(self):
-    #     return np.prod(self.size)
-
-    # def __sub__(self, other):
-    #     vg = self.copy()
-    #     vg.extent = tuple(
-    #         (ls - lo, rs - ro)
-    #         for ((ls, rs), (lo, ro)) in zip(self.extent, other.extent)
-    #     )
-    #     return vg
+    def __len__(self):
+        return 1
 
     def to_astra(self):
         """Return an Astra volume geometry.

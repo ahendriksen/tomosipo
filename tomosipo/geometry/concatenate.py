@@ -57,6 +57,9 @@ def concatenate(items):
             det_u=np.concatenate([i.det_u for i in items]),
         )
 
+    if isinstance(items, VolumeGeometry):
+        raise TypeError("items must be iterable. ")
+
     if all(ts.geometry.is_volume(i) for i in items):
         if not all(i.shape == items[0].shape for i in items):
             raise ValueError("Cannot concatenate volumes. Not all shapes are equal.")

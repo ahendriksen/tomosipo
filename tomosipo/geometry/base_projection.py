@@ -51,6 +51,9 @@ class ProjectionGeometry(object):
     def __eq__(self, other):
         raise NotImplementedError()
 
+    def __len__(self):
+        return self.num_steps
+
     ###########################################################################
     #                               to_* methods                              #
     ###########################################################################

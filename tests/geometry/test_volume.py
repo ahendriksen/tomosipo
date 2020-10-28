@@ -105,6 +105,10 @@ def test_repr():
     assert eval(repr(vg), dict(ts=ts)) == vg
 
 
+def test_len():
+    assert len(ts.volume()) == 1
+
+
 def test_volume():
     assert ts.volume() == ts.volume()
     shapes = [2, (1, 4, 5), (10, 10, 10)]

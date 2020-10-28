@@ -54,11 +54,14 @@ def test_interface(default_proj_geoms):
         assert pg.to_vec() == pg.to_vec().to_vec()
         pg.is_vec
         pg.num_angles
+        assert len(pg) == pg.num_angles
+
         if pg.is_vec:
             with pytest.raises(NotImplementedError):
                 pg.angles
         else:
             assert len(pg.angles) == pg.num_angles
+            assert len(pg) == pg.num_angles
 
         if pg.is_cone:
             assert pg.src_pos.shape == (pg.num_angles, 3)

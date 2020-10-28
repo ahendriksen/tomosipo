@@ -125,6 +125,10 @@ def test_get_item():
     assert vg[np.ones(vg.num_steps) == 1] == vg
     assert vg[np.arange(vg.num_steps) % 2 == 0] == vg[0::2]
 
+    # repeat test with len (instead of num_steps)
+    assert vg[np.ones(len(vg)) == 1] == vg
+    assert vg[np.arange(len(vg)) % 2 == 0] == vg[0::2]
+
     assert ts.volume_vec(shape=3)[:, 1, 1, 1] == ts.volume_vec(shape=1)
     T = random_transform()
     assert T * vg[:, 1, 2, 3] == (T * vg)[:, 1, 2, 3]

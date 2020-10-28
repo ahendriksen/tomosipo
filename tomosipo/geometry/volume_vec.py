@@ -197,6 +197,9 @@ class VolumeVectorGeometry(object):
             u=self.u[key],
         )
 
+    def __len__(self):
+        return self.num_steps
+
     def to_vec(self):
         """Returns a volume vector geometry
 

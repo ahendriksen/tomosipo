@@ -304,9 +304,7 @@ class ConeVectorGeometry(ProjectionGeometry):
 
     def __rmul__(self, other):
         if isinstance(other, Transform):
-            matrix = other.matrix
-            src_pos = vc.to_homogeneous_point(self._src_pos)
-            src_pos = vc.to_vec(vc.matrix_transform(matrix, src_pos))
+            src_pos = other.transform_point(self._src_pos)
 
             det_vec = other * self._det_vec
             return ConeVectorGeometry(

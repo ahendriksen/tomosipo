@@ -395,15 +395,9 @@ class VolumeVectorGeometry(object):
 
         """
         if isinstance(other, Transform):
-            matrix = other.matrix
-            pos = vc.to_homogeneous_point(self._pos)
-            w = vc.to_homogeneous_vec(self._w)
-            v = vc.to_homogeneous_vec(self._v)
-            u = vc.to_homogeneous_vec(self._u)
-
-            new_pos = vc.to_vec(vc.matrix_transform(matrix, pos))
-            new_w = vc.to_vec(vc.matrix_transform(matrix, w))
-            new_v = vc.to_vec(vc.matrix_transform(matrix, v))
-            new_u = vc.to_vec(vc.matrix_transform(matrix, u))
+            new_pos = other.transform_point(self._pos)
+            new_w = other.transform_vec(self._w)
+            new_v = other.transform_vec(self._v)
+            new_u = other.transform_vec(self._u)
 
             return VolumeVectorGeometry(self.shape, new_pos, new_w, new_v, new_u)

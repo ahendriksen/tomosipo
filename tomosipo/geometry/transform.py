@@ -5,9 +5,7 @@ import tomosipo.vector_calc as vc
 
 
 class Transform(object):
-    """Documentation for Transform
-
-    """
+    """Documentation for Transform"""
 
     def __init__(self, matrix):
         super(Transform, self).__init__()
@@ -45,9 +43,41 @@ class Transform(object):
     def inv(self):
         return Transform(vc.invert_transformation_matrix(self.matrix))
 
-    def norm(self):
-        # XXX: Deprecate or is this useful?
-        return vc.to_scalar([np.linalg.det(m) for m in self.matrix])
+    def transform_vec(self, vec):
+        """Transform one or multiple vectors
+
+        :param vec: `np.array`
+
+        The following shapes are allowed:
+        - `(n_rows, 3)`
+        - `(3,)`
+
+        :returns: `np.array`
+        :rtype:
+
+        The shape of the array is `(n_rows, 3)`
+
+        """
+        hv = vc.to_homogeneous_vec(vec)
+        return vc.to_vec(vc.matrix_transform(self.matrix, hv))
+
+    def transform_point(self, points):
+        """Transform one or multiple points
+
+        :param points: `np.array`
+
+        The following shapes are allowed:
+        - `(n_rows, 3)`
+        - `(3,)`
+
+        :returns: `np.array`
+        :rtype:
+
+        The shape of the array is `(n_rows, 3)`
+
+        """
+        hp = vc.to_homogeneous_point(points)
+        return vc.to_vec(vc.matrix_transform(self.matrix, hp))
 
 
 def identity():

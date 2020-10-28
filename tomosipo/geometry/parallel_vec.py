@@ -307,9 +307,7 @@ class ParallelVectorGeometry(ProjectionGeometry):
 
     def __rmul__(self, other):
         if isinstance(other, Transform):
-            matrix = other.matrix
-            ray_dir = vc.to_homogeneous_vec(self._ray_dir)
-            ray_dir = vc.to_vec(vc.matrix_transform(matrix, ray_dir))
+            ray_dir = other.transform_vec(self._ray_dir)
 
             det_vec = other * self._det_vec
             return parallel_vec(

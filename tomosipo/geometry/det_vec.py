@@ -370,13 +370,8 @@ class DetectorVectorGeometry(ProjectionGeometry):
 
     def __rmul__(self, other):
         if isinstance(other, Transform):
-            matrix = other.matrix
-            det_pos = vc.to_homogeneous_point(self._det_pos)
-            det_v = vc.to_homogeneous_vec(self._det_v)
-            det_u = vc.to_homogeneous_vec(self._det_u)
-
-            det_pos = vc.to_vec(vc.matrix_transform(matrix, det_pos))
-            det_v = vc.to_vec(vc.matrix_transform(matrix, det_v))
-            det_u = vc.to_vec(vc.matrix_transform(matrix, det_u))
+            det_pos = other.transform_point(self._det_pos)
+            det_v = other.transform_vec(self._det_v)
+            det_u = other.transform_vec(self._det_u)
 
             return det_vec(self.det_shape, det_pos, det_v, det_u)

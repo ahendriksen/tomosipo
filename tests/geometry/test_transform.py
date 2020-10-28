@@ -65,6 +65,75 @@ def test_equations(vg, T, R, S):
     assert (T * S * R).inv == R.inv * S.inv * T.inv
 
 
+@pytest.mark.parametrize(
+    "T, R, S", itertools.product(translations, rotations, scalings)
+)
+def test_equations_on_vecs(T, R, S):
+    id = transform.identity()
+    vec = np.random.normal(size=(10, 3))
+
+    assert id.transform_vec(vec).shape == vec.shape
+    assert np.allclose(id.transform_vec(vec), vec)
+    assert np.allclose((id * S).transform_vec(vec), S.transform_vec(vec))
+    assert np.allclose((id * T).transform_vec(vec), T.transform_vec(vec))
+    assert np.allclose((id * R).transform_vec(vec), R.transform_vec(vec))
+    assert np.allclose(
+        (id * (S * T * R)).transform_vec(vec), (S * T * R).transform_vec(vec)
+    )
+    # Associativity of group action:
+    assert np.allclose(
+        (S * (T * R)).transform_vec(vec), ((S * T) * R).transform_vec(vec)
+    )
+    # Associativity:
+    assert np.allclose(
+        (S * (T * R)).transform_vec(vec), ((S * T) * R).transform_vec(vec)
+    )
+    # inverse
+    for t in [id, S, T, R, S * T * R]:
+        assert np.allclose((id).transform_vec(vec), (t * t.inv).transform_vec(vec))
+        assert np.allclose((id).transform_vec(vec), (t.inv * t).transform_vec(vec))
+    assert np.allclose(
+        ((T * S * R).inv).transform_vec(vec), (R.inv * S.inv * T.inv).transform_vec(vec)
+    )
+
+
+@pytest.mark.parametrize(
+    "T, R, S", itertools.product(translations, rotations, scalings)
+)
+def test_equations_on_points(T, R, S):
+    id = transform.identity()
+    points = np.random.normal(size=(10, 3))
+
+    assert id.transform_point(points).shape == points.shape
+    assert np.allclose(id.transform_point(points), points)
+    assert np.allclose((id * S).transform_point(points), S.transform_point(points))
+    assert np.allclose((id * T).transform_point(points), T.transform_point(points))
+    assert np.allclose((id * R).transform_point(points), R.transform_point(points))
+    assert np.allclose(
+        (id * (S * T * R)).transform_point(points), (S * T * R).transform_point(points)
+    )
+    # Associativity of group action:
+    assert np.allclose(
+        (S * (T * R)).transform_point(points), ((S * T) * R).transform_point(points)
+    )
+    # Associativity:
+    assert np.allclose(
+        (S * (T * R)).transform_point(points), ((S * T) * R).transform_point(points)
+    )
+    # inverse
+    for t in [id, S, T, R, S * T * R]:
+        assert np.allclose(
+            (id).transform_point(points), (t * t.inv).transform_point(points)
+        )
+        assert np.allclose(
+            (id).transform_point(points), (t.inv * t).transform_point(points)
+        )
+    assert np.allclose(
+        ((T * S * R).inv).transform_point(points),
+        (R.inv * S.inv * T.inv).transform_point(points),
+    )
+
+
 @pytest.mark.parametrize("vg", vgs)
 def test_identity(vg):
     T = transform.identity()

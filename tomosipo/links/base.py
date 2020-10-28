@@ -53,9 +53,7 @@ def are_compatible(link_a, link_b):
 
 
 class Link(object):
-    """A General base class for link types
-
-    """
+    """A General base class for link types"""
 
     def __init__(self, shape, initial_value):
         self._shape = shape
@@ -76,8 +74,7 @@ class Link(object):
         raise NotImplementedError()
 
     def __compatible_with__(self, other):
-        """Can ASTRA project from this link to other link?
-        """
+        """Can ASTRA project from this link to other link?"""
         raise NotImplementedError()
 
     ###########################################################################

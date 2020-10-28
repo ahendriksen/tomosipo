@@ -12,9 +12,7 @@ import tomosipo as ts
 
 
 class Interval(object):
-    """Documentation for Interval
-
-    """
+    """Documentation for Interval"""
 
     def __init__(self, l, r, length):
         super(Interval, self).__init__()

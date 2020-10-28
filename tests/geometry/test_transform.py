@@ -218,8 +218,7 @@ def test_scale():
 
 
 def test_scale_pos():
-    """Test that the `pos` parameter for `ts.scale` works correctly
-    """
+    """Test that the `pos` parameter for `ts.scale` works correctly"""
     for _ in range(10):
         vg = random_volume_vec()
         T = ts.translate(np.random.normal(size=3))
@@ -285,9 +284,7 @@ def test_rotate_visually(interactive):
 
 
 def test_perspective():
-    """Test to_perspective and from_perspective functions.
-
-    """
+    """Test to_perspective and from_perspective functions."""
     # Unit cube
     unit = ts.volume_vec(shape=1, pos=0)
 

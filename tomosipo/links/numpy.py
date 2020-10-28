@@ -5,9 +5,7 @@ from .base import Link, backends
 
 
 class NumpyLink(Link):
-    """Link implementation for numpy arrays
-
-    """
+    """Link implementation for numpy arrays"""
 
     def __init__(self, shape, initial_value):
         super(NumpyLink, self).__init__(shape, initial_value)
@@ -122,13 +120,22 @@ class NumpyLink(Link):
     #                            New data creation                            #
     ###########################################################################
     def new_zeros(self, shape):
-        return NumpyLink(shape, np.zeros(shape, dtype=self._data.dtype),)
+        return NumpyLink(
+            shape,
+            np.zeros(shape, dtype=self._data.dtype),
+        )
 
     def new_full(self, shape, value):
-        return NumpyLink(shape, np.full(shape, value, dtype=self._data.dtype),)
+        return NumpyLink(
+            shape,
+            np.full(shape, value, dtype=self._data.dtype),
+        )
 
     def new_empty(self, shape):
-        return NumpyLink(shape, np.empty(shape, dtype=self._data.dtype),)
+        return NumpyLink(
+            shape,
+            np.empty(shape, dtype=self._data.dtype),
+        )
 
     def clone(self):
         return NumpyLink(self._data.shape, np.copy(self._data))

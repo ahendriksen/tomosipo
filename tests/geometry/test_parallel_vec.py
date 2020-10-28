@@ -36,7 +36,12 @@ def par_vecs():
 
 def test_init():
     vecs = np.arange(30).reshape((10, 3))
-    kwargs = dict(ray_dir=vecs, det_pos=vecs, det_v=vecs, det_u=vecs,)
+    kwargs = dict(
+        ray_dir=vecs,
+        det_pos=vecs,
+        det_v=vecs,
+        det_u=vecs,
+    )
     assert ts.parallel_vec(shape=1, **kwargs).det_shape == (1, 1)
     assert ts.parallel_vec(shape=(3, 5), **kwargs).det_shape == (3, 5)
 
@@ -50,7 +55,12 @@ def test_init():
 
     with pytest.raises(ValueError):
         vecs = np.random.normal(size=(10, 2))
-        two_dim_args = dict(ray_dir=vecs, det_pos=vecs, det_v=vecs, det_u=vecs,)
+        two_dim_args = dict(
+            ray_dir=vecs,
+            det_pos=vecs,
+            det_v=vecs,
+            det_u=vecs,
+        )
         ts.parallel_vec(shape=1, **two_dim_args)
 
     with pytest.raises(ValueError):

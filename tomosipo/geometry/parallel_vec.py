@@ -51,9 +51,7 @@ def random_parallel_vec():
 
 
 class ParallelVectorGeometry(ProjectionGeometry):
-    """Documentation for ParallelVectorGeometry
-
-    """
+    """Documentation for ParallelVectorGeometry"""
 
     def __init__(self, shape, ray_dir, det_pos, det_v, det_u):
         """Create a parallel-beam vector geometry

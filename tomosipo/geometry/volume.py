@@ -163,7 +163,11 @@ class VolumeGeometry:
             # voxel size per dimension
             vs = tuple(sz / sh for sz, sh in zip(size, shape))
             self._inner = ts.volume_vec(
-                shape=shape, pos=pos, w=(vs[0], 0, 0), v=(0, vs[1], 0), u=(0, 0, vs[2]),
+                shape=shape,
+                pos=pos,
+                w=(vs[0], 0, 0),
+                v=(0, vs[1], 0),
+                u=(0, 0, vs[2]),
             )
 
         np.array(self._inner.pos[0])
@@ -202,7 +206,11 @@ class VolumeGeometry:
         else:
             new_inner = self._inner[0, key]
 
-        return VolumeGeometry(new_inner.shape, new_inner.pos[0], new_inner.size,)
+        return VolumeGeometry(
+            new_inner.shape,
+            new_inner.pos[0],
+            new_inner.size,
+        )
 
     def __contains__(self, other):
         """Check if other volume is contained in current volume
@@ -396,14 +404,22 @@ class VolumeGeometry:
         :rtype: VolumeGeometry
 
         """
-        return VolumeGeometry(new_shape, pos=self.pos[0], size=self.size,)
+        return VolumeGeometry(
+            new_shape,
+            pos=self.pos[0],
+            size=self.size,
+        )
 
     def translate(self, t):
         t = ts.utils.to_pos(t)
 
         new_pos = tuple(p + t for p, t in zip(self.pos[0], t))
 
-        return VolumeGeometry(shape=self.shape, pos=new_pos, size=self.size,)
+        return VolumeGeometry(
+            shape=self.shape,
+            pos=new_pos,
+            size=self.size,
+        )
 
     def untranslate(self, ts):
         return self.translate(-np.array(ts))

@@ -296,7 +296,11 @@ def operator(
 
 
 def direct_project(
-    projector, vol_link, proj_link, forward=None, additive=False,
+    projector,
+    vol_link,
+    proj_link,
+    forward=None,
+    additive=False,
 ):
     """Project forward or backward
 
@@ -344,7 +348,10 @@ def direct_project(
 
 
 def direct_fp(
-    projector, vol_data, proj_data, additive=False,
+    projector,
+    vol_data,
+    proj_data,
+    additive=False,
 ):
     """Project forward or backward
 
@@ -363,12 +370,19 @@ def direct_fp(
 
     """
     return direct_project(
-        projector, vol_data, proj_data, forward=True, additive=additive,
+        projector,
+        vol_data,
+        proj_data,
+        forward=True,
+        additive=additive,
     )
 
 
 def direct_bp(
-    projector, vol_data, proj_data, additive=False,
+    projector,
+    vol_data,
+    proj_data,
+    additive=False,
 ):
     """Project forward or backward
 
@@ -387,7 +401,11 @@ def direct_bp(
 
     """
     return direct_project(
-        projector, vol_data, proj_data, forward=False, additive=additive,
+        projector,
+        vol_data,
+        proj_data,
+        forward=False,
+        additive=additive,
     )
 
 
@@ -399,9 +417,7 @@ def _to_link(geometry, x):
 
 
 class Operator(object):
-    """Documentation for Operator
-
-    """
+    """Documentation for Operator"""
 
     def __init__(
         self,
@@ -500,7 +516,10 @@ class Operator(object):
                 vlink = plink.new_empty(self.domain_shape)
 
         direct_bp(
-            self.astra_projector, vlink, plink, additive=self.additive,
+            self.astra_projector,
+            vlink,
+            plink,
+            additive=self.additive,
         )
 
         if isinstance(projection, Data):
@@ -576,10 +595,10 @@ class BackprojectionOperator(object):
     """
 
     def __init__(
-        self, parent,
+        self,
+        parent,
     ):
-        """Create a new tomographic operator
-        """
+        """Create a new tomographic operator"""
         super(BackprojectionOperator, self).__init__()
         self.parent = parent
 

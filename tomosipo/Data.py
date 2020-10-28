@@ -30,9 +30,7 @@ def data(geometry, initial_value=None):
 
 
 class Data(object):
-    """Data: a data manager for Astra
-
-    """
+    """Data: a data manager for Astra"""
 
     def __init__(self, geometry, initial_value=None):
         """Create a managed Astra Data3d object

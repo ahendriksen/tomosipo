@@ -19,9 +19,7 @@ import cupy
 
 
 class CupyLink(Link):
-    """Link implementation for cupy arrays
-
-    """
+    """Link implementation for cupy arrays"""
 
     def __init__(self, shape, initial_value):
         super().__init__(shape, initial_value)

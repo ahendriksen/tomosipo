@@ -106,8 +106,7 @@ def random_cone():
 
 
 class ConeGeometry(ProjectionGeometry):
-    """A parametrized circular cone-beam geometry
-    """
+    """A parametrized circular cone-beam geometry"""
 
     def __init__(
         self, angles=None, shape=None, size=None, src_orig_dist=None, src_det_dist=None
@@ -276,14 +275,12 @@ class ConeGeometry(ProjectionGeometry):
 
     @property
     def src_orig_dist(self):
-        """The source to object distance
-        """
+        """The source to object distance"""
         return self._src_orig_dist
 
     @property
     def src_det_dist(self):
-        """The source to detector distance
-        """
+        """The source to detector distance"""
         return self._src_det_dist
 
     @ProjectionGeometry.num_angles.getter

@@ -46,33 +46,31 @@ def random_parallel():
 
 
 class ParallelGeometry(ProjectionGeometry):
-    """A parametrized parallel-beam geometry
-
-    """
+    """A parametrized parallel-beam geometry"""
 
     def __init__(self, angles=1, shape=1, size=None):
         """Create a parallel-beam geometry
 
-            :param angles: `np.array` or integral value
-                If integral value: the number of angles in the parallel-beam
-                geometry. This describes a half arc (pi radians) with
-                uniform placement and without the start and end point
-                overlapping.
+        :param angles: `np.array` or integral value
+            If integral value: the number of angles in the parallel-beam
+            geometry. This describes a half arc (pi radians) with
+            uniform placement and without the start and end point
+            overlapping.
 
-                If np.array: the values of the array are taken as
-                projection angle (units are radians).
-            :param size: (float, float) or float
-                The detector size. If a single float is provided, the
-                detector is square with equal width and height.
+            If np.array: the values of the array are taken as
+            projection angle (units are radians).
+        :param size: (float, float) or float
+            The detector size. If a single float is provided, the
+            detector is square with equal width and height.
 
-                The order is (height, width), i.e. (v, u).
+            The order is (height, width), i.e. (v, u).
 
-            :param shape: (`int`, `int`) or `int`
-                The detector shape in pixels. If tuple, the order is
-                (height, width). Else the pixel has the same number of
-                pixels in the U and V direction.
-            :returns: a parallel-beam geometry
-            :rtype: ParallelGeometry
+        :param shape: (`int`, `int`) or `int`
+            The detector shape in pixels. If tuple, the order is
+            (height, width). Else the pixel has the same number of
+            pixels in the U and V direction.
+        :returns: a parallel-beam geometry
+        :rtype: ParallelGeometry
         """
         # Shape
         super(ParallelGeometry, self).__init__(shape=shape)

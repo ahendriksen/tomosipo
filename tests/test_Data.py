@@ -55,8 +55,7 @@ def test_with():
 
 
 def test_data():
-    """Test data.data property
-    """
+    """Test data.data property"""
 
     pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2).reshape(10)
     d = ts.data(pg, 0)

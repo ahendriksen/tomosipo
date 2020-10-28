@@ -48,9 +48,7 @@ def animate(*geometries, total_duration_seconds=5):
 
 
 class Animation(object):
-    """Documentation for Animation
-
-    """
+    """Documentation for Animation"""
 
     def __init__(self, *geometries, total_duration_seconds=5):
         super().__init__()
@@ -71,8 +69,7 @@ class Animation(object):
         return max([1, *(g.num_steps for g in self.geometries)])
 
     def iter_video_frames(self):
-        """Return an iterator over the frames the video
-        """
+        """Return an iterator over the frames the video"""
         color_cycle = get_color_cycle()
         colors = [_take(color_cycle, num_colors(g)) for g in self.geometries]
 

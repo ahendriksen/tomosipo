@@ -22,9 +22,7 @@ import torch
 
 
 class TorchLink(Link):
-    """Link implementation for torch arrays
-
-    """
+    """Link implementation for torch arrays"""
 
     def __init__(self, shape, initial_value):
         super(TorchLink, self).__init__(shape, initial_value)

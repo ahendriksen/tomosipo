@@ -58,9 +58,7 @@ def random_volume_vec():
 
 
 class VolumeVectorGeometry(object):
-    """Documentation for VolumeVectorGeometry
-
-    """
+    """Documentation for VolumeVectorGeometry"""
 
     def __init__(self, shape, pos, w=(1, 0, 0), v=(0, 1, 0), u=(0, 0, 1)):
         """Create a new volume vector geometry
@@ -383,7 +381,13 @@ class VolumeVectorGeometry(object):
         new_v = self.sizes[:, 1] / max(new_shape[1], 1)
         new_u = self.sizes[:, 2] / max(new_shape[2], 1)
 
-        return VolumeVectorGeometry(new_shape, self.pos, new_w, new_v, new_u,)
+        return VolumeVectorGeometry(
+            new_shape,
+            self.pos,
+            new_w,
+            new_v,
+            new_u,
+        )
 
     def __rmul__(self, other):
         """Applies a projective matrix transformation to geometry

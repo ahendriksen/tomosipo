@@ -75,9 +75,7 @@ def test_init():
 
 
 def test_equal():
-    """Test __eq__
-
-    """
+    """Test __eq__"""
     vg = ts.volume()
     unequal = [
         ts.volume(shape=10),
@@ -146,7 +144,8 @@ def test_getitem():
     assert np.allclose(vg.shape[1], 2 * vg[:, ::2].shape[1])
 
     assert np.allclose(
-        2 * vg.size[1] / vg.shape[1], vg[:, ::2, :].size[1] / vg[:, ::2, :].shape[1],
+        2 * vg.size[1] / vg.shape[1],
+        vg[:, ::2, :].size[1] / vg[:, ::2, :].shape[1],
     )
 
     assert np.allclose(vg[:, ::2, :].size, vg[:, 1::2, :].size)

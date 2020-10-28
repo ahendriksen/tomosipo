@@ -25,10 +25,7 @@ def is_parallel(g):
 
 
 class ProjectionGeometry(object):
-    """A general base class for projection geometries
-
-
-    """
+    """A general base class for projection geometries"""
 
     def __init__(self, shape=1):
         """Create a projection geometry

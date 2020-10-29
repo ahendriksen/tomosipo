@@ -29,7 +29,7 @@ from .astra import (
     from_astra,
     to_astra,
 )
-
+from .svg import svg
 
 from . import phantom
 

@@ -144,6 +144,14 @@ def pg_to_line_items(pg, i):
 #                Projection: From 3D LineItems to 2D LineItems                #
 ###############################################################################
 
+# Introduction to projection matrices in Python and opengl:
+# https://www.labri.fr/perso/nrougier/python-opengl/#id14
+
+# We reuse the cone geometry as a kind of reverse camera: instead of having the
+# object located between the source and detector, the source and detector define
+# the camera, and the scene is "behind the detector" from the point of view of
+# the source. The cone angle determines the field of view.
+
 
 def default_camera(height, width, angle=1 / 2.7):
     # default camera:
@@ -195,6 +203,10 @@ def project_lines(camera, line_items):
 def text_svg_frame(
     line_items, frame_begin, frame_end, total_duration, height=100, width=100
 ):
+    # For polylines, see:
+    # - https://www.w3.org/TR/SVG11/shapes.html#PolylineElement
+    # - https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes
+
     polylines = []
     for l in line_items:
         # extract y and x coordinates (from zyx to xy)
@@ -231,6 +243,28 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
     # We format this string with `replace` because it is littered with {}'s.
 
     svg_id = str(uuid.uuid4())
+
+    # Great tutorial on SVG animation:
+    # - http://www.joningram.co.uk/article/svg-smil-frame-animation/
+    # Docs on onclick and onmousemove:
+    # - https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onmousemove
+    # - https://stackoverflow.com/questions/16472224/add-onclick-event-to-svg-element
+    # - https://stackoverflow.com/questions/10139460/modify-stroke-and-fill-of-svg-image-with-javascript
+    # - https://stackoverflow.com/questions/6764961/change-an-image-with-onclick
+    # - https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onclick
+    # Set current time:
+    # - https://www.w3.org/TR/SVG11/struct.html#__svg__SVGSVGElement__setCurrentTime
+    # SVG Animations:
+    # - https://webplatform.github.io/docs/svg/tutorials/smarter_svg_animation/#Scripting-animations
+    # - https://webplatform.github.io/docs/svg/methods/
+    # - https://developer.mozilla.org/en-US/docs/Web/API/SVGAnimationElement
+    # - https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animate
+    # SVG DOM element width:
+    # - https://stackoverflow.com/a/18148142
+    # JS query selectors (and foreach)
+    # - https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll
+    # - https://stackoverflow.com/questions/19324700/how-to-loop-through-all-the-elements-returned-from-getelementsbytagname
+
     JS = r"""
       <script type="text/ecmascript"><![CDATA[
           function mouse_move(evt) {

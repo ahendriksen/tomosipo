@@ -40,7 +40,7 @@ class SVG:
         # embedding the svg directly is better since the hover text (title) works.
         if self.base64:
             svg64 = base64.encodebytes(self.svg_str.encode()).decode("ascii")
-            tag = r"""<object height="{height}" width="{width}" data="data:image/svg+xml;base64,{image}" />"""
+            tag = r"""<object height="{height}" width="{width}" data="data:image/svg+xml;base64,{image}"></object>"""
             return tag.format(height=self.height, width=self.width, image=svg64)
         else:
             tag = r"""<object height="{height}" width="{width}" title="{title}"> {svg_str} </object>"""

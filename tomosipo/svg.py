@@ -6,6 +6,7 @@
 import tomosipo as ts
 import tomosipo.vector_calc as vc
 import base64
+import uuid
 import collections
 import numpy as np
 from pathlib import Path
@@ -20,19 +21,32 @@ from tomosipo.geometry.volume_vec import VolumeVectorGeometry
 
 
 class SVG:
-    def __init__(self, svg_str, height=200, width=320):
+    def __init__(self, svg_str, height=200, width=320, base64=False):
         super().__init__()
         self.svg_str = svg_str
         self.height = height
         self.width = width
+        self.base64 = base64
 
     def _repr_html_(self):
-        svg64 = base64.encodebytes(self.svg_str.encode()).decode("ascii")
+        # How to embed svg:
         # https://vecta.io/blog/best-way-to-embed-svg
-        # TODO: use "<object />"
-        TAG = r"""<object height="{height}" width="{width}" data="data:image/svg+xml;base64,{image}" />"""
+        # Display text on hover:
+        # https://stackoverflow.com/questions/4697100/accessibility-recommended-alt-text-convention-for-svg-and-mathml
+        title = "Click to pause/unpause; press and hold to scroll through animation"
 
-        return TAG.format(height=self.height, width=self.width, image=svg64)
+        # Base64 is better when the text is further processed in blogging
+        # platforms with markdown etc.. For interactive uses with Jupyter,
+        # embedding the svg directly is better since the hover text (title) works.
+        if self.base64:
+            svg64 = base64.encodebytes(self.svg_str.encode()).decode("ascii")
+            tag = r"""<object height="{height}" width="{width}" data="data:image/svg+xml;base64,{image}" />"""
+            return tag.format(height=self.height, width=self.width, image=svg64)
+        else:
+            tag = r"""<object height="{height}" width="{width}" title="{title}"> {svg_str} </object>"""
+            return tag.format(
+                height=self.height, width=self.width, title=title, svg_str=self.svg_str
+            )
 
     def save(self, path):
         """Save svg to disk"""
@@ -215,20 +229,21 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
         for i, ls in enumerate(line_items)
     )
     # We format this string with `replace` because it is littered with {}'s.
+
+    svg_id = str(uuid.uuid4())
     JS = r"""
       <script type="text/ecmascript"><![CDATA[
           function mouse_move(evt) {
-              var root = document.querySelector('svg');
               if (evt.buttons > 0) {
-                    var root = document.querySelector('svg');
+                    var root = document.getElementById('SVG_ID');
                     root.pauseAnimations();
                     var new_time = DURATION * evt.clientX / evt.target.getBBox().width;
                     root.setCurrentTime(new_time);
               }
           }
           function on_click(evt) {
-              console.log(document.getElementById('frame3'));
-              var root = document.querySelector('svg');
+              var root = document.getElementById('SVG_ID');
+              //console.log(root);
               root.animationsPaused() ? root.unpauseAnimations() : root.pauseAnimations();
           }
         ]]>
@@ -236,13 +251,15 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
 
     """.replace(
         "DURATION", str(duration)
+    ).replace(
+        "SVG_ID", svg_id
     )
 
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" height="{height}" width="{width}">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" id="{svg_id}" height="{height}" width="{width}">
       <title>Click to pause/unpause, press and hold to scroll through animation</title>
         {frames_str}
         {JS}
-        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move(evt)' onclick='on_click(evt)' width="{width - 1}" height="{height - 1}" stroke="gray" fill="transparent" stroke-width="1"/>
+        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move(evt)' onclick='on_click(evt)' width="{width - 2}" height="{height - 2}" stroke="gray" fill="transparent" stroke-width="1"/>
     </svg>
     """
 
@@ -250,7 +267,7 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
 ###############################################################################
 #                Tying it all together: from *geometries => svg               #
 ###############################################################################
-def svg(*geoms, height=200, width=320, duration=3, camera=None):
+def svg(*geoms, height=200, width=320, duration=3, camera=None, base64=False):
     num_steps = max(map(len, geoms))
 
     # default camera:
@@ -270,4 +287,4 @@ def svg(*geoms, height=200, width=320, duration=3, camera=None):
         width=width,
     )
 
-    return SVG(svg_text, height=height, width=width)
+    return SVG(svg_text, height=height, width=width, base64=base64)

@@ -48,6 +48,9 @@ class SVG:
                 height=self.height, width=self.width, title=title, svg_str=self.svg_str
             )
 
+    def _repr_svg_(self):
+        return self.svg_str
+
     def save(self, path):
         """Save svg to disk"""
         path = Path(path)

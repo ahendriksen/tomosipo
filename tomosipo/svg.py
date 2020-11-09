@@ -21,12 +21,11 @@ from tomosipo.geometry.volume_vec import VolumeVectorGeometry
 
 
 class SVG:
-    def __init__(self, svg_str, height=200, width=320, base64=False):
+    def __init__(self, svg_str, height=200, width=320):
         super().__init__()
         self.svg_str = svg_str
         self.height = height
         self.width = width
-        self.base64 = base64
 
     def _repr_html_(self):
         # How to embed svg:
@@ -35,18 +34,18 @@ class SVG:
         # https://stackoverflow.com/questions/4697100/accessibility-recommended-alt-text-convention-for-svg-and-mathml
         title = "Click to pause/unpause; press and hold to scroll through animation"
 
+        tag = r"""<object height="{height}" width="{width}" title="{title}"> {svg_str} </object>"""
+        return tag.format(
+            height=self.height, width=self.width, title=title, svg_str=self.svg_str
+        )
+
+    def _repr_markdown_(self):
         # Base64 is better when the text is further processed in blogging
         # platforms with markdown etc.. For interactive uses with Jupyter,
         # embedding the svg directly is better since the hover text (title) works.
-        if self.base64:
-            svg64 = base64.encodebytes(self.svg_str.encode()).decode("ascii")
-            tag = r"""<object height="{height}" width="{width}" data="data:image/svg+xml;base64,{image}"></object>"""
-            return tag.format(height=self.height, width=self.width, image=svg64)
-        else:
-            tag = r"""<object height="{height}" width="{width}" title="{title}"> {svg_str} </object>"""
-            return tag.format(
-                height=self.height, width=self.width, title=title, svg_str=self.svg_str
-            )
+        svg64 = base64.encodebytes(self.svg_str.encode()).decode("ascii")
+        tag = r"""<object height="{height}" width="{width}" data="data:image/svg+xml;base64,{image}"></object>"""
+        return tag.format(height=self.height, width=self.width, image=svg64)
 
     def _repr_svg_(self):
         return self.svg_str
@@ -304,7 +303,7 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
 ###############################################################################
 #                Tying it all together: from *geometries => svg               #
 ###############################################################################
-def svg(*geoms, height=200, width=320, duration=3, camera=None, base64=False):
+def svg(*geoms, height=200, width=320, duration=3, camera=None):
     num_steps = max(map(len, geoms))
 
     # default camera:
@@ -324,4 +323,4 @@ def svg(*geoms, height=200, width=320, duration=3, camera=None, base64=False):
         width=width,
     )
 
-    return SVG(svg_text, height=height, width=width, base64=base64)
+    return SVG(svg_text, height=height, width=width)

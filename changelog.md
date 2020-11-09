@@ -11,6 +11,8 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 - Convenience methods `Transform.transform_vec` and `Transform.transform_point`
 - `ts.svg()`: Render geometries to an animated SVG (no dependencies required(!)).
 ### Changed
+- `ts.svg()`: Remove `base64` keyword parameter. This functionality has been
+  moved to the `_repr_markdown_` method.
 ### Removed
 
 

@@ -250,7 +250,6 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
         text_svg_frame(ls, i * frame_duration, (i + 1) * frame_duration, **const_opts)
         for i, ls in enumerate(line_items)
     )
-    # We format this string with `replace` because it is littered with {}'s.
     svg_id = str(uuid.uuid4()).replace("-", "_")
 
     # Great tutorial on SVG animation:
@@ -274,6 +273,7 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
     # - https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll
     # - https://stackoverflow.com/questions/19324700/how-to-loop-through-all-the-elements-returned-from-getelementsbytagname
 
+    # We format this string with `replace` because it is littered with {}'s.
     JS = r"""
       <script type="text/ecmascript"><![CDATA[
           function mouse_move_SVG_ID(evt) {
@@ -310,18 +310,39 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
 ###############################################################################
 #                Tying it all together: from *geometries => svg               #
 ###############################################################################
-def svg(*geoms, height=200, width=320, duration=3, camera=None):
+def svg(*geoms, height=200, width=320, duration=3, camera=None, show_axes=True):
     num_steps = max(map(len, geoms))
 
-    # default camera:
-    if camera is None:
-        c = default_camera(height, width)
+    c = camera or default_camera(height, width)
 
     def geoms2frame(i):
         # For each geometry, generate a list of line items
         frames_list = (project_lines(c, to_line_items(g, i)) for g in geoms)
-        # flatten the list
-        return [f for fs in frames_list for f in fs]
+
+        # Return early
+        if not show_axes:
+            # flatten the list
+            return [f for fs in frames_list for f in fs]
+
+        # Add axes in colors red, green, blue (for z, y, x axes) to top-left
+        # corner.
+        ref_axes_pos = (
+            c.corners[0][1] - 0.1 * height * c.det_v[0] + 0.05 * width * c.det_u[0]
+        )
+
+        axes = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+        colors = [(1, 0, 0, 1), (0, 1, 0, 1), (0, 0, 1, 1)]
+        ax_len = 0.07 * height * vc.norm(c.det_v[0])
+
+        ref_axes_lines = [
+            line_item([ref_axes_pos, ref_axes_pos + ax_len * ax], color=c)
+            for ax, c in zip(axes, colors)
+        ]
+
+        axes_list = project_lines(c, ref_axes_lines)
+
+        # Return axes and flattened list of geometries
+        return [*axes_list, *(f for fs in frames_list for f in fs)]
 
     svg_text = text_svg_animation(
         [geoms2frame(i) for i in range(num_steps)],

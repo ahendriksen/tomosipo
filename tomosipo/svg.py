@@ -220,7 +220,10 @@ def text_svg_frame(
         polylines.append(polyline)
     lines_str = "\n".join(polylines)
 
+    # width of progress bar
+    pb_width = frame_begin * width
     return f"""<g>
+          <path d="M0,{height} h{pb_width} v{-height/40} h{-pb_width} Z" fill="black" stroke="none" fill-opacity="0.2"/>
           {lines_str}
           <animate
               attributeName="display"

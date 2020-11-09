@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 - All geometry classes implement `len()`, which returns the number of steps in the geometry.
 - Convenience methods `Transform.transform_vec` and `Transform.transform_point`
 - `ts.svg()`: Render geometries to an animated SVG (no dependencies required(!)).
+- `ts.svg()`: Added progress bar.
 ### Changed
 - `ts.svg()`: Remove `base64` keyword parameter. This functionality has been
   moved to the `_repr_markdown_` method.

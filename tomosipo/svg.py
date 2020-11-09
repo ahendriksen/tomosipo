@@ -209,6 +209,7 @@ def text_svg_frame(
     # - https://www.w3.org/TR/SVG11/shapes.html#PolylineElement
     # - https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes
 
+    BLACK = (0.0, 0.0, 0.0, 1.0)
     polylines = []
     for l in line_items:
         # extract y and x coordinates (from zyx to xy)
@@ -216,7 +217,11 @@ def text_svg_frame(
         # Correct y to move from bottom to top instead of vice versa
         pos2d[:, 1] = height - pos2d[:, 1]
         points = " ".join(f"{p:0.2f}" for p in pos2d.ravel())
-        polyline = f'<polyline points="{points}" stroke="black" fill="none" stroke-width="{l.width:0.2f}"/>'
+        if l.color == BLACK:
+            polyline = f'<polyline points="{points}" stroke="black" fill="none" stroke-width="{l.width:0.2f}"/>'
+        else:
+            stroke = f"rgb({l.color[0]*255}, {l.color[1]*255}, {l.color[2] * 255})"
+            polyline = f'<polyline points="{points}" stroke="{stroke}" fill="none" stroke-width="{l.width:0.2f}"/>'
         polylines.append(polyline)
     lines_str = "\n".join(polylines)
 

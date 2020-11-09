@@ -246,8 +246,7 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
         for i, ls in enumerate(line_items)
     )
     # We format this string with `replace` because it is littered with {}'s.
-
-    svg_id = str(uuid.uuid4())
+    svg_id = str(uuid.uuid4()).replace("-", "_")
 
     # Great tutorial on SVG animation:
     # - http://www.joningram.co.uk/article/svg-smil-frame-animation/
@@ -272,15 +271,15 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
 
     JS = r"""
       <script type="text/ecmascript"><![CDATA[
-          function mouse_move(evt) {
+          function mouse_move_SVG_ID(evt) {
               if (evt.buttons > 0) {
                     var root = document.getElementById('SVG_ID');
                     root.pauseAnimations();
-                    var new_time = DURATION * evt.clientX / evt.target.getBBox().width;
+                    var new_time = DURATION * evt.layerX / evt.target.getBBox().width;
                     root.setCurrentTime(new_time);
               }
           }
-          function on_click(evt) {
+          function on_click_SVG_ID(evt) {
               var root = document.getElementById('SVG_ID');
               //console.log(root);
               root.animationsPaused() ? root.unpauseAnimations() : root.pauseAnimations();
@@ -298,7 +297,7 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
       <title>Click to pause/unpause, press and hold to scroll through animation</title>
         {frames_str}
         {JS}
-        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move(evt)' onclick='on_click(evt)' width="{width - 2}" height="{height - 2}" stroke="gray" fill="transparent" stroke-width="1"/>
+        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move_{svg_id}(evt)' onclick='on_click_{svg_id}(evt)' width="{width - 2}" height="{height - 2}" stroke="gray" fill="transparent" stroke-width="1"/>
     </svg>
     """
 

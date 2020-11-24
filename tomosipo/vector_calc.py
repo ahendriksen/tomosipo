@@ -298,29 +298,30 @@ def matrix_transform(M, x):
     assert M.ndim == 3
     assert x.shape[0] == M.shape[0]
 
-    return np.array([M_ @ x_ for M_, x_ in zip(M, x)])
-
-    raise ValueError("M and x do not match")
+    # The following code executes the equivalent of
+    # > np.array([M_ @ x_ for M_, x_ in zip(M, x)])
+    # (but substantially faster)
+    return np.matmul(M, x[:, :, None])[:, :, 0]
 
 
 def matrix_matrix_transform(M1, M2):
     M1, M2 = _broadcastmm(M1, M2)
-
-    return np.array([m1 @ m2 for m1, m2 in zip(M1, M2)])
+    # The following code executes the equivalent of
+    # > np.array([m1 @ m2 for m1, m2 in zip(M1, M2)])
+    # (but substantially faster)
+    return np.matmul(M1, M2)
 
 
 def invert_transformation_matrix(M):
     M, _ = _broadcastmm(M, M)
     assert M.ndim == 3
-    out = np.zeros_like(M)
-
-    for i in range(len(M)):
-        try:
-            out[i] = np.linalg.inv(M[i])
-        except np.linalg.LinAlgError:
-            raise ValueError(f"Inverting matrix {i} failed, {M[i]}")
-
-    return np.array([np.linalg.inv(m) for m in M])
+    try:
+        # The following code executes the equivalent of
+        # > np.array([np.linalg.inv(m) for m in M])
+        # (but substantially faster)
+        return np.linalg.inv(M)
+    except np.linalg.LinAlgError:
+        raise ValueError(f"Inverting matrix failed, {M}")
 
 
 ###############################################################################

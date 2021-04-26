@@ -221,7 +221,9 @@ def rotate(*, pos, axis, angles=None, rad=None, deg=None, right_handed=True):
         # case: angles is None and (rad is not None or deg is not None):
         warnings.warn(
             "The `rad` and `deg` parameters of `ts.rotate` are deprecated. Please use `angles` instead.",
-            category=DeprecationWarning, stacklevel=2)
+            category=DeprecationWarning,
+            stacklevel=2,
+        )
         # Define theta in radians
         theta = np.deg2rad(deg) if deg is not None else rad
         # Make theta of shape `(num_steps, 1)`
@@ -262,6 +264,44 @@ def rotate(*, pos, axis, angles=None, rad=None, deg=None, right_handed=True):
     R = Transform(np.concatenate([R0, R1, R2, R3], axis=2))
 
     return T.inv * R * T
+
+
+def reflect(*, pos, axis):
+    """Reflect in the plane through `pos` with normal vector `axis`
+
+    The parameters `pos` and `axis` are interpreted as
+    homogeneous coordinates. You may pass in both homogeneous or
+    non-homogeneous coordinates. Also, you may pass in multiple rows
+    for multiple timesteps. The following shapes are allowed:
+
+    - `(n_rows, 3)` [non-homogeneous] or `(n_rows, 4)` [homogeneous]
+    - `(3,)` [non-homogeneous] or `(4,)` [homogeneous]
+
+    :param pos: `np.array` or `scalar`
+        A position intersecting the plane of reflection.
+    :param axis:
+        A normal vector to the plane of reflection. Need not be unit-normal.
+
+    :returns:
+    :rtype:
+
+    """
+    if np.isscalar(pos):
+        pos = ts.utils.to_pos(pos)
+    pos = vc.to_homogeneous_point(pos)
+    axis = vc.to_homogeneous_vec(axis)
+    pos, axis = vc._broadcastv(pos, axis)
+    axis = axis / vc.norm(axis)[:, None]
+
+    # Create a householder matrix for reflection through the origin.
+    # https://en.wikipedia.org/wiki/Householder_transformation
+    R_origin = ts.concatenate(
+        [Transform(identity().matrix - 2 * np.outer(a, a)) for a in axis]
+    )
+
+    T = ts.translate(pos)
+
+    return T * R_origin * T.inv
 
 
 def to_perspective(pos=None, w=None, v=None, u=None, box=None):

@@ -28,8 +28,17 @@ rotations = [
     ts.rotate(pos=0, axis=(1, 0, 0), angles=1.0),
     ts.rotate(pos=0, axis=np.random.normal(size=3), angles=np.random.normal()),
     ts.rotate(
-        pos=0, axis=np.random.normal(size=3), angles=np.random.normal(), right_handed=False
+        pos=0,
+        axis=np.random.normal(size=3),
+        angles=np.random.normal(),
+        right_handed=False,
     ),
+]
+
+reflections = [
+    ts.reflect(pos=0, axis=(1, 0, 0)),
+    ts.reflect(pos=(1, 1, 1), axis=(1, 1, 1)),
+    ts.reflect(pos=(0, 1, 1), axis=(0, -1, 1)),
 ]
 
 scalings = [
@@ -44,9 +53,10 @@ transforms = translations + rotations + scalings
 
 
 @pytest.mark.parametrize(
-    "vg, T, R, S", itertools.product(vgs, translations, rotations, scalings)
+    "vg, T, R, M, S",
+    itertools.product(vgs, translations, rotations, reflections, scalings),
 )
-def test_equations(vg, T, R, S):
+def test_equations(vg, T, R, M, S):
     # identity:
     id = transform.identity()
     assert id * vg == vg
@@ -55,14 +65,14 @@ def test_equations(vg, T, R, S):
     assert id * R == R
     assert id * (S * T * R) == S * T * R
     # Associativity of group action:
-    assert S * (T * (R * vg)) == ((S * T) * R) * vg
+    assert S * (T * (R * (M * vg))) == (((S * T) * R) * M) * vg
     # Associativity:
-    assert S * (T * R) == (S * T) * R
+    assert S * ((T * R) * M) == ((S * T) * R) * M
     # inverse
-    for t in [id, S, T, R, S * T * R]:
+    for t in [id, S, T, R, M, S * T * R, S * T * R * M]:
         assert id == t * t.inv
         assert id == t.inv * t
-    assert (T * S * R).inv == R.inv * S.inv * T.inv
+    assert (T * S * R * M).inv == M.inv * R.inv * S.inv * T.inv
 
 
 @pytest.mark.parametrize(
@@ -235,20 +245,20 @@ def test_rotate_inversion_of_angle_axis_handedness():
     for p, axis in np.random.normal(size=(N, 2, 3)):
         angle = 2 * np.pi * np.random.normal()
         # Test handedness by inverting the angle and also by inverting the rotation axis.
-        assert ts.rotate(pos=p, axis=axis, angles=angle, right_handed=True) == ts.rotate(
-            pos=p, axis=axis, angles=-angle, right_handed=False
-        )
-        assert ts.rotate(pos=p, axis=axis, angles=angle, right_handed=True) == ts.rotate(
-            pos=p, axis=-axis, angles=angle, right_handed=False
-        )
+        assert ts.rotate(
+            pos=p, axis=axis, angles=angle, right_handed=True
+        ) == ts.rotate(pos=p, axis=axis, angles=-angle, right_handed=False)
+        assert ts.rotate(
+            pos=p, axis=axis, angles=angle, right_handed=True
+        ) == ts.rotate(pos=p, axis=-axis, angles=angle, right_handed=False)
         # Ensure that adding 2*pi to the angle does not affect the rotation
-        assert ts.rotate(pos=p, axis=axis, angles=angle, right_handed=True) == ts.rotate(
-            pos=p, axis=axis, angles=angle + 2 * np.pi, right_handed=True
-        )
+        assert ts.rotate(
+            pos=p, axis=axis, angles=angle, right_handed=True
+        ) == ts.rotate(pos=p, axis=axis, angles=angle + 2 * np.pi, right_handed=True)
         # Ensure that scaling the rotation axis does not affect rotation
-        assert ts.rotate(pos=p, axis=axis, angles=angle, right_handed=True) == ts.rotate(
-            pos=p, axis=2 * axis, angles=angle, right_handed=True
-        )
+        assert ts.rotate(
+            pos=p, axis=axis, angles=angle, right_handed=True
+        ) == ts.rotate(pos=p, axis=2 * axis, angles=angle, right_handed=True)
 
 
 def test_rotate_adding_angles():
@@ -288,6 +298,39 @@ def test_rotate_deprecation():
         ts.rotate(pos=0, axis=(1, 0, 0), rad=1.0)
     with pytest.warns(DeprecationWarning):
         ts.rotate(pos=0, axis=(1, 0, 0), deg=1.0)
+
+
+def test_reflect():
+    vg = ts.volume(shape=1).to_vec()
+    M = ts.reflect(pos=0, axis=(1, 0, 0))
+
+    assert vg.size == (M * vg).size
+
+    points_in_plane = np.array(
+        [
+            [0.0, 1, 1],
+            [0.0, 2, 0],
+            [0.0, 0, 3],
+        ]
+    )
+    assert np.allclose(points_in_plane, M.transform_point(points_in_plane))
+
+    points_out_plane = np.array(
+        [
+            [1.0, 1, 1],
+            [-1.0, 2, 0],
+            [3.0, 0, 3],
+        ]
+    )
+    for p in points_out_plane:
+        assert not np.allclose(p, M.transform_point(p))
+
+
+@pytest.mark.parametrize("M", reflections)
+def test_reflect_inverse(M):
+    id = transform.identity()
+    assert id == M * M
+    assert M.inv == M
 
 
 def test_perspective():

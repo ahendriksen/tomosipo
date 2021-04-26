@@ -19,6 +19,7 @@ from .geometry.transform import (
     translate,
     scale,
     rotate,
+    reflect,
     to_perspective,
     from_perspective,
 )

@@ -157,8 +157,8 @@ def pg_to_line_items(pg, i):
 
 def default_camera(height, width, angle=1 / 2.7):
     # default camera:
-    R0 = ts.rotate(pos=0, axis=(1, 0, 0), deg=70)
-    R1 = ts.rotate(pos=0, axis=(0, 0, 1), deg=-25)
+    R0 = ts.rotate(pos=0, axis=(1, 0, 0), angles=np.deg2rad(70))
+    R1 = ts.rotate(pos=0, axis=(0, 0, 1), angles=np.deg2rad(-25))
     size = (1, 1 * width / height)
 
     good_cone = (

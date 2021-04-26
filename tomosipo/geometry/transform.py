@@ -1,5 +1,6 @@
 import tomosipo as ts
 import numpy as np
+import warnings
 from tomosipo.utils import up_tuple
 import tomosipo.vector_calc as vc
 
@@ -161,7 +162,7 @@ def scale(s, pos=None):
         return Transform(S)
 
 
-def rotate(*, pos, axis, rad=None, deg=None, right_handed=True):
+def rotate(*, pos, axis, angles=None, rad=None, deg=None, right_handed=True):
     """Rotate around axis through position by some angle
 
     The parameters `position` and `axis` are interpreted as
@@ -180,17 +181,19 @@ def rotate(*, pos, axis, rad=None, deg=None, right_handed=True):
         The position through which the axis moves.
     :param axis:
         The axis of rotation.
-    :param rad: `float` or `np.array`
-        The angle by which must be rotated. Only one of `deg` or `rad` may be passed.
-    :param deg: `float` or `np.array`
-        The angle by which must be rotated. Only one of `deg` or `rad` may be passed.
+    :param angles: `float` or `np.array`
+        The angle by which must be rotated in radians.
+    :param rad:
+        **DEPRECATED**
+    :param deg:
+        **DEPRECATED**
     :param right_handed:
-
         By default, the rotation performs a right-handed rotation (in
-        the anti-clockwise direction). If you want to perform a left-handed rotation, you may
+        the anti-clockwise direction). A left-handed rotation is
+        performed when `right_handed=False`.
 
     :returns:
-    :rtype:
+    :rtype: Transform
 
     """
     if np.isscalar(pos):
@@ -201,12 +204,28 @@ def rotate(*, pos, axis, rad=None, deg=None, right_handed=True):
 
     axis = axis / vc.norm(axis)
 
-    if rad is None and deg is None:
-        raise ValueError("At least one of `rad=` or `deg=` parameters is required.")
-    # Define theta in radians
-    theta = np.deg2rad(deg) if deg is not None else rad
-    # Make theta of shape `(num_steps, 1)`
-    theta = vc.to_scalar(theta)
+    angles_defined = angles is not None
+    rad_deg_defined = rad is not None or deg is not None
+    if not angles_defined and not rad_deg_defined:
+        raise ValueError("The `angles=` parameter is required.")
+    elif angles_defined and not rad_deg_defined:
+        theta = angles
+        # Make theta of shape `(num_steps, 1)`
+        theta = vc.to_scalar(theta)
+    elif angles_defined and rad_deg_defined:
+        raise TypeError(
+            "The `angles` parameter is not compatible with the `rad` or `deg` parameter. "
+            "The `rad` and `deg` parameters are deprecated. "
+        )
+    else:
+        # case: angles is None and (rad is not None or deg is not None):
+        warnings.warn(
+            "The `rad` and `deg` parameters of `ts.rotate` are deprecated. Please use `angles` instead.",
+            category=DeprecationWarning, stacklevel=2)
+        # Define theta in radians
+        theta = np.deg2rad(deg) if deg is not None else rad
+        # Make theta of shape `(num_steps, 1)`
+        theta = vc.to_scalar(theta)
 
     # Make the rotation left-handed if necessary
     if not right_handed:
@@ -319,7 +338,7 @@ def random_transform():
     t, pos, axis, s = np.random.normal(size=(4, 3))
     angle = np.random.normal()
     T = ts.translate(t)
-    R = ts.rotate(pos=pos, axis=axis, rad=angle)
+    R = ts.rotate(pos=pos, axis=axis, angles=angle)
     S = ts.scale(abs(s))
 
     return R * S * T

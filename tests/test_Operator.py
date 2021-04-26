@@ -134,7 +134,7 @@ def test_volume_vector():
     vg = ts.volume(shape=32)
 
     angles = np.linspace(0, np.pi, 48, endpoint=False)
-    R = ts.rotate(pos=0, axis=(1, 0, 0), rad=angles)
+    R = ts.rotate(pos=0, axis=(1, 0, 0), angles=angles)
 
     A_v = ts.operator(R * vg.to_vec(), pg)
     A_p = ts.operator(vg, R.inv * pg)

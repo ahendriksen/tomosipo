@@ -25,7 +25,7 @@ def test_display_cone_geometry(interactive):
     vg = ts.volume()
 
     # Add volume vector geometry
-    R = ts.rotate(pos=0, axis=(1, 0, 0), rad=-np.linspace(0, np.pi, 300))
+    R = ts.rotate(pos=0, axis=(1, 0, 0), angles=-np.linspace(0, np.pi, 300))
     T = ts.translate((2, 0, 0))
     vg_vec = T * R * vg.to_vec()
 

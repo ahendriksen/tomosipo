@@ -162,7 +162,7 @@ def test_get_item(T):
 def test_translate_simple_case():
     # "Simple case": we check that the position of a rotated box
     # changes correctly.
-    R = ts.rotate((2, 3, 5), axis=(7, 11, -13), deg=15)
+    R = ts.rotate(pos=(2, 3, 5), axis=(7, 11, -13), deg=15)
     original = R * ts.volume_vec(shape=(3, 4, 5), pos=(2, 3, 5))
 
     t = np.array((3, 4, 5))
@@ -235,19 +235,19 @@ def test_rotate_inversion_of_angle_axis_handedness():
     for p, axis in np.random.normal(size=(N, 2, 3)):
         angle = 2 * np.pi * np.random.normal()
         # Test handedness by inverting the angle and also by inverting the rotation axis.
-        assert ts.rotate(p, axis, rad=angle, right_handed=True) == ts.rotate(
-            p, axis, rad=-angle, right_handed=False
+        assert ts.rotate(pos=p, axis=axis, rad=angle, right_handed=True) == ts.rotate(
+            pos=p, axis=axis, rad=-angle, right_handed=False
         )
-        assert ts.rotate(p, axis, rad=angle, right_handed=True) == ts.rotate(
-            p, -axis, rad=angle, right_handed=False
+        assert ts.rotate(pos=p, axis=axis, rad=angle, right_handed=True) == ts.rotate(
+            pos=p, axis=-axis, rad=angle, right_handed=False
         )
         # Ensure that adding 2*pi to the angle does not affect the rotation
-        assert ts.rotate(p, axis, rad=angle, right_handed=True) == ts.rotate(
-            p, axis, rad=angle + 2 * np.pi, right_handed=True
+        assert ts.rotate(pos=p, axis=axis, rad=angle, right_handed=True) == ts.rotate(
+            pos=p, axis=axis, rad=angle + 2 * np.pi, right_handed=True
         )
         # Ensure that scaling the rotation axis does not affect rotation
-        assert ts.rotate(p, axis, rad=angle, right_handed=True) == ts.rotate(
-            p, 2 * axis, rad=angle, right_handed=True
+        assert ts.rotate(pos=p, axis=axis, rad=angle, right_handed=True) == ts.rotate(
+            pos=p, axis=2 * axis, rad=angle, right_handed=True
         )
 
 
@@ -259,9 +259,9 @@ def test_rotate_adding_angles():
         vg = random_volume_vec()
         axis = np.random.normal(size=3)
         pos = np.random.normal(size=3)
-        R1 = ts.rotate(pos, axis, rad=theta1)
-        R2 = ts.rotate(pos, axis, rad=theta2)
-        R = ts.rotate(pos, axis, rad=theta1 + theta2)
+        R1 = ts.rotate(pos=pos, axis=axis, rad=theta1)
+        R2 = ts.rotate(pos=pos, axis=axis, rad=theta2)
+        R = ts.rotate(pos=pos, axis=axis, rad=theta1 + theta2)
 
         assert (R1 * R2) * vg == R1 * (R2 * vg)
         assert R1 * R2 == R
@@ -275,7 +275,7 @@ def test_rotate_visually(interactive):
     top_vg = ts.volume_vec(shape=1, pos=(3, 0, 0))
 
     s = np.linspace(0, 360, 361, endpoint=True)
-    R = ts.rotate((0, 0, 0), (1, 0, 0), deg=s, right_handed=True)
+    R = ts.rotate(pos=(0, 0, 0), axis=(1, 0, 0), deg=s, right_handed=True)
 
     if interactive:
         from tomosipo.qt import display
@@ -292,7 +292,7 @@ def test_perspective():
     for t, p, axis in np.random.normal(size=(N, 3, 3)):
         angle = 2 * np.pi * np.random.normal()
         T = ts.translate(t)
-        R = ts.rotate(p, axis, rad=angle)
+        R = ts.rotate(pos=p, axis=axis, rad=angle)
         # We now have a unit cube on some random location:
         random_vg = (R * T) * unit
 

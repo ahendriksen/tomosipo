@@ -15,6 +15,8 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 ### Changed
 - `ts.svg()`: Remove `base64` keyword parameter. This functionality has been
   moved to the `_repr_markdown_` method.
+- `ts.rotate()`: All parameters are now keyword only passing `pos` and
+  `axis` by position is not possible anymore.
 ### Removed
 
 

@@ -161,7 +161,7 @@ def scale(s, pos=None):
         return Transform(S)
 
 
-def rotate(pos, axis, *, rad=None, deg=None, right_handed=True):
+def rotate(*, pos, axis, rad=None, deg=None, right_handed=True):
     """Rotate around axis through position by some angle
 
     The parameters `position` and `axis` are interpreted as
@@ -319,7 +319,7 @@ def random_transform():
     t, pos, axis, s = np.random.normal(size=(4, 3))
     angle = np.random.normal()
     T = ts.translate(t)
-    R = ts.rotate(pos, axis, rad=angle)
+    R = ts.rotate(pos=pos, axis=axis, rad=angle)
     S = ts.scale(abs(s))
 
     return R * S * T

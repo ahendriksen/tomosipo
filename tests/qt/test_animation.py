@@ -12,7 +12,7 @@ except ModuleNotFoundError:
 @pytest.fixture
 def geometry_list():
     T = ts.translate((2, 0, 0))
-    R = ts.rotate(0, (1, 0, 0), rad=np.linspace(0, np.pi, 20))
+    R = ts.rotate(pos=0, axis=(1, 0, 0), rad=np.linspace(0, np.pi, 20))
     return [
         ts.volume(),
         T * R * ts.volume().to_vec(),

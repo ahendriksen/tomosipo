@@ -3,15 +3,23 @@
 This module is not automatically imported by tomosipo, you must import
 it manually as follows:
 
+>>> import tomosipo as ts
 >>> import tomosipo.torch_support
 
 Now, you may use torch tensors as you would numpy arrays:
 
 >>> vg = ts.volume(shape=(10, 10, 10))
->>> vd = ts.data(vg, torch.zeros(10, 10, 10))
->>> # Or directly on gpu:
->>> vd = ts.data(vg, torch.zeros(10, 10, 10).cuda())
+>>> pg = ts.parallel(angles=10, shape=10)
+>>> A = ts.operator(vg, pg)
+>>> x = torch.zeros(A.domain_shape)
+>>> A(x).shape == A.range_shape
+True
 
+You can also directly apply the tomographic operator to data on the
+GPU:
+
+>>> A(x.cuda()).is_cuda
+True
 """
 import astra
 from .base import Link, backends

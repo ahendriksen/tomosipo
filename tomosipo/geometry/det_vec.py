@@ -131,13 +131,12 @@ class DetectorVectorGeometry(ProjectionGeometry):
     def __getitem__(self, key):
         """Slice the geometry to create a sub-geometry
 
-        This geometry can be sliced in the number of projections:
+        This geometry can be sliced in the number of projections and
+        in the detector plane
 
-        >>> ts.geometry.random_det_vec()[0::2]
-
-        Or in the detector plane:
-
-        >>> ts.geometry.random_det_vec()[:, ::2, ::2]
+        >>> pg = random_det_vec()
+        >>> pg.num_angles // 2 == pg[0::2, ::3, ::4].num_angles
+        True
 
         :param key:
         :returns:

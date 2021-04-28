@@ -3,13 +3,17 @@
 This module is not automatically imported by tomosipo, you must import
 it manually as follows:
 
+>>> import tomosipo as ts
 >>> import tomosipo.cupy
 
 Now, you may use cupy arrays as you would numpy arrays:
 
 >>> vg = ts.volume(shape=(10, 10, 10))
->>> vd = ts.data(vg, cupy.zeros((10, 10, 10)))
-
+>>> pg = ts.parallel(angles=10, shape=10)
+>>> A = ts.operator(vg, pg)
+>>> x = cupy.zeros(A.domain_shape, dtype='float32')
+>>> A(x).shape == A.range_shape
+True
 """
 import astra
 from .base import Link, backends
@@ -43,11 +47,11 @@ class CupyLink(Link):
             initial_value = initial_value.astype("float32")
             # Make contiguous:
             if not (
-                initial_value.flags["C_CONTIGUOUS"] and initial_value.flags["ALIGNED"]
+                initial_value.flags["C_CONTIGUOUS"]
             ):
                 warnings.warn(
-                    f"The parameter initial_value should be C_CONTIGUOUS and ALIGNED. "
-                    f"It has been automatically made contiguous and aligned. "
+                    f"The parameter initial_value should be C_CONTIGUOUS. "
+                    f"It has been automatically made contiguous. "
                     f"Use `ts.link(cupy.ascontiguousarray(x))' to inhibit this warning. "
                 )
                 initial_value = cupy.ascontiguousarray(initial_value)

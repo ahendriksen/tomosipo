@@ -144,6 +144,13 @@ class VolumeVectorGeometry(object):
         step, execute:
 
         >>> ts.volume().to_vec()[0, 0, 0, 0]
+        ts.volume_vec(
+            shape=(1, 1, 1),
+            pos=array([[0., 0., 0.]]),
+            w=array([[1., 0., 0.]]),
+            v=array([[0., 1., 0.]]),
+            u=array([[0., 0., 1.]]),
+        )
 
         :param key:
         :returns:

@@ -29,11 +29,13 @@ def animate(*geometries, total_duration_seconds=5):
 
     The return type is an object that can be saved:
 
-    >>> ts.animate(ts.parallel(angles=10)).save('geometry.mp4')
+    >>> import tomosipo as ts
+    >>> from tomosipo.qt import animate
+    >>> animate(ts.parallel(angles=10)).save('/tmp/geometry.mp4');
 
     It can also be opened in a window:
 
-    >>> ts.animate(ts.parallel(angles=10)).window()
+    >>> animate(ts.parallel(angles=10)).window() # doctest: +SKIP
 
     In a Jupyter notebook, the animation is automatically converted to
     a video and shown if it is the final value in a cell.

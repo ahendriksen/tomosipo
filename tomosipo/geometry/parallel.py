@@ -132,7 +132,8 @@ class ParallelGeometry(ProjectionGeometry):
 
         Example: Obtain geometry containing every second angle:
 
-        >>> ts.parallel()[0::2]
+        >>> ts.parallel(angles=10)[0::2].num_angles
+        5
 
         Indexing on the detector plane is not supported, since it
         might move the detector center.

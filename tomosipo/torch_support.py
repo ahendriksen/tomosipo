@@ -62,18 +62,25 @@ def to_autograd(operator):
 
     Example:
 
-    >>> B = 1  # batch dimension
-    >>> A = ts.operator(vg, pg)
-    >>> f = to_autograd(A)
-    >>> vd = torch.randn((B, *A.domain_shape), requires_grad=True)
-    >>> f(vd).sum().backward()
-    >>> print(vd.grad)
+        >>> import tomosipo as ts
+        >>> vg = ts.volume(shape=10)
+        >>> pg = ts.parallel(angles=10, shape=10)
+        >>> A = ts.operator(vg, pg)
+        >>> B = 1  # batch dimension
+
+        >>> f = to_autograd(A)
+        >>> vd = torch.randn((B, *A.domain_shape), requires_grad=True)
+        >>> f(vd).sum().backward()
+        >>> vd.grad is not None
+        True
 
     Likewise, you may use the transpose:
-    >>> g = to_autograd(A.T)
-    >>> pd = torch.randn((B, *A.T.domain_shape), requires_grad=True)
-    >>> g(pd).sum().backward()
-    >>> print(vd.grad)
+
+        >>> g = to_autograd(A.T)
+        >>> pd = torch.randn((B, *A.T.domain_shape), requires_grad=True)
+        >>> g(pd).sum().backward()
+        >>> vd.grad is not None
+        True
 
     :param operator: a `ts.Operator'
     :returns: an autograd function

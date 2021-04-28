@@ -122,11 +122,13 @@ class ParallelVectorGeometry(ProjectionGeometry):
         This geometry can be sliced by angle. The following obtains a
         sub-geometry containing every second projection:
 
-        >>> ts.parallel(angles=10).to_vec()[0::2]
+        >>> ts.parallel(angles=10).to_vec()[0::2].num_angles
+        5
 
         This geometry can also be sliced in the detector plane:
 
-        >>> ts.parallel(shape=10).to_vec()[:, ::2, ::2]
+        >>> ts.parallel(shape=10).to_vec()[:, ::2, ::2].det_shape
+        (5, 5)
 
         :param key:
         :returns:

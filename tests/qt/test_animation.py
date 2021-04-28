@@ -32,7 +32,7 @@ def test_save(geometry_list, tmpdir, interactive):
     path = tmpdir / "test.mp4"
     animation.save(path)
     assert path.exists()
-    assert path.stat().size == 78455
+    assert path.stat().size == 77333
 
 
 @skip_if_no_qt

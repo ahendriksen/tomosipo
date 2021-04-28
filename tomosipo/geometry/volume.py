@@ -193,8 +193,9 @@ class VolumeGeometry:
         The key may be up to three-dimensional. Both examples below
         yield the same geometry describing the axial central slice:
 
-        >>> ts.volume(128)[64, :, :]
-        >>> ts.volume(128)[64]
+        >>> vg = ts.volume(shape=128)
+        >>> vg[64, :, :] == vg[64]
+        True
 
         :param key:
         :returns:

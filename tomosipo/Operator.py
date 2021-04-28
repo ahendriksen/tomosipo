@@ -581,15 +581,19 @@ class BackprojectionOperator(object):
 
     We have the following property:
 
-    >>> op = ts.operator(vg, pg)
-    >>> op.T == op.T.T.T
+    >>> import tomosipo as ts
+    >>> vg = ts.volume(shape=10)
+    >>> pg = ts.parallel(angles=10, shape=10)
+    >>> A = ts.operator(vg, pg)
+    >>> A.T is A.T.T.T
+    True
 
     It is nice that we do not allocate a new object every time we use
-    `op.T`. If we did, users might save the transpose in a separate
+    `A.T`. If we did, users might save the transpose in a separate
     variable for 'performance reasons', writing
 
-    >>> op = ts.operator(vg, pg)
-    >>> op_T = op.T
+    >>> A = ts.operator(vg, pg)
+    >>> A_T = A.T
 
     This is a waste of time.
     """

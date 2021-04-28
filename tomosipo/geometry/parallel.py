@@ -96,6 +96,8 @@ class ParallelGeometry(ProjectionGeometry):
         # Size
         if size is None:
             size = shape
+
+        # TODO: This does not appear to reject a size of (1, 1, 1) [wrong dimensions]..
         self._size = ts.utils.to_size(size, dim=2)
 
         self._is_cone = False

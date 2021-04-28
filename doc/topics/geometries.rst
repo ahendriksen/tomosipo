@@ -1,6 +1,89 @@
-==================================
- Volume and Projection Geometries
-==================================
+========
+Geometry
+========
+
+Units, axes and indexing
+========================
+
+Tomosipo follows NumPy's indexing convention. In the image below, we
+display the coordinate axes and indexing into a volume cube.
+The Z-axis points upward.
+
+.. image:: ../img/volume_geometry.svg
+   :width: 400
+   :alt: Volume geometry indexing and axes
+
+As you can see, the first coordinate indexes in the `Z` direction, the second
+coordinate in the `Y` direction, and the third coordinate in the `X` direction.
+By default, each voxel has a "physical size" of `1` unit. The voxel's height,
+width, and depth can be customized arbitrarily, however.
+
+.. testcode::
+
+   import tomosipo as ts
+
+   N = 64
+   vg = ts.volume(shape=N)
+
+   print(vg[0, 0, 0])
+   print(vg[N - 1, 0, 0])
+   print(vg[N - 1, N - 1, N - 1])
+
+.. testoutput::
+
+    ts.volume(
+        shape=(1, 1, 1),
+        pos=(-31.5, -31.5, -31.5),
+        size=(1.0, 1.0, 1.0),
+    )
+    ts.volume(
+        shape=(1, 1, 1),
+        pos=(31.5, -31.5, -31.5),
+        size=(1.0, 1.0, 1.0),
+    )
+    ts.volume(
+        shape=(1, 1, 1),
+        pos=(31.5, 31.5, 31.5),
+        size=(1.0, 1.0, 1.0),
+    )
+
+We display an example for a parallel geometry with its associated
+sinogram indexing below. The detector coordinate frame is defined by
+two vectors
+
+-   **u:** Usually points sideways and to the "right" from the perspective
+    of the source. The length of u defines the width of a detector
+    pixel.
+-   **v:** Usually points upwards. The length of v defines the height of a
+    detector pixel.
+
+.. image:: ../img/projection_geometry.svg
+  :width: 400
+  :alt: Projection geometry
+
+Here, we see that the order of the physical dimensions does not match the order
+of the data indices. For performance reasons, projection data is stored as a
+sinogram stack indexed in `(V, angle, U)` order. The projection geometry
+coordinates are `(angles, v, u)`, however. The size of a detector pixel can be
+arbitrary and is defined by the `u` and `v` vectors.
+
+In short,
+
+-   volume geometry and data are indexed  in `(Z, Y, X)` order
+-   projection geometries are indexed in `(angle, v, u)` order
+-   projection data is stored as a stack of sinograms, indexed in (V,
+    angle, U) order.
+
+
+.. note::
+
+   The coordinate system `(z, y, x)` is
+   `left-handed <https://en.wikipedia.org/wiki/Right-hand_rule>`__
+   rather than right-handed.
+
+
+Overview of geometries
+======================
 
 Tomosipo has six types of geometries with varying degrees of flexibility.
 
@@ -22,10 +105,13 @@ Tomosipo has six types of geometries with varying degrees of flexibility.
      - 3D arbitrarily-oriented cone beam geometry
    * - :meth:`tomosipo.volume`
      - 3D axis-aligned volume geometry
-   * - :meth:`tomosipo.cone_vec`
-     - 3D arbitrarily-oriented volume geometry. This object cannot be converted to ASTRA directly, but can be used in geometric computations.
+   * - :meth:`tomosipo.volume_vec`
+     - 3D arbitrarily-oriented volume geometry.
 
+.. note::
 
+   For a more detailed overview of the properties of the created geometry classes,
+   see :ref:`summary-geometry-classes`.
 
 Useful properties
 =================
@@ -47,6 +133,18 @@ Printed representation
 
 Angles, shape, and size
 -----------------------
+
+.. currentmodule:: tomosipo.geometry
+
+.. autosummary::
+
+   ~ProjectionGeometry.num_angles
+   ~ProjectionGeometry.num_steps
+   ~ProjectionGeometry.angles
+   ~ProjectionGeometry.det_shape
+   ~ProjectionGeometry.det_size
+   ~ProjectionGeometry.det_sizes
+
 
 .. ipython::
    :verbatim:
@@ -74,6 +172,15 @@ Angles, shape, and size
 Cone, parallel, vec
 -------------------
 
+
+.. currentmodule:: tomosipo.geometry
+
+.. autosummary::
+
+   ~ProjectionGeometry.is_cone
+   ~ProjectionGeometry.is_parallel
+   ~ProjectionGeometry.is_vec
+
 Determine whether the geometry is a cone beam or parallel beam
 geometry and whether or not it is a vector geometry.
 
@@ -89,6 +196,21 @@ Coordinates for geometric calculations
 
 Specific coordinates, such as position (center of detector), `u`, `v`,
 corners, detector normal, the lower left corner, etc.
+
+
+.. currentmodule:: tomosipo.geometry
+
+.. autosummary::
+
+   ~ProjectionGeometry.corners
+   ~ProjectionGeometry.det_normal
+   ~ProjectionGeometry.det_pos
+   ~ProjectionGeometry.det_u
+   ~ProjectionGeometry.det_v
+   ~ProjectionGeometry.lower_left_corner
+   ~ProjectionGeometry.ray_dir
+   ~ProjectionGeometry.src_pos
+
 
 .. ipython::
    :verbatim:

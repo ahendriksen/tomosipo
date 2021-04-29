@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="8f5c0e3b_28fc_42c3_9479_6c2b9e752e05" height="200" width="320">
+      <title>Click to pause/unpause, press and hold to scroll through animation</title>
+        <g>
+          <path d="M0,200 h0.0 v-5.0 h-0.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
+          <polyline points="16.00 20.00 14.40 6.28" stroke="rgb(255, 0, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 30.20 18.63" stroke="rgb(0, 255, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 17.65 23.88" stroke="rgb(0, 0, 255)" fill="none" stroke-width="1.00"/>
+<polyline points="109.35 125.83 133.02 165.37" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="182.59 113.78 215.01 149.74" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="106.01 51.18 130.97 82.29" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="184.02 41.82 218.98 69.92" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="109.35 125.83 182.59 113.78" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="133.02 165.37 215.01 149.74" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="106.01 51.18 184.02 41.82" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="130.97 82.29 218.98 69.92" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="109.35 125.83 106.01 51.18" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="133.02 165.37 130.97 82.29" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="182.59 113.78 184.02 41.82" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="215.01 149.74 218.98 69.92" stroke="black" fill="none" stroke-width="1.00"/>
+          <animate
+              attributeName="display"
+              values="none;inline;none;none"
+              keyTimes="0;0.0;1.0;1"
+              dur="3s"
+              begin="0s"
+              repeatCount="indefinite" />
+     </g>
+    
+        
+      <script type="text/ecmascript"><![CDATA[
+          function mouse_move_8f5c0e3b_28fc_42c3_9479_6c2b9e752e05(evt) {
+              if (evt.buttons > 0) {
+                    var root = document.getElementById('8f5c0e3b_28fc_42c3_9479_6c2b9e752e05');
+                    root.pauseAnimations();
+                    var new_time = 3 * evt.layerX / evt.target.getBBox().width;
+                    root.setCurrentTime(new_time);
+              }
+          }
+          function on_click_8f5c0e3b_28fc_42c3_9479_6c2b9e752e05(evt) {
+              var root = document.getElementById('8f5c0e3b_28fc_42c3_9479_6c2b9e752e05');
+              //console.log(root);
+              root.animationsPaused() ? root.unpauseAnimations() : root.pauseAnimations();
+          }
+        ]]>
+      </script>
+
+    
+        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move_8f5c0e3b_28fc_42c3_9479_6c2b9e752e05(evt)' onclick='on_click_8f5c0e3b_28fc_42c3_9479_6c2b9e752e05(evt)' width="318" height="198" stroke="gray" fill="transparent" stroke-width="1"/>
+    </svg>
+    

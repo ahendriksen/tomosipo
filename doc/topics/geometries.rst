@@ -13,39 +13,85 @@ The Z-axis points upward.
    :width: 400
    :alt: Volume geometry indexing and axes
 
-As you can see, the first coordinate indexes in the `Z` direction, the second
-coordinate in the `Y` direction, and the third coordinate in the `X` direction.
+As you can see, the first coordinate indexes in the `z` direction, the second
+coordinate in the `y` direction, and the third coordinate in the `x` direction.
 By default, each voxel has a "physical size" of `1` unit. The voxel's height,
 width, and depth can be customized arbitrarily, however.
+
+We can recreate the above figure and check the documented behavior using
+tomosipo as follows:
 
 .. testcode::
 
    import tomosipo as ts
 
-   N = 64
-   vg = ts.volume(shape=N)
+   vg = ts.volume(shape=3)
+
+   svg = ts.svg(vg, vg[0, 0, 0], vg[2, 0, 0], vg[2, 2, 2])
+   svg.save("./doc/img/topics_geometries_indexing.svg")
 
    print(vg[0, 0, 0])
-   print(vg[N - 1, 0, 0])
-   print(vg[N - 1, N - 1, N - 1])
+   print(vg[2, 0, 0])
+   print(vg[2, 2, 2])
 
 .. testoutput::
 
     ts.volume(
         shape=(1, 1, 1),
-        pos=(-31.5, -31.5, -31.5),
+        pos=(-1.0, -1.0, -1.0),
         size=(1.0, 1.0, 1.0),
     )
     ts.volume(
         shape=(1, 1, 1),
-        pos=(31.5, -31.5, -31.5),
+        pos=(1.0, -1.0, -1.0),
         size=(1.0, 1.0, 1.0),
     )
     ts.volume(
         shape=(1, 1, 1),
-        pos=(31.5, 31.5, 31.5),
+        pos=(1.0, 1.0, 1.0),
         size=(1.0, 1.0, 1.0),
     )
+
+
+.. figure:: ../img/topics_geometries_indexing.svg
+   :width: 400
+   :alt: Realized indexing of volume geometry using tomosipo
+
+We can also test that the index in the data corresponds to the index in the
+volume geometry by forward projecting on a very small detector:
+
+.. testcode::
+   :skipif: not cuda_available
+
+   import numpy as np
+   import tomosipo as ts
+
+   # Create a small detector rotating through single voxel:
+   vg = ts.volume(shape=3)
+   pg = ts.parallel(angles=4, shape=1).to_vec()
+   T = ts.translate(vg[0, 1, 2].pos)
+
+   # Save geometry animation:
+   ts.svg(vg, vg[0, 1, 2], T * pg).save("./doc/img/topics_geometries_check.svg")
+
+   # Project on detector:
+   A = ts.operator(vg, T * pg)
+   x = np.zeros(vg.shape, dtype=np.float32)
+   x[0, 1, 2] = 1.0
+   A(x)
+
+.. testoutput::
+   :skipif: not cuda_available
+
+   array([[[1.       ],
+          [1.       ],
+          [1.]]], dtype=float32)
+
+
+.. figure:: ../img/topics_geometries_check.svg
+   :width: 400
+   :alt: Projection geometry to check single voxel
+
 
 We display an example for a parallel geometry with its associated
 sinogram indexing below. The detector coordinate frame is defined by
@@ -63,16 +109,15 @@ two vectors
 
 Here, we see that the order of the physical dimensions does not match the order
 of the data indices. For performance reasons, projection data is stored as a
-sinogram stack indexed in `(V, angle, U)` order. The projection geometry
+sinogram stack indexed in `(v, angle, u)` order. The projection geometry
 coordinates are `(angles, v, u)`, however. The size of a detector pixel can be
 arbitrary and is defined by the `u` and `v` vectors.
 
-In short,
+In short:
 
--   volume geometry and data are indexed  in `(Z, Y, X)` order
--   projection geometries are indexed in `(angle, v, u)` order
--   projection data is stored as a stack of sinograms, indexed in (V,
-    angle, U) order.
+-   Volume geometry and data are indexed  in `(z, y, x)` order.
+-   Projection geometries are indexed in `(angle, v, u)` order.
+-   Projection data is stored as a **sinogram stack**, indexed in `(v, angle, u)` order.
 
 
 .. note::
@@ -85,10 +130,30 @@ In short,
 Overview of geometries
 ======================
 
-Tomosipo has six types of geometries with varying degrees of flexibility.
+At the most basic level, tomosipo can represent a boxed volume, a parallel beam,
+and a cone beam geometry. These are displayed below
+
+.. testcode:: overview
+
+   import tomosipo as ts
+   vol = ts.volume(shape=2)
+   par = ts.parallel(angles=4, shape=2)
+   cone = ts.cone(angles=5, shape=2, cone_angle=1 / 2)
+
+   ts.svg(vol).save("./doc/img/topics_geometries_vol.svg")
+   ts.svg(par).save("./doc/img/topics_geometries_par.svg")
+   ts.svg(cone).save("./doc/img/topics_geometries_cone.svg")
+
+
+.. image:: ../img/topics_geometries_vol.svg
+   :width: 25%
+.. image:: ../img/topics_geometries_par.svg
+   :width: 25%
+.. image:: ../img/topics_geometries_cone.svg
+   :width: 25%
 
 .. tabularcolumns:: |l|p{2px}|
-.. list-table:: Geometries
+.. list-table:: Basic geometries
    :width: 50
    :widths: 10 40
    :header-rows: 1
@@ -97,42 +162,151 @@ Tomosipo has six types of geometries with varying degrees of flexibility.
      - Geometry
    * - :meth:`tomosipo.parallel`
      - 3D circular parallel beam geometry
-   * - :meth:`tomosipo.parallel_vec`
-     - 3D arbitrarily-oriented parallel beam geometry
    * - :meth:`tomosipo.cone`
      - 3D circular cone beam geometry
-   * - :meth:`tomosipo.cone_vec`
-     - 3D arbitrarily-oriented cone beam geometry
    * - :meth:`tomosipo.volume`
      - 3D axis-aligned volume geometry
+
+
+In addition, tomosipo also can represent arbitrarily oriented versions of these
+geometries. These are known as vector geometries and can be created using the `to_vec()` method:
+
+.. doctest:: overview
+
+   >>> vol.to_vec()
+   ts.volume_vec(
+       shape=(2, 2, 2),
+       pos=array([[0., 0., 0.]]),
+       w=array([[1., 0., 0.]]),
+       v=array([[0., 1., 0.]]),
+       u=array([[0., 0., 1.]]),
+   )
+
+Usually, it is not necessary to create vector geometries manually by specifying
+their coordinate axes manually. In tomosipo, it is easier to start with a basic
+geometry and transform it using geometric transforms, as described in TODO. 
+If you need to manually define vector geometry, use the following functions:
+
+.. tabularcolumns:: |l|p{2px}|
+.. list-table:: Vector (arbitrarily oriented) geometries
+   :width: 50
+   :widths: 10 40
+   :header-rows: 1
+
+   * - Creation function
+     - Geometry
+   * - :meth:`tomosipo.parallel_vec`
+     - 3D arbitrarily-oriented parallel beam geometry
+   * - :meth:`tomosipo.cone_vec`
+     - 3D arbitrarily-oriented cone beam geometry
    * - :meth:`tomosipo.volume_vec`
      - 3D arbitrarily-oriented volume geometry.
 
-.. note::
 
-   For a more detailed overview of the properties of the created geometry classes,
-   see :ref:`summary-geometry-classes`.
-
-Useful properties
+Geometry creation
 =================
+
+Creation of circular projection geometries
+------------------------------------------
+
+The following conventions are used:
+
+1. The `size` and `shape` parameters can be provided as a single
+   float, resulting in a square detector, or as a tuple containing the
+   `height` and `width` of the detector.
+
+   .. doctest:: creation
+
+      >>> import numpy as np
+      >>> import tomosipo as ts
+      >>> ts.parallel(shape=2, size=2).det_shape
+      (2, 2)
+
+2. When `size` is not provided, it is taken to be equal to the shape,
+   i.e., the detector pixel size is equal to one in each dimension by
+   default.
+
+   .. doctest:: creation
+
+      >>> ts.parallel(shape=2).det_size
+      (2, 2)
+
+3. The `angles` parameter can be provided as a single integer. This is
+   automatically expanded to a half circle arc (:meth:`ts.parallel`) or full
+   circle arc (:meth:`ts.cone`).
+
+   .. doctest:: creation
+
+      >>> ts.parallel(angles=5).angles / np.pi
+      array([0. , 0.2, 0.4, 0.6, 0.8])
+      >>> ts.cone(angles=5, cone_angle=1 / 2).angles / np.pi
+      array([0. , 0.4, 0.8, 1.2, 1.6])
+
+
+4. An array of `angles` can also be provided, in units of **radians**.
+
+   .. doctest:: creation
+
+      >>> angles = np.linspace(0, np.pi, 5, endpoint=True)
+      >>> ts.parallel(angles=angles).angles
+      array([0.        , 0.78539816, 1.57079633, 2.35619449, 3.14159265])
+
+
+Creation of volume geometries
+-----------------------------
+
+Volume geometries can be created in a similar way to projection geometries.
+Volume geometries do not rotate by default, so no `angles` argument has to be
+provided. By default, volume geometries are centered on the origin. A different
+center can be chosen by providing the `pos` argument.
+
+.. doctest:: creation
+
+   >>> ts.volume(shape=1)
+   ts.volume(
+       shape=(1, 1, 1),
+       pos=(0.0, 0.0, 0.0),
+       size=(1.0, 1.0, 1.0),
+   )
+   >>> ts.volume(shape=10, size=1.0)
+   ts.volume(
+       shape=(10, 10, 10),
+       pos=(0.0, 0.0, 0.0),
+       size=(1.0, 1.0, 1.0),
+   )
+   >>> ts.volume(shape=10, size=.1, pos=(0.5, 0.5, 0.5))
+   ts.volume(
+       shape=(10, 10, 10),
+       pos=(0.5, 0.5, 0.5),
+       size=(0.1, 0.1, 0.1),
+   )
+
+
+
+Useful properties of geometries
+===============================
 
 Printed representation
 ----------------------
 
-.. ipython::
-   :verbatim:
+Geometries have a useful representation when printed:
 
-   In [13]: import tomosipo as ts
-      ....: pg = ts.parallel(angles=3, shape=(10, 15), size=(1, 1.5))
-      ....: pg # geometries have a useful representation when printed
-   Out[15]: ts.parallel(
+.. doctest:: properties
+
+   >>> import tomosipo as ts
+   >>> pg = ts.parallel(angles=3, shape=(10, 15), size=(1, 1.5))
+   >>> pg
+   ts.parallel(
        angles=3,
        shape=(10, 15),
        size=(1, 1.5),
    )
-
+   
 Angles, shape, and size
 -----------------------
+
+There are a number of useful properties to query a created geometry. These are listed below.
+
 
 .. currentmodule:: tomosipo.geometry
 
@@ -145,26 +319,27 @@ Angles, shape, and size
    ~ProjectionGeometry.det_size
    ~ProjectionGeometry.det_sizes
 
+For projection geometries, `num_steps` can be used interchangeable with
+`num_angles`. The properties `angles` is supported for `ts.parallel` and
+`ts.cone` only. In a vector geometry, not all pixels have to be the same size.
+In that case, `det_sizes` can be used to determine the detector size at each
+angle.
 
-.. ipython::
-   :verbatim:
+.. doctest:: properties
 
-   In [31]: pg.num_angles # number of angles
-   Out[31]: 3
+   >>> pg.num_angles # number of angles
+   3
 
-   In [18]: pg.angles # Supported for ts.parallel and ts.cone
-   Out[18]: array([0.        , 1.04719755, 2.0943951 ])
+   >>> pg.angles
+   array([0.        , 1.04719755, 2.0943951 ])
 
-   In [17]: pg.det_shape # detector shape
-   Out[17]: (10, 15)
+   >>> pg.det_shape
+   (10, 15)
 
-   In [23]: pg.det_size # detector size (in real-world metrics)
-   Out[23]: (1, 1.5)
+   >>> pg.det_size
+   (1, 1.5)
 
-   In [24]: # In a vector geometry, not all pixels have to be the same size..
-      ....: # In that case, detector_sizes can be used to determine the detector size at each angle.
-      ....: pg.det_sizes
-   Out[24]:
+   >>> pg.det_sizes
    array([[1. , 1.5],
           [1. , 1.5],
           [1. , 1.5]])
@@ -172,6 +347,8 @@ Angles, shape, and size
 Cone, parallel, vec
 -------------------
 
+The following properties determine whether the geometry is a cone beam or
+parallel beam geometry and whether or not it is a vector geometry.
 
 .. currentmodule:: tomosipo.geometry
 
@@ -181,15 +358,11 @@ Cone, parallel, vec
    ~ProjectionGeometry.is_parallel
    ~ProjectionGeometry.is_vec
 
-Determine whether the geometry is a cone beam or parallel beam
-geometry and whether or not it is a vector geometry.
 
-.. ipython::
-   :verbatim:
+.. doctest:: properties
 
-   In [34]: pg.is_parallel, pg.is_cone, pg.is_vec
-   Out[34]: (True, False, False)
-
+   >>> pg.is_parallel, pg.is_cone, pg.is_vec
+   (True, False, False)
 
 Coordinates for geometric calculations
 --------------------------------------
@@ -211,95 +384,56 @@ corners, detector normal, the lower left corner, etc.
    ~ProjectionGeometry.ray_dir
    ~ProjectionGeometry.src_pos
 
+Of these properties, `src_pos` is only supported on `cone` and `cone_vec`
+geometries and `ray_dir` is only supported on `parallel` and `parallel_vec`
+geometries.
 
-.. ipython::
-   :verbatim:
+.. doctest:: properties
 
-   In [19]: pg.corners
-   Out[19]:
+   >>> pg.corners
    array([[[-0.5       ,  0.        , -0.75      ],
            [ 0.5       ,  0.        , -0.75      ],
            [-0.5       ,  0.        ,  0.75      ],
            [ 0.5       ,  0.        ,  0.75      ]],
+   <BLANKLINE>
           [[-0.5       , -0.64951905, -0.375     ],
            [ 0.5       , -0.64951905, -0.375     ],
            [-0.5       ,  0.64951905,  0.375     ],
            [ 0.5       ,  0.64951905,  0.375     ]],
+   <BLANKLINE>
           [[-0.5       , -0.64951905,  0.375     ],
            [ 0.5       , -0.64951905,  0.375     ],
            [-0.5       ,  0.64951905, -0.375     ],
            [ 0.5       ,  0.64951905, -0.375     ]]])
 
-   In [20]: pg.det_normal
-   Out[20]:
+   >>> pg.det_normal
    array([[ 0.        ,  0.01      ,  0.        ],
           [ 0.        ,  0.005     , -0.00866025],
           [ 0.        , -0.005     , -0.00866025]])
 
-   In [21]: pg.det_pos
-   Out[21]:
+   >>> pg.det_pos
    array([[0., 0., 0.],
           [0., 0., 0.],
           [0., 0., 0.]])
 
-   In [25]: pg.det_u
-   Out[25]:
+   >>> pg.det_u
    array([[ 0.        ,  0.        ,  0.1       ],
           [ 0.        ,  0.08660254,  0.05      ],
           [ 0.        ,  0.08660254, -0.05      ]])
 
-   In [26]: pg.det_v
-   Out[26]:
+   >>> pg.det_v
    array([[0.1, 0. , 0. ],
           [0.1, 0. , 0. ],
           [0.1, 0. , 0. ]])
 
-   In [30]: pg.lower_left_corner
-   Out[30]:
+   >>> pg.lower_left_corner
    array([[-0.5       ,  0.        , -0.75      ],
           [-0.5       , -0.64951905, -0.375     ],
           [-0.5       , -0.64951905,  0.375     ]])
 
-   In [32]: pg.ray_dir
-   Out[32]:
+   >>> pg.ray_dir
    array([[ 0.       , -1.       ,  0.       ],
           [ 0.       , -0.5      ,  0.8660254],
           [ 0.       ,  0.5      ,  0.8660254]])
 
-   In [33]: pg.src_pos # Only supported on cone and cone_vec geometries
 
-
-Geometry creation
-=================
-
-Circular projection geometries
-------------------------------
-
-The following conventions are used:
-
-1. When `size` is not provided, it is taken to be equal to the shape,
-   i.e., the detector pixel size is equal to one in each dimension by
-   default.
-2. The `angles` be provided as a single integer. This is automatically
-   expanded to a half circle arc (:meth:`ts.parallel`) or full circle
-   arc (:meth:`ts.cone`).
-3. An array of `angles` can also be provided, in units of **radians**.
-4. The `size` and `shape` parameters can be provided as a single
-   float, resulting in a square detector, or as a tuple containing the
-   `height` and `width` of the detector.
-
-
-.. autofunction:: tomosipo.parallel
-.. autofunction:: tomosipo.cone
-
-Arbitrary projection geometries
--------------------------------
-
-.. autofunction:: tomosipo.parallel_vec
-.. autofunction:: tomosipo.cone_vec
-
-Volume geometries
------------------
-
-.. autofunction:: tomosipo.volume
-.. autofunction:: tomosipo.volume_vec

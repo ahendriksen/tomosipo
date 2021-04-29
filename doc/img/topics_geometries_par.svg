@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="03524fae_6dad_4b4e_b3fd_61a0bd869b86" height="200" width="320">
+      <title>Click to pause/unpause, press and hold to scroll through animation</title>
+        <g>
+          <path d="M0,200 h0.0 v-5.0 h-0.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
+          <polyline points="16.00 20.00 14.40 6.28" stroke="rgb(255, 0, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 30.20 18.63" stroke="rgb(0, 255, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 17.65 23.88" stroke="rgb(0, 0, 255)" fill="none" stroke-width="1.00"/>
+<polyline points="160.00 100.00 160.00 100.00 160.00 100.00 160.00 100.00" stroke="black" fill="none" stroke-width="0.20"/>
+<polyline points="146.78 119.68 145.93 46.39 176.16 75.94 175.05 157.36 146.78 119.68" stroke="black" fill="none" stroke-width="1.00"/>
+          <animate
+              attributeName="display"
+              values="none;inline;none;none"
+              keyTimes="0;0.0;0.25;1"
+              dur="3s"
+              begin="0s"
+              repeatCount="indefinite" />
+     </g>
+    
+<g>
+          <path d="M0,200 h80.0 v-5.0 h-80.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
+          <polyline points="16.00 20.00 14.40 6.28" stroke="rgb(255, 0, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 30.20 18.63" stroke="rgb(0, 255, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 17.65 23.88" stroke="rgb(0, 0, 255)" fill="none" stroke-width="1.00"/>
+<polyline points="160.00 100.00 160.00 100.00 160.00 100.00 160.00 100.00" stroke="black" fill="none" stroke-width="0.20"/>
+<polyline points="123.76 129.10 121.34 53.73 201.15 66.96 198.42 145.99 123.76 129.10" stroke="black" fill="none" stroke-width="1.00"/>
+          <animate
+              attributeName="display"
+              values="none;inline;none;none"
+              keyTimes="0;0.25;0.5;1"
+              dur="3s"
+              begin="0s"
+              repeatCount="indefinite" />
+     </g>
+    
+<g>
+          <path d="M0,200 h160.0 v-5.0 h-160.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
+          <polyline points="16.00 20.00 14.40 6.28" stroke="rgb(255, 0, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 30.20 18.63" stroke="rgb(0, 255, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 17.65 23.88" stroke="rgb(0, 0, 255)" fill="none" stroke-width="1.00"/>
+<polyline points="160.00 100.00 160.00 100.00 160.00 100.00 160.00 100.00" stroke="black" fill="none" stroke-width="0.20"/>
+<polyline points="120.40 144.29 117.60 65.63 200.31 54.92 197.78 130.62 120.40 144.29" stroke="black" fill="none" stroke-width="1.00"/>
+          <animate
+              attributeName="display"
+              values="none;inline;none;none"
+              keyTimes="0;0.5;0.75;1"
+              dur="3s"
+              begin="0s"
+              repeatCount="indefinite" />
+     </g>
+    
+<g>
+          <path d="M0,200 h240.0 v-5.0 h-240.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
+          <polyline points="16.00 20.00 14.40 6.28" stroke="rgb(255, 0, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 30.20 18.63" stroke="rgb(0, 255, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 17.65 23.88" stroke="rgb(0, 0, 255)" fill="none" stroke-width="1.00"/>
+<polyline points="160.00 100.00 160.00 100.00 160.00 100.00 160.00 100.00" stroke="black" fill="none" stroke-width="0.20"/>
+<polyline points="141.45 156.60 140.08 75.33 177.42 46.85 176.37 120.26 141.45 156.60" stroke="black" fill="none" stroke-width="1.00"/>
+          <animate
+              attributeName="display"
+              values="none;inline;none;none"
+              keyTimes="0;0.75;1.0;1"
+              dur="3s"
+              begin="0s"
+              repeatCount="indefinite" />
+     </g>
+    
+        
+      <script type="text/ecmascript"><![CDATA[
+          function mouse_move_03524fae_6dad_4b4e_b3fd_61a0bd869b86(evt) {
+              if (evt.buttons > 0) {
+                    var root = document.getElementById('03524fae_6dad_4b4e_b3fd_61a0bd869b86');
+                    root.pauseAnimations();
+                    var new_time = 3 * evt.layerX / evt.target.getBBox().width;
+                    root.setCurrentTime(new_time);
+              }
+          }
+          function on_click_03524fae_6dad_4b4e_b3fd_61a0bd869b86(evt) {
+              var root = document.getElementById('03524fae_6dad_4b4e_b3fd_61a0bd869b86');
+              //console.log(root);
+              root.animationsPaused() ? root.unpauseAnimations() : root.pauseAnimations();
+          }
+        ]]>
+      </script>
+
+    
+        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move_03524fae_6dad_4b4e_b3fd_61a0bd869b86(evt)' onclick='on_click_03524fae_6dad_4b4e_b3fd_61a0bd869b86(evt)' width="318" height="198" stroke="gray" fill="transparent" stroke-width="1"/>
+    </svg>
+    

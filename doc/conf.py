@@ -73,3 +73,15 @@ source_suffix = {
 
 autodoc_mock_imports = ["cupy", "ffmpeg", "pyqtgraph", "torch", "odl"]
 autosummary_generate = True
+
+# Only include tests that are part of the documentation. Doctests in code
+# comments are tested using pytest.
+# To test the documentation source blocks, use:
+# > python -msphinx -b doctest doc/ ./.doctest-output
+doctest_test_doctest_blocks = ''
+
+
+doctest_global_setup = '''
+import astra
+cuda_available = astra.use_cuda()
+'''

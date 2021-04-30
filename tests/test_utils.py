@@ -6,7 +6,7 @@
 
 import pytest
 from pytest import approx
-from tomosipo.utils import up_tuple, to_shape, to_pos, slice_interval
+from tomosipo.utils import up_tuple, to_pos, slice_interval
 import numpy as np
 import tomosipo as ts
 
@@ -63,18 +63,6 @@ def test_up_tuple():
     assert (0, 0) == up_tuple([0], 2)
     assert (0, 0) == up_tuple((0,), 2)
     assert (0, 0) == up_tuple(iter((0,)), 2)
-
-
-def test_to_shape():
-    assert (1, 1, 1) == to_shape(1)
-    assert (0, 0, 0) == to_shape(0)
-    assert (1, 1) == to_shape(1, dim=2)
-    with pytest.raises(ValueError):
-        to_shape((1, 2, 3, 4))
-    with pytest.raises(TypeError):
-        to_shape(1.0)
-    with pytest.raises(ValueError):
-        to_shape(-1)
 
 
 def test_to_pos():

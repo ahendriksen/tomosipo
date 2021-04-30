@@ -44,24 +44,6 @@ def up_tuple(x, n):
     return (x,) * n
 
 
-def to_shape(shape, dim=3, allow_zeros=True):
-    shape = up_tuple(shape, dim)
-    for s in shape:
-        if not isinstance(s, Integral):
-            raise TypeError(
-                f"Shape must contain only integers. Got {shape} with type {type(s)}. "
-            )
-    shape = tuple(map(int, shape))
-    if allow_zeros:
-        if not all(s >= 0 for s in shape):
-            raise ValueError(f"Shape must be non-negative. Got {shape}.")
-    else:
-        if not all(s >= 1 for s in shape):
-            raise ValueError(f"Shape must be positive. Got {shape}.")
-
-    return shape
-
-
 def to_pos(pos, dim=3):
     if np.isscalar(pos) and pos == 0.0:
         pos = up_tuple(pos, dim)

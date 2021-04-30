@@ -75,15 +75,6 @@ def to_pos(pos, dim=3):
     return pos
 
 
-def to_size(size, dim=3):
-    if np.isscalar(size):
-        size = up_tuple(size, dim)
-    if not all(np.ndim(s) > 0 or s >= 0.0 for s in size):
-        raise ValueError(f"Size must be non-negative. Got {size}")
-    # TODO: Check if size is a vector and nicely shaped.
-    return size
-
-
 def up_slice(key):
     if isinstance(key, Integral):
         if key == -1:

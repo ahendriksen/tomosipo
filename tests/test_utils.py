@@ -6,7 +6,7 @@
 
 import pytest
 from pytest import approx
-from tomosipo.utils import up_tuple, to_shape, to_pos, to_size, slice_interval
+from tomosipo.utils import up_tuple, to_shape, to_pos, slice_interval
 import numpy as np
 import tomosipo as ts
 
@@ -85,18 +85,6 @@ def test_to_pos():
     assert np.allclose(two_rows, to_pos(two_rows))
     with pytest.raises(ValueError):
         to_pos(1.0)
-
-
-def test_to_size():
-    assert (0, 0, 0) == to_size(0)
-    assert (0, 0) == to_size(0, dim=2)
-    assert (1, 2, 3) == to_size((1, 2, 3))
-
-    two_rows = abs(np.random.normal(size=(2, 3)))
-    assert np.allclose(two_rows, to_size(two_rows))
-
-    with pytest.raises(ValueError):
-        to_size((-1, 0, 0))
 
 
 def test_slice_interval():

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="02940c80_a514_4305_bf68_4f4941e4ebb1" height="200" width="320">
+      <title>Click to pause/unpause, press and hold to scroll through animation</title>
+        <g>
+          <path d="M0,200 h0.0 v-5.0 h-0.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
+          <polyline points="16.00 20.00 14.40 6.28" stroke="rgb(255, 0, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 30.20 18.63" stroke="rgb(0, 255, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 17.65 23.88" stroke="rgb(0, 0, 255)" fill="none" stroke-width="1.00"/>
+<polyline points="133.75 113.39 146.91 131.71" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="171.96 107.30 187.38 124.75" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="132.88 75.48 146.45 91.73" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="172.35 70.09 188.32 85.55" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="133.75 113.39 171.96 107.30" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="146.91 131.71 187.38 124.75" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="132.88 75.48 172.35 70.09" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="146.45 91.73 188.32 85.55" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="133.75 113.39 132.88 75.48" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="146.91 131.71 146.45 91.73" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="171.96 107.30 172.35 70.09" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="187.38 124.75 188.32 85.55" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="308.73 85.49 331.16 100.05" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="276.74 90.59 297.68 105.80" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="313.12 50.86 336.54 63.68" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="280.27 55.35 302.10 68.77" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="308.73 85.49 276.74 90.59" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="331.16 100.05 297.68 105.80" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="313.12 50.86 280.27 55.35" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="336.54 63.68 302.10 68.77" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="308.73 85.49 313.12 50.86" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="331.16 100.05 336.54 63.68" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="276.74 90.59 280.27 55.35" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="297.68 105.80 302.10 68.77" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="216.88 108.14 253.05 142.49" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="216.88 108.14 253.05 142.49" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="220.38 37.45 259.58 64.21" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="220.38 37.45 259.58 64.21" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="216.88 108.14 216.88 108.14" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="253.05 142.49 253.05 142.49" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="220.38 37.45 220.38 37.45" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="259.58 64.21 259.58 64.21" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="216.88 108.14 220.38 37.45" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="253.05 142.49 259.58 64.21" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="216.88 108.14 220.38 37.45" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="253.05 142.49 259.58 64.21" stroke="black" fill="none" stroke-width="1.00"/>
+          <animate
+              attributeName="display"
+              values="none;inline;none;none"
+              keyTimes="0;0.0;1.0;1"
+              dur="3s"
+              begin="0s"
+              repeatCount="indefinite" />
+     </g>
+    
+        
+      <script type="text/ecmascript"><![CDATA[
+          function mouse_move_02940c80_a514_4305_bf68_4f4941e4ebb1(evt) {
+              if (evt.buttons > 0) {
+                    var root = document.getElementById('02940c80_a514_4305_bf68_4f4941e4ebb1');
+                    root.pauseAnimations();
+                    var new_time = 3 * evt.layerX / evt.target.getBBox().width;
+                    root.setCurrentTime(new_time);
+              }
+          }
+          function on_click_02940c80_a514_4305_bf68_4f4941e4ebb1(evt) {
+              var root = document.getElementById('02940c80_a514_4305_bf68_4f4941e4ebb1');
+              //console.log(root);
+              root.animationsPaused() ? root.unpauseAnimations() : root.pauseAnimations();
+          }
+        ]]>
+      </script>
+
+    
+        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move_02940c80_a514_4305_bf68_4f4941e4ebb1(evt)' onclick='on_click_02940c80_a514_4305_bf68_4f4941e4ebb1(evt)' width="318" height="198" stroke="gray" fill="transparent" stroke-width="1"/>
+    </svg>
+    

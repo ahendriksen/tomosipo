@@ -7,4 +7,5 @@ Introductions to all the key parts of tomosipo you’ll need to know:
    :maxdepth: 2
 
    geometries.rst
+   transforms.rst
    conventions.rst

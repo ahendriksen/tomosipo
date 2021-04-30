@@ -31,6 +31,8 @@ author = 'Allard Hendriksen'
 extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',
+    'sphinx_autodoc_typehints',
     'sphinx.ext.todo',
     'sphinx.ext.doctest',
     'sphinx.ext.viewcode',
@@ -73,6 +75,10 @@ source_suffix = {
 
 autodoc_mock_imports = ["cupy", "ffmpeg", "pyqtgraph", "torch", "odl"]
 autosummary_generate = True
+
+napoleon_google_docstring = False
+napoleon_use_param = True
+napoleon_use_ivar = True
 
 # Only include tests that are part of the documentation. Doctests in code
 # comments are tested using pytest.

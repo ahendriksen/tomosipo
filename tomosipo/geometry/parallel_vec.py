@@ -4,37 +4,52 @@
 
 import numpy as np
 import tomosipo as ts
+from typing import Union
+from tomosipo.types import ToShape2D, ToPos, ToSize2D, ToVec
 import tomosipo.vector_calc as vc
-from tomosipo.utils import up_tuple, up_slice
 from .base_projection import ProjectionGeometry
 from . import det_vec as dv
 from .transform import Transform
 
 
-def parallel_vec(*, shape, ray_dir, det_pos, det_v, det_u):
-    """Create a parallel-beam vector geometry
+def parallel_vec(*,
+                 shape: ToShape2D,
+                 ray_dir: ToVec,
+                 det_pos: ToVec,
+                 det_v: ToVec,
+                 det_u: ToVec):
+    """Create an arbitrarily oriented parallel-beam geometry
 
-    :param shape: (`int`, `int`) or `int`
+    Parameters
+    ----------
+
+    shape:
         The detector shape in pixels. If tuple, the order is
-        (height, width). Else the pixel has the same number of
+        `(height, width)`. Else the pixel has the same number of
         pixels in the U and V direction.
-    :param ray_dir: np.array
+
+    ray_dir:
         A numpy array of dimension (num_positions, 3) with the
         ray direction in (Z, Y, X) order.
-    :param det_pos:
+
+    det_pos:
         A numpy array of dimension (num_positions, 3) with the
         detector center positions in (Z, Y, X) order.
-    :param det_v:
+
+    det_v:
         A numpy array of dimension (num_positions, 3) with the
         vector pointing from the detector (0, 0) to (1, 0) pixel
         (up).
-    :param det_u:
+
+    det_u:
         A numpy array of dimension (num_positions, 3) with the
         vector pointing from the detector (0, 0) to (0, 1) pixel
         (sideways).
 
-    :returns: An arbitrarily oriented parallel-beam geometry
-    :rtype: ParallelVectorGeometry
+    Returns
+    -------
+    ParallelVectorGeometry
+        An arbitrarily oriented parallel-beam geometry
     """
     return ParallelVectorGeometry(shape, ray_dir, det_pos, det_v, det_u)
 
@@ -54,40 +69,52 @@ class ParallelVectorGeometry(ProjectionGeometry):
     """Documentation for ParallelVectorGeometry"""
 
     def __init__(self, shape, ray_dir, det_pos, det_v, det_u):
-        """Create a parallel-beam vector geometry
+        """Create an arbitrarily oriented parallel-beam geometry
 
-        :param shape: (`int`, `int`) or `int`
+        Parameters
+        ----------
+
+        shape:
             The detector shape in pixels. If tuple, the order is
             (height, width). Else the pixel has the same number of
             pixels in the U and V direction.
-        :param ray_dir: np.array
+
+        ray_dir:
             A numpy array of dimension (num_positions, 3) with the
             ray direction in (Z, Y, X) order.
-        :param det_pos:
+
+        det_pos:
             A numpy array of dimension (num_positions, 3) with the
             detector center positions in (Z, Y, X) order.
-        :param det_v:
+
+        det_v:
             A numpy array of dimension (num_positions, 3) with the
             vector pointing from the detector (0, 0) to (1, 0) pixel
             (up).
-        :param det_u:
+
+        det_u:
             A numpy array of dimension (num_positions, 3) with the
             vector pointing from the detector (0, 0) to (0, 1) pixel
             (sideways).
-        :returns: An arbitrarily oriented parallel-beam geometry
-        :rtype: ParallelVectorGeometry
         """
-
         super(ParallelVectorGeometry, self).__init__(shape=shape)
 
-        ray_dir, det_pos, det_v, det_u = (
-            vc.to_vec(x) for x in (ray_dir, det_pos, det_v, det_u)
-        )
+        ray_dir = ts.types.to_vec(ray_dir, 'ray direction')
+        det_pos = ts.types.to_vec(det_pos, 'detector position')
+        det_v = ts.types.to_vec(det_v, 'v axis')
+        det_u = ts.types.to_vec(det_u, 'u axis')
+
         ray_dir, det_pos, det_v, det_u = np.broadcast_arrays(
             ray_dir, det_pos, det_v, det_u
         )
 
-        vc.check_same_shapes(ray_dir, det_pos, det_v, det_u)
+        shapes = [x.shape for x in [ray_dir, det_pos, det_v, det_u]]
+
+        if min(shapes) != max(shapes):
+            raise ValueError(
+                "Not all arguments ray_dir, det_pos, det_v, det_u are the same shape. "
+                f"Got: {shapes}"
+            )
 
         self._ray_dir = ray_dir
         self._det_vec = dv.det_vec(shape, det_pos, det_v, det_u)
@@ -288,9 +315,9 @@ class ParallelVectorGeometry(ProjectionGeometry):
 
     def project_point(self, point):
         if np.isscalar(point):
-            point = up_tuple(point, 3)
+            point = ts.types.to_pos(point)
 
-        v_origin = vc.to_vec(point)
+        v_origin = ts.types.to_vec(point)
 
         det_pos = self._det_vec.det_pos
         det_v = self.det_v

@@ -5,6 +5,7 @@ We summarize important functions and classes that you may encounter in daily
 usage of tomosipo. This list is not meant to be exhaustive.
 
 .. _summary-create-geometries:
+
 Create geometries
 -----------------
 
@@ -27,6 +28,7 @@ Create geometric transforms
    tomosipo.translate
    tomosipo.rotate
    tomosipo.scale
+   tomosipo.reflect
    tomosipo.to_perspective
    tomosipo.from_perspective
 

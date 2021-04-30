@@ -1,7 +1,9 @@
 import tomosipo as ts
 import numpy as np
+from . import skip_if_no_cuda
 
 
+@skip_if_no_cuda
 def test_display_data(interactive):
     if interactive:
         from tomosipo.qt import display

@@ -2,38 +2,44 @@ import astra
 import warnings
 import numpy as np
 import tomosipo as ts
-from tomosipo.utils import up_tuple, up_slice
+from tomosipo.types import ToShape2D, ToSize2D, ToScalars
+from typing import Union, Tuple
 from .base_projection import ProjectionGeometry
 from .parallel_vec import ParallelVectorGeometry
 from .transform import Transform
 
 
-def parallel(*, angles=1, shape=1, size=None):
-    """Create a parallel-beam geometry
+def parallel(*,
+             angles: Union[int, ToScalars] = 1,
+             shape: ToShape2D = 1,
+             size: ToSize2D = None):
+    """Create a circular parallel-beam geometry
 
-    :param angles: `np.array` or integral value
-
+    Parameters
+    ----------
+    angles:
         If integral value: the number of angles in the parallel-beam
         geometry. This describes a half arc (pi radians) with
         uniform placement and without the start and end point
         overlapping.
 
-        If `np.array`: the values of the array are taken as
+        If `np.ndarray`: the values of the array are taken as
         projection angle (units are radians).
 
-    :param shape: (`int`, `int`) or `int`
+    shape:
         The detector shape in pixels. If tuple, the order is
         (height, width). Else the pixel has the same number of
-        pixels in the U and V direction.
-    :param size: (float, float) or float
+        pixels in the `u` and `v` direction.
+    size:
         The detector size. If a single float is provided, the
         detector is square with equal width and height.
 
-        The order is (height, width), i.e. (v, u).
+        The order is `(height, width)`, i.e. `(v, u)`.
 
-    :returns: A circular parallel-beam geometry
-    :rtype: ParallelGeometry
-
+    Returns
+    -------
+    ParallelGeometry
+        A circular parallel-beam geometry
     """
     return ParallelGeometry(angles, shape, size)
 
@@ -49,56 +55,53 @@ class ParallelGeometry(ProjectionGeometry):
     """A parametrized parallel-beam geometry"""
 
     def __init__(self, angles=1, shape=1, size=None):
-        """Create a parallel-beam geometry
+        """Create a circular parallel-beam geometry
 
-        :param angles: `np.array` or integral value
+        Parameters
+        ----------
+        angles:
             If integral value: the number of angles in the parallel-beam
             geometry. This describes a half arc (pi radians) with
             uniform placement and without the start and end point
             overlapping.
 
-            If np.array: the values of the array are taken as
+            If `np.array`: the values of the array are taken as
             projection angle (units are radians).
-        :param size: (float, float) or float
+
+        shape:
+            The detector shape in pixels. If tuple, the order is
+            (height, width). Else the pixel has the same number of
+            pixels in the `u` and `v` direction.
+        size:
             The detector size. If a single float is provided, the
             detector is square with equal width and height.
 
-            The order is (height, width), i.e. (v, u).
+            The order is `(height, width)`, i.e. `(v, u)`.
 
-        :param shape: (`int`, `int`) or `int`
-            The detector shape in pixels. If tuple, the order is
-            (height, width). Else the pixel has the same number of
-            pixels in the U and V direction.
-        :returns: a parallel-beam geometry
-        :rtype: ParallelGeometry
         """
         # Shape
         super(ParallelGeometry, self).__init__(shape=shape)
 
         # Angles
         self._angles_original = angles
-        if np.isscalar(angles):
+        if np.isscalar(angles) and isinstance(angles, int):
             # 180°; first and last angle are not parallel.
             angles = np.linspace(0, np.pi, angles, endpoint=False)
         else:
-            angles = np.array(angles, ndmin=1, dtype=np.float64)
+            angles = ts.types.to_scalars(angles, var_name='angles')
 
         if len(angles) == 0:
-            raise ValueError(
+            raise TypeError(
                 f"ParallelGeometry expects non-empty array of angles; got {self._angles_original}"
             )
-        if angles.ndim > 1:
-            raise ValueError(
-                f"ParallelGeometry expects one-dimensional array of angles; got {self._angles_original}"
-            )
+
         self._angles = angles
 
         # Size
         if size is None:
             size = shape
 
-        # TODO: This does not appear to reject a size of (1, 1, 1) [wrong dimensions]..
-        self._size = ts.utils.to_size(size, dim=2)
+        self._size = ts.types.to_size2d(size)
 
         self._is_cone = False
         self._is_parallel = True
@@ -258,7 +261,7 @@ class ParallelGeometry(ProjectionGeometry):
     ###########################################################################
 
     def rescale_det(self, scale):
-        scaleV, scaleU = up_tuple(scale, 2)
+        scaleV, scaleU = ts.types.to_size2d(scale)
         scaleV, scaleU = int(scaleV), int(scaleU)
         shape = (self.det_shape[0] // scaleV, self.det_shape[1] // scaleU)
 

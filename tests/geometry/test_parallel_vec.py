@@ -3,7 +3,6 @@ from pytest import approx
 import numpy as np
 import tomosipo as ts
 from tomosipo.geometry import random_transform, random_parallel_vec
-from tomosipo.utils import up_tuple
 import tomosipo.vector_calc as vc
 from tomosipo.geometry import transform
 
@@ -49,11 +48,11 @@ def test_init():
         # must use `shape=1`:
         ts.parallel_vec(1, **kwargs)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         # Shape of 0 is not allowed
         ts.parallel_vec(shape=0, **kwargs)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         vecs = np.random.normal(size=(10, 2))
         two_dim_args = dict(
             ray_dir=vecs,
@@ -201,11 +200,11 @@ def test_corners(par_vecs):
 
 def test_reshape(par_vecs):
     for pg in par_vecs:
-        for shape in [1, (3, 5)]:
-            pg_reshaped = pg.reshape(shape)
-            assert pg_reshaped.ray_dir == approx(pg.ray_dir)
-            assert pg_reshaped.det_shape == up_tuple(shape, 2)
-            assert pg_reshaped.det_sizes == approx(pg.det_sizes)
+        pg.reshape(1).det_shape == (1, 1)
+        pg.reshape((3, 5)).det_shape == (3, 5)
+
+        pg.reshape(1).det_sizes == pg.det_sizes
+        pg.reshape((3, 5)).det_sizes == approx(pg.det_sizes)
 
 
 def test_rescale_par_vecs(par_vecs):

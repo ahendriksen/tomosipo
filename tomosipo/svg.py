@@ -172,7 +172,9 @@ def default_camera(height, width, angle=1 / 2.7):
 def project_pos(camera, pos):
     assert len(camera) == 1, "Camera must have single viewpoint"
 
-    pos = vc.to_vec(ts.utils.to_pos(pos))
+    if np.isscalar(pos):
+        pos = ts.types.to_pos(pos)
+    pos = ts.types.to_vec(pos)
     # Project onto camera coordinates:
     pos = np.array([camera.project_point(p)[0] for p in pos])
     # Move (0, 0) from detector center to detector lower-left corner

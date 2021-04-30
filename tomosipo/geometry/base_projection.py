@@ -35,7 +35,7 @@ class ProjectionGeometry(object):
         :rtype:
 
         """
-        height, width = ts.utils.to_shape(shape, dim=2, allow_zeros=False)
+        height, width = ts.types.to_shape2d(shape)
 
         self._shape = (height, width)
 
@@ -138,7 +138,7 @@ class ProjectionGeometry(object):
     def num_steps(self):
         """The number of orientations in the geometry
 
-        This property equals `num_angles' and is provided so
+        This property equals `num_angles` and is provided so
         projection geometries and volume geometries share the same
         interface.
 

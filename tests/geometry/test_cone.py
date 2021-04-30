@@ -24,7 +24,7 @@ def test_init(interactive):
     with pytest.raises(TypeError):
         ts.cone(angles=1, shape=None, cone_angle=1)
     with pytest.raises(TypeError):
-        assert ts.cone(angles=None, shape=1, cone_angle=1).num_angles == 1
+        ts.cone(angles=None, shape=1, cone_angle=1)
 
     # Check combinations of cone_angle, src_orig_dist, and src_det_dist.
     ass_kws = dict(angles=1, shape=1, size=1)
@@ -50,7 +50,7 @@ def test_init(interactive):
     pg = ts.cone(angles=np.linspace(0, 1, 100), cone_angle=1)
     assert pg.num_angles == 100
 
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=[])
 
     representation = repr(pg)
@@ -64,7 +64,7 @@ def test_repr():
     r = """ts.cone(
     angles=10,
     shape=(11, 11),
-    size=(1, 1),
+    size=(1.0, 1.0),
     src_orig_dist=5.0,
     src_det_dist=6.0,
 )"""
@@ -134,12 +134,8 @@ def test_to_vec():
         else:
             angles = num_angles
 
-        if tupled:
-            shape = np.random.uniform(1, 100, size=2).astype(np.int)
-            size = np.random.uniform(1, 100, size=2)
-        else:
-            shape = np.random.uniform(1, 100, size=1).astype(np.int)
-            size = np.random.uniform(1, 100, size=1)
+        shape = np.random.uniform(1, 100, size=2).astype(np.int)
+        size = np.random.uniform(1, 100, size=2)
 
         pg = ts.cone(
             angles=angles,
@@ -169,12 +165,8 @@ def test_to_from_astra():
         else:
             angles = num_angles
 
-        if tupled:
-            shape = np.random.uniform(1, 100, size=2).astype(np.int)
-            size = np.random.uniform(1, 100, size=2)
-        else:
-            shape = np.random.uniform(1, 100, size=1).astype(np.int)
-            size = np.random.uniform(1, 100, size=1)
+        shape = np.random.uniform(1, 100, size=2).astype(np.int)
+        size = np.random.uniform(1, 100, size=2)
 
         pg = ts.cone(
             angles=angles, shape=shape, size=size, cone_angle=np.random.uniform(0.5, 1)

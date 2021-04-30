@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="bdd4f918_5aca_42c3_96f0_795a1fa308dd" height="200" width="320">
+      <title>Click to pause/unpause, press and hold to scroll through animation</title>
+        <g>
+          <path d="M0,200 h0.0 v-5.0 h-0.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
+          <polyline points="16.00 20.00 14.40 6.28" stroke="rgb(255, 0, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 30.20 18.63" stroke="rgb(0, 255, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 17.65 23.88" stroke="rgb(0, 0, 255)" fill="none" stroke-width="1.00"/>
+<polyline points="133.75 113.39 146.91 131.71" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="171.96 107.30 187.38 124.75" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="132.88 75.48 146.45 91.73" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="172.35 70.09 188.32 85.55" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="133.75 113.39 171.96 107.30" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="146.91 131.71 187.38 124.75" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="132.88 75.48 172.35 70.09" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="146.45 91.73 188.32 85.55" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="133.75 113.39 132.88 75.48" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="146.91 131.71 146.45 91.73" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="171.96 107.30 172.35 70.09" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="187.38 124.75 188.32 85.55" stroke="black" fill="none" stroke-width="1.00"/>
+          <animate
+              attributeName="display"
+              values="none;inline;none;none"
+              keyTimes="0;0.0;0.2;1"
+              dur="3s"
+              begin="0s"
+              repeatCount="indefinite" />
+     </g>
+    
+<g>
+          <path d="M0,200 h64.0 v-5.0 h-64.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
+          <polyline points="16.00 20.00 14.40 6.28" stroke="rgb(255, 0, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 30.20 18.63" stroke="rgb(0, 255, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 17.65 23.88" stroke="rgb(0, 0, 255)" fill="none" stroke-width="1.00"/>
+<polyline points="127.48 116.59 143.52 139.93" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="174.73 108.99 194.26 130.98" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="126.14 69.38 142.77 89.49" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="175.33 62.87 195.76 81.76" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="127.48 116.59 174.73 108.99" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="143.52 139.93 194.26 130.98" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="126.14 69.38 175.33 62.87" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="142.77 89.49 195.76 81.76" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="127.48 116.59 126.14 69.38" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="143.52 139.93 142.77 89.49" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="174.73 108.99 175.33 62.87" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="194.26 130.98 195.76 81.76" stroke="black" fill="none" stroke-width="1.00"/>
+          <animate
+              attributeName="display"
+              values="none;inline;none;none"
+              keyTimes="0;0.2;0.4;1"
+              dur="3s"
+              begin="0s"
+              repeatCount="indefinite" />
+     </g>
+    
+<g>
+          <path d="M0,200 h128.0 v-5.0 h-128.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
+          <polyline points="16.00 20.00 14.40 6.28" stroke="rgb(255, 0, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 30.20 18.63" stroke="rgb(0, 255, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 17.65 23.88" stroke="rgb(0, 0, 255)" fill="none" stroke-width="1.00"/>
+<polyline points="121.33 119.72 140.07 148.28" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="177.43 110.63 201.16 137.22" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="119.41 63.30 138.97 87.17" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="178.26 55.76 203.34 77.89" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="121.33 119.72 177.43 110.63" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="140.07 148.28 201.16 137.22" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="119.41 63.30 178.26 55.76" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="138.97 87.17 203.34 77.89" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="121.33 119.72 119.41 63.30" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="140.07 148.28 138.97 87.17" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="177.43 110.63 178.26 55.76" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="201.16 137.22 203.34 77.89" stroke="black" fill="none" stroke-width="1.00"/>
+          <animate
+              attributeName="display"
+              values="none;inline;none;none"
+              keyTimes="0;0.4;0.6000000000000001;1"
+              dur="3s"
+              begin="0s"
+              repeatCount="indefinite" />
+     </g>
+    
+<g>
+          <path d="M0,200 h192.00000000000003 v-5.0 h-192.00000000000003 Z" fill="black" stroke="none" fill-opacity="0.2"/>
+          <polyline points="16.00 20.00 14.40 6.28" stroke="rgb(255, 0, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 30.20 18.63" stroke="rgb(0, 255, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 17.65 23.88" stroke="rgb(0, 0, 255)" fill="none" stroke-width="1.00"/>
+<polyline points="115.28 122.81 136.57 156.76" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="180.05 112.23 208.08 143.47" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="112.70 57.23 135.04 84.77" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="181.16 48.74 211.08 73.95" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="115.28 122.81 180.05 112.23" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="136.57 156.76 208.08 143.47" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="112.70 57.23 181.16 48.74" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="135.04 84.77 211.08 73.95" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="115.28 122.81 112.70 57.23" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="136.57 156.76 135.04 84.77" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="180.05 112.23 181.16 48.74" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="208.08 143.47 211.08 73.95" stroke="black" fill="none" stroke-width="1.00"/>
+          <animate
+              attributeName="display"
+              values="none;inline;none;none"
+              keyTimes="0;0.6000000000000001;0.8;1"
+              dur="3s"
+              begin="0s"
+              repeatCount="indefinite" />
+     </g>
+    
+<g>
+          <path d="M0,200 h256.0 v-5.0 h-256.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
+          <polyline points="16.00 20.00 14.40 6.28" stroke="rgb(255, 0, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 30.20 18.63" stroke="rgb(0, 255, 0)" fill="none" stroke-width="1.00"/>
+<polyline points="16.00 20.00 17.65 23.88" stroke="rgb(0, 0, 255)" fill="none" stroke-width="1.00"/>
+<polyline points="109.35 125.83 133.02 165.37" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="182.59 113.78 215.01 149.74" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="106.01 51.18 130.97 82.29" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="184.02 41.82 218.98 69.92" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="109.35 125.83 182.59 113.78" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="133.02 165.37 215.01 149.74" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="106.01 51.18 184.02 41.82" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="130.97 82.29 218.98 69.92" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="109.35 125.83 106.01 51.18" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="133.02 165.37 130.97 82.29" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="182.59 113.78 184.02 41.82" stroke="black" fill="none" stroke-width="1.00"/>
+<polyline points="215.01 149.74 218.98 69.92" stroke="black" fill="none" stroke-width="1.00"/>
+          <animate
+              attributeName="display"
+              values="none;inline;none;none"
+              keyTimes="0;0.8;1.0;1"
+              dur="3s"
+              begin="0s"
+              repeatCount="indefinite" />
+     </g>
+    
+        
+      <script type="text/ecmascript"><![CDATA[
+          function mouse_move_bdd4f918_5aca_42c3_96f0_795a1fa308dd(evt) {
+              if (evt.buttons > 0) {
+                    var root = document.getElementById('bdd4f918_5aca_42c3_96f0_795a1fa308dd');
+                    root.pauseAnimations();
+                    var new_time = 3 * evt.layerX / evt.target.getBBox().width;
+                    root.setCurrentTime(new_time);
+              }
+          }
+          function on_click_bdd4f918_5aca_42c3_96f0_795a1fa308dd(evt) {
+              var root = document.getElementById('bdd4f918_5aca_42c3_96f0_795a1fa308dd');
+              //console.log(root);
+              root.animationsPaused() ? root.unpauseAnimations() : root.pauseAnimations();
+          }
+        ]]>
+      </script>
+
+    
+        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move_bdd4f918_5aca_42c3_96f0_795a1fa308dd(evt)' onclick='on_click_bdd4f918_5aca_42c3_96f0_795a1fa308dd(evt)' width="318" height="198" stroke="gray" fill="transparent" stroke-width="1"/>
+    </svg>
+    

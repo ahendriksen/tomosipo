@@ -1,40 +1,57 @@
 import numpy as np
 from tomosipo.utils import slice_interval
 from numbers import Integral
+from typing import Union
 import tomosipo as ts
+from tomosipo.types import ToShape3D, ToPos, ToSize3D, ToVec
 from tomosipo import vector_calc as vc
 from .transform import Transform
 
 
-def volume_vec(*, shape, pos=0, w=(1, 0, 0), v=(0, 1, 0), u=(0, 0, 1)):
-    """Create a new volume vector geometry
+def volume_vec(
+    *,
+    shape: ToShape3D,
+    pos: Union[float, ToVec] = 0,
+    w: ToVec = (1, 0, 0),
+    v: ToVec = (0, 1, 0),
+    u: ToVec = (0, 0, 1),
+):
+    """Create an arbitrarily oriented volume geometry
 
     Like the parallel and cone vector geometries, the volume vector
     geometry can be arbitrarily oriented and positioned.
 
-    The position describes the center of the volume.
+    The position describes the center of the volume. The vectors `w, v, u`
+    describe the coordinate frame of a single voxel, just like `u` and `v` do
+    for detector pixels of vector projection geometries.
 
-    :param shape: `(int, int, int)` or `int`
-        The shape of the volume as measured in basis elements w,
-        v, u.
-    :param pos: `scalar`, `np.array`
+    Parameters
+    ----------
+
+    shape:
+        The shape of the volume in voxels.
+    pos:
         A numpy array of dimension (num_steps, 3)
         describing the center of the volume in world-coordinates
-        `(Z, Y, X)`. You may also pass a 3-tuple or a scalar.
-    :param w: `np.array` (optional)
+        `(z, y, x)`. You may also pass a 3-tuple or a scalar.
+    w:
         A numpy array of dimension (num_steps, 3)
-        describing the `w` basis element in `(Z, Y, X)`
+        describing the `w` basis element in `(z, y, x)`
         coordinates. Default is `(1, 0, 0)`.
-    :param v: `np.array` (optional)
+    v:
         A numpy array of dimension (num_steps, 3)
-        describing the `v` basis element in `(Z, Y, X)`
+        describing the `v` basis element in `(z, y, x)`
         coordinates. Default is `(0, 1, 0)`.
-    :param u: `np.array` (optional)
+    u:
         A numpy array of dimension (num_steps, 3)
-        describing the `u` basis element in `(Z, Y, X)`
+        describing the `u` basis element in `(z, y, x)`
         coordinates. Default is `(0, 0, 1)`.
-    :returns:
-    :rtype:
+
+    Returns
+    -------
+
+    VolumeVectorGeometry
+        An arbitarily oriented volume geometry.
 
     """
     return VolumeVectorGeometry(shape, pos, w, v, u)
@@ -51,7 +68,7 @@ def random_volume_vec():
 
     RT = ts.geometry.random_transform()
     vg = ts.volume_vec(
-        shape=np.random.uniform(2, 10, size=3).astype(int),
+        shape=np.random.uniform(4, 10, size=3).astype(int),
         pos=np.random.normal(size=3),
     )
     return RT * vg
@@ -61,48 +78,57 @@ class VolumeVectorGeometry(object):
     """Documentation for VolumeVectorGeometry"""
 
     def __init__(self, shape, pos, w=(1, 0, 0), v=(0, 1, 0), u=(0, 0, 1)):
-        """Create a new volume vector geometry
+        """Create an arbitrarily oriented volume geometry
 
-        An arbitarily oriented volume with multiple orientations and positions.
+        Like the parallel and cone vector geometries, the volume vector
+        geometry can be arbitrarily oriented and positioned.
 
-        The position describes the center of the volume.
+        The position describes the center of the volume. The vectors `w, v, u`
+        describe the coordinate frame of a single voxel, just like `u` and `v` do
+        for detector pixels of vector projection geometries.
 
-        :param shape: `(int, int, int)` or `int`
-            The shape of the volume as measured in basis elements w,
-            v, u.
-        :param pos: `scalar`, `np.array`
+        Parameters
+        ----------
+
+        shape:
+            The shape of the volume in voxels.
+        pos:
             A numpy array of dimension (num_steps, 3)
             describing the center of the volume in world-coordinates
-            `(Z, Y, X)`. You may also pass a 3-tuple or a scalar.
-        :param w: `np.array` (optional)
+            `(z, y, x)`. You may also pass a 3-tuple or a scalar.
+        w:
             A numpy array of dimension (num_steps, 3)
-            describing the `w` basis element in `(Z, Y, X)`
+            describing the `w` basis element in `(z, y, x)`
             coordinates. Default is `(1, 0, 0)`.
-        :param v: `np.array` (optional)
+        v:
             A numpy array of dimension (num_steps, 3)
-            describing the `v` basis element in `(Z, Y, X)`
+            describing the `v` basis element in `(z, y, x)`
             coordinates. Default is `(0, 1, 0)`.
-        :param u: `np.array` (optional)
+        u:
             A numpy array of dimension (num_steps, 3)
-            describing the `u` basis element in `(Z, Y, X)`
+            describing the `u` basis element in `(z, y, x)`
             coordinates. Default is `(0, 0, 1)`.
-        :returns:
-        :rtype:
 
         """
         super().__init__()
 
-        self._shape = ts.utils.to_shape(shape)
-        pos = ts.utils.to_pos(pos)
+        self._shape = ts.types.to_shape3d(shape)
+        if np.isscalar(pos) and pos == 0.0:
+            pos = (0.0, 0.0, 0.0)
 
-        pos, w, v, u = np.broadcast_arrays(*(vc.to_vec(x) for x in (pos, w, v, u)))
+        pos = ts.types.to_vec(pos, 'position')
+        w = ts.types.to_vec(w, 'w axis')
+        v = ts.types.to_vec(v, 'v axis')
+        u = ts.types.to_vec(u, 'u axis')
+
+        pos, w, v, u = np.broadcast_arrays(pos, w, v, u)
         self._pos, self._w, self._v, self._u = pos, w, v, u
 
         shapes = [x.shape for x in [pos, w, v, u]]
 
         if min(shapes) != max(shapes):
             raise ValueError(
-                "Not all arguments pos, w, v, u are the same shape. " f"Got: {shapes}"
+                f"Not all arguments pos, w, v, u are the same shape. Got: {shapes}"
             )
 
     def __repr__(self):
@@ -383,7 +409,7 @@ class VolumeVectorGeometry(object):
         :rtype: VolumeVectorGeometry
 
         """
-        new_shape = ts.utils.to_shape(new_shape)
+        new_shape = ts.types.to_shape3d(new_shape)
         new_w = self.sizes[:, 0] / max(new_shape[0], 1)
         new_v = self.sizes[:, 1] / max(new_shape[1], 1)
         new_u = self.sizes[:, 2] / max(new_shape[2], 1)

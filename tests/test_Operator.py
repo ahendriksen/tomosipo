@@ -9,8 +9,10 @@ import numpy as np
 import tomosipo as ts
 import itertools
 from .geometry.test_transform import scalings, rotations, translations
+from . import skip_if_no_cuda
 
 
+@skip_if_no_cuda
 def test_forward_backward():
     pd = ts.data(ts.cone(size=np.sqrt(2), cone_angle=1 / 2, shape=10))
     vd = ts.data(ts.volume(shape=10))
@@ -27,6 +29,7 @@ def test_forward_backward():
         ts.backward(*data, **kwargs)
 
 
+@skip_if_no_cuda
 def test_fdk(interactive):
     if interactive:
         from tomosipo.qt import display
@@ -49,6 +52,7 @@ def test_fdk(interactive):
         display(vd)
 
 
+@skip_if_no_cuda
 def test_operator():
     pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=150, shape=100)
     vg = ts.volume(shape=100)
@@ -68,6 +72,7 @@ def test_operator():
     assert np.sum(abs(x1.data - x2.data)) == approx(0.0)
 
 
+@skip_if_no_cuda
 def test_operator_additive():
     pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=150, shape=100)
     vg = ts.volume(shape=100)
@@ -84,6 +89,7 @@ def test_operator_additive():
     assert np.allclose(2 * A(x).data, y.data)
 
 
+@skip_if_no_cuda
 @pytest.mark.parametrize(
     "S, T, R", itertools.product(scalings, translations, rotations)
 )
@@ -117,6 +123,7 @@ def test_operator_volume_vector(S, T, R):
     assert np.allclose(A_v.T(A_v(x)), A_p.T(A_p(x)))
 
 
+@skip_if_no_cuda
 def test_volume_vector():
     """Test volume vector with multiple steps
 

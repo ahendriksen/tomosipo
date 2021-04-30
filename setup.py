@@ -37,6 +37,7 @@ dev_requirements = [
     # Documentation
     'sphinx',
     'sphinx_rtd_theme',
+    'sphinx-autodoc-typehints',
     'recommonmark',
     # Other
     'watchdog',

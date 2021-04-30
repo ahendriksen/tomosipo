@@ -9,7 +9,7 @@ import warnings
 import numpy as np
 import tomosipo as ts
 import tomosipo.vector_calc as vc
-from tomosipo.utils import up_tuple, up_slice, slice_interval
+from tomosipo.utils import slice_interval
 from numbers import Integral
 from .base_projection import ProjectionGeometry
 from .transform import Transform
@@ -226,7 +226,7 @@ class DetectorVectorGeometry(ProjectionGeometry):
         """
         det_shape = self.det_shape
         det_box = ts.volume_vec(
-            shape=(det_shape[0], 0, det_shape[1]),
+            shape=(det_shape[0], 1, det_shape[1]),
             pos=self.det_pos,
             # self.v points up, volume.w points up
             w=self._det_v,
@@ -339,7 +339,7 @@ class DetectorVectorGeometry(ProjectionGeometry):
         :rtype: `ConeVectorGeometry`
 
         """
-        scaleV, scaleU = up_tuple(scale, 2)
+        scaleV, scaleU = ts.types.to_size2d(scale)
         scaleV, scaleU = int(scaleV), int(scaleU)
 
         shape = (self.det_shape[0] // scaleV, self.det_shape[1] // scaleU)
@@ -358,7 +358,7 @@ class DetectorVectorGeometry(ProjectionGeometry):
         :rtype: ProjectionGeometry
 
         """
-        new_shape = up_tuple(new_shape, 2)
+        new_shape = ts.types.to_shape2d(new_shape)
         det_v = self.det_v / new_shape[0] * self.det_shape[0]
         det_u = self.det_u / new_shape[1] * self.det_shape[1]
 

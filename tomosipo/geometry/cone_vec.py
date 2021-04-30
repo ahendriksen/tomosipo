@@ -1,36 +1,49 @@
 import numpy as np
 import tomosipo as ts
+from tomosipo.types import ToShape2D, ToPos, ToSize2D, ToVec
 import tomosipo.vector_calc as vc
-from tomosipo.utils import up_tuple, up_slice
 from .base_projection import ProjectionGeometry
 from . import det_vec as dv
 from .transform import Transform
 
 
-def cone_vec(*, shape, src_pos, det_pos, det_v, det_u):
-    """Create a cone-beam vector geometry
+def cone_vec(*,
+             shape: ToShape2D,
+             src_pos: ToVec,
+             det_pos: ToVec,
+             det_v: ToVec,
+             det_u: ToVec):
+    """Create an arbitrarily oriented cone-beam geometry
 
-    :param shape: (`int`, `int`) or `int`
+    Parameters
+    ----------
+
+    shape:
         The detector shape in pixels. If tuple, the order is
-        (height, width). Else the pixel has the same number of
-        pixels in the U and V direction.
-    :param src_pos: np.array
-        A numpy array of dimension (num_positions, 3) with the
-        source positions in (Z, Y, X) order.
-    :param det_pos:
-        A numpy array of dimension (num_positions, 3) with the
-        detector center positions in (Z, Y, X) order.
-    :param det_v:
-        A numpy array of dimension (num_positions, 3) with the
-        vector pointing from the detector (0, 0) to (1, 0) pixel
-        (up).
-    :param det_u:
-        A numpy array of dimension (num_positions, 3) with the
-        vector pointing from the detector (0, 0) to (0, 1) pixel
-        (sideways).
-    :returns: An arbitrarily oriented cone beam geometry
-    :rtype: ConeVectorGeometry
+        `(height, width)`. Else the pixel has the same number of
+        pixels in the `u` and `v` direction.
 
+    src_pos:
+        A numpy array of dimension `(num_positions, 3)` with the
+        source positions in `(z, y, x)` order.
+
+    det_pos:
+        A numpy array of dimension `(num_positions, 3)` with the
+        detector center positions in `(z, y, x)` order.
+
+    det_v:
+        A numpy array of dimension `(num_positions, 3)` with the vector pointing
+        from the detector `(0, 0)` to `(1, 0)` pixel (up).
+
+    det_u:
+        A numpy array of dimension `(num_positions, 3)` with the
+        vector pointing from the detector `(0, 0)` to `(0, 1)` pixel
+        (sideways).
+
+    Returns
+    -------
+    ConeVectorGeometry
+        An arbitrarily oriented cone-beam geometry
     """
     return ConeVectorGeometry(
         shape=shape, src_pos=src_pos, det_pos=det_pos, det_v=det_v, det_u=det_u
@@ -55,40 +68,51 @@ class ConeVectorGeometry(ProjectionGeometry):
     """
 
     def __init__(self, *, shape, src_pos, det_pos, det_v, det_u):
-        """Create a cone-beam vector geometry
+        """Create an arbitrarily oriented cone-beam geometry
 
-        :param shape: (`int`, `int`) or `int`
+        Parameters
+        ----------
+
+        shape:
             The detector shape in pixels. If tuple, the order is
-            (height, width). Else the pixel has the same number of
-            pixels in the U and V direction.
-        :param src_pos: np.array
-            A numpy array of dimension (num_positions, 3) with the
-            source positions in (Z, Y, X) order.
-        :param det_pos:
-            A numpy array of dimension (num_positions, 3) with the
-            detector center positions in (Z, Y, X) order.
-        :param det_v:
-            A numpy array of dimension (num_positions, 3) with the
-            vector pointing from the detector (0, 0) to (1, 0) pixel
-            (up).
-        :param det_u:
-            A numpy array of dimension (num_positions, 3) with the
-            vector pointing from the detector (0, 0) to (0, 1) pixel
-            (sideways).
-        :returns: An arbitrarily oriented cone beam geometry
-        :rtype: `ConeVectorGeometry`
+            `(height, width)`. Else the pixel has the same number of
+            pixels in the `u` and `v` direction.
 
+        src_pos:
+            A numpy array of dimension `(num_positions, 3)` with the
+            source positions in `(z, y, x)` order.
+
+        det_pos:
+            A numpy array of dimension `(num_positions, 3)` with the
+            detector center positions in `(z, y, x)` order.
+
+        det_v:
+            A numpy array of dimension `(num_positions, 3)` with the vector pointing
+            from the detector `(0, 0)` to `(1, 0)` pixel (up).
+
+        det_u:
+            A numpy array of dimension `(num_positions, 3)` with the
+            vector pointing from the detector `(0, 0)` to `(0, 1)` pixel
+            (sideways).
         """
         super(ConeVectorGeometry, self).__init__(shape=shape)
 
-        src_pos, det_pos, det_v, det_u = (
-            vc.to_vec(x) for x in (src_pos, det_pos, det_v, det_u)
-        )
+        src_pos = ts.types.to_vec(src_pos, 'source position')
+        det_pos = ts.types.to_vec(det_pos, 'detector position')
+        det_v = ts.types.to_vec(det_v, 'v axis')
+        det_u = ts.types.to_vec(det_u, 'u axis')
+
         src_pos, det_pos, det_v, det_u = np.broadcast_arrays(
             src_pos, det_pos, det_v, det_u
         )
 
-        vc.check_same_shapes(src_pos, det_pos, det_v, det_u)
+        shapes = [x.shape for x in [src_pos, det_pos, det_v, det_u]]
+
+        if min(shapes) != max(shapes):
+            raise ValueError(
+                "Not all arguments src_pos, det_pos, det_v, det_u are the same shape. "
+                f"Got: {shapes}"
+            )
 
         self._src_pos = src_pos
         self._det_vec = dv.det_vec(shape, det_pos, det_v, det_u)
@@ -284,9 +308,9 @@ class ConeVectorGeometry(ProjectionGeometry):
 
     def project_point(self, point):
         if np.isscalar(point):
-            point = up_tuple(point, 3)
+            point = ts.types.to_pos(point)
 
-        v_origin = vc.to_vec(point)
+        v_origin = ts.types.to_vec(point)
 
         # TODO: Check v_origin shape (should be 3)
 

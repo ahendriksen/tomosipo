@@ -17,6 +17,8 @@ from tomosipo.geometry.volume import (
 )
 from tomosipo.geometry import transform
 from .test_transform import translations, scalings
+import unittest
+from .. import add_doctest_cases
 
 
 def test_pos_size_and_extent():
@@ -264,3 +266,10 @@ def test_with_voxel_size():
     assert vg.with_voxel_size(1.0) == vg.with_voxel_size((1.0, 1.0, 1.0))
     assert vg.with_voxel_size(2.0) == vg.with_voxel_size((2.0, 2.0, 2.0))
     assert vg.with_voxel_size(3.0) == vg.with_voxel_size((3.0, 3.0, 3.0))
+
+# The tests are included in the doc strings of the methods.
+class TestDocs(unittest.TestCase):
+    pass
+
+
+add_doctest_cases(TestDocs, ts.geometry.volume)

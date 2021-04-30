@@ -4,7 +4,8 @@ import warnings
 import tomosipo as ts
 from .transform import Transform
 from .volume_vec import VolumeVectorGeometry
-
+from tomosipo.types import ToShape3D, ToPos, ToSize3D
+from typing import Union, Tuple
 
 def is_volume(g):
     """Determine if a geometry is a volume geometry
@@ -20,31 +21,73 @@ def is_volume(g):
     return isinstance(g, VolumeGeometry) or isinstance(g, VolumeVectorGeometry)
 
 
-def volume(*, shape=(1, 1, 1), pos=None, size=None, extent=None):
+Extent = Union[
+    Tuple[float, float],
+    Tuple[
+        Tuple[float, float],
+        Tuple[float, float],
+        Tuple[float, float],
+    ]
+]
+
+def volume(*,
+           shape : ToShape3D = (1, 1, 1),
+           pos : ToPos = None,
+           size : ToSize3D = None,
+           extent: Extent = None):
     """Create an axis-aligned volume geometry
 
     A VolumeGeometry is an axis-aligned cuboid centered on `pos`.
 
     You may provide a combination of arguments to create a new volume geometry:
+
     - shape (size will equal shape)
     - shape and pos (size will equal shape)
     - shape and size (volume will be centered on the origin)
     - shape, pos, and size.
     - shape and extent
 
-    :param shape: `int` or (`int`, `int`, `int`)
+    Parameters
+    ----------
+    shape:
         Shape of the voxel grid underlying the volume.
-    :param extent: `(scalar, scalar)` or `((scalar, scalar), (scalar, scalar), (scalar, scalar))`
-        The minimal and maximal value of the volume in the Z, Y, X
-        coordinate. If only one minimal and maximal value is provided,
+
+    pos:
+        Position of the center of the volume. By default, the volume is placed
+        on the origin.
+
+    size:
+        The size of the volume in physical units. This determines the shape. If
+        not provided, the size will equal the shape.
+    extent:
+        The minimal and maximal value of the volume in the `(z, y, x)`
+        coordinate space. If only one minimal and maximal value is provided,
         then it is applied to all coordinates.
-    :param center: `scalar` or `(scalar, scalar, scalar)`
-    :param size: `scalar` or `(scalar, scalar, scalar)`
-    :returns: a volume geometry of the unit cube with shape as given.
-    :rtype: VolumeGeometry
+
+    Returns
+    -------
+    VolumeGeometry
+        An axis-aligned volume geometry.
+
+    Examples
+    --------
+
+    >>> ts.volume()
+    ts.volume(
+        shape=(1, 1, 1),
+        pos=(0.0, 0.0, 0.0),
+        size=(1.0, 1.0, 1.0),
+    )
+
+    >>> ts.volume(shape=1, size=2.0, pos=(1, 1, 1))
+    ts.volume(
+        shape=(1, 1, 1),
+        pos=(1.0, 1.0, 1.0),
+        size=(2.0, 2.0, 2.0),
+    )
 
     """
-    shape = ts.utils.to_shape(shape)
+    shape = ts.types.to_shape3d(shape)
 
     pos_present = pos is not None
     size_present = size is not None
@@ -95,8 +138,8 @@ def random_volume():
 
 
 def _pos_size_to_extent(pos, size):
-    pos = np.array(ts.utils.to_pos(pos))
-    size = np.array(ts.utils.to_size(size))
+    pos = np.array(ts.types.to_pos(pos))
+    size = np.array(ts.types.to_size3d(size))
 
     min_extent = pos - 0.5 * size
     max_extent = pos + 0.5 * size
@@ -105,20 +148,20 @@ def _pos_size_to_extent(pos, size):
 
 
 def _extent_to_pos_size(extent):
-    size = ts.utils.to_size(tuple(r - l for l, r in extent))
-    pos = ts.utils.to_pos(tuple((r + l) / 2 for l, r in extent))
+    size = ts.types.to_size3d(tuple(r - l for l, r in extent))
+    pos = ts.types.to_pos(tuple((r + l) / 2 for l, r in extent))
 
     return (pos, size)
 
 
 class VolumeGeometry:
-    """VolumeGeometry
+    """A volume geometry
 
     A VolumeGeometry describes a 3D axis-aligned cuboid that is
     divided into voxels.
 
     The number of voxels in each dimension determine the object's
-    `shape'. The voxel size is thus determined by the size of
+    `shape`. The voxel size is thus determined by the size of
     the object and its shape.
 
     A VolumeGeometry cannot move in time and cannot be arbitrarily
@@ -128,38 +171,43 @@ class VolumeGeometry:
     """
 
     def __init__(self, shape=(1, 1, 1), pos=0, size=None):
-        """Create a new volume geometry
+        """Create an axis-aligned volume geometry
 
-        A VolumeGeometry is an axis-aligned cuboid centered on
-        `pos`.
+        A VolumeGeometry is an axis-aligned cuboid centered on `pos`.
 
-        If not `size' is not given, then the voxel size defaults to 1
-        in each dimension.
+        You may provide a combination of arguments to create a new volume geometry:
 
-        VolumeGeometry is indexed(Z, Y, X) just like numpy. The
-        conversion to and from an astra_vol_geom depends on this.
+        - shape (size will equal shape)
+        - shape and pos (size will equal shape)
+        - shape and size (volume will be centered on the origin)
+        - shape, pos, and size.
 
-        :param shape: `(int, int, int)` or `int`
-            The shape of the volume as measured in voxels.
-        :param pos: `0.0`, or `(scalar, scalar, scalar)`
-            The center of the object. To center on the origin, pass
-            `0` (the default).
-        :param size: `scalar` or `(scalar, scalar, scalar)`
-            The size of the object (must be non-negative). If `size`
-            is a sing value, the volume equally sized in each
-            dimension.
-        :returns: a new volume geometry
-        :rtype: `VolumeGeometry`
+        Parameters
+        ----------
+        shape:
+            Shape of the voxel grid underlying the volume.
 
+        pos:
+            Position of the center of the volume. By default, the volume is placed
+            on the origin.
+
+        size:
+            The size of the volume in physical units. This determines the shape. If
+            not provided, the size will equal the shape.
+        extent:
+            The minimal and maximal value of the volume in the `(z, y, x)`
+            coordinate space. If only one minimal and maximal value is provided,
+            then it is applied to all coordinates.
         """
-        shape = ts.utils.to_shape(shape)
-        pos = ts.utils.to_pos(pos)
+
+        shape = ts.types.to_shape3d(shape)
+        pos = ts.types.to_pos(pos)
 
         if size is None:
             # Make geometry where voxel size equals (1, 1, 1)
             self._inner = ts.volume_vec(shape, pos)
         else:
-            size = ts.utils.to_size(size)
+            size = ts.types.to_size3d(size)
             # voxel size per dimension
             vs = tuple(sz / sh for sz, sh in zip(size, shape))
             self._inner = ts.volume_vec(
@@ -390,7 +438,7 @@ class VolumeGeometry:
         :rtype:
 
         """
-        voxel_size = ts.utils.to_size(voxel_size)
+        voxel_size = ts.types.to_size3d(voxel_size)
         new_shape = (np.array(self.size) / voxel_size).astype(np.int)
 
         return VolumeGeometry(new_shape, pos=self.pos[0], size=new_shape * voxel_size)
@@ -412,7 +460,7 @@ class VolumeGeometry:
         )
 
     def translate(self, t):
-        t = ts.utils.to_pos(t)
+        t = ts.types.to_pos(t)
 
         new_pos = tuple(p + t for p, t in zip(self.pos[0], t))
 
@@ -438,7 +486,7 @@ class VolumeGeometry:
         :rtype:
 
         """
-        scale = ts.utils.to_size(scale)
+        scale = ts.types.to_size3d(scale)
         new_size = tuple(a * b for a, b in zip(scale, self.size))
         return VolumeGeometry(shape=self.shape, pos=self.pos[0], size=new_size)
 
@@ -454,7 +502,7 @@ class VolumeGeometry:
         :rtype:
 
         """
-        scale = ts.utils.to_size(scale)
+        scale = ts.types.to_size3d(scale)
         new_size = tuple(a * b for a, b in zip(scale, self.size))
         new_pos = tuple(a * b for a, b in zip(scale, self.pos[0]))
         return VolumeGeometry(shape=self.shape, pos=new_pos, size=new_size)

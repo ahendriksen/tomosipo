@@ -3,7 +3,9 @@ import warnings
 from numbers import Integral
 import numpy as np
 import tomosipo as ts
-from tomosipo.utils import up_tuple, up_slice
+from tomosipo.types import ToShape2D, ToSize2D, ToScalars
+from typing import Union, Tuple
+
 from .base_projection import ProjectionGeometry
 from .cone_vec import ConeVectorGeometry
 from .transform import Transform
@@ -11,48 +13,57 @@ from .transform import Transform
 
 def cone(
     *,
-    angles=1,
-    shape=(1, 1),
-    size=None,
-    cone_angle=None,
-    src_orig_dist=None,
-    src_det_dist=None,
+    angles: Union[int, ToScalars] = 1,
+    shape: ToShape2D=(1, 1),
+    size: ToSize2D=None,
+    cone_angle: float=None,
+    src_orig_dist: float=None,
+    src_det_dist: float=None,
 ):
-    """Create a cone-beam geometry
+    """Create a circular cone-beam geometry
 
-    :param angles: `np.array` or integral value
+    Parameters
+    ----------
+    angles:
         If integral value: the number of angles in the cone-beam
         geometry. This describes a full arc (2 pi radians) with
         uniform placement and without the start and end point
         overlapping.
 
-        If np.array: the values of the array are taken as
+        If `np.ndarray`: the values of the array are taken as
         projection angle (units are radians).
-    :param shape: (`int`, `int`) or `int`
+
+    shape:
         The detector shape in pixels. If tuple, the order is
-        (height, width). Else the pixel has the same number of
-        pixels in the U and V direction.
-    :param size: (float, float) or float
+        `(height, width)`. Else the pixel has the same number of
+        pixels in the `u` and `v` direction.
+
+    size:
         The detector size. If a single float is provided, the
         detector is square with equal width and height.
 
-        The order is (height, width), i.e. (v, u).
-    :param cone_angle: `scalar`
+        The order is `(height, width)`, i.e. `(v, u)`.
+
+    cone_angle:
         The fraction `det_height / src_det_dist`. If provided,
         `src_orig_dist` and `src_det_dist` need not be provided. The
         detector is placed on the origin.
-    :param src_orig_dist: scalar
-        The source to origin distance.
-    :param src_det_dist:
-        The source to detector distance.
-    :returns: a cone-beam geometry
-    :rtype: ConeGeometry
 
+    src_orig_dist:
+        The source to origin distance.
+
+    src_det_dist:
+        The source to detector distance.
+
+    Returns
+    -------
+    ConeGeometry
+        A circular cone-beam geometry
     """
-    shape = ts.utils.to_shape(shape, dim=2, allow_zeros=False)
+    shape = ts.types.to_shape2d(shape)
     if size is None:
         size = shape
-    size = ts.utils.to_size(size, dim=2)
+    size = ts.types.to_size2d(size)
 
     if cone_angle is None and src_orig_dist is None and src_det_dist is None:
         raise ValueError(
@@ -109,55 +120,62 @@ class ConeGeometry(ProjectionGeometry):
     """A parametrized circular cone-beam geometry"""
 
     def __init__(
-        self, angles=None, shape=None, size=None, src_orig_dist=None, src_det_dist=None
+        self, angles=1, shape=1, size=None, src_orig_dist=None, src_det_dist=None
     ):
-        """Create a cone-beam geometry
+        """Create a circular cone-beam geometry
 
-        :param angles: `np.array` or integral value
+        Parameters
+        ----------
+        angles:
             If integral value: the number of angles in the cone-beam
             geometry. This describes a full arc (2 pi radians) with
             uniform placement and without the start and end point
             overlapping.
 
-            If np.array: the values of the array are taken as
+            If `np.ndarray`: the values of the array are taken as
             projection angle (units are radians).
-        :param size: (float, float) or float
+
+        shape:
+            The detector shape in pixels. If tuple, the order is
+            `(height, width)`. Else the pixel has the same number of
+            pixels in the `u` and `v` direction.
+
+        size:
             The detector size. If a single float is provided, the
             detector is square with equal width and height.
 
-            The order is (height, width), i.e. (v, u).
-        :param shape: (`int`, `int`) or `int`
-            The detector shape in pixels. If tuple, the order is
-            (height, width). Else the pixel has the same number of
-            pixels in the U and V direction.
-        :param src_orig_dist: scalar
-            The source to object distance.
-        :param src_det_dist:
+            The order is `(height, width)`, i.e. `(v, u)`.
+
+        cone_angle:
+            The fraction `det_height / src_det_dist`. If provided,
+            `src_orig_dist` and `src_det_dist` need not be provided. The
+            detector is placed on the origin.
+
+        src_orig_dist:
+            The source to origin distance.
+
+        src_det_dist:
             The source to detector distance.
-        :returns: a cone-beam geometry
-        :rtype: ConeGeometry
         """
         super(ConeGeometry, self).__init__(shape=shape)
+
         # Angles
         self.angles_original = angles
-        if angles is None:
-            raise TypeError(
-                "Angles parameter must be `int` or `np.array`. Got `None`. "
-            )
-        elif np.isscalar(angles):
+        if np.isscalar(angles) and isinstance(angles, int):
             # Make 360° arc such that last angle does not equal the first (endpoint=False).
             angles = np.linspace(0, 2 * np.pi, angles, endpoint=False)
         else:
-            angles = np.array(angles, copy=False, ndmin=1, dtype=np.float64)
+            angles = ts.types.to_scalars(angles, var_name='angles')
 
         if len(angles) == 0:
             raise ValueError(
                 f"ConeGeometry expects non-empty array of angles; got {self.angles_original}"
             )
+
         # Size
         if size is None:
             size = shape
-        size = ts.utils.to_size(size, dim=2)
+        size = ts.types.to_size2d(size)
         # cone parameters
         if src_orig_dist is None:
             raise ValueError("Expected `src_orig_dist` parameter. Got `None`. ")
@@ -345,7 +363,7 @@ class ConeGeometry(ProjectionGeometry):
             return other * self.to_vec()
 
     def rescale_det(self, scale):
-        scaleV, scaleU = up_tuple(scale, 2)
+        scaleV, scaleU = ts.types.to_size2d(scale)
         scaleV, scaleU = int(scaleV), int(scaleU)
 
         shape = (self.det_shape[0] // scaleV, self.det_shape[1] // scaleU)
@@ -359,7 +377,7 @@ class ConeGeometry(ProjectionGeometry):
         )
 
     def reshape(self, new_shape):
-        new_shape = up_tuple(new_shape, 2)
+        new_shape = ts.types.to_shape2d(new_shape)
         return ConeGeometry(
             self.angles_original,
             new_shape,

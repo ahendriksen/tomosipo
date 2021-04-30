@@ -82,7 +82,7 @@ class Transform(object):
 
 
 def identity():
-    """Return identity transform
+    """Create identity transform
 
     :returns:
     :rtype:
@@ -92,7 +92,7 @@ def identity():
 
 
 def translate(t):
-    """Return translation transform
+    """Create a translation transform
 
     The parameter `t` is interpreted as a series homogeneous
     coordinates. You may pass in both homogeneous or non-homogeneous
@@ -117,9 +117,10 @@ def translate(t):
 
 
 def scale(s, pos=None):
-    """Return scaling transform
+    """Create a scaling transform
 
-    The scaling transform scales the coordinate frame of the object.
+    The scaling transform scales the coordinate frame of the object by `s`
+    around position `pos`.
 
     The parameter `s` is interpreted as a series of homogeneous
     coordinates. You may pass in both homogeneous or non-homogeneous
@@ -140,7 +141,8 @@ def scale(s, pos=None):
     :rtype:
 
     """
-    s = ts.utils.to_size(s)
+    if np.isscalar(s):
+        s = ts.types.to_size3d(s)
     s = vc.to_vec(s)
     s0 = s[:, 0:1]  # scaling in coordinate 0
     s1 = s[:, 1:2]  # scaling in coordinate 1
@@ -163,9 +165,11 @@ def scale(s, pos=None):
 
 
 def rotate(*, pos, axis, angles=None, rad=None, deg=None, right_handed=True):
-    """Rotate around axis through position by some angle
+    """Create a rotation transform
 
-    The parameters `position` and `axis` are interpreted as
+    The transform rotates around `axis` through position `pos` by some `angles`.
+
+    The parameters `pos` and `axis` are interpreted as
     homogeneous coordinates. You may pass in both homogeneous or
     non-homogeneous coordinates. Also, you may pass in multiple rows
     for multiple timesteps. The following shapes are allowed:
@@ -173,14 +177,10 @@ def rotate(*, pos, axis, angles=None, rad=None, deg=None, right_handed=True):
     - `(n_rows, 3)` [non-homogeneous] or `(n_rows, 4)` [homogeneous]
     - `(3,)` [non-homogeneous] or `(4,)` [homogeneous]
 
-    *Note*: the (Z, Y, X) coordinate system is left-handed. If
-    `right_handed=True` is set (the default), then the rotation is
-    translated to a left-handed rotation matrix.
-
     :param pos: `np.array` or `scalar`
-        The position through which the axis moves.
+        The position of the axis of rotation.
     :param axis:
-        The axis of rotation.
+        The direction vector of the axis of rotation.
     :param angles: `float` or `np.array`
         The angle by which must be rotated in radians.
     :param rad:
@@ -197,7 +197,7 @@ def rotate(*, pos, axis, angles=None, rad=None, deg=None, right_handed=True):
 
     """
     if np.isscalar(pos):
-        pos = up_tuple(pos, 3)
+        pos = ts.types.to_pos(pos)
     pos = vc.to_homogeneous_point(pos)
     axis = vc.to_homogeneous_vec(axis)
     pos, axis = vc._broadcastv(pos, axis)
@@ -267,7 +267,9 @@ def rotate(*, pos, axis, angles=None, rad=None, deg=None, right_handed=True):
 
 
 def reflect(*, pos, axis):
-    """Reflect in the plane through `pos` with normal vector `axis`
+    """Create a reflection transform
+
+    The transform reflects in the plane through `pos` with normal vector `axis`.
 
     The parameters `pos` and `axis` are interpreted as
     homogeneous coordinates. You may pass in both homogeneous or

@@ -4,7 +4,6 @@ import numpy as np
 import tomosipo as ts
 from tomosipo.geometry import random_transform
 import tomosipo.geometry.det_vec as dv
-from tomosipo.utils import up_tuple
 from tomosipo.geometry import transform
 
 
@@ -27,7 +26,7 @@ def test_init():
     assert dv.det_vec(1, vecs, vecs, vecs).det_shape == (1, 1)
     assert dv.det_vec((3, 5), vecs, vecs, vecs).det_shape == (3, 5)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         # Shape of 0 is not allowed
         dv.det_vec(0, vecs, vecs, vecs)
 
@@ -143,10 +142,11 @@ def test_corners(det_vecs):
 
 def test_reshape(det_vecs):
     for pg in det_vecs:
-        for shape in [1, (3, 5)]:
-            pg_reshaped = pg.reshape(shape)
-            assert pg_reshaped.det_shape == up_tuple(shape, 2)
-            assert pg_reshaped.det_sizes == approx(pg.det_sizes)
+        pg.reshape(1).det_shape == (1, 1)
+        pg.reshape((3, 5)).det_shape == (3, 5)
+
+        pg.reshape(1).det_sizes == pg.det_sizes
+        pg.reshape((3, 5)).det_sizes == approx(pg.det_sizes)
 
 
 def test_rescale_det_vecs(det_vecs):

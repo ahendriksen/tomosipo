@@ -1,7 +1,9 @@
 import numpy as np
 import tomosipo as ts
+from typing import Union, Collection
 from . import (
     Transform,
+    ProjectionGeometry,
     ConeGeometry,
     ConeVectorGeometry,
     ParallelGeometry,
@@ -11,16 +13,26 @@ from . import (
 )
 
 
-def concatenate(items):
+def concatenate(
+        items: Union[
+            Collection[ProjectionGeometry],
+            Collection[VolumeGeometry],
+            Collection[VolumeVectorGeometry],
+            Collection[Transform]
+        ],
+):
     """Concatenate geometries and transformations
 
-    Supports:
+    This function supports:
+
     - parallel geometries (vec and non-vec)
     - cone geometries (vec and non-vec)
     - oriented boxes
     - transformations
 
-    Parallel and Cone geometries are converted to vector geometries.
+    .. note ::
+
+        Parallel and Cone geometries are converted to vector geometries.
 
     :returns:
     :rtype:

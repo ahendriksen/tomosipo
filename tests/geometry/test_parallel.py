@@ -3,7 +3,6 @@ from pytest import approx
 import numpy as np
 import tomosipo as ts
 from tomosipo.geometry import random_transform, random_parallel
-from tomosipo.utils import up_tuple
 import tomosipo.vector_calc as vc
 
 
@@ -32,14 +31,14 @@ def test_init():
     angles = np.linspace(0, np.pi, 10, endpoint=False)
     assert ts.parallel(angles=10) == ts.parallel(angles=angles)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         # Shape of 0 is not allowed
         ts.parallel(shape=0)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         # Do not allow empty angles:
         ts.parallel(angles=0)
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         # Do not allow 2-dimensional angle arrays
         ts.parallel(angles=np.ones((1, 1)))
 
@@ -49,7 +48,7 @@ def test_repr():
     r = """ts.parallel(
     angles=10,
     shape=(11, 11),
-    size=(1, 1),
+    size=(1.0, 1.0),
 )"""
 
     assert repr(pg) == r
@@ -165,11 +164,11 @@ def test_corners(par_geoms):
 
 def test_reshape(par_geoms):
     for pg in par_geoms:
-        for shape in [1, (3, 5)]:
-            pg_reshaped = pg.reshape(shape)
-            assert pg_reshaped.angles == approx(pg.angles)
-            assert pg_reshaped.det_shape == up_tuple(shape, 2)
-            assert pg_reshaped.det_sizes == approx(pg.det_sizes)
+        pg.reshape(1).det_shape == (1, 1)
+        pg.reshape((3, 5)).det_shape == (3, 5)
+
+        pg.reshape(1).det_sizes == pg.det_sizes
+        pg.reshape((3, 5)).det_sizes == approx(pg.det_sizes)
 
 
 def test_rescale_par_geoms(par_geoms):

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="d08e8e76_e0ab_4f1a_ad9e_b65a4e2fa2b7" height="200" width="320">
+<svg xmlns="http://www.w3.org/2000/svg" id="78af4da2_2b2f_4f8d_99fa_f31b429f7136" height="200" width="320">
       <title>Click to pause/unpause, press and hold to scroll through animation</title>
         <g>
           <path d="M0,200 h0.0 v-5.0 h-0.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
@@ -107,16 +107,16 @@
     
         
       <script type="text/ecmascript"><![CDATA[
-          function mouse_move_d08e8e76_e0ab_4f1a_ad9e_b65a4e2fa2b7(evt) {
+          function mouse_move_78af4da2_2b2f_4f8d_99fa_f31b429f7136(evt) {
               if (evt.buttons > 0) {
-                    var root = document.getElementById('d08e8e76_e0ab_4f1a_ad9e_b65a4e2fa2b7');
+                    var root = document.getElementById('78af4da2_2b2f_4f8d_99fa_f31b429f7136');
                     root.pauseAnimations();
                     var new_time = 3 * evt.layerX / evt.target.getBBox().width;
                     root.setCurrentTime(new_time);
               }
           }
-          function on_click_d08e8e76_e0ab_4f1a_ad9e_b65a4e2fa2b7(evt) {
-              var root = document.getElementById('d08e8e76_e0ab_4f1a_ad9e_b65a4e2fa2b7');
+          function on_click_78af4da2_2b2f_4f8d_99fa_f31b429f7136(evt) {
+              var root = document.getElementById('78af4da2_2b2f_4f8d_99fa_f31b429f7136');
               //console.log(root);
               root.animationsPaused() ? root.unpauseAnimations() : root.pauseAnimations();
           }
@@ -124,6 +124,6 @@
       </script>
 
     
-        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move_d08e8e76_e0ab_4f1a_ad9e_b65a4e2fa2b7(evt)' onclick='on_click_d08e8e76_e0ab_4f1a_ad9e_b65a4e2fa2b7(evt)' width="318" height="198" stroke="gray" fill="transparent" stroke-width="1"/>
+        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move_78af4da2_2b2f_4f8d_99fa_f31b429f7136(evt)' onclick='on_click_78af4da2_2b2f_4f8d_99fa_f31b429f7136(evt)' width="318" height="198" stroke="gray" fill="transparent" stroke-width="1"/>
     </svg>
     

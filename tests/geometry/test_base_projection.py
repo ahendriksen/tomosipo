@@ -38,7 +38,7 @@ def test_is_projection(default_proj_geoms):
 def test_init():
     """Test init."""
     pg = ProjectionGeometry()
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         ProjectionGeometry(0)
 
     assert pg.det_shape == (1, 1)

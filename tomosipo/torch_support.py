@@ -82,7 +82,7 @@ def to_autograd(operator):
         >>> vd.grad is not None
         True
 
-    :param operator: a `ts.Operator'
+    :param operator: a `ts.Operator`
     :returns: an autograd function
     :rtype:
 

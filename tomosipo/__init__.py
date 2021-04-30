@@ -33,6 +33,7 @@ from .astra import (
 from .svg import svg
 
 from . import phantom
+from . import types
 
 # This is a fundamental constant used for equality checking in
 # floating point code.

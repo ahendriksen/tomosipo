@@ -27,9 +27,9 @@ def test_init():
 
     with pytest.raises(TypeError):
         ts.cone_vec(0, **kwargs)  # missing shape=
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         ts.cone_vec(shape=0, **kwargs)  # shape cannot be zero
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         two_dim = np.arange(20).reshape((10, 2))
         ts.cone_vec(
             shape=1, src_pos=two_dim, det_pos=two_dim, det_v=two_dim, det_u=two_dim

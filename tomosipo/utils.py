@@ -135,10 +135,14 @@ def slice_interval(left, right, length, key):
     right. With a step size of 3, the resulting interval is larger
     than the original interval.
 
-       |x|x|x|x|   [0:4:1]
-      | x | x |    [0:4:2]
-        | x | x |  [1:4:2]
-     |  x  |  x  | [0:4:3]
+
+    .. code-block:: none
+    
+           |x|x|x|x|   [0:4:1]
+          | x | x |    [0:4:2]
+            | x | x |  [1:4:2]
+         |  x  |  x  | [0:4:3]
+
 
     :param left: `scalar` or `np.array`
     :param right: `scalar` or `np.array`

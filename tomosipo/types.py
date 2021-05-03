@@ -4,20 +4,6 @@ from collections import abc
 from numbers import Integral
 import numpy as np
 
-# shape 3d, shape 2d
-
-# pos
-
-# size
-
-# extent
-
-# angles
-
-# axis, ray_dir, det_v, det_u, w, v, u
-
-# scale (size )
-
 ###############################################################################
 #                                    Types                                    #
 ###############################################################################
@@ -52,7 +38,7 @@ ToVec = Union[
     np.ndarray
 ]
 
-ToHomoGeneousVec = Union[
+ToHomogeneousVec = Union[
     ToVec,
     Tuple[float, float, float, float],
     Iterable[Tuple[float, float, float, float]],
@@ -267,8 +253,8 @@ def to_scalars(s: ToScalars, var_name='scalars', accept_empty=False) -> Scalars:
     >>> to_scalars((1, 1, 1))
     array([1., 1., 1.])
 
-    >>> to_scalars((1, 1, 1)).shape
-    (3,)
+    >>> to_scalars(1).shape
+    (1,)
 
     >>> import numpy as np
     >>> to_scalars(np.ones((1, 3))).shape
@@ -286,13 +272,22 @@ def to_scalars(s: ToScalars, var_name='scalars', accept_empty=False) -> Scalars:
     Traceback (most recent call last):
     ...
     TypeError: Could not convert scalars to np.array. Got: 'string'.
+    >>> to_scalars(None)
+    Traceback (most recent call last):
+    ...
+    TypeError: Could not convert to array of scalars: array contains NaN.
     """
     try:
-        s = np.array(s, dtype=np.float64, copy=False)
+        s = np.array(s, dtype=np.float64, ndmin=1, copy=False)
     except ValueError:
         raise TypeError(
             f"Could not convert {var_name} to np.array. Got: {repr(s)}."
         )
+    if np.any(np.isnan(s)):
+        raise TypeError(
+            f"Could not convert to array of scalars: array contains NaN."
+        )
+
     shape = s.shape
 
     length_acceptable = accept_empty or len(s) > 0

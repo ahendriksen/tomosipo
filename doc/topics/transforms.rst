@@ -31,7 +31,7 @@ These are listed below.
    vg = ts.volume(size=1.0).to_vec()
 
    t = np.linspace(0, 1, 5)
-   T = ts.translate(t[:, None] * np.array([[0, 1, 0]]))
+   T = ts.translate(axis=(0, 1, 0), alpha=t)
    ts.svg(T * vg).save("./doc/img/topics_transforms_translate.svg")
 
    R = ts.rotate(pos=0, axis=(1, 0, 0), angles=np.pi * t)

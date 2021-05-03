@@ -1,7 +1,9 @@
+from typing import Optional
+import warnings
 import tomosipo as ts
 import numpy as np
-import warnings
 import tomosipo.vector_calc as vc
+from tomosipo.types import ToHomogeneousVec, ToScalars
 
 
 class Transform(object):
@@ -90,24 +92,68 @@ def identity():
     return Transform(np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]))
 
 
-def translate(t):
+def translate(axis: ToHomogeneousVec, *, alpha: ToScalars = 1):
     """Create a translation transform
 
-    The parameter `t` is interpreted as a series homogeneous
-    coordinates. You may pass in both homogeneous or non-homogeneous
-    coordinates. Also, you may pass in multiple rows for multiple
-    timesteps. The following shapes are allowed:
+    Parameters
+    ----------
+    axis:
+        By how much to translate. The parameter `axis` is interpreted as a
+        series of homogeneous coordinates. You may pass in both homogeneous or
+        non-homogeneous coordinates. Also, you may pass in multiple rows for
+        multiple timesteps. The following shapes are allowed:
 
-    - `(n_rows, 3)` [non-homogeneous] or `(n_rows, 4)` [homogeneous]
-    - `(3,)` [non-homogeneous] or `(4,)` [homogeneous]
+        - `(n_rows, 3)` [non-homogeneous] or `(n_rows, 4)` [homogeneous]
+        - `(3,)` [non-homogeneous] or `(4,)` [homogeneous]
 
-    :param t: `np.array`
-        By how much to translate.
-    :returns: A transform describing the translation
-    :rtype: `Transform`
+    alpha:
+        A scalar multiplier of axis. This parameter can be used to conveniently
+        translate along a single axis.
+
+    Returns
+    -------
+    Transform
+        A transform describing the translation
+
+    Examples
+    --------
+
+    >>> ts.translate((1, 2, 3))
+    Transform(
+        [[[1. 0. 0. 1.]
+      [0. 1. 0. 2.]
+      [0. 0. 1. 3.]
+      [0. 0. 0. 1.]]]
+    )
+
+    >>> ts.translate((1, 1, 1), alpha=[2, 3])
+    Transform(
+        [[[1. 0. 0. 2.]
+      [0. 1. 0. 2.]
+      [0. 0. 1. 2.]
+      [0. 0. 0. 1.]]
+    <BLANKLINE>
+     [[1. 0. 0. 3.]
+      [0. 1. 0. 3.]
+      [0. 0. 1. 3.]
+      [0. 0. 0. 1.]]]
+    )
 
     """
-    t = vc.to_homogeneous_point(t)
+    axis = vc.to_homogeneous_point(axis)
+    alpha = ts.types.to_scalars(alpha, var_name='alpha')
+
+    broadcastable = len(axis) == 1 or len(alpha) == 1 or len(axis) == len(alpha)
+
+    if not broadcastable:
+        raise ValueError(
+            "Expected parameters `axis` and `alpha` to be the same length. "
+            f"Got: {len(axis)}, {len(alpha)}"
+        )
+
+    t = alpha[:, None] * axis
+    t[:, 3] = 1.0
+
     w = vc.to_homogeneous_vec((1, 0, 0))
     v = vc.to_homogeneous_vec((0, 1, 0))
     u = vc.to_homogeneous_vec((0, 0, 1))

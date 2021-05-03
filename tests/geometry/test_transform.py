@@ -4,11 +4,13 @@
 """Tests for Transform."""
 
 import pytest
+import unittest
 import tomosipo as ts
 from tomosipo.geometry import random_volume_vec
 import numpy as np
 from tomosipo.geometry import transform
 import itertools
+from .. import add_doctest_cases
 
 
 vgs = [
@@ -362,3 +364,10 @@ def test_perspective():
             random_vg.pos, random_vg.w, random_vg.v, random_vg.u
         )
         assert to_random_vg == to_random_vg2
+
+# The tests are included in the doc strings of the methods.
+class TestDocs(unittest.TestCase):
+    pass
+
+
+add_doctest_cases(TestDocs, ts.geometry.transform)

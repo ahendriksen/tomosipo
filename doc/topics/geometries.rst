@@ -1,6 +1,6 @@
-========
-Geometry
-========
+==========
+Geometries
+==========
 
 Units, axes and indexing
 ========================
@@ -229,7 +229,7 @@ The following conventions are used:
    .. doctest:: creation
 
       >>> ts.parallel(shape=2).det_size
-      (2, 2)
+      (2.0, 2.0)
 
 3. The `angles` parameter can be provided as a single integer. This is
    automatically expanded to a half circle arc (:meth:`ts.parallel`) or full
@@ -299,7 +299,7 @@ Geometries have a useful representation when printed:
    ts.parallel(
        angles=3,
        shape=(10, 15),
-       size=(1, 1.5),
+       size=(1.0, 1.5),
    )
    
 Angles, shape, and size
@@ -337,7 +337,7 @@ angle.
    (10, 15)
 
    >>> pg.det_size
-   (1, 1.5)
+   (1.0, 1.5)
 
    >>> pg.det_sizes
    array([[1. , 1.5],

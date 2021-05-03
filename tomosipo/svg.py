@@ -6,7 +6,7 @@
 import tomosipo as ts
 import tomosipo.vector_calc as vc
 import base64
-import uuid
+import hashlib
 import collections
 import numpy as np
 from pathlib import Path
@@ -252,7 +252,12 @@ def text_svg_animation(line_items, duration=10, height=100, width=100):
         text_svg_frame(ls, i * frame_duration, (i + 1) * frame_duration, **const_opts)
         for i, ls in enumerate(line_items)
     )
-    svg_id = str(uuid.uuid4()).replace("-", "_")
+
+    # Use a hash of the frames_str as id. This way, the id should stay the same
+    # when the input data has not changed.
+    hasher = hashlib.sha512()
+    hasher.update(frames_str.encode())
+    svg_id = hasher.hexdigest()
 
     # Great tutorial on SVG animation:
     # - http://www.joningram.co.uk/article/svg-smil-frame-animation/

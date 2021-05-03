@@ -28,3 +28,14 @@ def test_svg():
         svg_item._repr_markdown_()
         svg_item._repr_html_()
         svg_item._repr_svg_()
+
+
+def test_svg_id_does_not_change():
+    geoms = [
+        ts.cone(angles=10, cone_angle=1 / 2).to_vec(),
+        ts.parallel(angles=3).to_vec(),
+        ts.volume().to_vec(),
+    ]
+    repr1 = str(ts.svg(*geoms))
+    repr2 = str(ts.svg(*geoms))
+    assert repr1 == repr2

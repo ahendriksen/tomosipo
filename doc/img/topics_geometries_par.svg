@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="d7b6badc_e6d4_4865_9067_b40ccb756738" height="200" width="320">
+<svg xmlns="http://www.w3.org/2000/svg" id="0d6d07929c4aace4d62846697c1ae4f056144b1c01e4d76e7f4184c1918edc88d8ee76ae7a23096adb3d755434e8a41d0f289ca9f14ee4c9736641060256da14" height="200" width="320">
       <title>Click to pause/unpause, press and hold to scroll through animation</title>
         <g>
           <path d="M0,200 h0.0 v-5.0 h-0.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
@@ -66,16 +66,16 @@
     
         
       <script type="text/ecmascript"><![CDATA[
-          function mouse_move_d7b6badc_e6d4_4865_9067_b40ccb756738(evt) {
+          function mouse_move_0d6d07929c4aace4d62846697c1ae4f056144b1c01e4d76e7f4184c1918edc88d8ee76ae7a23096adb3d755434e8a41d0f289ca9f14ee4c9736641060256da14(evt) {
               if (evt.buttons > 0) {
-                    var root = document.getElementById('d7b6badc_e6d4_4865_9067_b40ccb756738');
+                    var root = document.getElementById('0d6d07929c4aace4d62846697c1ae4f056144b1c01e4d76e7f4184c1918edc88d8ee76ae7a23096adb3d755434e8a41d0f289ca9f14ee4c9736641060256da14');
                     root.pauseAnimations();
                     var new_time = 3 * evt.layerX / evt.target.getBBox().width;
                     root.setCurrentTime(new_time);
               }
           }
-          function on_click_d7b6badc_e6d4_4865_9067_b40ccb756738(evt) {
-              var root = document.getElementById('d7b6badc_e6d4_4865_9067_b40ccb756738');
+          function on_click_0d6d07929c4aace4d62846697c1ae4f056144b1c01e4d76e7f4184c1918edc88d8ee76ae7a23096adb3d755434e8a41d0f289ca9f14ee4c9736641060256da14(evt) {
+              var root = document.getElementById('0d6d07929c4aace4d62846697c1ae4f056144b1c01e4d76e7f4184c1918edc88d8ee76ae7a23096adb3d755434e8a41d0f289ca9f14ee4c9736641060256da14');
               //console.log(root);
               root.animationsPaused() ? root.unpauseAnimations() : root.pauseAnimations();
           }
@@ -83,6 +83,6 @@
       </script>
 
     
-        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move_d7b6badc_e6d4_4865_9067_b40ccb756738(evt)' onclick='on_click_d7b6badc_e6d4_4865_9067_b40ccb756738(evt)' width="318" height="198" stroke="gray" fill="transparent" stroke-width="1"/>
+        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move_0d6d07929c4aace4d62846697c1ae4f056144b1c01e4d76e7f4184c1918edc88d8ee76ae7a23096adb3d755434e8a41d0f289ca9f14ee4c9736641060256da14(evt)' onclick='on_click_0d6d07929c4aace4d62846697c1ae4f056144b1c01e4d76e7f4184c1918edc88d8ee76ae7a23096adb3d755434e8a41d0f289ca9f14ee4c9736641060256da14(evt)' width="318" height="198" stroke="gray" fill="transparent" stroke-width="1"/>
     </svg>
     

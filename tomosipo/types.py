@@ -236,10 +236,11 @@ def to_pos(pos: ToPos) -> Pos:
 def to_scalars(s: ToScalars, var_name='scalars', accept_empty=False) -> Scalars:
     """Create an array of scalars
 
-    Parameters:
-    s
+    Parameters
+    ----------
+    s:
         A single float or collection of floats.
-    var_name
+    var_name:
         The name to use in error messages.
 
     Returns
@@ -272,6 +273,7 @@ def to_scalars(s: ToScalars, var_name='scalars', accept_empty=False) -> Scalars:
     Traceback (most recent call last):
     ...
     TypeError: Could not convert scalars to np.array. Got: 'string'.
+
     >>> to_scalars(None)
     Traceback (most recent call last):
     ...

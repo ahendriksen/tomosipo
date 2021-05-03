@@ -10,6 +10,15 @@ import numpy as np
 import pytest
 
 
+def test_broadcast_lengths():
+    assert vc.broadcast_lengths(1, 1) == 1
+    assert vc.broadcast_lengths(1, 5) == 5
+    assert vc.broadcast_lengths(5, 1) == 5
+    assert vc.broadcast_lengths(3, 3) == 3
+
+    with pytest.raises(ValueError):
+        vc.broadcast_lengths(2, 3)
+
 def test_broadcastv():
     x, y = vc._broadcastv(np.ones((3,)), np.ones((3,)))
     assert x.shape == (1, 3)

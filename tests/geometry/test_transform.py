@@ -200,6 +200,14 @@ def test_translate():
         assert T1 * T2 == T2 * T1
 
 
+def test_translate_alpha():
+    axis = np.array([1, 2, 3])
+    T = ts.translate(axis)
+
+    assert T * T == ts.translate(axis, alpha=2)
+    assert T * T * T == ts.translate(axis, alpha=3)
+    assert ts.translate(axis, alpha=[2, 3]).num_steps == 2
+
 def test_scale_simple_case():
     unit = ts.volume_vec(shape=1, pos=0)
     # Uniform scaling
@@ -240,6 +248,15 @@ def test_scale_pos():
         # Scaling a volume around its center should not move its
         # center.
         assert np.allclose((S * vg).pos, vg.pos)
+
+
+def test_scale_alpha():
+    s = np.array([1, 2, 3])
+    S = ts.scale(s)
+
+    assert ts.scale(2 * s) == ts.scale(s, alpha=2)
+    assert ts.scale(3 * s) == ts.scale(s, alpha=3)
+    assert ts.scale(s, alpha=[2, 3]).num_steps == 2
 
 
 def test_rotate_inversion_of_angle_axis_handedness():

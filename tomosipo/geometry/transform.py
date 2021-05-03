@@ -161,34 +161,97 @@ def translate(axis: ToHomogeneousVec, *, alpha: ToScalars = 1):
     return Transform(np.stack((w, v, u, t), axis=2))
 
 
-def scale(s, pos=None):
+def scale(scale, *, pos=0, alpha=1.0):
     """Create a scaling transform
 
-    The scaling transform scales the coordinate frame of the object by `s`
-    around position `pos`.
+    The scaling transform scales the coordinate frame of the object by `alpha *
+    scale` around position `pos`.
 
-    The parameter `s` is interpreted as a series of homogeneous
-    coordinates. You may pass in both homogeneous or non-homogeneous
-    coordinates. Also, you may pass in multiple rows for multiple
-    timesteps. The following shapes are allowed:
+    Parameters
+    ----------
+    scale:
+        By how much to scale in each direction. The parameter `scale` is
+        interpreted as a series of homogeneous coordinates. You may pass in both
+        homogeneous or non-homogeneous coordinates. Also, you may pass in
+        multiple rows for multiple timesteps. The following shapes are allowed:
 
-    - scalar
-    - `(n_rows, 3)` [non-homogeneous] or `(n_rows, 4)` [homogeneous]
-    - `(3,)` [non-homogeneous] or `(4,)` [homogeneous]
+        - scalar
+        - `(n_rows, 3)` [non-homogeneous] or `(n_rows, 4)` [homogeneous]
+        - `(3,)` [non-homogeneous] or `(4,)` [homogeneous]
 
-
-    :param s:
-        By how much to scale in each direction.
-    :param pos:  (optional)
-        If not `None`, scale around a custom position instead of the
+    pos:
+        Scale around a custom position. The default is to scale around the
         origin.
-    :returns:
-    :rtype:
 
+    alpha:
+        Multiply the scaling by `alpha`. This is useful if you want the scaling
+        to be time-dependent.
+
+    Returns
+    -------
+    Transform
+        A transform describing the scaling
+
+    Examples
+    --------
+
+    >>> ts.scale(2)
+    Transform(
+        [[[2. 0. 0. 0.]
+      [0. 2. 0. 0.]
+      [0. 0. 2. 0.]
+      [0. 0. 0. 1.]]]
+    )
+
+    >>> ts.scale((2, 2, 2), pos=(3, 4, 5))
+    Transform(
+        [[[ 2.  0.  0. -3.]
+      [ 0.  2.  0. -4.]
+      [ 0.  0.  2. -5.]
+      [ 0.  0.  0.  1.]]]
+    )
+
+    >>> ts.scale(1, alpha=[2, 3])
+    Transform(
+        [[[2. 0. 0. 0.]
+      [0. 2. 0. 0.]
+      [0. 0. 2. 0.]
+      [0. 0. 0. 1.]]
+    <BLANKLINE>
+     [[3. 0. 0. 0.]
+      [0. 3. 0. 0.]
+      [0. 0. 3. 0.]
+      [0. 0. 0. 1.]]]
+    )
+
+    Note that all parameters must have broadcastable length. Otherwise an error
+    is raised.
+
+    >>> ts.scale(np.ones((2,3)), pos=np.ones((4, 3)), alpha=np.ones(5))
+    Traceback (most recent call last):
+    ...
+    ValueError: Expected `scale`, `pos`, and `alpha` to be broadcastable. Got lengths: 2, 4, and 5.
     """
-    if np.isscalar(s):
-        s = ts.types.to_size3d(s)
-    s = vc.to_vec(s)
+    if np.isscalar(scale):
+        scale = ts.types.to_size3d(scale)
+    if np.isscalar(pos):
+        pos = ts.types.to_pos(pos)
+
+    scale = ts.types.to_homogeneous_vec(scale)
+    pos = ts.types.to_homogeneous_pos(pos)
+    alpha = ts.types.to_scalars(alpha)
+
+    l1, l2, l3 = len(scale), len(pos), len(alpha)
+    try:
+        broadcast_len = vc.broadcast_lengths(l1, l2)
+        broadcast_len = vc.broadcast_lengths(broadcast_len, l3)
+    except ValueError:
+        raise ValueError(
+            "Expected `scale`, `pos`, and `alpha` to be broadcastable. "
+            f"Got lengths: {l1}, {l2}, and {l3}."
+        )
+
+    s = alpha[:, None] * scale
     s0 = s[:, 0:1]  # scaling in coordinate 0
     s1 = s[:, 1:2]  # scaling in coordinate 1
     s2 = s[:, 2:3]  # scaling in coordinate 2

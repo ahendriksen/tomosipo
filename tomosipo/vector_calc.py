@@ -84,6 +84,18 @@ def to_homogeneous_point(x):
 ###############################################################################
 #                                 Broadcasting                                #
 ###############################################################################
+
+def broadcast_lengths(len_a, len_b):
+    if len_a == 1:
+        return len_b
+    if len_b == 1:
+        return len_a
+    if len_a == len_b:
+        return len_a
+
+    raise ValueError("Operands could not be broadcast together.")
+
+
 def _broadcastv(x, y):
     x = np.array(x, copy=False)
     y = np.array(y, copy=False)

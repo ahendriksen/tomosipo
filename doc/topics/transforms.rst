@@ -37,7 +37,7 @@ These are listed below.
    R = ts.rotate(pos=0, axis=(1, 0, 0), angles=np.pi * t)
    ts.svg(R * vg).save("./doc/img/topics_transforms_rotate.svg")
 
-   S = ts.scale(np.tile(1 + t[:, None], (1, 3)))
+   S = ts.scale((1, 1, 1), alpha=1 + t)
    ts.svg(S * vg).save("./doc/img/topics_transforms_scale.svg")
 
    mirror = ts.volume(pos=(0, 2, 0), size=(2, 0, 2))

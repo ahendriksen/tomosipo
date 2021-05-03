@@ -32,31 +32,6 @@ def print_options():
     )
 
 
-def up_tuple(x, n):
-    if isinstance(x, collections.Iterator) or isinstance(x, collections.Iterable):
-        x = tuple(x)
-        if len(x) == 1:
-            return (x[0],) * n
-        if len(x) != n:
-            raise ValueError(f"Expected tuple with {n} elements.")
-        return x
-    # Make tuple
-    return (x,) * n
-
-
-def to_pos(pos, dim=3):
-    if np.isscalar(pos) and pos == 0.0:
-        pos = up_tuple(pos, dim)
-    elif np.isscalar(pos):
-        raise ValueError(
-            f"Position {pos} is not automatically converted to {up_tuple(pos, dim)}. "
-            f"Provide a tuple instead. "
-        )
-
-    # TODO: Check if pos is a vector and nicely shaped.
-    return pos
-
-
 def up_slice(key):
     if isinstance(key, Integral):
         if key == -1:

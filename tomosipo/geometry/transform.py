@@ -1,7 +1,6 @@
 import tomosipo as ts
 import numpy as np
 import warnings
-from tomosipo.utils import up_tuple
 import tomosipo.vector_calc as vc
 
 
@@ -289,7 +288,7 @@ def reflect(*, pos, axis):
 
     """
     if np.isscalar(pos):
-        pos = ts.utils.to_pos(pos)
+        pos = ts.types.to_pos(pos)
     pos = vc.to_homogeneous_point(pos)
     axis = vc.to_homogeneous_vec(axis)
     pos, axis = vc._broadcastv(pos, axis)

@@ -6,7 +6,7 @@
 
 import pytest
 from pytest import approx
-from tomosipo.utils import up_tuple, to_pos, slice_interval
+from tomosipo.utils import slice_interval
 import numpy as np
 import tomosipo as ts
 
@@ -51,28 +51,6 @@ class Interval(object):
     @property
     def center(self):
         return (self.l + self.r) / 2
-
-
-def test_up_tuple():
-    """Test up_tuple."""
-
-    assert (1, 1) == up_tuple((1, 1), 2)
-    assert (1, 2) == up_tuple((1, 2), 2)
-    assert (1, 1) == up_tuple([1], 2)
-    assert (0, 0) == up_tuple(range(1), 2)
-    assert (0, 0) == up_tuple([0], 2)
-    assert (0, 0) == up_tuple((0,), 2)
-    assert (0, 0) == up_tuple(iter((0,)), 2)
-
-
-def test_to_pos():
-    assert (0, 0, 0) == to_pos(0)
-    assert (0, 0) == to_pos(0, dim=2)
-    assert (1, 2, 3) == to_pos((1, 2, 3))
-    two_rows = np.random.normal(size=(2, 3))
-    assert np.allclose(two_rows, to_pos(two_rows))
-    with pytest.raises(ValueError):
-        to_pos(1.0)
 
 
 def test_slice_interval():

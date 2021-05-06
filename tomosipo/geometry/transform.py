@@ -14,7 +14,34 @@ class Transform(object):
         self.matrix, _ = vc._broadcastmm(matrix, matrix)
 
     def __mul__(self, other):
+        """Multiply with other transforms
+
+        Any transform can multiplied by a single-time-step transform.
+        Multiplying two multi-time-step transforms requires that their number of
+        steps is equal. This mirrors the broadcasting rules for numpy arrays.
+
+        >>> T1 = ts.translate((1, 0, 0))
+        >>> T2 = ts.translate((1, 0, 0), alpha=[0.0, 1.0])
+        >>> T3 = ts.translate((1, 0, 0), alpha=[0.0, 1.0, 2.0])
+        >>> (T1 * T2).num_steps
+        2
+        >>> (T1 * T3).num_steps
+        3
+        >>> (T3 * T3).num_steps
+        3
+        >>> (T2 * T3).num_steps  # Not allowed
+        Traceback (most recent call last):
+        ...
+        ValueError: Cannot multiply transforms with different number of time steps. Got steps: 2 and 3
+
+        """
         if isinstance(other, Transform):
+            broadcasts = self.num_steps == 1 or other.num_steps == 1 or self.num_steps == other.num_steps
+            if not broadcasts:
+                raise ValueError(
+                    "Cannot multiply transforms with different number of time steps. "
+                    f"Got steps: {self.num_steps} and {other.num_steps}"
+                )
             M = vc.matrix_matrix_transform(self.matrix, other.matrix)
             return Transform(M)
         else:

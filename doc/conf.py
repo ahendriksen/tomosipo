@@ -14,6 +14,7 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 from recommonmark.parser import CommonMarkParser
+import doctest
 
 
 # -- Project information -----------------------------------------------------
@@ -86,6 +87,9 @@ napoleon_use_ivar = True
 # > python -msphinx -b doctest doc/ ./.doctest-output
 doctest_test_doctest_blocks = ''
 
+# Do not ignore exception details. See:
+# https://www.sphinx-doc.org/en/master/usage/extensions/doctest.html#confval-doctest_default_flags
+doctest_default_flags = doctest.DONT_ACCEPT_TRUE_FOR_1 | doctest.ELLIPSIS
 
 doctest_global_setup = '''
 import astra

@@ -24,3 +24,4 @@ Contributing to tomosipo
    :glob:
 
    update_doc
+   tests

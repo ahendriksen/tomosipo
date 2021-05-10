@@ -86,7 +86,7 @@ def test_eq():
 )
 def test_properties_under_transformations(vg, T, S, R):
     TSR = T * S * R
-    P = ts.from_perspective(box=vg)
+    P = ts.from_perspective(vol=vg)
     assert TSR * vg == TSR * vg
     assert (TSR * vg)[0, 0, 0, 0] == TSR * vg[0, 0, 0, 0]
     assert (TSR * vg)[-1, -1, -1, -1] == TSR * vg[-1, -1, -1, -1]
@@ -261,8 +261,8 @@ def test_transform_example(interactive):
     pos2 = np.stack([zero, h * np.sin(s), h * np.cos(s)], axis=1)
     vg2 = ts.volume_vec(shape=2, pos=pos2, w=z, v=y, u=x)
 
-    M1 = ts.from_perspective(box=vg1)
-    M2 = ts.from_perspective(box=vg2)
+    M1 = ts.from_perspective(vol=vg1)
+    M2 = ts.from_perspective(vol=vg2)
 
     if interactive:
         from tomosipo.qt import display

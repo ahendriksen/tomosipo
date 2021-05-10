@@ -7,13 +7,18 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 
 ## [Unreleased]
 ### Added
+
 - All geometry classes implement `len()`, which returns the number of steps in the geometry.
 - Convenience methods `Transform.transform_vec` and `Transform.transform_point`
 - `ts.svg()`: Render geometries to an animated SVG (no dependencies required(!)).
 - `ts.svg()`: Added progress bar.
 - `ts.svg()`: Optionally show z,y,x-axes in top-left corner with `show_axes=True`.
 - `ts.reflect()`: Add reflection geometrical transform.
+- `ts.from_perspective()` / `ts.to_perspective()`: Add `ignore_scale` parameter,
+  which is `True` by default.
+
 ### Changed
+
 - `ts.svg()`: Remove `base64` keyword parameter. This functionality has been
   moved to the `_repr_markdown_` method.
 - `ts.rotate()`: Disallow passing `pos` and `axis` by position. All
@@ -21,6 +26,10 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 - `ts.rotate()`: Deprecate `rad` and `deg` parameters in favor of
   `angles`. This makes `ts.rotate` more consistent with
   `ts.parallel()`, etc.
+- `ts.from_perspective()` / `ts.to_perspective()`: All parameters are now keyword-only.
+- `ts.from_perspective()` / `ts.to_perspective()`: The `box` parameter has been
+  renamed to `vol`.
+
 ### Removed
 
 

@@ -156,7 +156,7 @@ def test_getitem():
 @pytest.mark.parametrize("T, S", itertools.product(translations, scalings))
 def test_properties_under_transformations(T, S):
     vg = ts.geometry.random_volume()
-    P = ts.from_perspective(box=vg)
+    P = ts.from_perspective(vol=vg)
     TS = T * S
     assert (TS * vg)[0, 0, 0] == TS * vg[0, 0, 0]
     assert (TS * vg)[-1, -1, -1] == TS * vg[-1, -1, -1]

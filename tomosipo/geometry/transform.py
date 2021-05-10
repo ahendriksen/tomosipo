@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 import warnings
 import tomosipo as ts
 import numpy as np
@@ -36,7 +36,11 @@ class Transform(object):
 
         """
         if isinstance(other, Transform):
-            broadcasts = self.num_steps == 1 or other.num_steps == 1 or self.num_steps == other.num_steps
+            broadcasts = (
+                self.num_steps == 1
+                or other.num_steps == 1
+                or self.num_steps == other.num_steps
+            )
             if not broadcasts:
                 raise ValueError(
                     "Cannot multiply transforms with different number of time steps. "
@@ -168,7 +172,7 @@ def translate(axis: ToHomogeneousVec, *, alpha: ToScalars = 1):
 
     """
     axis = vc.to_homogeneous_point(axis)
-    alpha = ts.types.to_scalars(alpha, var_name='alpha')
+    alpha = ts.types.to_scalars(alpha, var_name="alpha")
 
     broadcastable = len(axis) == 1 or len(alpha) == 1 or len(axis) == len(alpha)
 
@@ -441,29 +445,98 @@ def reflect(*, pos, axis):
     return T * R_origin * T.inv
 
 
-def to_perspective(pos=None, w=None, v=None, u=None, box=None):
-    """Transform coordinate frame to another frame of reference
+def to_perspective(
+    *,
+    pos: ToHomogeneousVec = None,
+    w: ToHomogeneousVec = None,
+    v: ToHomogeneousVec = None,
+    u: ToHomogeneousVec = None,
+    vol: Any = None,
+    ignore_scale: bool = True,
+):
+    """Create a perspective transform
 
-    Returns a coordinate transformation to another frame of reference
-    (perspective).
+    This perspective transform converts the "world" coordinate frame to another
+    frame of reference.
 
-    :param pos:
+    The other frame of reference can either be explicitly provided using the
+    `pos`, `w`, `v`, `u` parameters. Alternatively, the other frame of reference
+    can be specified using a volume geometry.
+
+    To perform the perspective transformation without scaling any of the
+    coordinate axes (thus only performing rotation and translation), provide
+    `ignore_scale=True`.
+
+    Parameters
+    ----------
+    pos:
         The position of the new frame of reference.
-    :param w:
+    w:
         The first coordinate of the new frame of reference.
-    :param v:
+    v:
         The second coordinate of the new frame of reference.
-    :param u:
-        The second coordinate of the new frame of reference.
-    :param box: `VolumeVectorGeometry` (optional)
-        Retrieve `pos, w, v, u` arguments from a box.
-    :returns:
-    :rtype:
+    u:
+        The third coordinate of the new frame of reference.
+    vol:
+        A volume (vector) geometry that specifies the frame of reference. If
+        provided, the `pos`, `w`, `v`, and `u` parameters are taken from the
+        volume.
+    ignore_scale:
+        If `True`, do not perform any scaling of the coordinate axes.
+        Effectively, the transform only performs rotation and translation in
+        most cases.
+
+    Returns
+    -------
+    Transform
+        A transform describing the shift in perspective.
+
+    Examples
+    --------
+
+    Create a translation from `(0, 0, 0)` to `(1, 2, 3)`:
+
+    >>> ts.to_perspective(pos=(1, 2, 3), w=(1, 0, 0), v=(0, 1, 0), u=(0, 0, 1))
+    Transform(
+        [[[1. 0. 0. 1.]
+      [0. 1. 0. 2.]
+      [0. 0. 1. 3.]
+      [0. 0. 0. 1.]]]
+    )
+
+    Create equivalent translation, using the `vol` parameter:
+
+    >>> ts.to_perspective(vol=ts.volume(pos=(1, 2, 3)))
+    Transform(
+        [[[1. 0. 0. 1.]
+      [0. 1. 0. 2.]
+      [0. 0. 1. 3.]
+      [0. 0. 0. 1.]]]
+    )
+
+    Ignore scaling of the coordinate axes:
+
+    >>> ts.to_perspective(pos=(1, 2, 3), w=(2, 0, 0), v=(0, 2, 0), u=(0, 0, 2), ignore_scale=True)
+    Transform(
+        [[[1. 0. 0. 1.]
+      [0. 1. 0. 2.]
+      [0. 0. 1. 3.]
+      [0. 0. 0. 1.]]]
+    )
+
+    Scale the coordinate axes as well:
+
+    >>> ts.to_perspective(pos=(1, 2, 3), w=(2, 0, 0), v=(0, 2, 0), u=(0, 0, 2), ignore_scale=False)
+    Transform(
+        [[[2. 0. 0. 1.]
+      [0. 2. 0. 2.]
+      [0. 0. 2. 3.]
+      [0. 0. 0. 1.]]]
+    )
 
     """
-    # TODO: Rename box argument
-    if box is not None:
-        pos, w, v, u = box.pos, box.w, box.v, box.u
+    if vol is not None:
+        pos, w, v, u = vol.pos, vol.w, vol.v, vol.u
 
     if any(x is None for x in (pos, w, v, u)):
         raise ValueError(
@@ -477,32 +550,108 @@ def to_perspective(pos=None, w=None, v=None, u=None, box=None):
     pos, w, v, u = np.broadcast_arrays(pos, w, v, u)
     vc.check_same_shapes(pos, w, v, u)
 
+    if ignore_scale:
+        w = w / vc.norm(w)[:, None]
+        v = v / vc.norm(v)[:, None]
+        u = u / vc.norm(u)[:, None]
+
     assert pos.ndim == 2
     return Transform(np.stack((w, v, u, pos), axis=2))
 
 
-def from_perspective(pos=None, w=None, v=None, u=None, box=None):
-    """Transform coordinate frame to another frame of reference
+def from_perspective(
+    *,
+    pos: ToHomogeneousVec = None,
+    w: ToHomogeneousVec = None,
+    v: ToHomogeneousVec = None,
+    u: ToHomogeneousVec = None,
+    vol: Any = None,
+    ignore_scale: bool = True,
+):
+    """Create a perspective transform
 
-    Returns a coordinate transformation from another frame of
-    reference (perspective) to the coordinate frame with origin (0, 0,
-    0) and basis Z, Y, X.
+    This perspective transform converts the given frame of reference to the
+    "world" coordinate frame with origin `(0, 0, 0)` and coordinate axes Z, Y, X.
 
-    :param pos:
+    The frame of reference can either be explicitly provided using the `pos`,
+    `w`, `v`, `u` parameters. Alternatively, the frame of reference can be
+    specified using a volume geometry.
+
+    To perform the perspective transformation without scaling any of the
+    coordinate axes (thus only performing rotation and translation), provide
+    `ignore_scale=True`.
+
+    Parameters
+    ----------
+    pos:
         The position of the new frame of reference.
-    :param w:
+    w:
         The first coordinate of the new frame of reference.
-    :param v:
+    v:
         The second coordinate of the new frame of reference.
-    :param u:
-        The second coordinate of the new frame of reference.
-    :param box: `VolumeVectorGeometry` (optional)
-        Retrieve `pos, w, v, u` arguments from a box.
-    :returns:
-    :rtype:
+    u:
+        The third coordinate of the new frame of reference.
+    vol:
+        A volume (vector) geometry that specifies the frame of reference. If
+        provided, the `pos`, `w`, `v`, and `u` parameters are taken from the
+        volume.
+    ignore_scale:
+        If `True`, do not perform any scaling of the coordinate axes.
+        Effectively, the transform only performs rotation and translation in
+        most cases.
+
+    Returns
+    -------
+    Transform
+        A transform describing the shift in perspective.
+
+    Examples
+    --------
+
+    Create a translation from `(1, 2, 3)` to `(0, 0, 0)`:
+
+    >>> ts.from_perspective(pos=(1, 2, 3), w=(1, 0, 0), v=(0, 1, 0), u=(0, 0, 1))
+    Transform(
+        [[[ 1.  0.  0. -1.]
+      [ 0.  1.  0. -2.]
+      [ 0.  0.  1. -3.]
+      [ 0.  0.  0.  1.]]]
+    )
+
+    Create equivalent translation, using the `vol` parameter:
+
+    >>> ts.from_perspective(vol=ts.volume(pos=(1, 2, 3)))
+    Transform(
+        [[[ 1.  0.  0. -1.]
+      [ 0.  1.  0. -2.]
+      [ 0.  0.  1. -3.]
+      [ 0.  0.  0.  1.]]]
+    )
+
+    Ignore scaling of the coordinate axes:
+
+    >>> ts.from_perspective(pos=(1, 2, 3), w=(2, 0, 0), v=(0, 2, 0), u=(0, 0, 2), ignore_scale=True)
+    Transform(
+        [[[ 1.  0.  0. -1.]
+      [ 0.  1.  0. -2.]
+      [ 0.  0.  1. -3.]
+      [ 0.  0.  0.  1.]]]
+    )
+
+    Scale the coordinate axes as well:
+
+    >>> ts.from_perspective(pos=(1, 2, 3), w=(2, 0, 0), v=(0, 2, 0), u=(0, 0, 2), ignore_scale=False)
+    Transform(
+        [[[ 0.5  0.   0.  -0.5]
+      [ 0.   0.5  0.  -1. ]
+      [ 0.   0.   0.5 -1.5]
+      [ 0.   0.   0.   1. ]]]
+    )
 
     """
-    return to_perspective(pos, w, v, u, box).inv
+    return to_perspective(
+        pos=pos, w=w, v=v, u=u, vol=vol, ignore_scale=ignore_scale
+    ).inv
 
 
 def random_transform():

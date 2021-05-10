@@ -231,6 +231,7 @@ class VolumeGeometry:
         )
 
     def __eq__(self, other):
+        # TODO: Consider VolumeVectorGeometries...
         if not isinstance(other, VolumeGeometry):
             return False
         return self._inner == other._inner

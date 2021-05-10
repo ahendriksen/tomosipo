@@ -144,6 +144,7 @@ class VolumeVectorGeometry(object):
             )
 
     def __eq__(self, other):
+        # TODO: Consider VolumeGeometries...
         if not isinstance(other, VolumeVectorGeometry):
             return False
 

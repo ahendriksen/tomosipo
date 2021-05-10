@@ -366,11 +366,11 @@ def test_perspective():
         random_vg = (R * T) * unit
 
         # Check that we can move the unit cube to the random box:
-        to_random_vg = ts.to_perspective(box=random_vg)
+        to_random_vg = ts.to_perspective(vol=random_vg)
         assert random_vg == to_random_vg * unit
 
         # Check that we can move the random box to the unit cube:
-        to_unit_cube = ts.from_perspective(box=random_vg)
+        to_unit_cube = ts.from_perspective(vol=random_vg)
         assert unit == to_unit_cube * random_vg
 
         # Check that to_unit_cube is the inverse of to_random_vg
@@ -378,9 +378,22 @@ def test_perspective():
 
         # Check that we can use pos, w, v, u parameters:
         to_random_vg2 = ts.to_perspective(
-            random_vg.pos, random_vg.w, random_vg.v, random_vg.u
+            pos=random_vg.pos, w=random_vg.w, v=random_vg.v, u=random_vg.u
         )
         assert to_random_vg == to_random_vg2
+
+
+def test_perspective_ignore_scale():
+    vg = ts.volume(shape=1, pos=0)
+    S = ts.scale(2.0)
+    vg_large = S * vg.to_vec()
+
+    P0 = ts.from_perspective(vol=vg_large, ignore_scale=False)
+    P1 = ts.from_perspective(vol=vg_large, ignore_scale=True)
+
+    assert vg != P0 * vg.to_vec()
+    assert vg.to_vec() == P1 * vg.to_vec()
+
 
 # The tests are included in the doc strings of the methods.
 class TestDocs(unittest.TestCase):

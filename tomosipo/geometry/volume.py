@@ -7,6 +7,7 @@ from .volume_vec import VolumeVectorGeometry
 from tomosipo.types import ToShape3D, ToPos, ToSize3D
 from typing import Union, Tuple
 
+
 def is_volume(g):
     """Determine if a geometry is a volume geometry
 
@@ -27,14 +28,17 @@ Extent = Union[
         Tuple[float, float],
         Tuple[float, float],
         Tuple[float, float],
-    ]
+    ],
 ]
 
-def volume(*,
-           shape : ToShape3D = (1, 1, 1),
-           pos : ToPos = None,
-           size : ToSize3D = None,
-           extent: Extent = None):
+
+def volume(
+    *,
+    shape: ToShape3D = (1, 1, 1),
+    pos: ToPos = None,
+    size: ToSize3D = None,
+    extent: Extent = None,
+):
     """Create an axis-aligned volume geometry
 
     A VolumeGeometry is an axis-aligned cuboid centered on `pos`.

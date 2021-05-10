@@ -46,9 +46,7 @@ class CupyLink(Link):
             )
             initial_value = initial_value.astype("float32")
             # Make contiguous:
-            if not (
-                initial_value.flags["C_CONTIGUOUS"]
-            ):
+            if not (initial_value.flags["C_CONTIGUOUS"]):
                 warnings.warn(
                     f"The parameter initial_value should be C_CONTIGUOUS. "
                     f"It has been automatically made contiguous. "

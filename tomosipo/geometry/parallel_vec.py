@@ -12,12 +12,9 @@ from . import det_vec as dv
 from .transform import Transform
 
 
-def parallel_vec(*,
-                 shape: ToShape2D,
-                 ray_dir: ToVec,
-                 det_pos: ToVec,
-                 det_v: ToVec,
-                 det_u: ToVec):
+def parallel_vec(
+    *, shape: ToShape2D, ray_dir: ToVec, det_pos: ToVec, det_v: ToVec, det_u: ToVec
+):
     """Create an arbitrarily oriented parallel-beam geometry
 
     Parameters
@@ -99,10 +96,10 @@ class ParallelVectorGeometry(ProjectionGeometry):
         """
         super(ParallelVectorGeometry, self).__init__(shape=shape)
 
-        ray_dir = ts.types.to_vec(ray_dir, 'ray direction')
-        det_pos = ts.types.to_vec(det_pos, 'detector position')
-        det_v = ts.types.to_vec(det_v, 'v axis')
-        det_u = ts.types.to_vec(det_u, 'u axis')
+        ray_dir = ts.types.to_vec(ray_dir, "ray direction")
+        det_pos = ts.types.to_vec(det_pos, "detector position")
+        det_v = ts.types.to_vec(det_v, "v axis")
+        det_u = ts.types.to_vec(det_u, "u axis")
 
         ray_dir, det_pos, det_v, det_u = np.broadcast_arrays(
             ray_dir, det_pos, det_v, det_u

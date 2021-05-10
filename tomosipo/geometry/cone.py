@@ -14,11 +14,11 @@ from .transform import Transform
 def cone(
     *,
     angles: Union[int, ToScalars] = 1,
-    shape: ToShape2D=(1, 1),
-    size: ToSize2D=None,
-    cone_angle: float=None,
-    src_orig_dist: float=None,
-    src_det_dist: float=None,
+    shape: ToShape2D = (1, 1),
+    size: ToSize2D = None,
+    cone_angle: float = None,
+    src_orig_dist: float = None,
+    src_det_dist: float = None,
 ):
     """Create a circular cone-beam geometry
 
@@ -165,7 +165,7 @@ class ConeGeometry(ProjectionGeometry):
             # Make 360° arc such that last angle does not equal the first (endpoint=False).
             angles = np.linspace(0, 2 * np.pi, angles, endpoint=False)
         else:
-            angles = ts.types.to_scalars(angles, var_name='angles')
+            angles = ts.types.to_scalars(angles, var_name="angles")
 
         if len(angles) == 0:
             raise ValueError(

@@ -32,7 +32,9 @@ def test_init():
     # Check that differently shaped arguments for pos, w, v, u raise an error:
     N = 11
     with pytest.raises(ValueError):
-        print(ts.volume_vec(shape=1, pos=[(0, 0, 0)] * 3, w=[z] * N, v=[y] * N, u=[x] * N))
+        print(
+            ts.volume_vec(shape=1, pos=[(0, 0, 0)] * 3, w=[z] * N, v=[y] * N, u=[x] * N)
+        )
 
     with pytest.raises(ValueError):
         ts.volume_vec(shape=1, pos=[(0, 0, 0)] * N, w=[z] * 3, v=[y] * N, u=[x] * N)

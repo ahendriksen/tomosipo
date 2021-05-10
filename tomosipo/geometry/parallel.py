@@ -9,10 +9,9 @@ from .parallel_vec import ParallelVectorGeometry
 from .transform import Transform
 
 
-def parallel(*,
-             angles: Union[int, ToScalars] = 1,
-             shape: ToShape2D = 1,
-             size: ToSize2D = None):
+def parallel(
+    *, angles: Union[int, ToScalars] = 1, shape: ToShape2D = 1, size: ToSize2D = None
+):
     """Create a circular parallel-beam geometry
 
     Parameters
@@ -88,7 +87,7 @@ class ParallelGeometry(ProjectionGeometry):
             # 180°; first and last angle are not parallel.
             angles = np.linspace(0, np.pi, angles, endpoint=False)
         else:
-            angles = ts.types.to_scalars(angles, var_name='angles')
+            angles = ts.types.to_scalars(angles, var_name="angles")
 
         if len(angles) == 0:
             raise TypeError(

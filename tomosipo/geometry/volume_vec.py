@@ -116,10 +116,10 @@ class VolumeVectorGeometry(object):
         if np.isscalar(pos) and pos == 0.0:
             pos = (0.0, 0.0, 0.0)
 
-        pos = ts.types.to_vec(pos, 'position')
-        w = ts.types.to_vec(w, 'w axis')
-        v = ts.types.to_vec(v, 'v axis')
-        u = ts.types.to_vec(u, 'u axis')
+        pos = ts.types.to_vec(pos, "position")
+        w = ts.types.to_vec(w, "w axis")
+        v = ts.types.to_vec(v, "v axis")
+        u = ts.types.to_vec(u, "u axis")
 
         pos, w, v, u = np.broadcast_arrays(pos, w, v, u)
         self._pos, self._w, self._v, self._u = pos, w, v, u

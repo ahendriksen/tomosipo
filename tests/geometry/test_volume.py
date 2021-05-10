@@ -267,6 +267,7 @@ def test_with_voxel_size():
     assert vg.with_voxel_size(2.0) == vg.with_voxel_size((2.0, 2.0, 2.0))
     assert vg.with_voxel_size(3.0) == vg.with_voxel_size((3.0, 3.0, 3.0))
 
+
 # The tests are included in the doc strings of the methods.
 class TestDocs(unittest.TestCase):
     pass

@@ -8,7 +8,7 @@ import numpy as np
 #                                    Types                                    #
 ###############################################################################
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 Shape2D = Tuple[int, int]
 Shape3D = Tuple[int, int, int]
@@ -33,9 +33,7 @@ Vec = np.ndarray
 HomogeneousVec = np.ndarray
 
 ToVec = Union[
-    Tuple[float, float, float],
-    Iterable[Tuple[float, float, float]],
-    np.ndarray
+    Tuple[float, float, float], Iterable[Tuple[float, float, float]], np.ndarray
 ]
 
 ToHomogeneousVec = Union[
@@ -48,6 +46,7 @@ ToHomogeneousVec = Union[
 ###############################################################################
 #                               Shapes and Sizes                              #
 ###############################################################################
+
 
 def to_tuple(val: Union[Iterable[T], T], n: int) -> Tuple[T]:
     """Convert value to tuple of length `n`
@@ -71,16 +70,14 @@ def to_tuple(val: Union[Iterable[T], T], n: int) -> Tuple[T]:
     if isinstance(val, abc.Iterable):
         shape = tuple(val)
         if len(shape) != n:
-            raise TypeError(
-                f"Expected tuple with {n} elements. Got {repr(val)}."
-            )
+            raise TypeError(f"Expected tuple with {n} elements. Got {repr(val)}.")
         else:
             return val
     else:
-        return (val, ) * n
+        return (val,) * n
 
 
-def to_float_tuple(val, n, var_name='value'):
+def to_float_tuple(val, n, var_name="value"):
     """Convert value to tuple of `n` floats
 
     >>> to_float_tuple(1, 2)
@@ -107,14 +104,12 @@ def to_float_tuple(val, n, var_name='value'):
     try:
         val = tuple(map(float, val))
     except ValueError:
-        raise TypeError(
-            f"{var_name} must contain only floats. Got {repr(val)}."
-        )
+        raise TypeError(f"{var_name} must contain only floats. Got {repr(val)}.")
     return val
 
 
 def to_shape_nd(shape, n):
-    """ Create N-dimensional shape
+    """Create N-dimensional shape
 
     :meta private:
     """
@@ -163,7 +158,7 @@ def to_shape3d(shape: ToShape3D) -> Shape3D:
 
 
 def to_size_nd(size, n):
-    """ Create N-dimensional shape
+    """Create N-dimensional shape
 
     :meta private:
     """
@@ -233,7 +228,8 @@ def to_pos(pos: ToPos) -> Pos:
 #                                   Scalars                                   #
 ###############################################################################
 
-def to_scalars(s: ToScalars, var_name='scalars', accept_empty=False) -> Scalars:
+
+def to_scalars(s: ToScalars, var_name="scalars", accept_empty=False) -> Scalars:
     """Create an array of scalars
 
     Parameters
@@ -282,13 +278,9 @@ def to_scalars(s: ToScalars, var_name='scalars', accept_empty=False) -> Scalars:
     try:
         s = np.array(s, dtype=np.float64, ndmin=1, copy=False)
     except ValueError:
-        raise TypeError(
-            f"Could not convert {var_name} to np.array. Got: {repr(s)}."
-        )
+        raise TypeError(f"Could not convert {var_name} to np.array. Got: {repr(s)}.")
     if np.any(np.isnan(s)):
-        raise TypeError(
-            f"Could not convert to array of scalars: array contains NaN."
-        )
+        raise TypeError(f"Could not convert to array of scalars: array contains NaN.")
 
     shape = s.shape
 
@@ -307,8 +299,7 @@ def to_scalars(s: ToScalars, var_name='scalars', accept_empty=False) -> Scalars:
 ###############################################################################
 
 
-
-def to_vec(vec: ToVec, var_name='vector') -> Vec:
+def to_vec(vec: ToVec, var_name="vector") -> Vec:
     """Create an array of vectors
 
     Examples
@@ -341,9 +332,7 @@ def to_vec(vec: ToVec, var_name='vector') -> Vec:
     try:
         vec = np.array(vec, dtype=np.float64, copy=False)
     except ValueError:
-        raise TypeError(
-            f"Could not convert {var_name} to np.array. Got: {repr(vec)}."
-        )
+        raise TypeError(f"Could not convert {var_name} to np.array. Got: {repr(vec)}.")
     shape = vec.shape
     vec = np.array(vec, dtype=np.float64, copy=False, ndmin=2)
 
@@ -365,9 +354,7 @@ def to_homogeneous(vec, s) -> HomogeneousVec:
     try:
         vec = np.array(vec, dtype=np.float64, copy=False)
     except ValueError:
-        raise TypeError(
-            f"Could not convert value to np.array. Got: {repr(vec)}."
-        )
+        raise TypeError(f"Could not convert value to np.array. Got: {repr(vec)}.")
     shape = vec.shape
     vec = np.array(vec, dtype=np.float64, copy=False, ndmin=2)
 
@@ -375,11 +362,7 @@ def to_homogeneous(vec, s) -> HomogeneousVec:
         if vec.shape[1] == 4:
             return vec
         if vec.shape[1] == 3:
-            return np.append(
-                vec,
-                s * np.ones((vec.shape[0], 1)),
-                axis=1
-            )
+            return np.append(vec, s * np.ones((vec.shape[0], 1)), axis=1)
 
     raise TypeError(
         f"Value cannot be converted to homogeneous coordinates. "

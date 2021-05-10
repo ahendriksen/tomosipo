@@ -19,6 +19,7 @@ def test_broadcast_lengths():
     with pytest.raises(ValueError):
         vc.broadcast_lengths(2, 3)
 
+
 def test_broadcastv():
     x, y = vc._broadcastv(np.ones((3,)), np.ones((3,)))
     assert x.shape == (1, 3)

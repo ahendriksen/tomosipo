@@ -85,7 +85,7 @@ def slice_interval(left, right, length, key):
 
 
     .. code-block:: none
-    
+
            |x|x|x|x|   [0:4:1]
           | x | x |    [0:4:2]
             | x | x |  [1:4:2]

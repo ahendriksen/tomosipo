@@ -208,6 +208,7 @@ def test_translate_alpha():
     assert T * T * T == ts.translate(axis, alpha=3)
     assert ts.translate(axis, alpha=[2, 3]).num_steps == 2
 
+
 def test_scale_simple_case():
     unit = ts.volume_vec(shape=1, pos=0)
     # Uniform scaling

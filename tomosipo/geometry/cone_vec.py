@@ -7,12 +7,9 @@ from . import det_vec as dv
 from .transform import Transform
 
 
-def cone_vec(*,
-             shape: ToShape2D,
-             src_pos: ToVec,
-             det_pos: ToVec,
-             det_v: ToVec,
-             det_u: ToVec):
+def cone_vec(
+    *, shape: ToShape2D, src_pos: ToVec, det_pos: ToVec, det_v: ToVec, det_u: ToVec
+):
     """Create an arbitrarily oriented cone-beam geometry
 
     Parameters
@@ -97,10 +94,10 @@ class ConeVectorGeometry(ProjectionGeometry):
         """
         super(ConeVectorGeometry, self).__init__(shape=shape)
 
-        src_pos = ts.types.to_vec(src_pos, 'source position')
-        det_pos = ts.types.to_vec(det_pos, 'detector position')
-        det_v = ts.types.to_vec(det_v, 'v axis')
-        det_u = ts.types.to_vec(det_u, 'u axis')
+        src_pos = ts.types.to_vec(src_pos, "source position")
+        det_pos = ts.types.to_vec(det_pos, "detector position")
+        det_v = ts.types.to_vec(det_v, "v axis")
+        det_u = ts.types.to_vec(det_u, "u axis")
 
         src_pos, det_pos, det_v, det_u = np.broadcast_arrays(
             src_pos, det_pos, det_v, det_u

@@ -85,6 +85,7 @@ def to_homogeneous_point(x):
 #                                 Broadcasting                                #
 ###############################################################################
 
+
 def broadcast_lengths(len_a, len_b):
     if len_a == 1:
         return len_b

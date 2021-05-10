@@ -14,12 +14,12 @@ from . import (
 
 
 def concatenate(
-        items: Union[
-            Collection[ProjectionGeometry],
-            Collection[VolumeGeometry],
-            Collection[VolumeVectorGeometry],
-            Collection[Transform]
-        ],
+    items: Union[
+        Collection[ProjectionGeometry],
+        Collection[VolumeGeometry],
+        Collection[VolumeVectorGeometry],
+        Collection[Transform],
+    ],
 ):
     """Concatenate geometries and transformations
 

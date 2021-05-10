@@ -168,9 +168,9 @@ def test_to_vec(par_vecs):
         assert pg == pg.to_vec()
 
 
-def test_to_box(par_vecs):
+def test_to_vol(par_vecs):
     for pg in par_vecs:
-        assert pg.det_pos == approx(pg.to_box().pos)
+        assert pg.det_pos == approx(pg.to_vol().pos)
     # TODO: This test deserves better..
 
 

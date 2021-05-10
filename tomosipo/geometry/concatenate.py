@@ -27,7 +27,7 @@ def concatenate(
 
     - parallel geometries (vec and non-vec)
     - cone geometries (vec and non-vec)
-    - oriented boxes
+    - volume geometries (vec and non-vec)
     - transformations
 
     .. note ::

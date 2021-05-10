@@ -212,13 +212,13 @@ def test_transform():
         assert transform.identity() * pg == pg
 
 
-def test_to_box():
+def test_to_vol():
 
     pg = ts.cone(
         angles=10, shape=(5, 3), size=np.sqrt(2), src_orig_dist=11, src_det_dist=21
     ).to_vec()
 
-    assert np.allclose(pg.det_pos, pg.to_box().pos)
+    assert np.allclose(pg.det_pos, pg.to_vol().pos)
     # XXX: Really do not know what to test here..
 
 

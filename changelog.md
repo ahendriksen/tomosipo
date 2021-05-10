@@ -29,6 +29,7 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 - `ts.from_perspective()` / `ts.to_perspective()`: All parameters are now keyword-only.
 - `ts.from_perspective()` / `ts.to_perspective()`: The `box` parameter has been
   renamed to `vol`.
+- `.to_box()`: Rename the `.to_box()` method on projection geometries to `.to_vol()`.
 
 ### Removed
 

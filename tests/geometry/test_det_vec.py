@@ -99,9 +99,9 @@ def test_to_vec(det_vecs):
         assert pg == pg.to_vec()
 
 
-def test_to_box(det_vecs):
+def test_to_vol(det_vecs):
     for pg in det_vecs:
-        assert pg.det_pos == approx(pg.to_box().pos)
+        assert pg.det_pos == approx(pg.to_vol().pos)
 
 
 def test_src_pos(det_vecs):

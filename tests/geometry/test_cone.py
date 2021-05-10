@@ -214,8 +214,8 @@ def test_transform():
             assert transform.identity() * pg == pg.to_vec()
 
 
-def test_to_box():
+def test_to_vol():
     pg = ts.cone(
         angles=10, shape=(5, 3), size=np.sqrt(2), src_orig_dist=11, src_det_dist=21
     )
-    assert pg.det_pos == approx(pg.to_box().pos)
+    assert pg.det_pos == approx(pg.to_vol().pos)

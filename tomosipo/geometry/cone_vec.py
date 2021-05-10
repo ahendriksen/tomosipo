@@ -220,14 +220,14 @@ class ConeVectorGeometry(ProjectionGeometry):
     def to_vec(self):
         return self
 
-    def to_box(self):
-        """Returns an oriented box representating the detector
+    def to_vol(self):
+        """Returns a volume vector geometry representing the detector
 
-        :returns: an oriented box representating the detector
+        :returns: a volume vector geometry representing the detector
         :rtype:  `VolumeVectorGeometry`
 
         """
-        return self._det_vec.to_box()
+        return self._det_vec.to_vol()
 
     ###########################################################################
     #                                Properties                               #

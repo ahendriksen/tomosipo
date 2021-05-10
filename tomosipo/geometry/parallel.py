@@ -195,14 +195,14 @@ class ParallelGeometry(ProjectionGeometry):
         """
         return ParallelVectorGeometry.from_astra(astra.geom_2vec(self.to_astra()))
 
-    def to_box(self):
-        """Returns an oriented box representating the detector
+    def to_vol(self):
+        """Returns a volume vector geometry representing the detector
 
-        :returns: an oriented box representating the detector
+        :returns: a volume vector geometry representing the detector
         :rtype:  `VolumeVectorGeometry`
 
         """
-        return self.to_vec().to_box()
+        return self.to_vec().to_vol()
 
     ###########################################################################
     #                                Properties                               #

@@ -5,9 +5,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project *is planned to* adhere to [Semantic
 Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 
+
 ## [Unreleased]
 ### Added
+### Changed
+### Removed
 
+
+## [0.3.0] - 2021-06-17
+In this release, mostly small things have been polished for consistency.
+In addition, the transforms functions have gained some added
+functionality to easily move and scale things over time.
+
+### Added
 - All geometry classes implement `len()`, which returns the number of steps in the geometry.
 - Convenience methods `Transform.transform_vec` and `Transform.transform_point`
 - `ts.svg()`: Render geometries to an animated SVG (no dependencies required(!)).
@@ -16,9 +26,12 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 - `ts.reflect()`: Add reflection geometrical transform.
 - `ts.from_perspective()` / `ts.to_perspective()`: Add `ignore_scale` parameter,
   which is `True` by default.
+- `ts.scale()`: Add alpha parameter so that object can easily be scaled in
+  certain directions over time.
+- `ts.translate()`: Add alpha parameter so that object can easily be translated along a 
+  certain axis over time.
 
 ### Changed
-
 - `ts.svg()`: Remove `base64` keyword parameter. This functionality has been
   moved to the `_repr_markdown_` method.
 - `ts.rotate()`: Disallow passing `pos` and `axis` by position. All
@@ -30,8 +43,6 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 - `ts.from_perspective()` / `ts.to_perspective()`: The `box` parameter has been
   renamed to `vol`.
 - `.to_box()`: Rename the `.to_box()` method on projection geometries to `.to_vol()`.
-
-### Removed
 
 
 ## [0.2.0] - 2020-10-13
@@ -72,6 +83,7 @@ This is a major release. It introduces two features that define tomosipo in its 
 
 
 
-[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/ahendriksen/tomosipo/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/ahendriksen/tomosipo/compare/v0.0.1...v0.2.0
 [0.0.1]: https://github.com/ahendriksen/tomosipo/releases/tag/v0.0.1

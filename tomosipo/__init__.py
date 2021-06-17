@@ -4,7 +4,7 @@
 
 __author__ = """Allard Hendriksen"""
 __email__ = "allard.hendriksen@cwi.nl"
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 from .Operator import forward, backward, fdk, operator
 from .Data import data

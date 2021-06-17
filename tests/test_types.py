@@ -1,11 +1,11 @@
 import unittest
 import pytest
 import tomosipo as ts
-from . import add_doctest_cases
+from . import add_doctest_cases, UniformPrintingTestCase
 
 
-# The tests are included in the doc strings of the methods.
-class TestDocs(unittest.TestCase):
+# Test the doctests that are included in the docstrings of ts.types
+class TestDocs(UniformPrintingTestCase):
     pass
 
 

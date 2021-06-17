@@ -10,7 +10,7 @@ from tomosipo.geometry import random_volume_vec
 import numpy as np
 from tomosipo.geometry import transform
 import itertools
-from .. import add_doctest_cases
+from .. import add_doctest_cases, UniformPrintingTestCase
 
 
 vgs = [
@@ -396,8 +396,8 @@ def test_perspective_ignore_scale():
     assert vg.to_vec() == P1 * vg.to_vec()
 
 
-# The tests are included in the doc strings of the methods.
-class TestDocs(unittest.TestCase):
+# Test the doctests that are included in the docstrings of ts.transform
+class TestDocs(UniformPrintingTestCase):
     pass
 
 

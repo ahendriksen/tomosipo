@@ -1,6 +1,8 @@
 import pytest
 import astra
 import doctest
+import unittest
+import tomosipo as ts
 
 cuda_available = astra.use_cuda()
 skip_if_no_cuda = pytest.mark.skipif(not cuda_available, reason="Cuda not available")
@@ -36,3 +38,14 @@ def add_doctest_cases(testcase_class, module_to_document):
     for case in doctest.DocTestSuite(module_to_document):
         case_name = case._dt_test.name.replace(".", "_")
         setattr(testcase_class, f"test_{case_name}", case.runTest)
+
+
+class UniformPrintingTestCase(unittest.TestCase):
+    """Test case where numpy's print options are set consistently
+    """
+    def setUp(self):
+        self.print_options = ts.utils.print_options()
+        self.print_options.__enter__()
+
+    def tearDown(self):
+        self.print_options.__exit__(None, None, None)

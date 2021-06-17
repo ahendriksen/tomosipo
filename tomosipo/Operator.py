@@ -43,7 +43,7 @@ def to_astra_compatible_operator_geometry(vg, pg):
     assert np.allclose(vg.v, voxel_size[1] * np.array([0, 1, 0]))
     assert np.allclose(vg.u, voxel_size[2] * np.array([0, 0, 1]))
 
-    axis_aligned_vg = ts.volume(shape=vg.shape, pos=vg.pos, size=vg.size)
+    axis_aligned_vg = ts.volume(shape=vg.shape, pos=0, size=vg.size)
 
     return axis_aligned_vg, pg
 

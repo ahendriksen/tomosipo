@@ -9,6 +9,9 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 ## [Unreleased]
 ### Added
 ### Changed
+### Fixed
+- `ts.operator`: making an operator with a volume vector geometry would fail.
+  This has been fixed.
 ### Removed
 
 

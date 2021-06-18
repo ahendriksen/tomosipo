@@ -21,36 +21,30 @@ width, and depth can be customized arbitrarily, however.
 We can recreate the above figure and check the documented behavior using
 tomosipo as follows:
 
-.. testcode::
+.. doctest::
 
-   import tomosipo as ts
-
-   vg = ts.volume(shape=3)
-
-   svg = ts.svg(vg, vg[0, 0, 0], vg[2, 0, 0], vg[2, 2, 2])
-   svg.save("./doc/img/topics_geometries_indexing.svg")
-
-   print(vg[0, 0, 0])
-   print(vg[2, 0, 0])
-   print(vg[2, 2, 2])
-
-.. testoutput::
-
-    ts.volume(
-        shape=(1, 1, 1),
-        pos=(-1.0, -1.0, -1.0),
-        size=(1.0, 1.0, 1.0),
-    )
-    ts.volume(
-        shape=(1, 1, 1),
-        pos=(1.0, -1.0, -1.0),
-        size=(1.0, 1.0, 1.0),
-    )
-    ts.volume(
-        shape=(1, 1, 1),
-        pos=(1.0, 1.0, 1.0),
-        size=(1.0, 1.0, 1.0),
-    )
+   >>> import tomosipo as ts
+   >>> vg = ts.volume(shape=3)
+   >>> svg = ts.svg(vg, vg[0, 0, 0], vg[2, 0, 0], vg[2, 2, 2])
+   >>> svg.save("./doc/img/topics_geometries_indexing.svg")
+   >>> vg[0, 0, 0]
+   ts.volume(
+       shape=(1, 1, 1),
+       pos=(-1.0, -1.0, -1.0),
+       size=(1.0, 1.0, 1.0),
+   )
+   >>> vg[2, 0, 0]
+   ts.volume(
+       shape=(1, 1, 1),
+       pos=(1.0, -1.0, -1.0),
+       size=(1.0, 1.0, 1.0),
+   )
+   >>> vg[2, 2, 2]
+   ts.volume(
+       shape=(1, 1, 1),
+       pos=(1.0, 1.0, 1.0),
+       size=(1.0, 1.0, 1.0),
+   )
 
 
 .. figure:: ../img/topics_geometries_indexing.svg

@@ -25,7 +25,7 @@ Are you new to tomosipo? This is the place to start!
   :doc:`intro/forward_projection` | :doc:`intro/simple_reconstruction`
 
 * **Advanced Tutorials:**
-  :doc:`intro/fast_reconstruction`
+  :doc:`intro/fast_reconstruction` | :doc:`intro/lab_frame`
 
 
 How the documentation is organized

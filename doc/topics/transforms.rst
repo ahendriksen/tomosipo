@@ -1,3 +1,5 @@
+.. _topics_geometric_transforms:
+
 ====================
 Geometric transforms
 ====================

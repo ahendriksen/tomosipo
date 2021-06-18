@@ -1,6 +1,5 @@
-==================
-Use the unit tests
-==================
+Execute the unit tests
+======================
 
 
 Run the tests

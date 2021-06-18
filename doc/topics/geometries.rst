@@ -1,6 +1,10 @@
+.. _topics_geometries:
+
 ==========
 Geometries
 ==========
+
+.. _topics_units_axes_indexing:
 
 Units, axes and indexing
 ========================

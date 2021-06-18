@@ -1,7 +1,7 @@
 .. _intro_simple_reconstruction:
 
-A simple reconstruction SIRT reconstruction
-===========================================
+A simple SIRT reconstruction
+============================
 
 .. note::
    To keep the size of the documentation in version control manageable, we do

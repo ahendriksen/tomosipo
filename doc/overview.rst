@@ -22,13 +22,11 @@ Are you new to tomosipo? This is the place to start!
   :doc:`Installation <intro/install>`
 
 * **Tutorials:**
-
-  TODO
-
+  :doc:`intro/forward_projection` | :doc:`intro/simple_reconstruction`
 
 * **Advanced Tutorials:**
+  :doc:`intro/fast_reconstruction`
 
-  TODO
 
 How the documentation is organized
 ==================================

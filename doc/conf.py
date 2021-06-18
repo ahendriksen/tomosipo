@@ -30,6 +30,7 @@ author = 'Allard Hendriksen'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.mathjax',
     'sphinx.ext.autosummary',
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
@@ -94,4 +95,15 @@ doctest_default_flags = doctest.DONT_ACCEPT_TRUE_FOR_1 | doctest.ELLIPSIS
 doctest_global_setup = '''
 import astra
 cuda_available = astra.use_cuda()
+try:
+    import matplotlib
+    matplotlib_available = True
+except ModuleNotFoundError:
+    matplotlib_available = False
+
+try:
+    import torch
+    torch_available = True
+except ModuleNotFoundError:
+    torch_available = False
 '''

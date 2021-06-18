@@ -70,9 +70,9 @@ values using `np.minimum`.
 .. testcode:: session
    :skipif: not cuda_available
 
-   R = 1 / A(np.ones(A.domain_shape), dtype=np.float32)
+   R = 1 / A(np.ones(A.domain_shape, dtype=np.float32))
    R = np.minimum(R, 1 / ts.epsilon)
-   C = 1 / A.T(np.ones(A.range_shape), dtype=np.float32)
+   C = 1 / A.T(np.ones(A.range_shape, dtype=np.float32))
    C = np.minimum(C, 1 / ts.epsilon)
 
 Next, we reconstruct from the sinogram stack `y` into `x_rec`:

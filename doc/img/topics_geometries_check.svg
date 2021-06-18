@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="f744ec30_bbca_45ae_b55e_4e38de938be1" height="200" width="320">
+<svg xmlns="http://www.w3.org/2000/svg" id="322e7b2a7d453d3d77903052d77f936d01a2f812dece4a56d1d49754ad7ffc7195c2dd50bef94cd14d19f50c9313faaa3df9e6eaa26f34266ffaa0981f7db464" height="200" width="320">
       <title>Click to pause/unpause, press and hold to scroll through animation</title>
         <g>
           <path d="M0,200 h0.0 v-5.0 h-0.0 Z" fill="black" stroke="none" fill-opacity="0.2"/>
@@ -162,16 +162,16 @@
     
         
       <script type="text/ecmascript"><![CDATA[
-          function mouse_move_f744ec30_bbca_45ae_b55e_4e38de938be1(evt) {
+          function mouse_move_322e7b2a7d453d3d77903052d77f936d01a2f812dece4a56d1d49754ad7ffc7195c2dd50bef94cd14d19f50c9313faaa3df9e6eaa26f34266ffaa0981f7db464(evt) {
               if (evt.buttons > 0) {
-                    var root = document.getElementById('f744ec30_bbca_45ae_b55e_4e38de938be1');
+                    var root = document.getElementById('322e7b2a7d453d3d77903052d77f936d01a2f812dece4a56d1d49754ad7ffc7195c2dd50bef94cd14d19f50c9313faaa3df9e6eaa26f34266ffaa0981f7db464');
                     root.pauseAnimations();
                     var new_time = 3 * evt.layerX / evt.target.getBBox().width;
                     root.setCurrentTime(new_time);
               }
           }
-          function on_click_f744ec30_bbca_45ae_b55e_4e38de938be1(evt) {
-              var root = document.getElementById('f744ec30_bbca_45ae_b55e_4e38de938be1');
+          function on_click_322e7b2a7d453d3d77903052d77f936d01a2f812dece4a56d1d49754ad7ffc7195c2dd50bef94cd14d19f50c9313faaa3df9e6eaa26f34266ffaa0981f7db464(evt) {
+              var root = document.getElementById('322e7b2a7d453d3d77903052d77f936d01a2f812dece4a56d1d49754ad7ffc7195c2dd50bef94cd14d19f50c9313faaa3df9e6eaa26f34266ffaa0981f7db464');
               //console.log(root);
               root.animationsPaused() ? root.unpauseAnimations() : root.pauseAnimations();
           }
@@ -179,6 +179,6 @@
       </script>
 
     
-        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move_f744ec30_bbca_45ae_b55e_4e38de938be1(evt)' onclick='on_click_f744ec30_bbca_45ae_b55e_4e38de938be1(evt)' width="318" height="198" stroke="gray" fill="transparent" stroke-width="1"/>
+        <rect x="1" y="1" rx="5" ry="5" onmousemove='mouse_move_322e7b2a7d453d3d77903052d77f936d01a2f812dece4a56d1d49754ad7ffc7195c2dd50bef94cd14d19f50c9313faaa3df9e6eaa26f34266ffaa0981f7db464(evt)' onclick='on_click_322e7b2a7d453d3d77903052d77f936d01a2f812dece4a56d1d49754ad7ffc7195c2dd50bef94cd14d19f50c9313faaa3df9e6eaa26f34266ffaa0981f7db464(evt)' width="318" height="198" stroke="gray" fill="transparent" stroke-width="1"/>
     </svg>
     

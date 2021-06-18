@@ -78,14 +78,15 @@ volume geometry by forward projecting on a very small detector:
    A = ts.operator(vg, T * pg)
    x = np.zeros(vg.shape, dtype=np.float32)
    x[0, 1, 2] = 1.0
-   A(x)
+   print(A(x))
 
 .. testoutput::
    :skipif: not cuda_available
 
-   array([[[1.       ],
-          [1.       ],
-          [1.]]], dtype=float32)
+   [[[1.       ]
+     [1.4142135]
+     [1.       ]
+     [1.4142135]]]
 
 
 .. figure:: ../img/topics_geometries_check.svg
@@ -184,7 +185,7 @@ geometries. These are known as vector geometries and can be created using the `t
 
 Usually, it is not necessary to create vector geometries manually by specifying
 their coordinate axes manually. In tomosipo, it is easier to start with a basic
-geometry and transform it using geometric transforms, as described in TODO. 
+geometry and transform it using geometric transforms, as described in TODO.
 If you need to manually define vector geometry, use the following functions:
 
 .. tabularcolumns:: |l|p{2px}|
@@ -301,7 +302,7 @@ Geometries have a useful representation when printed:
        shape=(10, 15),
        size=(1.0, 1.5),
    )
-   
+
 Angles, shape, and size
 -----------------------
 
@@ -435,5 +436,3 @@ geometries.
    array([[ 0.       , -1.       ,  0.       ],
           [ 0.       , -0.5      ,  0.8660254],
           [ 0.       ,  0.5      ,  0.8660254]])
-
-

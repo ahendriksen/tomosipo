@@ -63,7 +63,7 @@ pages:
     - export PATH="$HOME/miniconda3/bin:$PATH"
     - conda install python=3.7 astra-toolbox pyqtgraph pyqt pyopengl pytorch cupy ffmpeg ffmpeg-python matplotlib sphinx ipython sphinx_rtd_theme odl recommonmark -c defaults -c astra-toolbox/label/dev -c conda-forge -c odlgroup -yq
     - pip install .[dev]
-    - sphinx-apidoc -M -f -e --tocfile api_reference -H "API Reference" --ext-autodoc -o doc/reference/ tomosipo
+    - sphinx-apidoc -M -f -e --tocfile api_reference -H "API Reference" --ext-autodoc -o doc/ref/ tomosipo
     - sphinx-build -b html doc/ public
     - python -msphinx -b doctest doc ./doctest-output # Run doctest
   artifacts:

@@ -4,7 +4,6 @@
 htmlcov/
 /doc/_build
 /doc/_static
-/doc/api_details/
 /public/
 /doc/ref/_autosummary/
 doc/ref/tomosipo*.rst

@@ -1,14 +1,8 @@
 Conventions
 ===========
 
-
-
-
-
-
-
 Naming and ordering
-----------------------------------
+-------------------
 
 The following terms are used as parameters, properties, and in
 function names:

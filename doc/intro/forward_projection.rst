@@ -20,7 +20,6 @@ as `ts`:
 
 Now we can create a volume and a circular parallel-beam projection geometry. The
 volume is a three-dimensional unit cube and is composed of 32 voxels in each dimension.
-
 The parallel-beam geometry has 32 angles that are equi-spaced over a half arc.
 The detector has 48 pixels in each dimension and 1.5 units high and wide.
 
@@ -42,13 +41,13 @@ created as follows:
 
 .. doctest:: session
 
-   >>> vg
+   >>> print(vg)
    ts.volume(
        shape=(32, 32, 32),
        pos=(0.0, 0.0, 0.0),
        size=(1.0, 1.0, 1.0),
    )
-   >>> pg
+   >>> pg    # or just press enter in the python console..
    ts.parallel(
        angles=32,
        shape=(48, 48),

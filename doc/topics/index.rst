@@ -6,6 +6,13 @@ Introductions to all the key parts of tomosipo you’ll need to know:
 .. toctree::
    :maxdepth: 2
 
-   geometries.rst
-   transforms.rst
-   conventions.rst
+   geometries
+   transforms
+   operator
+   display
+   indexing_concatenation
+
+   astra
+   pytorch
+
+   conventions

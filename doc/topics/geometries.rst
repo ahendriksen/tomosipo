@@ -22,8 +22,48 @@ coordinate in the `y` direction, and the third coordinate in the `x` direction.
 By default, each voxel has a "physical size" of `1` unit. The voxel's height,
 width, and depth can be customized arbitrarily, however.
 
-We can recreate the above figure and check the documented behavior using
-tomosipo as follows:
+We display an example for a parallel geometry with its associated
+sinogram indexing below. The detector coordinate frame is defined by
+two vectors
+
+-   **u:** Usually points sideways and to the "right" from the perspective
+    of the source. The length of u defines the width of a detector
+    pixel.
+-   **v:** Usually points upwards. The length of v defines the height of a
+    detector pixel.
+
+.. image:: ../img/projection_geometry.svg
+  :width: 400
+  :alt: Projection geometry
+
+Here, we see that the order of the physical dimensions does not match the order
+of the data indices. For performance reasons, projection data is stored as a
+sinogram stack indexed in `(v, angle, u)` order. The projection geometry
+coordinates are `(angles, v, u)`, however. The size of a detector pixel can be
+arbitrary and is defined by the `u` and `v` vectors.
+
+In short:
+
+-   Volume geometry and data are indexed  in `(z, y, x)` order.
+-   Projection geometries are indexed in `(angle, v, u)` order.
+-   Projection data is stored as a **sinogram stack**, indexed in `(v, angle, u)` order.
+
+.. note::
+
+   The coordinate system `(z, y, x)` is
+   `left-handed <https://en.wikipedia.org/wiki/Right-hand_rule>`__
+   rather than right-handed.
+
+
+Indexing
+--------
+
+In tomosipo, it is not just data arrays that can be indexed, but geometries can
+be indexed as well! This makes it considerably easier to reconstruct or describe
+a subset of your data.
+
+We can recreate the above figure using tomosipo by sub-indexing a larger volume
+and showing the subvolumes:
 
 .. doctest::
 
@@ -53,77 +93,11 @@ tomosipo as follows:
 
 .. figure:: ../img/topics_geometries_indexing.svg
    :width: 400
-   :alt: Realized indexing of volume geometry using tomosipo
-
-We can also test that the index in the data corresponds to the index in the
-volume geometry by forward projecting on a very small detector:
-
-.. testcode::
-   :skipif: not cuda_available
-
-   import numpy as np
-   import tomosipo as ts
-
-   # Create a small detector rotating through single voxel:
-   vg = ts.volume(shape=3)
-   pg = ts.parallel(angles=4, shape=1).to_vec()
-   T = ts.translate(vg[0, 1, 2].pos)
-
-   # Save geometry animation:
-   ts.svg(vg, vg[0, 1, 2], T * pg).save("./doc/img/topics_geometries_check.svg")
-
-   # Project on detector:
-   A = ts.operator(vg, T * pg)
-   x = np.zeros(vg.shape, dtype=np.float32)
-   x[0, 1, 2] = 1.0
-   print(A(x))
-
-.. testoutput::
-   :skipif: not cuda_available
-
-   [[[1.       ]
-     [1.4142135]
-     [1.       ]
-     [1.4142135]]]
+   :alt: A volume and three sub-volumes that were created by indexing into it.
 
 
-.. figure:: ../img/topics_geometries_check.svg
-   :width: 400
-   :alt: Projection geometry to check single voxel
-
-
-We display an example for a parallel geometry with its associated
-sinogram indexing below. The detector coordinate frame is defined by
-two vectors
-
--   **u:** Usually points sideways and to the "right" from the perspective
-    of the source. The length of u defines the width of a detector
-    pixel.
--   **v:** Usually points upwards. The length of v defines the height of a
-    detector pixel.
-
-.. image:: ../img/projection_geometry.svg
-  :width: 400
-  :alt: Projection geometry
-
-Here, we see that the order of the physical dimensions does not match the order
-of the data indices. For performance reasons, projection data is stored as a
-sinogram stack indexed in `(v, angle, u)` order. The projection geometry
-coordinates are `(angles, v, u)`, however. The size of a detector pixel can be
-arbitrary and is defined by the `u` and `v` vectors.
-
-In short:
-
--   Volume geometry and data are indexed  in `(z, y, x)` order.
--   Projection geometries are indexed in `(angle, v, u)` order.
--   Projection data is stored as a **sinogram stack**, indexed in `(v, angle, u)` order.
-
-
-.. note::
-
-   The coordinate system `(z, y, x)` is
-   `left-handed <https://en.wikipedia.org/wiki/Right-hand_rule>`__
-   rather than right-handed.
+More information about how geometries can be indexed and recombined can be found
+in :ref:`topics_indexing_concatenation`.
 
 
 Overview of geometries

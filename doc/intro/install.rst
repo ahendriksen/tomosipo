@@ -27,7 +27,7 @@ environment named `tomosipo` containing the required packages:
 
 .. code-block:: bash
 
-    conda create -n tomosipo python>=3.6 astra-toolbox cudatoolkit=X.X -c astra-toolbox/label/dev
+    conda create -n tomosipo python=3.8 astra-toolbox cudatoolkit=X.X -c astra-toolbox/label/dev
 
 Then activate the environment and install tomosipo using pip:
 

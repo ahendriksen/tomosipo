@@ -9,7 +9,7 @@ import numpy as np
 import tomosipo as ts
 import itertools
 from .geometry.test_transform import scalings, rotations, translations
-from . import skip_if_no_cuda
+from . import skip_if_no_cuda, add_doctest_cases, UniformPrintingTestCase
 
 
 @skip_if_no_cuda
@@ -110,3 +110,11 @@ def test_volume_vector():
 
     assert np.allclose(A_v(x), A_p(x))
     assert np.allclose(A_v.T(A_v(x)), A_p.T(A_p(x)))
+
+
+# Test the doctests that are included in the docstrings of ts.Operator
+class TestDocs(UniformPrintingTestCase):
+    pass
+
+
+add_doctest_cases(TestDocs, ts.Operator)

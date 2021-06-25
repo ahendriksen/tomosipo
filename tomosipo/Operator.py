@@ -14,12 +14,20 @@ def to_astra_compatible_operator_geometry(vg, pg):
     ASTRA does not support arbitrarily oriented volume geometries. If
     `vg` is a VolumeVectorGeometry, we rotate and translate both `vg`
     and `pg` such that `vg` is axis-aligned, and positioned on the
-    origin, which renders it ASTRA-compatible.
+    origin, which makes it ASTRA-compatible.
 
-    :param vg: volume geometry
-    :param pg: projection geometry
-    :returns:
-    :rtype: (VolumeGeometry, ProjectionGeometry)
+    Parameters
+    ----------
+    vg:
+        volume geometry
+    pg:
+        projection geometry
+
+    Returns
+    -------
+    (VolumeGeometry, ProjectionGeometry)
+        A non-vector volume geometry centered on the origin and its
+        corresponding projection geometry.
 
     """
     if isinstance(vg, ts.geometry.VolumeGeometry):
@@ -61,25 +69,33 @@ def operator(
 ):
     """Create a new tomographic operator
 
-    :param volume_geometry: `VolumeGeometry`
+    Parameters:
+    -----------
+    volume_geometry: `VolumeGeometry`
         The domain of the operator.
-    :param projection_geometry:  `ProjectionGeometry`
+
+    projection_geometry:  `ProjectionGeometry`
         The range of the operator.
-    :param voxel_supersampling: `int` (optional)
+
+    voxel_supersampling: `int` (optional)
         Specifies the amount of voxel supersampling, i.e., how
         many (one dimension) subvoxels are generated from a single
         parent voxel. The default is 1.
-    :param detector_supersampling: `int` (optional)
+
+    detector_supersampling: `int` (optional)
         Specifies the amount of detector supersampling, i.e., how
         many rays are cast per detector. The default is 1.
-    :param additive: `bool` (optional)
+
+    additive: `bool` (optional)
         Specifies whether the operator should overwrite its range
         (forward) and domain (transpose). When `additive=True`,
         the operator adds instead of overwrites. The default is
         `additive=False`.
-    :returns:
-    :rtype:
 
+    Returns
+    -------
+    Operator
+        A linear tomographic projection operator
     """
     return Operator(
         volume_geometry,
@@ -97,8 +113,12 @@ def _to_link(geometry, x):
         return ts.link(geometry, x)
 
 
-class Operator(object):
-    """Documentation for Operator"""
+class Operator:
+    """A linear tomographic projection operator
+
+    An operator describes and computes the projection from a volume onto a
+    projection geometry.
+    """
 
     def __init__(
         self,
@@ -110,24 +130,28 @@ class Operator(object):
     ):
         """Create a new tomographic operator
 
-        :param volume_geometry: `VolumeGeometry`
+        Parameters
+        ----------
+        volume_geometry: `VolumeGeometry`
             The domain of the operator.
-        :param projection_geometry:  `ProjectionGeometry`
+
+        projection_geometry:  `ProjectionGeometry`
             The range of the operator.
-        :param voxel_supersampling: `int` (optional)
+
+        voxel_supersampling: `int` (optional)
             Specifies the amount of voxel supersampling, i.e., how
             many (one dimension) subvoxels are generated from a single
             parent voxel. The default is 1.
-        :param detector_supersampling: `int` (optional)
+
+        detector_supersampling: `int` (optional)
             Specifies the amount of detector supersampling, i.e., how
             many rays are cast per detector. The default is 1.
-        :param additive: `bool` (optional)
+
+        additive: `bool` (optional)
             Specifies whether the operator should overwrite its range
             (forward) and domain (transpose). When `additive=True`,
             the operator adds instead of overwrites. The default is
             `additive=False`.
-        :returns:
-        :rtype:
 
         """
         super(Operator, self).__init__()
@@ -234,26 +258,38 @@ class Operator(object):
 
     @property
     def T(self):
+        """The transpose operator
+
+        This property returns the transpose (backprojection) operator.
+        """
         return self.transpose()
 
     @property
     def domain(self):
+        """The domain (volume geometry) of the operator
+        """
         return self.volume_geometry
 
     @property
     def range(self):
+        """The range (projection geometry) of the operator
+        """
         return self.projection_geometry
 
     @property
     def domain_shape(self):
+        """The expected shape of the input (volume) data
+        """
         return ts.links.geometry_shape(self.astra_compat_vg)
 
     @property
     def range_shape(self):
+        """The expected shape of the output (projection) data
+        """
         return ts.links.geometry_shape(self.astra_compat_pg)
 
 
-class BackprojectionOperator(object):
+class BackprojectionOperator:
     """Transpose of the Forward operator
 
     The idea of having a dedicated class for the backprojection
@@ -313,20 +349,32 @@ class BackprojectionOperator(object):
 
     @property
     def T(self):
+        """The transpose of the backprojection operator
+
+        This property returns the transpose (forward projection) operator.
+        """
         return self.transpose()
 
     @property
     def domain(self):
+        """The domain (projection geometry) of the operator
+        """
         return self.parent.range
 
     @property
     def range(self):
+        """The range (volume geometry) of the operator
+        """
         return self.parent.domain
 
     @property
     def domain_shape(self):
+        """The expected shape of the input (projection) data
+        """
         return self.parent.range_shape
 
     @property
     def range_shape(self):
+        """The expected shape of the output (volume) data
+        """
         return self.parent.domain_shape

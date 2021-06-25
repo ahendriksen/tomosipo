@@ -7,7 +7,7 @@ __email__ = "allard.hendriksen@cwi.nl"
 # Also edit the version in setup.py!
 __version__ = "0.3.1"
 
-from .Operator import forward, backward, fdk, operator
+from .Operator import operator
 from .Data import data
 from .geometry.volume import volume
 from .geometry.volume_vec import volume_vec

@@ -1,7 +1,7 @@
 import tomosipo as ts
 import numpy as np
 from . import skip_if_no_cuda
-
+from tomosipo.astra import forward
 
 @skip_if_no_cuda
 def test_display_data(interactive):
@@ -13,7 +13,7 @@ def test_display_data(interactive):
 
     # Fill v with hollow box phantom
     ts.phantom.hollow_box(v)
-    ts.forward(v, p)
+    forward(v, p)
 
     if interactive:
         display(v)

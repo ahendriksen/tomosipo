@@ -10,6 +10,10 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 ### Changed
 ### Fixed
 ### Removed
+- The `ts.forward` and `ts.backward` top-level bindings have been removed. They are
+  still available as `ts.astra.forward` and `ts.astra.backward`.
+- The `ts.fdk` top-level binding has been removed. It is still available as
+  `ts.astra.fdk`.
 
 ## [0.3.1] - 2021-06-17
 ### Fixed

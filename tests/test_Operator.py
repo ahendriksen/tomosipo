@@ -13,46 +13,6 @@ from . import skip_if_no_cuda
 
 
 @skip_if_no_cuda
-def test_forward_backward():
-    pd = ts.data(ts.cone(size=np.sqrt(2), cone_angle=1 / 2, shape=10))
-    vd = ts.data(ts.volume(shape=10))
-
-    rs = [
-        ([pd, vd], {}),
-        ([pd, vd], dict(detector_supersampling=2, voxel_supersampling=2)),
-        ((pd, vd), dict(detector_supersampling=1, voxel_supersampling=2)),
-        ((pd, vd), dict(detector_supersampling=2, voxel_supersampling=1)),
-    ]
-
-    for data, kwargs in rs:
-        ts.forward(*data, **kwargs)
-        ts.backward(*data, **kwargs)
-
-
-@skip_if_no_cuda
-def test_fdk(interactive):
-    if interactive:
-        from tomosipo.qt import display
-
-    pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=100, shape=100)
-    vg = ts.volume(shape=100)
-    pd = ts.data(pg)
-    vd = ts.data(vg)
-
-    ts.phantom.hollow_box(vd)
-    ts.forward(vd, pd)
-
-    if interactive:
-        display(vg, pg)
-        display(pd)
-
-    ts.fdk(vd, pd)
-
-    if interactive:
-        display(vd)
-
-
-@skip_if_no_cuda
 def test_operator():
     pg = ts.cone(size=np.sqrt(2), cone_angle=1 / 2, angles=150, shape=100)
     vg = ts.volume(shape=100)

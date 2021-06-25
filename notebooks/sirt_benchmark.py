@@ -49,7 +49,6 @@ does influence performance and ASTRA is faster again:
 
 import torch
 import tomosipo as ts
-import tomosipo.torch_support
 from argparse import ArgumentParser
 from tqdm import tqdm
 import numpy as np

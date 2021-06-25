@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 ## [Unreleased]
 ### Added
 ### Changed
+- It is no longer necessary to import `tomosipo.torch_support` or
+  `tomosipo.cupy` to enable support for linking torch and cupy arrays. Support
+  for these arrays is now added automatically when the packages are installed in
+  the host environment.
 ### Fixed
 ### Removed
 - The `ts.forward` and `ts.backward` top-level bindings have been removed. They are

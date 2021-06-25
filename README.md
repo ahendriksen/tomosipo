@@ -137,8 +137,7 @@ for i in range(num_iters):
 print(f"SIRT finished in {timer() - start:0.2f} seconds")
 
 # Perform the same computation on the GPU using PyTorch.
-# First, import support for pytorch tensors
-import tomosipo.torch_support
+# First, import pytorch:
 import torch
 
 # Move all data to GPU:

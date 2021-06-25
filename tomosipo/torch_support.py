@@ -1,8 +1,4 @@
-""" This module provides a short-hand to add torch support to tomosipo
-
-To enable support for torch tensors in tomosipo, use:
-
->>> import tomosipo.torch_support
+""" This module provides functions to interoperate with torch
 
 """
 import tomosipo as ts
@@ -21,9 +17,6 @@ except ModuleNotFoundError:
     )
     raise
 from torch.autograd import Function
-
-# This import is needed to enable to pytorch linking backend.
-import tomosipo.links.torch
 
 
 class OperatorFunction(Function):

@@ -30,13 +30,14 @@ detector:
    pg = ts.parallel(angles=M, shape=(M, M))
    A = ts.operator(vg, pg)
 
-To use torch, we import it and enable torch support in tomosipo as follows:
+
+Torch support is automatic if it has been installed in the host environment. To
+use torch, we import it:
 
 .. testcode:: session
    :skipif: (not cuda_available) or (not torch_available)
 
    import torch
-   import tomosipo.torch_support
 
 
 Using torch, we recreate the hollow cube phantom and forward project to obtain

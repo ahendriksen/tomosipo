@@ -4,7 +4,6 @@ from . import skip_if_no_cuda
 
 try:
     import torch
-    import tomosipo.torch_support
 
     torch_present = True
 

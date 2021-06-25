@@ -1,8 +1,6 @@
-""" This module provides a short-hand to add cupy support to tomosipo
+""" This module can be used to force interoperability with cupy
 
-To enable support for torch tensors in tomosipo, use:
-
->>> import tomosipo.cupy
+In general it is not necessary to explicitly import this module.
 
 """
 import warnings

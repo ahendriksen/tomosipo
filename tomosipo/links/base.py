@@ -4,7 +4,8 @@ import warnings
 
 backends = [
     # numpy backend is imported by default;
-    # torch backend is only supported when explicitly imported.
+    # torch backend is only supported when the PyTorch package has been installed;
+    # cupy backend is only supported when the CuPy package has been installed.
 ]
 
 
@@ -16,7 +17,6 @@ def link(geometry, arr):
             return backend(shape, arr)
     raise ValueError(
         f"An initial_value of class {type(arr)} is not supported. "
-        f"For torch support please `import tomosipo.torch_support`. "
     )
 
 

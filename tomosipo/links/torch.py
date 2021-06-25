@@ -170,4 +170,7 @@ class TorchLink(Link):
         return TorchLink(self._data.shape, self._data.clone())
 
 
-backends.append(TorchLink)
+# When the torch module is mock imported by the Sphinx documentation system, do
+# not alter the observable behavior the linking backend.
+if not hasattr(torch, '__sphinx_mock__'):
+    backends.append(TorchLink)

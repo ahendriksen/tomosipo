@@ -15,7 +15,7 @@
 # sys.path.insert(0, os.path.abspath('.'))
 from recommonmark.parser import CommonMarkParser
 import doctest
-
+import importlib
 
 # -- Project information -----------------------------------------------------
 
@@ -72,8 +72,17 @@ source_suffix = {
     '.md': 'markdown',
 }
 
+# Mock import modules if they are not otherwise available. This is needed for
+# the test code to run properly.
+def _is_package_available(package):
+    try:
+        importlib.import_module(package)
+        return True
+    except ModuleNotFoundError:
+        return False
 
-autodoc_mock_imports = ["cupy", "ffmpeg", "pyqtgraph", "torch", "odl"]
+dependencies = ["cupy", "ffmpeg", "pyqtgraph", "torch", "odl"]
+autodoc_mock_imports = [p for p in dependencies if not _is_package_available(p)]
 autosummary_generate = True
 
 napoleon_google_docstring = False
@@ -90,18 +99,9 @@ doctest_test_doctest_blocks = ''
 # https://www.sphinx-doc.org/en/master/usage/extensions/doctest.html#confval-doctest_default_flags
 doctest_default_flags = doctest.DONT_ACCEPT_TRUE_FOR_1 | doctest.ELLIPSIS
 
-doctest_global_setup = '''
+doctest_global_setup = f'''
 import astra
 cuda_available = astra.use_cuda()
-try:
-    import matplotlib
-    matplotlib_available = True
-except ModuleNotFoundError:
-    matplotlib_available = False
-
-try:
-    import torch
-    torch_available = True
-except ModuleNotFoundError:
-    torch_available = False
+matplotlib_available = {_is_package_available('matplotlib')}
+torch_available = {_is_package_available('torch')}
 '''

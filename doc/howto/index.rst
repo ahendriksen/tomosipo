@@ -42,3 +42,4 @@ Contributing to tomosipo
 
    update_doc
    tests
+   conda_package

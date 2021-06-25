@@ -3,8 +3,8 @@
 [[file:./doc/img/logo.svg]]
 
 * Tomosipo
-Tomosipo is a pythonic wrapper for the ASTRA-toolbox of
-high-performance GPU primitives for 3D tomography.
+Tomosipo is a pythonic wrapper for the ASTRA-toolbox of high-performance GPU
+primitives for 3D tomography.
 
 The aim of this library is as to:
 - Expose a user-friendly API for high-performance 3D tomography, while
@@ -16,7 +16,9 @@ The aim of this library is as to:
     inverse problems
   - [[http://pyqtgraph.org/][PyQtGraph]] for interactive visualization of geometries and data
 
-
+| Latest version: | https://anaconda.org/aahendriksen/tomosipo/badges/version.svg                      |
+| Last updated:   | https://anaconda.org/aahendriksen/tomosipo/badges/latest_release_relative_date.svg |
+| Documentation:  | https://aahendriksen.gitlab.io/tomosipo/index.html                                 |
 * Installation
 A minimal installation requires:
 - python >= 3.6
@@ -26,14 +28,14 @@ A minimal installation requires:
 These requirements can be installed using conda (replace =<X.X>= by your
 CUDA version)
 #+BEGIN_SRC sh
-conda create -y -n tomosipo python=3.6 astra-toolbox cudatoolkit=<X.X> -c astra-toolbox/label/dev
+conda create -y -n tomosipo python=3.8 astra-toolbox cudatoolkit=<X.X> -c astra-toolbox/label/dev
 pip install git+https://github.com/ahendriksen/tomosipo@develop
 source activate tomosipo
 #+END_SRC
 
 To use tomosipo with PyTorch, QT, ODL, and cupy, install:
 #+BEGIN_SRC sh
-  conda create -y -n tomosipo python=3.6 astra-toolbox cudatoolkit=<X.X> pytorch cupy pyqtgraph pyqt pyopengl cupy \
+  conda create -y -n tomosipo python=3.8 astra-toolbox cudatoolkit=<X.X> pytorch cupy pyqtgraph pyqt pyopengl cupy \
         -c defaults -c astra-toolbox/label/dev -c pytorch -c conda-forge
   source activate tomosipo
   # Install latest version of ODL:
@@ -152,87 +154,6 @@ SIRT finished in 0.94 seconds using PyTorch
 ** More examples
 Please checkout the =examples= and =notebooks= directory for more examples.
 
-* Conventions
-** Axes and indexing
-
-Tomosipo follows numpy's indexing convention. In the image below, we
-display the coordinate axes and indexing into a volume cube.
-The z-axis points upward.
-
-[[file:./doc/img/volume_geometry.png]]
-
-We display an example for a parallel geometry with its associated
-sinogram indexing below. The detector coordinate frame is defined by
-two vectors
-- u :: Usually points sideways and to the "right" from the perspective
-       of the source. The length of u defines the width of a detector
-       pixel.
-- v :: Usually points upwards. The length of v defines the height of a
-       detector pixel.
-
-[[file:doc/img/projection_geometry.png]]
-
-
-In short,
-- volume geometry and data are indexed  in (Z, Y, X) order
-- projection geometries are indexed in (angle, v, u) order
-- projection data is stored as a stack of sinograms, indexed in (V,
-  angle, U) order.
-
-The coordinate system (z, y, x) is *left-handed* rather than
-right-handed.
-** Conventions in naming and ordering
-Whenever a function takes as parameters a volume geometry,
-projection geometry, or operator, there is a fixed ordering:
-1. operator
-2. volume (data or geometry)
-3. projection (data or geometry)
-
-As parameters, properties, and in function names, we use:
-- shape :: The number of voxels / pixels in each dimension
-- size :: The physical size of the object in each dimension
-- dist :: Short for distance
-- vec :: Short for vector
-- obj :: Short for object
-- vol :: Short for volume
-- pos :: Short for position: this is alway the *center* of an object
-- src :: Short for source
-- det :: Short for detector
-- pos :: Short for position
-- len :: Short for length
-- rel :: Short for relative
-- abs :: Short for absolute
-- num_* :: Number of * (angles for instance)
-
-In examples and code we use:
-- pg :: projection geometry
-- vg :: volume geometry
-- pd :: projection data
-- vd :: volume data
-
-** Geometry
-There are several helper functions to create a geometry:
-- ~ts.parallel~: creates a 3D circular parallel beam geometry
-- ~ts.cone~: creates a 3D circular cone beam geometry
-- ~ts.parallel_vec~: creates a 3D parallel beam geometry where the
-  beam and detector can be arbitrarily oriented
-- ~ts.cone_vec~: creates a 3D cone beam geometry where the
-  source and detector can be arbitrarily oriented
-- ~ts.volume~: creates an axis-aligned volume geometry
-- ~ts.volume_vec~: creates an arbitrarily oriented volume. This object cannot be
-  converted to ASTRA directly, but can be used in geometric computations.
-
-*** Transformations
-TODO
-- Translation
-- Rotation
-- Scaling
-- Perspective
-
-** Warnings
-All warnings should
-1) Explain what is wrong
-2) Explain how the warning can be prevented
 * Authors and contributors
 tomosipo is developed by the Computational Imaging group at CWI. Original author:
 
@@ -244,8 +165,3 @@ We thank the following authors for their contribution
 
 See also the list of contributors who participated in this project.
 
-** Building conda packages
-#+BEGIN_SRC sh
-conda install conda-build anaconda-client
-conda build conda/ -c astra-toolbox/label/dev
-#+END_SRC

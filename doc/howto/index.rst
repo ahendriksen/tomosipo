@@ -13,6 +13,7 @@ Using tomosipo
    :maxdepth: 1
    :glob:
 
+   google_colab
    figure_for_paper
 
 

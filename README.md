@@ -69,7 +69,7 @@ Simple examples:
 ## Create and visualize geometries
 
 You can follow along on [Google
-Colab](https://colab.research.google.com/github/ahendriksen/tomosipo/blob/update-readme/notebooks/00_getting_started_visualize_geometry.ipynb).
+Colab](https://colab.research.google.com/github/ahendriksen/tomosipo/blob/update-readme/notebooks/00_getting_started_google_colab.ipynb).
 
 ``` python
 import astra

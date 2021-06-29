@@ -47,3 +47,18 @@ organized will help you know where to look for certain things:
 * :doc:`How-to guides </howto/index>` are recipes. They guide you through the
   steps involved in addressing key problems and use-cases. They are more
   goal-oriented than tutorials and assume some knowledge of how tomosipo works.
+
+Other resources
+===============
+
+Video
+-----
+
+* `CWI Tomosipo Tutorial (21-Jun-2021) <https://www.youtube.com/watch?v=biStJB1zb-Y>`_
+
+Blog
+----
+
+* `Modeling Cryo-EM using tomosipo <https://blog.allardhendriksen.nl/cwi-ci-group/modeling_cry_em_using_tomosipo/>`_
+* `Chambolle-Pock algorithm on the GPU using tomosipo <https://blog.allardhendriksen.nl/cwi-ci-group/chambolle_pock_using_tomosipo/>`_
+* `Tomosipo reconstruction the GPU <https://blog.allardhendriksen.nl/cwi-ci-group/advent-of-tomosipo-s003_gpu_reconstruction/>`_

@@ -5,7 +5,7 @@
 
 from setuptools import setup, find_packages
 
-with open('README.org') as readme_file:
+with open('README.md') as readme_file:
     readme = readme_file.read()
 
 # with open('HISTORY.rst') as history_file:
@@ -54,8 +54,10 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     description="A usable Python astra-based tomography library.",
     install_requires=requirements,

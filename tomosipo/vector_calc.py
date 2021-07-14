@@ -109,7 +109,7 @@ def _broadcastv(x, y):
     if x.shape[0] == 1:
         x = np.broadcast_to(x, (y.shape[0], x.shape[1]))
     elif y.shape[0] == 1:
-        y = np.broadcast_to(y, (x.shape[1], y.shape[1]))
+        y = np.broadcast_to(y, (x.shape[0], y.shape[1]))
 
     if x.ndim != 2 or y.ndim != 2 or x.shape != y.shape:
         raise ValueError(

@@ -13,6 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
   for these arrays is now added automatically when the packages are installed in
   the host environment.
 ### Fixed
+- `ts.rotate` can now correctly deal with a changing axis of rotation over time.
+  https://github.com/ahendriksen/tomosipo/issues/7
 ### Removed
 - The `ts.forward` and `ts.backward` top-level bindings have been removed. They are
   still available as `ts.astra.forward` and `ts.astra.backward`.

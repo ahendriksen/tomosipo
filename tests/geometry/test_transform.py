@@ -313,6 +313,19 @@ def test_rotate_visually(interactive):
         display(R * vg, top_vg)
 
 
+def test_rotate_broadcasting():
+    for n in [2, 5, 10]:
+        # No broadcasting
+        R = ts.rotate(pos=np.ones((n, 3)), axis=np.ones((n, 3)), angles=np.ones(n))
+        # Broadcast pos
+        R = ts.rotate(pos=0, axis=np.ones((n, 3)), angles=np.ones(n))
+        # Broadcast axis
+        R = ts.rotate(pos=np.ones((n, 3)), axis=(1, 0, 0), angles=np.ones(n))
+        # Broadcast angles
+        R = ts.rotate(pos=np.ones((n, 3)), axis=np.ones((n, 3)), angles=[0.15])
+        R = ts.rotate(pos=np.ones((n, 3)), axis=np.ones((n, 3)), angles=0.15)
+
+
 def test_rotate_deprecation():
     with pytest.warns(DeprecationWarning):
         ts.rotate(pos=0, axis=(1, 0, 0), rad=1.0)

@@ -341,7 +341,7 @@ def rotate(*, pos, axis, angles=None, rad=None, deg=None, right_handed=True):
     axis = vc.to_homogeneous_vec(axis)
     pos, axis = vc._broadcastv(pos, axis)
 
-    axis = axis / vc.norm(axis)
+    axis = axis / vc.norm(axis)[:, None]
 
     angles_defined = angles is not None
     rad_deg_defined = rad is not None or deg is not None
@@ -367,6 +367,9 @@ def rotate(*, pos, axis, angles=None, rad=None, deg=None, right_handed=True):
         theta = np.deg2rad(deg) if deg is not None else rad
         # Make theta of shape `(num_steps, 1)`
         theta = vc.to_scalar(theta)
+
+    # undo theta shape `(num_steps, 1)`
+    theta = theta[:, 0]
 
     # Make the rotation left-handed if necessary
     if not right_handed:
@@ -400,7 +403,8 @@ def rotate(*, pos, axis, angles=None, rad=None, deg=None, right_handed=True):
     R1 = np.stack([R10, R11, R12, zero], axis=1)
     R2 = np.stack([R20, R21, R22, zero], axis=1)
     R3 = np.stack([zero, zero, zero, one], axis=1)
-    R = Transform(np.concatenate([R0, R1, R2, R3], axis=2))
+    R = np.stack([R0, R1, R2, R3], axis=1)
+    R = Transform(R)
 
     return T.inv * R * T
 

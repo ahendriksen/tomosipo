@@ -15,9 +15,7 @@ def link(geometry, arr):
     for backend in backends:
         if backend.__accepts__(arr):
             return backend(shape, arr)
-    raise ValueError(
-        f"An initial_value of class {type(arr)} is not supported. "
-    )
+    raise ValueError(f"An initial_value of class {type(arr)} is not supported. ")
 
 
 def geometry_shape(geometry):

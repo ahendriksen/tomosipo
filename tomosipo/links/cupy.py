@@ -155,5 +155,5 @@ class CupyLink(Link):
 
 # When the cupy module is mock imported by the Sphinx documentation system, do
 # not alter the observable behavior the linking backend.
-if not hasattr(cupy, '__sphinx_mock__'):
+if not hasattr(cupy, "__sphinx_mock__"):
     backends.append(CupyLink)

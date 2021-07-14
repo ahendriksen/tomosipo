@@ -41,8 +41,8 @@ def add_doctest_cases(testcase_class, module_to_document):
 
 
 class UniformPrintingTestCase(unittest.TestCase):
-    """Test case where numpy's print options are set consistently
-    """
+    """Test case where numpy's print options are set consistently"""
+
     def setUp(self):
         self.print_options = ts.utils.print_options()
         self.print_options.__enter__()

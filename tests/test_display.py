@@ -3,6 +3,7 @@ import numpy as np
 from . import skip_if_no_cuda
 from tomosipo.astra import forward
 
+
 @skip_if_no_cuda
 def test_display_data(interactive):
     if interactive:

@@ -13,12 +13,13 @@ from tomosipo.geometry import (
     random_parallel_vec,
     random_volume,
 )
-from tomosipo.astra import (forward, backward, fdk)
+from tomosipo.astra import forward, backward, fdk
 from . import skip_if_no_cuda
 
 ###############################################################################
 #                           Test geometry conversion                          #
 ###############################################################################
+
 
 def test_to_from_astra():
     rs = [

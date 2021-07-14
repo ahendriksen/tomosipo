@@ -266,26 +266,22 @@ class Operator:
 
     @property
     def domain(self):
-        """The domain (volume geometry) of the operator
-        """
+        """The domain (volume geometry) of the operator"""
         return self.volume_geometry
 
     @property
     def range(self):
-        """The range (projection geometry) of the operator
-        """
+        """The range (projection geometry) of the operator"""
         return self.projection_geometry
 
     @property
     def domain_shape(self):
-        """The expected shape of the input (volume) data
-        """
+        """The expected shape of the input (volume) data"""
         return ts.links.geometry_shape(self.astra_compat_vg)
 
     @property
     def range_shape(self):
-        """The expected shape of the output (projection) data
-        """
+        """The expected shape of the output (projection) data"""
         return ts.links.geometry_shape(self.astra_compat_pg)
 
 
@@ -357,24 +353,20 @@ class BackprojectionOperator:
 
     @property
     def domain(self):
-        """The domain (projection geometry) of the operator
-        """
+        """The domain (projection geometry) of the operator"""
         return self.parent.range
 
     @property
     def range(self):
-        """The range (volume geometry) of the operator
-        """
+        """The range (volume geometry) of the operator"""
         return self.parent.domain
 
     @property
     def domain_shape(self):
-        """The expected shape of the input (projection) data
-        """
+        """The expected shape of the input (projection) data"""
         return self.parent.range_shape
 
     @property
     def range_shape(self):
-        """The expected shape of the output (volume) data
-        """
+        """The expected shape of the output (volume) data"""
         return self.parent.domain_shape

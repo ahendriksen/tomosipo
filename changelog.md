@@ -5,8 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project *is planned to* adhere to [Semantic
 Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 
-## [Unreleased]
+## [Unreleased] -
 ### Added
+### Changed
+### Fixed
+### Removed
+
+## [0.4.0] - 2021-07-15
+Bug fix release for `ts.rotate`. Minor bump for automatic torch and cupy
+linking.
+
 ### Changed
 - It is no longer necessary to import `tomosipo.torch_support` or
   `tomosipo.cupy` to enable support for linking torch and cupy arrays. Support
@@ -97,7 +105,8 @@ This is a major release. It introduces two features that define tomosipo in its 
 
 
 
-[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/ahendriksen/tomosipo/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/ahendriksen/tomosipo/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/ahendriksen/tomosipo/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/ahendriksen/tomosipo/compare/v0.0.1...v0.2.0

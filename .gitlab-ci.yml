@@ -61,7 +61,7 @@ pages:
     - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O install_conda.sh
     - bash install_conda.sh -b
     - export PATH="$HOME/miniconda3/bin:$PATH"
-    - conda install python=3.7 astra-toolbox pyqtgraph pyqt pyopengl pytorch cupy ffmpeg ffmpeg-python matplotlib sphinx ipython sphinx_rtd_theme odl recommonmark -c defaults -c astra-toolbox/label/dev -c conda-forge -c odlgroup -yq
+    - conda install python=3.7 cudatoolkit=9.2 astra-toolbox pyqtgraph pyqt pyopengl pytorch cupy ffmpeg ffmpeg-python matplotlib sphinx ipython sphinx_rtd_theme odl recommonmark -c defaults -c astra-toolbox/label/dev -c conda-forge -c odlgroup -yq
     - pip install .[dev]
     - sphinx-apidoc -M -f -e --tocfile api_reference -H "API Reference" --ext-autodoc -o doc/ref/ tomosipo
     - sphinx-build -b html doc/ public

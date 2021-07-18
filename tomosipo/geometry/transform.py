@@ -397,11 +397,14 @@ def rotate(*, pos, axis, angles=None, rad=None, deg=None, right_handed=True):
     R21 = axis_2 * axis_1 * (1 - np.cos(theta)) + axis_0 * np.sin(theta)
     R22 = np.cos(theta) + np.square(axis_2) * (1 - np.cos(theta))
 
+    # Compared to the description on wikipedia, the matrix below is transposed.
+    # This is because the order of the axes (z, y, x) is reversed compared to
+    # the order on wikipedia (x, y, z).
     one = np.ones_like(R00)
     zero = np.zeros_like(R00)
-    R0 = np.stack([R00, R01, R02, zero], axis=1)
-    R1 = np.stack([R10, R11, R12, zero], axis=1)
-    R2 = np.stack([R20, R21, R22, zero], axis=1)
+    R0 = np.stack([R00, R10, R20, zero], axis=1)
+    R1 = np.stack([R01, R11, R21, zero], axis=1)
+    R2 = np.stack([R02, R12, R22, zero], axis=1)
     R3 = np.stack([zero, zero, zero, one], axis=1)
     R = np.stack([R0, R1, R2, R3], axis=1)
     R = Transform(R)

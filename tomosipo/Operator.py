@@ -46,7 +46,7 @@ def to_astra_compatible_operator_geometry(vg, pg):
     )
     # Move vg to perspective:
     vg = P * vg
-    pg = P * pg
+    pg = P * pg.to_vec()
 
     # Assert that vg is now axis-aligned and positioned on the origin:
     voxel_size = vg.voxel_size

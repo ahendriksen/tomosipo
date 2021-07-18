@@ -11,9 +11,18 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 ### Fixed
 ### Removed
 
+## [0.4.1] - 2021-07-18
+Bug fix release for `ts.rotate` (again)..
+
+### Fixed
+- `ts.rotate`: the rotation matrix had become transposed while fixing https://github.com/ahendriksen/tomosipo/issues/7. This has now been fixed.
+
+
 ## [0.4.0] - 2021-07-15
 Bug fix release for `ts.rotate`. Minor bump for automatic torch and cupy
 linking.
+
+**NOTE**: `ts.rotate` is **broken** in this release. Please use v0.4.1.
 
 ### Changed
 - It is no longer necessary to import `tomosipo.torch_support` or
@@ -105,7 +114,8 @@ This is a major release. It introduces two features that define tomosipo in its 
 
 
 
-[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/ahendriksen/tomosipo/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/ahendriksen/tomosipo/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/ahendriksen/tomosipo/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/ahendriksen/tomosipo/compare/v0.2.0...v0.3.0

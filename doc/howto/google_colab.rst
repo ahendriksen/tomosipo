@@ -15,4 +15,4 @@ tomosipo as follows:
    ! pip install git+https://github.com/ahendriksen/tomosipo.git
 
 An example can be found `here
-<https://colab.research.google.com/github/ahendriksen/tomosipo/blob/update-readme/notebooks/00_getting_started_google_colab.ipynb>`_.
+<https://colab.research.google.com/github/ahendriksen/tomosipo/blob/master/notebooks/00_getting_started_google_colab.ipynb>`_.

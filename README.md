@@ -1,11 +1,11 @@
 ![img](./doc/img/logo.svg)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 <a id="org584a4eb"></a>
 # Tomosipo
 
 [![Anaconda-Server Badge](https://anaconda.org/aahendriksen/tomosipo/badges/version.svg)](https://anaconda.org/aahendriksen/tomosipo)
 [![Anaconda-Server Badge](https://anaconda.org/aahendriksen/tomosipo/badges/latest_release_relative_date.svg)](https://anaconda.org/aahendriksen/tomosipo)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 Tomosipo is a pythonic wrapper for the ASTRA-toolbox of high-performance GPU
 primitives for 3D tomography.

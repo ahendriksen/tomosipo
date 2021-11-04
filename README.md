@@ -63,33 +63,21 @@ entry:
 A minimal installation requires:
 
 -   python >= 3.6
--   ASTRA-toolbox (the latest 1.9.x development version is **required**)
+-   ASTRA-toolbox >= 2.0
 -   CUDA
 
-These requirements can be installed using conda (replace `<X.X>` by your
-CUDA version)
+The requirements can be installed using the anaconda package manager. The
+following snippet creates a new conda environment named `tomosipo` (replace
+`X.X` by your CUDA version)
 
-    conda create -y -n tomosipo python=3.8 astra-toolbox cudatoolkit=<X.X> -c astra-toolbox/label/dev
-    pip install git+https://github.com/ahendriksen/tomosipo@develop
-    source activate tomosipo
+    conda create -n tomosipo cudatoolkit=<X.X> tomosipo -c defaults -c astra-toolbox -c aahendriksen
 
-To use tomosipo with PyTorch, QT, ODL, and cupy, install:
-
-    conda create -y -n tomosipo python=3.8 astra-toolbox cudatoolkit=<X.X> pytorch cupy pyqtgraph pyqt pyopengl cupy \
-          -c defaults -c astra-toolbox/label/dev -c pytorch -c conda-forge
-    source activate tomosipo
-    # Install latest version of ODL:
-    pip install git+https://github.com/odlgroup/odl
-    # Install development version of tomosipo:
-    pip install git+https://github.com/ahendriksen/tomosipo@develop
-
+More information about installation is provided in the [documentation](https://aahendriksen.gitlab.io/tomosipo/intro/install.html).
 
 <a id="orgb723de1"></a>
-
 # Usage
 
 Simple examples:
-
 
 <a id="org887ab1a"></a>
 

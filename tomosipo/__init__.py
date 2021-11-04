@@ -52,14 +52,14 @@ try:
 except AttributeError:
     raise ImportError(
         "Cannot find all required astra.experimental methods. \n"
-        "Please make sure you have at least ASTRA version 1.9.9-dev4 installed. \n"
-        "You can install the latest ASTRA development version using: \n"
-        "> conda install astra-toolbox -c astra-toolbox/label/dev "
+        "Please make sure you have at least ASTRA version 2.0 installed. \n"
+        "You can install the latest ASTRA version using: \n"
+        "> conda install astra-toolbox=2.0 -c astra-toolbox "
     )
 except ImportError:
     raise ImportError(
         "Cannot find all required astra.experimental methods. \n"
-        "Please make sure you have at least ASTRA version 1.9.9-dev4 installed. \n"
-        "You can install the latest ASTRA development version using: \n"
-        "> conda install astra-toolbox -c astra-toolbox/label/dev "
+        "Please make sure you have at least ASTRA version 2.0 installed. \n"
+        "You can install the latest ASTRA version using: \n"
+        "> conda install astra-toolbox=2.0 -c astra-toolbox "
     )

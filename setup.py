@@ -12,7 +12,7 @@ with open('README.md') as readme_file:
 #     history = history_file.read()
 
 requirements = [
-    'astra-toolbox',
+    'astra-toolbox>=2.0',
     'numpy',
 ]
 

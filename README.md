@@ -10,18 +10,21 @@
 Tomosipo is a pythonic wrapper for the ASTRA-toolbox of high-performance GPU
 primitives for 3D tomography.
 
-The aim of this library is as to:
+The aim of this library is to:
 
 -   Expose a user-friendly API for high-performance 3D tomography, while
     allowing strict control over resource usage
--   Enable easy manipulation of 3D geometries
+-   Enable easy manipulation and visualization of 3D geometries
 -   Provide easy integration with
     -   Deep learning toolkits, such as [PyTorch](https://pytorch.org)
     -   [The operator discretization library (ODL)](https://github.com/odlgroup/odl) for optimization in
         inverse problems
     -   [PyQtGraph](http://pyqtgraph.org/) for interactive visualization of geometries and data
 
-The documentation can be found [here](https://aahendriksen.gitlab.io/tomosipo/index.html).
+The documentation can be found
+[here](https://aahendriksen.gitlab.io/tomosipo/index.html). An introduction and
+demonstration of `tomosipo` was published in [Optics
+Express](https://doi.org/10.1364/oe.439909).
 
 2.  [Installation](#org85d2a99)
 3.  [Usage](#orgb723de1)
@@ -30,6 +33,29 @@ The documentation can be found [here](https://aahendriksen.gitlab.io/tomosipo/in
     3.  [More examples](#org4c299a8)
 4.  [Authors and contributors](#org2e2678c)
 
+
+# Citing tomosipo
+
+If you use `tomosipo` in scientific publications, we would appreciate citations
+of [our paper](https://doi.org/10.1364/oe.439909) using the following Bibtex
+entry:
+
+``` bibtex
+@Article{hendriksen-2021-tomos,
+  author          = {Hendriksen, Allard and Schut, Dirk and Palenstijn, Willem
+                  Jan and Viganò, Nicola and Kim, Jisoo and Pelt, Dani{\"e}l and
+                  van Leeuwen, Tristan and Batenburg, K. Joost},
+  title           = {Tomosipo: Fast, Flexible, and Convenient {3D} Tomography for
+                  Complex Scanning Geometries in {Python}},
+  journal         = {Optics Express},
+  year            = 2021,
+  doi             = {10.1364/oe.439909},
+  url             = {https://doi.org/10.1364/oe.439909},
+  issn            = {1094-4087},
+  month           = {Oct},
+  publisher       = {The Optical Society},
+}
+```
 
 <a id="org85d2a99"></a>
 # Installation
@@ -173,7 +199,11 @@ Please checkout the `examples` and `notebooks` directory for more examples.
 
 # Authors and contributors
 
-tomosipo is developed by the Computational Imaging group at CWI. Original author:
+tomosipo is developed by the Computational Imaging group at CWI. Current maintainer:
+
+- **Dirk Schut**
+
+Original author:
 
 -   **Allard Hendriksen**
 

@@ -199,7 +199,9 @@ Please checkout the `examples` and `notebooks` directory for more examples.
 
 # Authors and contributors
 
-tomosipo is developed by the Computational Imaging group at CWI. Current maintainer:
+tomosipo is developed by the Computational Imaging group at CWI.
+
+Current maintainer:
 
 - **Dirk Schut**
 

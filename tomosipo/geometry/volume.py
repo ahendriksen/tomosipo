@@ -444,7 +444,7 @@ class VolumeGeometry:
 
         """
         voxel_size = ts.types.to_size3d(voxel_size)
-        new_shape = (np.array(self.size) / voxel_size).astype(np.int)
+        new_shape = (np.array(self.size) / voxel_size).astype(int)
 
         return VolumeGeometry(new_shape, pos=self.pos[0], size=new_shape * voxel_size)
 

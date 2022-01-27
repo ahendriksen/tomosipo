@@ -54,7 +54,7 @@ def parallel_vec(
 def random_parallel_vec():
     num_angles = int(np.random.uniform(1, 20))
     return parallel_vec(
-        shape=np.random.uniform(10, 20, size=2).astype(np.int),
+        shape=np.random.uniform(10, 20, size=2).astype(int),
         ray_dir=np.random.normal(size=(num_angles, 3)),
         det_pos=np.random.normal(size=(num_angles, 3)),
         det_v=np.random.normal(size=(num_angles, 3)),

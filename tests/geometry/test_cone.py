@@ -134,7 +134,7 @@ def test_to_vec():
         else:
             angles = num_angles
 
-        shape = np.random.uniform(1, 100, size=2).astype(np.int)
+        shape = np.random.uniform(1, 100, size=2).astype(int)
         size = np.random.uniform(1, 100, size=2)
 
         pg = ts.cone(
@@ -165,7 +165,7 @@ def test_to_from_astra():
         else:
             angles = num_angles
 
-        shape = np.random.uniform(1, 100, size=2).astype(np.int)
+        shape = np.random.uniform(1, 100, size=2).astype(int)
         size = np.random.uniform(1, 100, size=2)
 
         pg = ts.cone(

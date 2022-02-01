@@ -178,7 +178,7 @@ def test_det_sizes():
     pg = ts.cone(angles=5, size=size, cone_angle=1 / 2).to_vec()
     assert abs(size - pg.det_sizes).sum() < ts.epsilon
     for _ in range(10):
-        new_shape = np.random.uniform(1, 100, size=2).astype(np.int)
+        new_shape = np.random.uniform(1, 100, size=2).astype(int)
         # Ensure that reshape does not increase the detector size.
         pg2 = pg.reshape(new_shape)
         assert pg2.det_shape == tuple(new_shape)

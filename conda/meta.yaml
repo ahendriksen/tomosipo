@@ -35,8 +35,9 @@ about:
     home: https://github.com/ahendriksen/tomosipo
     license: GPL-3.0-only
     license_file: LICENSE
-    summary: "A usable Python astra-based tomography library."
+    summary: "Library for painless 3D tomographic reconstruction based on Astra."
 
 extra:
     maintainers:
+        - Dirk Schut
         - Allard Hendriksen

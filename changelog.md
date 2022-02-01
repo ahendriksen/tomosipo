@@ -10,6 +10,28 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 ### Changed
 ### Fixed
 ### Removed
+### Deprecated
+### Security
+
+## [0.5.0] - 2022-02-01
+This release is mostly about maintaining existing functionality. The tomosipo paper and Astra toolbox 2 were released, there is a new maintainer, and some bugs were fixed. The conda package is now the default installation option.
+
+### Added
+- Added information and Bibtex entry of the tomosipo paper to the readme
+
+### Changed
+- Changed repository maintainer from Allard Hendriksen to Dirk Schut
+- The conda package is now the default installation option, instead of cloning from Github with pip. This is changed in the readme
+- Astra toolbox 2 was released so it is now the required version. There were no API changes compared to the recent development version that was required before.
+- Removed cupy and odl packages from the environment presented in the documentation.
+  Cupy was removed because of cudatoolkit error messages
+  ODL was removed because it changes the global numpy formatting options
+
+### Fixed
+- Replaced usage of np.int which was deprecated in numpy 1.20 with int
+- Replaced the usage of collect_ignore in setup.cfg because it was removed from pytest
+- Licence information was updated to show GPLv3
+
 
 ## [0.4.1] - 2021-07-18
 Bug fix release for `ts.rotate` (again)..
@@ -114,7 +136,8 @@ This is a major release. It introduces two features that define tomosipo in its 
 
 
 
-[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.5.0...develop
+[0.5.0]: https://github.com/ahendriksen/tomosipo/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/ahendriksen/tomosipo/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/ahendriksen/tomosipo/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/ahendriksen/tomosipo/compare/v0.3.0...v0.3.1

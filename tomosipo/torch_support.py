@@ -29,7 +29,7 @@ class OperatorFunction(Function):
         ), "Autograd operator expects a 4-dimensional input (3+1 for Batch dimension). "
 
         B, C, H, W = input.shape
-        out = input.new_empty(B, *operator.range_shape)
+        out = input.new_empty(B, *operator.range_shape, dtype=torch.float32)
 
         for i in range(B):
             operator(input[i], out=out[i])
@@ -41,7 +41,7 @@ class OperatorFunction(Function):
         operator = ctx.operator
 
         B, C, H, W = grad_output.shape
-        grad_input = grad_output.new_empty(B, *operator.domain_shape)
+        grad_input = grad_output.new_empty(B, *operator.domain_shape, dtype=torch.float32)
 
         for i in range(B):
             operator.T(grad_output[i], out=grad_input[i])

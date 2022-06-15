@@ -1,6 +1,9 @@
 import pytest
 import tomosipo as ts
 from . import skip_if_no_cuda
+from tomosipo.torch_support import (
+    to_autograd,
+)
 
 try:
     import torch
@@ -67,3 +70,16 @@ def test_fp_bp(device):
 
     assert 1.0 < sino.sum()
     assert 1.0 < bp.sum()
+    
+@skip_if_no_torch
+def test_float64():
+    vg = ts.volume(shape=(1, N, N))
+    pg = ts.parallel(angles=N_angles, shape=(1, M))
+    A = ts.operator(vg, pg)
+    A_ag = to_autograd(A)
+    
+    x = torch.ones((1, 1, N, N), dtype=torch.float64)
+    y = A(x[0, ...])
+    y_ag = A_ag(x)
+
+    assert torch.equal(y, y_ag[0, ...])

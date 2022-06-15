@@ -73,6 +73,6 @@ setup(
     extras_require={'dev': dev_requirements},
     url='https://github.com/ahendriksen/tomosipo',
     # Also edit the version in tomosipo/__init__.py!
-    version='0.5.0',
+    version='0.5.1',
     zip_safe=False,
 )

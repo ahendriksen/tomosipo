@@ -13,6 +13,12 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 ### Deprecated
 ### Security
 
+## [0.5.1] - 2022-06-15
+Small bugfix to the to_autograd operator. (Pull request 16)
+
+### Fixed
+- Fixed to_autograd operator to always output 32 bit results, also with a 64 bi input just like the normal operator. Before the fix it only worked with 32 bit inputs.
+
 ## [0.5.0] - 2022-02-01
 This release is mostly about maintaining existing functionality. The tomosipo paper and Astra toolbox 2 were released, there is a new maintainer, and some bugs were fixed. The conda package is now the default installation option.
 
@@ -136,7 +142,8 @@ This is a major release. It introduces two features that define tomosipo in its 
 
 
 
-[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.5.0...develop
+[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.5.1...develop
+[0.5.1]: https://github.com/ahendriksen/tomosipo/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/ahendriksen/tomosipo/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/ahendriksen/tomosipo/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/ahendriksen/tomosipo/compare/v0.3.1...v0.4.0

@@ -15,12 +15,9 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 
 ## [0.6.0] - 2022-07-19
 ### Added
+- References and links to ts_algorithms were added to the readme
 ### Changed
 - Changed the Tomosipo autograd operators made by the tomosipo.torch\_support.to\_autograd function. By default they now expect the same input shape (3 dimensions) as a normal Tomosipo operator. New arguments have been added to also support the input shapes expected in Pytorch neural networks.
-### Fixed
-### Removed
-### Deprecated
-### Security
 
 ## [0.5.1] - 2022-06-15
 Small bugfix to the to_autograd operator. (Pull request 16)

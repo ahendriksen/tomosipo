@@ -14,12 +14,14 @@ The aim of this library is to:
 
 -   Expose a user-friendly API for high-performance 3D tomography, while
     allowing strict control over resource usage
+    -   The [ts_algorithms](https://github.com/ahendriksen/ts_algorithms) library contains implementations of reconstruction algorithms using Tomosipo
 -   Enable easy manipulation and visualization of 3D geometries
 -   Provide easy integration with
     -   Deep learning toolkits, such as [PyTorch](https://pytorch.org)
     -   [The operator discretization library (ODL)](https://github.com/odlgroup/odl) for optimization in
         inverse problems
     -   [PyQtGraph](http://pyqtgraph.org/) for interactive visualization of geometries and data
+    
 
 The documentation can be found
 [here](https://aahendriksen.gitlab.io/tomosipo/index.html). An introduction and
@@ -69,8 +71,16 @@ A minimal installation requires:
 The requirements can be installed using the anaconda package manager. The
 following snippet creates a new conda environment named `tomosipo` (replace
 `X.X` by your CUDA version)
+```
+conda create -n tomosipo cudatoolkit=<X.X> tomosipo -c astra-toolbox -c aahendriksen -c defaults
+```
 
-    conda create -n tomosipo cudatoolkit=<X.X> tomosipo -c defaults -c astra-toolbox -c aahendriksen
+An installation with Pytorch and [ts_algorithms](https://github.com/ahendriksen/ts_algorithms) can be created with the following snippet
+```
+conda create -n tomosipo cudatoolkit=<X.X> tomosipo tqdm pytorch -c pytorch -c astra-toolbox -c aahendriksen -c defaults
+conda activate tomosipo
+pip install git+https://github.com/ahendriksen/ts_algorithms.git
+```
 
 More information about installation is provided in the [documentation](https://aahendriksen.gitlab.io/tomosipo/intro/install.html).
 
@@ -175,6 +185,7 @@ print(f"SIRT finished in {timer() - start:0.2f} seconds using PyTorch")
     SIRT finished in 2.07 seconds
     SIRT finished in 0.94 seconds using PyTorch
 
+A similar implementation of SIRT and succinct implementations of some other reconstruction algorithms are available in the [ts_algorithms](https://github.com/ahendriksen/ts_algorithms) library.
 
 <a id="org4c299a8"></a>
 
@@ -191,7 +202,7 @@ tomosipo is developed by the Computational Imaging group at CWI.
 
 Current maintainer:
 
-- **Dirk Schut**
+-   **Dirk Schut**
 
 Original author:
 

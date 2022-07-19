@@ -13,11 +13,20 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 ### Deprecated
 ### Security
 
+## [0.6.0] - 2022-07-19
+### Added
+### Changed
+- Changed the Tomosipo autograd operators made by the tomosipo.torch\_support.to\_autograd function. By default they now expect the same input shape (3 dimensions) as a normal Tomosipo operator. New arguments have been added to also support the input shapes expected in Pytorch neural networks.
+### Fixed
+### Removed
+### Deprecated
+### Security
+
 ## [0.5.1] - 2022-06-15
 Small bugfix to the to_autograd operator. (Pull request 16)
 
 ### Fixed
-- Fixed to_autograd operator to always output 32 bit results, also with a 64 bi input just like the normal operator. Before the fix it only worked with 32 bit inputs.
+- Fixed to_autograd operator to always output 32 bit results, also with a 64 bit input just like the normal operator. Before the fix it only worked with 32 bit inputs.
 
 ## [0.5.0] - 2022-02-01
 This release is mostly about maintaining existing functionality. The tomosipo paper and Astra toolbox 2 were released, there is a new maintainer, and some bugs were fixed. The conda package is now the default installation option.

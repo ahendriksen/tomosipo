@@ -17,40 +17,70 @@ except ModuleNotFoundError:
     )
     raise
 from torch.autograd import Function
+import itertools
 
 
 class OperatorFunction(Function):
     @staticmethod
-    def forward(ctx, input, operator):
+    def forward(ctx, input, operator, num_extra_dims=0, is_2d=False):
+        extra_dims = input.size()[:num_extra_dims]
         if input.requires_grad:
             ctx.operator = operator
+            ctx.extra_dims = extra_dims
+            ctx.is_2d = is_2d
+
+        expected_ndim = (2 if is_2d else 3) + num_extra_dims
         assert (
-            input.ndim == 4
-        ), "Autograd operator expects a 4-dimensional input (3+1 for Batch dimension). "
+            input.ndim == expected_ndim
+        ), (f"Tomosipo autograd operator expected {expected_ndim} dimensions "
+        "but got {input.ndim}.\n"
+        "The interface of to_autograd was changed in Tomosipo 0.6.0 to "
+        "by default match standard Tomosipo operators and extra arguments are "
+        "provided to match Pytorch NN functions.\n"
+        "To add batch and channel dimensions set argument num_extra_dims=2\n"
+        "To remove the first operator dimension set argument is_2d=True\n"
+        )
 
-        B, C, H, W = input.shape
-        out = input.new_empty(B, *operator.range_shape, dtype=torch.float32)
+        output = input.new_empty(*extra_dims, *operator.range_shape, dtype=torch.float32)
 
-        for i in range(B):
-            operator(input[i], out=out[i])
+        if is_2d:
+            input = torch.unsqueeze(input, dim=-3)
 
-        return out
+        if len(extra_dims) == 0:
+            operator(input, out=output)
+        else:
+            for subspace in itertools.product(*[range(dim_size) for dim_size in extra_dims]):
+                operator(input[subspace], out=output[subspace])
+        
+        if is_2d:
+            output = torch.squeeze(output, dim=-3)
+        return output
 
     @staticmethod
     def backward(ctx, grad_output):
         operator = ctx.operator
+        extra_dims = ctx.extra_dims
+        is_2d = ctx.is_2d
+        
+        grad_input = grad_output.new_empty(*extra_dims, *operator.domain_shape, dtype=torch.float32)
+        
+        if is_2d:
+            grad_output = torch.unsqueeze(grad_output, dim=-3)
 
-        B, C, H, W = grad_output.shape
-        grad_input = grad_output.new_empty(B, *operator.domain_shape, dtype=torch.float32)
-
-        for i in range(B):
-            operator.T(grad_output[i], out=grad_input[i])
+        if len(extra_dims) == 0:
+            operator.T(grad_output, out=grad_input)
+        else:
+            for subspace in itertools.product(*[range(dim_size) for dim_size in extra_dims]):
+                operator.T(grad_output[subspace], out=grad_input[subspace])
+        
+        if is_2d:
+            grad_input = torch.squeeze(grad_input, dim=-3)
 
         # do not return gradient for operator
-        return grad_input, None
+        return grad_input, None, None, None
 
 
-def to_autograd(operator):
+def to_autograd(operator, num_extra_dims=0, is_2d=False):
     """Converts an operator to an autograd function
 
     Example:
@@ -59,10 +89,9 @@ def to_autograd(operator):
         >>> vg = ts.volume(shape=10)
         >>> pg = ts.parallel(angles=10, shape=10)
         >>> A = ts.operator(vg, pg)
-        >>> B = 1  # batch dimension
 
         >>> f = to_autograd(A)
-        >>> vd = torch.randn((B, *A.domain_shape), requires_grad=True)
+        >>> vd = torch.randn(*A.domain_shape, requires_grad=True)
         >>> f(vd).sum().backward()
         >>> vd.grad is not None
         True
@@ -70,19 +99,24 @@ def to_autograd(operator):
     Likewise, you may use the transpose:
 
         >>> g = to_autograd(A.T)
-        >>> pd = torch.randn((B, *A.T.domain_shape), requires_grad=True)
+        >>> pd = torch.randn(*A.T.domain_shape, requires_grad=True)
         >>> g(pd).sum().backward()
         >>> vd.grad is not None
         True
 
     :param operator: a `ts.Operator`
+    :param num_extra_dims: Number of extra dimensions to be prepended. For use
+    with Pytorch neural networks, set this to 2 to add batch and channel
+    dimensions.
+    :param is_2d: if True, the first tomosipo dimension is not used, resulting
+    in a 2D operator.
     :returns: an autograd function
     :rtype:
 
     """
 
     def f(x):
-        return OperatorFunction.apply(x, operator)
+        return OperatorFunction.apply(x, operator, num_extra_dims, is_2d)
 
     return f
 

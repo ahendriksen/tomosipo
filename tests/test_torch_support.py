@@ -78,8 +78,45 @@ def test_float64():
     A = ts.operator(vg, pg)
     A_ag = to_autograd(A)
     
-    x = torch.ones((1, 1, N, N), dtype=torch.float64)
-    y = A(x[0, ...])
+    x = torch.ones((1, N, N), dtype=torch.float64)
+    y = A(x)
     y_ag = A_ag(x)
 
-    assert torch.equal(y, y_ag[0, ...])
+    assert torch.equal(y, y_ag)
+
+@skip_if_no_torch
+def test_autograd():
+    vg = ts.volume(shape=(1, N, N))
+    pg = ts.parallel(angles=N_angles, shape=(1, M))
+    A = ts.operator(vg, pg)
+    A_ag = to_autograd(A)
+    x = torch.ones(A.domain_shape, dtype=torch.float32, requires_grad=True)
+    y = A_ag(x)
+    y.backward(y)
+    assert(torch.allclose(x.grad, A.T(A(x))))
+
+@skip_if_no_torch
+def test_autograd_shape():
+    vg = ts.volume(shape=(1, N, N))
+    pg = ts.parallel(angles=N_angles, shape=(1, M))
+    A = ts.operator(vg, pg)
+    A_ag = to_autograd(A, num_extra_dims=2)
+    x1 = torch.ones(1, 1, *A.domain_shape, dtype=torch.float32, requires_grad=True)
+    x2 = torch.ones(2, 3, *A.domain_shape, dtype=torch.float32, requires_grad=True)
+    
+    y1 = A_ag(x1)
+    assert(y1.size()[0] == 1)
+    assert(y1.size()[1] == 1)
+    
+    y2 = A_ag(x2)
+    assert(y2.size()[0] == 2)
+    assert(y2.size()[1] == 3)
+    
+    y1.backward(y1)
+    assert(x1.grad.size()[0] == 1)
+    assert(x1.grad.size()[1] == 1)
+    
+    y2.backward(y2)
+    assert(x2.grad.size()[0] == 2)
+    assert(x2.grad.size()[1] == 3)
+    

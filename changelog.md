@@ -13,7 +13,7 @@ Versioning](https://semver.org/spec/v2.0.0.html) when it reaches version 1.0.
 ### Deprecated
 ### Security
 
-## [0.6.0] - 2022-07-19
+## [0.6.0] - 2022-08-02
 ### Added
 - References and links to ts_algorithms were added to the readme
 ### Changed
@@ -148,7 +148,8 @@ This is a major release. It introduces two features that define tomosipo in its 
 
 
 
-[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.5.1...develop
+[Unreleased]: https://github.com/ahendriksen/tomosipo/compare/v0.6.0...develop
+[0.6.0]: https://github.com/ahendriksen/tomosipo/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/ahendriksen/tomosipo/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/ahendriksen/tomosipo/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/ahendriksen/tomosipo/compare/v0.4.0...v0.4.1

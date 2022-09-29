@@ -155,7 +155,7 @@ def pg_to_line_items(pg, i):
 # the source. The cone angle determines the field of view.
 
 
-def default_camera(height, width, angle=1 / 2.7):
+def default_camera(height, width, angle=1 / 2.7, scale=1):
     # default camera:
     R0 = ts.rotate(pos=0, axis=(1, 0, 0), angles=np.deg2rad(70))
     R1 = ts.rotate(pos=0, axis=(0, 0, 1), angles=np.deg2rad(-25))
@@ -164,7 +164,7 @@ def default_camera(height, width, angle=1 / 2.7):
     good_cone = (
         R0 * R1 * ts.cone(cone_angle=angle, shape=(height, width), size=size).to_vec()
     )
-    camera = ts.translate(good_cone.src_pos * 10 * angle) * good_cone
+    camera = ts.translate(good_cone.src_pos * 10 * scale * angle) * good_cone
 
     return camera
 

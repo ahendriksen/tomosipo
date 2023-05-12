@@ -3,6 +3,7 @@
 """
 import tomosipo as ts
 import warnings
+from tomosipo.Operator import BackprojectionOperator
 
 try:
     import torch
@@ -191,3 +192,103 @@ class Backward(Function):
 
 def backward(input, vg, pg, projector=None):
     return Backward.apply(input, vg, pg, projector)
+    
+class AutogradOperator():
+    """A linear tomographic projection operator with torch autograd support
+
+    This class has almost the same interface as a normal tomosipo operator, but
+    it supports pytorch autograd, allowing for automatic differentiation. This
+    can be used for example on the reconstruction algorithms in ts_algorithms.
+    Additive operators, numpy inputs and outputs, and transformations are not
+    supported on AutogradOperators.
+    """
+    def __init__(
+        self,
+        operator
+    ):
+        """
+        Create an operator with autograd support from an existing tomosipo
+        operator
+
+        Parameters
+        ----------
+        operator: `Operator`
+            Tomosipo operator whose behavior will be mimicked
+        """
+        if operator.additive == True:
+            raise ValueError("Additive operators are not supported")
+        
+        self.operator = operator
+        self._fp_op = to_autograd(operator)
+        self._bp_op = to_autograd(operator.T)
+        self._transpose = BackprojectionOperator(self)
+
+    def _fp(self, volume, out=None):
+        if out is None:
+            return self._fp_op(volume)
+        else:
+            out[...] = self._fp_op(volume)
+            return out
+        
+    def _bp(self, projection, out=None):
+        if out is None:
+            return self._bp_op(projection)
+        else:
+            out[...] = self._bp_op(projection)
+            return out
+
+    def __call__(self, volume, out=None):
+        """Apply operator
+
+        :param volume: `torch.Tensor`
+            An input volume. The shape must match the operator geometry.
+        :param out: `torch.Tensor` (optional)
+            An optional output value. The shape must match the operator
+            geometry.
+        :returns:
+            A projection dataset on which the volume has been forward
+            projected.
+        :rtype: `torch.Tensor`
+
+        """
+        return self._fp(volume, out)
+
+    def transpose(self):
+        """Return backprojection operator"""
+        return self._transpose
+
+    @property
+    def T(self):
+        """The transpose operator
+
+        This property returns the transpose (backprojection) operator.
+        """
+        return self.transpose()
+
+    @property
+    def astra_compat_vg(self):
+        return self.operator.astra_compat_vg
+        
+    @property
+    def astra_compat_pg(self):
+        return self.operator.astra_compat_pg
+
+    @property
+    def domain(self):
+        """The domain (volume geometry) of the operator"""
+        return self.operator.domain
+
+    @property
+    def range(self):
+        """The range (projection geometry) of the operator"""
+        return self.operator.range
+
+    @property
+    def domain_shape(self):
+        """The expected shape of the input (volume) data"""
+        return self.operator.domain_shape
+
+    @property
+    def range_shape(self):
+        """The expected shape of the output (projection) data"""
+        return self.operator.range_shape

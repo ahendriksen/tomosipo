@@ -33,7 +33,7 @@ class OperatorFunction(Function):
         assert (
             input.ndim == expected_ndim
         ), (f"Tomosipo autograd operator expected {expected_ndim} dimensions "
-        "but got {input.ndim}.\n"
+        f"but got {input.ndim}.\n"
         "The interface of to_autograd was changed in Tomosipo 0.6.0 to "
         "by default match standard Tomosipo operators and extra arguments are "
         "provided to match Pytorch NN functions.\n"

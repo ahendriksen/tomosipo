@@ -101,9 +101,9 @@ class ProjectionGeometry(object):
         """Is this a vector geometry?
 
         A geometry can either be a vector geometry, like
-        ``ConeVectorGeometry``, or ``ParallelVectorGeometry``, or it
-        can be a parametrized geometry like ``ConeGeometry`` or
-        ``ParallelGeometry``.
+        ``ConeVectorGeometry``, ``CylConeVectorGeometry`` or
+        ``ParallelVectorGeometry``, or it can be a parametrized geometry like
+        ``ConeGeometry`` or ``ParallelGeometry``.
 
         :returns:
         :rtype:

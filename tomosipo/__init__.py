@@ -14,6 +14,7 @@ from .geometry.volume_vec import volume_vec
 from . import geometry
 from .geometry.cone import cone
 from .geometry.cone_vec import cone_vec
+from .geometry.cyl_cone_vec import cyl_cone_vec
 from .geometry.parallel_vec import parallel_vec
 from .geometry.parallel import parallel
 from .geometry.transform import (

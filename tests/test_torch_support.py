@@ -3,6 +3,7 @@ import tomosipo as ts
 from . import skip_if_no_cuda
 from tomosipo.torch_support import (
     to_autograd,
+    AutogradOperator
 )
 
 try:
@@ -112,5 +113,39 @@ def test_autograd_shape():
     assert(torch.equal(torch.tensor(y1.size()), torch.tensor([1, 1, *A.range_shape])))
     assert(torch.equal(torch.tensor(y2.size()), torch.tensor([2, 3, *A.range_shape])))
     assert(torch.equal(torch.tensor(x1.grad.size()), torch.tensor([1, 1, *A.domain_shape])))    
-    assert(torch.equal(torch.tensor(x2.grad.size()), torch.tensor([2, 3, *A.domain_shape]))) 
+    assert(torch.equal(torch.tensor(x2.grad.size()), torch.tensor([2, 3, *A.domain_shape])))
     
+@skip_if_no_torch
+def test_autograd_operator():
+    vg = ts.volume(shape=(1, N, N))
+    pg = ts.parallel(angles=N_angles, shape=(1, M))
+    A = ts.operator(vg, pg)
+    A_ag = AutogradOperator(A)
+    
+    # Create hollow cube phantom
+    x = torch.zeros(A.domain_shape, dtype=torch.float32)
+    x[:, 10:-10, 10:-10] = 1.0
+    x[:, 20:-20, 20:-20] = 0.0
+    y = A(x)
+    b = A.T(y)
+    y2 = A(b)
+    
+    y_ag = A_ag(x)
+    b_ag = A_ag.T(y_ag)
+    y2_ag = A_ag(b_ag)
+    
+    assert(torch.equal(y, y_ag))
+    assert(torch.equal(b, b_ag))
+    assert(torch.equal(y2, y2_ag))
+    
+    y_ag[...] = 0
+    b_ag[...] = 0
+    y2_ag[...] = 0
+    
+    A_ag(x, out=y_ag)
+    A_ag.T(y_ag, out=b_ag)
+    A_ag(b_ag, out=y2_ag)
+    
+    assert(torch.equal(y, y_ag))
+    assert(torch.equal(b, b_ag))
+    assert(torch.equal(y2, y2_ag))

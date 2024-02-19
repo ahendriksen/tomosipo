@@ -77,10 +77,12 @@ conda create -n tomosipo cudatoolkit=<X.X> tomosipo -c astra-toolbox -c aahendri
 
 An installation with Pytorch and [ts_algorithms](https://github.com/ahendriksen/ts_algorithms) can be created with the following snippet
 ```
-conda create -n tomosipo cudatoolkit=<X.X> tomosipo tqdm pytorch -c pytorch -c astra-toolbox -c aahendriksen -c defaults
+conda create -n tomosipo tomosipo pytorch==2.0.1 pytorch-cuda=11.7 tqdm -c pytorch -c nvidia -c astra-toolbox/label/dev -c aahendriksen -c defaults
+
 conda activate tomosipo
 pip install git+https://github.com/ahendriksen/ts_algorithms.git
 ```
+From PyTorch version 2 the cuda toolkit dependencies have changed from the _cudatoolkit_ package to the _pytorch-cuda_ package. The development version of Astra uses the _cuda-cudart_ and _libcufft_ packages which are automatically included by installing _pytorch-cuda_.
 
 More information about installation is provided in the [documentation](https://aahendriksen.gitlab.io/tomosipo/intro/install.html).
 

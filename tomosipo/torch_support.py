@@ -34,7 +34,7 @@ class OperatorFunction(Function):
         assert (
             input.ndim == expected_ndim
         ), (f"Tomosipo autograd operator expected {expected_ndim} dimensions "
-        "but got {input.ndim}.\n"
+        f"but got {input.ndim}.\n"
         "The interface of to_autograd was changed in Tomosipo 0.6.0 to "
         "by default match standard Tomosipo operators and extra arguments are "
         "provided to match Pytorch NN functions.\n"
@@ -42,7 +42,7 @@ class OperatorFunction(Function):
         "To remove the first operator dimension set argument is_2d=True\n"
         )
 
-        output = input.new_empty(*extra_dims, *operator.range_shape, dtype=torch.float32)
+        output = input.new_empty(extra_dims + operator.range_shape, dtype=torch.float32)
 
         if is_2d:
             input = torch.unsqueeze(input, dim=-3)
@@ -63,7 +63,7 @@ class OperatorFunction(Function):
         extra_dims = ctx.extra_dims
         is_2d = ctx.is_2d
         
-        grad_input = grad_output.new_empty(*extra_dims, *operator.domain_shape, dtype=torch.float32)
+        grad_input = grad_output.new_empty(extra_dims + operator.domain_shape, dtype=torch.float32)
         
         if is_2d:
             grad_output = torch.unsqueeze(grad_output, dim=-3)

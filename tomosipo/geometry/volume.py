@@ -209,7 +209,7 @@ class VolumeGeometry:
 
         if size is None:
             # Make geometry where voxel size equals (1, 1, 1)
-            self._inner = ts.volume_vec(shape, pos)
+            self._inner = ts.volume_vec(shape=shape, pos=pos)
         else:
             size = ts.types.to_size3d(size)
             # voxel size per dimension

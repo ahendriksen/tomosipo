@@ -66,6 +66,14 @@ class OperatorFunction(Function):
         # do not return gradient for operator
         return grad_input, None, None, None
 
+    @staticmethod
+    def jvp(ctx, grad_input, *args):
+        operator = ctx.operator
+        num_extra_dims = ctx.num_extra_dims
+        is_2d = ctx.is_2d
+
+        return OperatorFunction.apply(grad_input, operator, num_extra_dims, is_2d)
+
 
 def to_autograd(operator, num_extra_dims=0, is_2d=False):
     """Converts an operator to an autograd function

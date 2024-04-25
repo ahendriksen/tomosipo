@@ -24,10 +24,9 @@ class OperatorFunction(Function):
     @staticmethod
     def forward(ctx, input, operator, num_extra_dims=0, is_2d=False):
         extra_dims = input.size()[:num_extra_dims]
-        if input.requires_grad:
-            ctx.operator = operator
-            ctx.num_extra_dims = num_extra_dims
-            ctx.is_2d = is_2d
+        ctx.operator = operator
+        ctx.num_extra_dims = num_extra_dims
+        ctx.is_2d = is_2d
 
         expected_ndim = (2 if is_2d else 3) + num_extra_dims
         assert (

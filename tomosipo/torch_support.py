@@ -26,7 +26,7 @@ class OperatorFunction(Function):
         extra_dims = input.size()[:num_extra_dims]
         if input.requires_grad:
             ctx.operator = operator
-            ctx.extra_dims = extra_dims
+            ctx.num_extra_dims = num_extra_dims
             ctx.is_2d = is_2d
 
         expected_ndim = (2 if is_2d else 3) + num_extra_dims
@@ -51,7 +51,7 @@ class OperatorFunction(Function):
         else:
             for subspace in itertools.product(*[range(dim_size) for dim_size in extra_dims]):
                 operator(input[subspace], out=output[subspace])
-        
+
         if is_2d:
             output = torch.squeeze(output, dim=-3)
         return output
@@ -59,22 +59,10 @@ class OperatorFunction(Function):
     @staticmethod
     def backward(ctx, grad_output):
         operator = ctx.operator
-        extra_dims = ctx.extra_dims
+        num_extra_dims = ctx.num_extra_dims
         is_2d = ctx.is_2d
-        
-        grad_input = grad_output.new_empty(extra_dims + operator.domain_shape, dtype=torch.float32)
-        
-        if is_2d:
-            grad_output = torch.unsqueeze(grad_output, dim=-3)
 
-        if len(extra_dims) == 0:
-            operator.T(grad_output, out=grad_input)
-        else:
-            for subspace in itertools.product(*[range(dim_size) for dim_size in extra_dims]):
-                operator.T(grad_output[subspace], out=grad_input[subspace])
-        
-        if is_2d:
-            grad_input = torch.squeeze(grad_input, dim=-3)
+        grad_input = OperatorFunction.apply(grad_output, operator.T, num_extra_dims, is_2d)
 
         # do not return gradient for operator
         return grad_input, None, None, None

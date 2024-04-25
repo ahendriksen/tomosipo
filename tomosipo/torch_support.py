@@ -22,11 +22,8 @@ import itertools
 
 class OperatorFunction(Function):
     @staticmethod
-    def forward(ctx, input, operator, num_extra_dims=0, is_2d=False):
+    def forward(input, operator, num_extra_dims=0, is_2d=False):
         extra_dims = input.size()[:num_extra_dims]
-        ctx.operator = operator
-        ctx.num_extra_dims = num_extra_dims
-        ctx.is_2d = is_2d
 
         expected_ndim = (2 if is_2d else 3) + num_extra_dims
         assert (
@@ -54,6 +51,13 @@ class OperatorFunction(Function):
         if is_2d:
             output = torch.squeeze(output, dim=-3)
         return output
+
+    @staticmethod
+    def setup_context(ctx, inputs, output):
+        _, operator, num_extra_dims, is_2d = inputs
+        ctx.operator = operator
+        ctx.num_extra_dims = num_extra_dims
+        ctx.is_2d = is_2d
 
     @staticmethod
     def backward(ctx, grad_output):

@@ -78,6 +78,18 @@ class OperatorFunction(Function):
 
         return OperatorFunction.apply(grad_input, operator, num_extra_dims, is_2d)
 
+    @staticmethod
+    def vmap(info, in_dims, input, operator, num_extra_dims, is_2d):
+        batch_dim = in_dims[0]
+        if batch_dim > num_extra_dims + 1:
+            # If batching along a dimension that is interspersed with spatial
+            # dimensions, move it in front to conform to batching logic
+            # implemented in `OperatorFunction.forward`
+            input = input.movedim(batch_dim, 0)
+            return OperatorFunction.apply(input, operator, num_extra_dims + 1, is_2d), 0
+        else:
+            return OperatorFunction.apply(input, operator, num_extra_dims + 1, is_2d), batch_dim
+
 
 def to_autograd(operator, num_extra_dims=0, is_2d=False):
     """Converts an operator to an autograd function

@@ -1,6 +1,8 @@
 from . import base_projection
 from . import det_vec
+from . import cyl_det_vec
 from . import cone_vec
+from . import cyl_cone_vec
 from . import cone
 from . import parallel_vec
 from . import parallel
@@ -25,6 +27,7 @@ from .transform import random_transform
 from .base_projection import ProjectionGeometry
 from .cone import ConeGeometry
 from .cone_vec import ConeVectorGeometry
+from .cyl_cone_vec import CylConeVectorGeometry
 from .parallel import ParallelGeometry
 from .parallel_vec import ParallelVectorGeometry
 from .volume import VolumeGeometry

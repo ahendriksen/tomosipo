@@ -1,6 +1,7 @@
 from .base_projection import ProjectionGeometry
 from .cone import ConeGeometry
 from .cone_vec import ConeVectorGeometry
+from .cyl_cone_vec import CylConeVectorGeometry
 from .det_vec import DetectorVectorGeometry
 from .parallel_vec import ParallelVectorGeometry
 from .parallel import ParallelGeometry
@@ -18,6 +19,8 @@ def from_astra_projection_geometry(astra_pg):
         return ConeGeometry.from_astra(astra_pg)
     elif pg_type == "cone_vec":
         return ConeVectorGeometry.from_astra(astra_pg)
+    elif pg_type == "cyl_cone_vec":
+        return CylConeVectorGeometry.from_astra(astra_pg)
     elif pg_type == "det_vec":
         return DetectorVectorGeometry.from_astra(astra_pg)
     elif pg_type == "parallel3d_vec":

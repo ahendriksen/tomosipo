@@ -6,6 +6,7 @@ from . import (
     ProjectionGeometry,
     ConeGeometry,
     ConeVectorGeometry,
+    CylConeVectorGeometry,
     ParallelGeometry,
     ParallelVectorGeometry,
     VolumeGeometry,

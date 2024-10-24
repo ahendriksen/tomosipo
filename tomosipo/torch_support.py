@@ -31,15 +31,14 @@ class OperatorFunction(Function):
             ctx.is_2d = is_2d
 
         expected_ndim = (2 if is_2d else 3) + num_extra_dims
-        assert (
-            input.ndim == expected_ndim
-        ), (f"Tomosipo autograd operator expected {expected_ndim} dimensions "
-        f"but got {input.ndim}.\n"
-        "The interface of to_autograd was changed in Tomosipo 0.6.0 to "
-        "by default match standard Tomosipo operators and extra arguments are "
-        "provided to match Pytorch NN functions.\n"
-        "To add batch and channel dimensions set argument num_extra_dims=2\n"
-        "To remove the first operator dimension set argument is_2d=True\n"
+        assert (input.ndim == expected_ndim), (
+            f"Tomosipo autograd operator expected {expected_ndim} dimensions "
+            f"but got {input.ndim}.\n"
+            "The interface of to_autograd was changed in Tomosipo 0.6.0 to "
+            "by default match standard Tomosipo operators and extra arguments are "
+            "provided to match Pytorch NN functions.\n"
+            "To add batch and channel dimensions set argument num_extra_dims=2\n"
+            "To remove the first operator dimension set argument is_2d=True\n"
         )
 
         output = input.new_empty(extra_dims + operator.range_shape, dtype=torch.float32)
@@ -52,7 +51,7 @@ class OperatorFunction(Function):
         else:
             for subspace in itertools.product(*[range(dim_size) for dim_size in extra_dims]):
                 operator(input[subspace], out=output[subspace])
-        
+
         if is_2d:
             output = torch.squeeze(output, dim=-3)
         return output
@@ -62,9 +61,9 @@ class OperatorFunction(Function):
         operator = ctx.operator
         extra_dims = ctx.extra_dims
         is_2d = ctx.is_2d
-        
+
         grad_input = grad_output.new_empty(extra_dims + operator.domain_shape, dtype=torch.float32)
-        
+
         if is_2d:
             grad_output = torch.unsqueeze(grad_output, dim=-3)
 
@@ -73,7 +72,7 @@ class OperatorFunction(Function):
         else:
             for subspace in itertools.product(*[range(dim_size) for dim_size in extra_dims]):
                 operator.T(grad_output[subspace], out=grad_input[subspace])
-        
+
         if is_2d:
             grad_input = torch.squeeze(grad_input, dim=-3)
 
@@ -105,15 +104,24 @@ def to_autograd(operator, num_extra_dims=0, is_2d=False):
         >>> vd.grad is not None
         True
 
-    :param operator: a `ts.Operator`
-    :param num_extra_dims: Number of extra dimensions to be prepended. For use
-    with Pytorch neural networks, set this to 2 to add batch and channel
-    dimensions.
-    :param is_2d: if True, the first tomosipo dimension is not used, resulting
-    in a 2D operator.
-    :returns: an autograd function
-    :rtype:
+    Parameters
+    ----------
+    operator: `Operator`
+        Tomosipo operator whose behavior will be mimicked
 
+    num_extra_dims : `int` (optional)
+        Number of extra dimensions to prepend to the input and output of
+        this operator. Set this to 2 to add channel and batch
+        dimensions when taining neural networks. The default is 0.
+
+    is_2d : `bool` (optional)
+        Whether to remove the first dimension of the operator, resulting in
+        a 2D operator. The default is False.
+
+    Returns
+    -------
+    Function
+        An autograd enabled function
     """
 
     def f(x):
@@ -192,7 +200,8 @@ class Backward(Function):
 
 def backward(input, vg, pg, projector=None):
     return Backward.apply(input, vg, pg, projector)
-    
+
+
 class AutogradOperator():
     """A linear tomographic projection operator with torch autograd support
 
@@ -204,7 +213,9 @@ class AutogradOperator():
     """
     def __init__(
         self,
-        operator
+        operator,
+        num_extra_dims=0,
+        is_2d=False
     ):
         """
         Create an operator with autograd support from an existing tomosipo
@@ -214,13 +225,23 @@ class AutogradOperator():
         ----------
         operator: `Operator`
             Tomosipo operator whose behavior will be mimicked
+
+        num_extra_dims : `int` (optional)
+            Number of extra dimensions to prepend to the input and output of
+            this operator. Set this to 2 to add channel and batch
+            dimensions when taining neural networks. The default is 0.
+
+        is_2d : `bool` (optional)
+            Whether to remove the first dimension of the operator, resulting in
+            a 2D operator. The default is False.
         """
-        if operator.additive == True:
+
+        if operator.additive:
             raise ValueError("Additive operators are not supported")
-        
+
         self.operator = operator
-        self._fp_op = to_autograd(operator)
-        self._bp_op = to_autograd(operator.T)
+        self._fp_op = to_autograd(operator, num_extra_dims, is_2d)
+        self._bp_op = to_autograd(operator.T, num_extra_dims, is_2d)
         self._transpose = BackprojectionOperator(self)
 
     def _fp(self, volume, out=None):
@@ -229,7 +250,7 @@ class AutogradOperator():
         else:
             out[...] = self._fp_op(volume)
             return out
-        
+
     def _bp(self, projection, out=None):
         if out is None:
             return self._bp_op(projection)
@@ -239,16 +260,20 @@ class AutogradOperator():
 
     def __call__(self, volume, out=None):
         """Apply operator
-
-        :param volume: `torch.Tensor`
+        
+        Parameters
+        ----------
+        volume: `torch.Tensor`
             An input volume. The shape must match the operator geometry.
-        :param out: `torch.Tensor` (optional)
+        out: `torch.Tensor` (optional)
             An optional output value. The shape must match the operator
             geometry.
-        :returns:
+            
+        Returns
+        -------
+        `torch.Tensor`
             A projection dataset on which the volume has been forward
             projected.
-        :rtype: `torch.Tensor`
 
         """
         return self._fp(volume, out)
@@ -268,7 +293,7 @@ class AutogradOperator():
     @property
     def astra_compat_vg(self):
         return self.operator.astra_compat_vg
-        
+
     @property
     def astra_compat_pg(self):
         return self.operator.astra_compat_pg
@@ -292,3 +317,54 @@ class AutogradOperator():
     def range_shape(self):
         """The expected shape of the output (projection) data"""
         return self.operator.range_shape
+
+
+def autograd_operator(volume_geometry, projection_geometry, voxel_supersampling=1, detector_supersampling=1,
+                      num_extra_dims=0, is_2d=False):
+    """
+    Create a tomographic operator with PyTorch autograd support.
+
+    Parameters
+    ----------
+    volume_geometry: `VolumeGeometry`
+        The domain of the operator.
+
+    projection_geometry:  `ProjectionGeometry`
+        The range of the operator.
+
+    voxel_supersampling: `int` (optional)
+        Specifies the amount of voxel supersampling, i.e., how
+        many (one dimension) subvoxels are generated from a single
+        parent voxel. The default is 1.
+
+    detector_supersampling: `int` (optional)
+        Specifies the amount of detector supersampling, i.e., how
+        many rays are cast per detector. The default is 1.
+
+    num_extra_dims : `int` (optional)
+        Number of extra dimensions to prepend to the input and output of this
+        operator. This can be useful to add channel and batch dimensions when
+        training neural networks. The default is 0.
+
+    is_2d : `bool` (optional)
+        Whether to remove the first dimension of the operator, resulting in a
+        2D operator. The default is False.
+
+    Returns
+    -------
+    `AutogradOperator`
+        A tomographic operator with PyTorch autograd support.
+
+    """
+
+    op = ts.operator(
+        volume_geometry=volume_geometry,
+        projection_geometry=projection_geometry,
+        voxel_supersampling=voxel_supersampling,
+        detector_supersampling=detector_supersampling
+    )
+    return AutogradOperator(
+        operator=op,
+        num_extra_dims=num_extra_dims,
+        is_2d=is_2d
+    )

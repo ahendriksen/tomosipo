@@ -3,6 +3,8 @@ import tomosipo as ts
 from . import skip_if_no_cuda
 from tomosipo.torch_support import (
     to_autograd,
+    AutogradOperator,
+    autograd_operator
 )
 
 try:
@@ -70,19 +72,21 @@ def test_fp_bp(device):
 
     assert 1.0 < sino.sum()
     assert 1.0 < bp.sum()
-    
+
+
 @skip_if_no_torch
 def test_float64():
     vg = ts.volume(shape=(1, N, N))
     pg = ts.parallel(angles=N_angles, shape=(1, M))
     A = ts.operator(vg, pg)
     A_ag = to_autograd(A)
-    
+
     x = torch.ones((1, N, N), dtype=torch.float64)
     y = A(x)
     y_ag = A_ag(x)
 
     assert torch.equal(y, y_ag)
+
 
 @skip_if_no_torch
 def test_autograd():
@@ -93,7 +97,8 @@ def test_autograd():
     x = torch.ones(A.domain_shape, dtype=torch.float32, requires_grad=True)
     y = A_ag(x)
     y.backward(y)
-    assert(torch.allclose(x.grad, A.T(A(x))))
+    assert (torch.allclose(x.grad, A.T(A(x))))
+
 
 @skip_if_no_torch
 def test_autograd_shape():
@@ -103,14 +108,67 @@ def test_autograd_shape():
     A_ag = to_autograd(A, num_extra_dims=2)
     x1 = torch.ones(1, 1, *A.domain_shape, dtype=torch.float32, requires_grad=True)
     x2 = torch.ones(2, 3, *A.domain_shape, dtype=torch.float32, requires_grad=True)
-    
+
     y1 = A_ag(x1)
     y2 = A_ag(x2)
     y1.backward(y1)
     y2.backward(y2)
+
+    assert (torch.equal(torch.tensor(y1.size()), torch.tensor([1, 1, *A.range_shape])))
+    assert (torch.equal(torch.tensor(y2.size()), torch.tensor([2, 3, *A.range_shape])))
+    assert (torch.equal(torch.tensor(x1.grad.size()), torch.tensor([1, 1, *A.domain_shape])))
+    assert (torch.equal(torch.tensor(x2.grad.size()), torch.tensor([2, 3, *A.domain_shape])))
+
+
+@skip_if_no_torch
+def test_autograd_operator():
+    vg = ts.volume(shape=(1, N, N))
+    pg = ts.parallel(angles=N_angles, shape=(1, M))
+    A = ts.operator(vg, pg)
+
+    # Create hollow cube phantom
+    x = torch.zeros(A.domain_shape, dtype=torch.float32)
+    x[:, 10:-10, 10:-10] = 1.0
+    x[:, 20:-20, 20:-20] = 0.0
+
+    for A_ag in [AutogradOperator(A), autograd_operator(vg, pg)]:
+        y = A(x)
+        b = A.T(y)
+        y2 = A(b)
+
+        y_ag = A_ag(x)
+        b_ag = A_ag.T(y_ag)
+        y2_ag = A_ag(b_ag)
+
+        assert (torch.equal(y, y_ag))
+        assert (torch.equal(b, b_ag))
+        assert (torch.equal(y2, y2_ag))
+
+        y_ag[...] = 0
+        b_ag[...] = 0
+        y2_ag[...] = 0
+
+        A_ag(x, out=y_ag)
+        A_ag.T(y_ag, out=b_ag)
+        A_ag(b_ag, out=y2_ag)
+
+        assert (torch.equal(y, y_ag))
+        assert (torch.equal(b, b_ag))
+        assert (torch.equal(y2, y2_ag))
+
+
+@skip_if_no_torch
+def test_autograd_operator_backward():
+    vg = ts.volume(shape=(1, N, N))
+    pg = ts.parallel(angles=N_angles, shape=(1, M))
+    A = ts.operator(vg, pg)
+    A_ag = AutogradOperator(A)
+    x = torch.ones(A_ag.domain_shape, dtype=torch.float32, requires_grad=True)
+    y = A_ag(x)
+    y.backward(y)
+    assert (torch.allclose(x.grad, A.T(A(x))))
     
-    assert(torch.equal(torch.tensor(y1.size()), torch.tensor([1, 1, *A.range_shape])))
-    assert(torch.equal(torch.tensor(y2.size()), torch.tensor([2, 3, *A.range_shape])))
-    assert(torch.equal(torch.tensor(x1.grad.size()), torch.tensor([1, 1, *A.domain_shape])))    
-    assert(torch.equal(torch.tensor(x2.grad.size()), torch.tensor([2, 3, *A.domain_shape]))) 
-    
+    p = torch.ones(A_ag.range_shape, dtype=torch.float32, requires_grad=True)
+    q = A_ag.T(p)
+    q.backward(q)
+    assert (torch.allclose(p.grad, A(A.T(p))))
